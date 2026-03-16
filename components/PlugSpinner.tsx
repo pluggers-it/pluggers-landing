@@ -1,105 +1,231 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Plug } from "lucide-react";
+import { motion, useAnimationFrame } from "framer-motion";
+import { useRef, useState } from "react";
+import {
+  Wrench,
+  Zap,
+  HardHat,
+  Hammer,
+  Paintbrush,
+  Plug,
+} from "lucide-react";
 
-/**
- * Connection hub animation: Pluggers come nodo centrale che collega clienti e lavoratori.
- * Network di nodi che si accendono e convergono verso la spina centrale.
- */
+const WORKERS = [
+  { icon: Wrench,     label: "Idraulico",    color: "#38bdf8", angle: -90 },
+  { icon: Zap,        label: "Elettricista", color: "#facc15", angle: -18 },
+  { icon: HardHat,    label: "Muratore",     color: "#fb923c", angle:  54 },
+  { icon: Hammer,     label: "Carpentiere",  color: "#34d399", angle: 126 },
+  { icon: Paintbrush, label: "Imbianchino",  color: "#c084fc", angle: 198 },
+];
+
+const RADIUS = 148;
+
+/** Converts polar coords (r, angleDeg) to {x, y} offsets from center */
+function polar(r: number, angleDeg: number) {
+  const rad = (angleDeg * Math.PI) / 180;
+  return { x: Math.cos(rad) * r, y: Math.sin(rad) * r };
+}
+
 export function PlugSpinner() {
-  const nodes = Array.from({ length: 10 }).map((_, i) => {
-    const ring = i < 4 ? 80 : i < 7 ? 120 : 155;
-    const angle = (i / 10) * Math.PI * 2 + (i % 2 === 0 ? 0 : Math.PI / 12);
-    return { id: i, ring, angle };
+  const [hovered, setHovered] = useState<number | null>(null);
+  const orbitRef = useRef<HTMLDivElement>(null);
+  const angleRef = useRef(0);
+
+  // Slow continuous orbit rotation
+  useAnimationFrame((_, delta) => {
+    angleRef.current = (angleRef.current + delta * 0.012) % 360;
+    if (orbitRef.current) {
+      orbitRef.current.style.transform = `rotate(${angleRef.current}deg)`;
+    }
   });
 
   return (
-    <motion.div
-      initial="rest"
-      animate="rest"
-      whileHover="hover"
-      className="group relative inline-flex items-center justify-center"
+    <div
+      className="relative flex items-center justify-center"
+      style={{ width: 360, height: 360 }}
     >
-      <div className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(15,23,42,0.85),rgba(0,0,0,0)_75%)] blur-3xl opacity-90" />
+      {/* ── Ambient glows ── */}
+      <div className="pointer-events-none absolute inset-0 rounded-full">
+        <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.22),transparent_65%)] blur-2xl" />
+      </div>
 
-      <motion.div
-        variants={{
-          rest: {
-            rotate: 0,
-          },
-          hover: {
-            rotate: 2,
-          },
-        }}
-        className="relative will-change-transform"
+      {/* ── Orbit ring (slowly rotating dashes) ── */}
+      <div
+        ref={orbitRef}
+        className="absolute inset-0"
+        style={{ willChange: "transform" }}
       >
-        <div className="relative flex h-60 w-60 items-center justify-center">
-          {/* outer frame */}
-          <div className="absolute inset-0 rounded-[32px] border border-[rgba(148,163,184,0.38)] bg-[radial-gradient(circle_at_top,rgba(15,23,42,1),rgba(15,23,42,0.4))] shadow-[0_30px_120px_rgba(15,23,42,0.9)]" />
-          <div className="absolute inset-[3px] rounded-[28px] border border-[rgba(148,163,184,0.25)] bg-[radial-gradient(circle_at_top,rgba(24,24,35,0.9),rgba(15,23,42,0.4))]" />
-
-          {/* orbit ring */}
-          <motion.div
-            className="absolute inset-10 rounded-full border border-[rgba(129,140,248,0.45)] [mask-image:repeating-conic-gradient(from_90deg,#000_0deg,#000_10deg,transparent_10deg,transparent_24deg)]"
-            animate={{
-              rotate: [0, 8, 0],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 18,
-              ease: "easeInOut",
-            }}
+        <svg
+          viewBox="0 0 360 360"
+          fill="none"
+          className="h-full w-full"
+          style={{ overflow: "visible" }}
+        >
+          <circle
+            cx={180}
+            cy={180}
+            r={RADIUS}
+            stroke="rgba(139,92,246,0.18)"
+            strokeWidth={1}
+            strokeDasharray="6 10"
+            strokeLinecap="round"
           />
+        </svg>
+      </div>
 
-          {/* connection arc */}
-          <div className="absolute inset-[54px] rounded-full border-2 border-transparent [border-image:conic-gradient(from_180deg,rgba(129,140,248,0.15),rgba(56,189,248,0.5),rgba(234,179,8,0.8))_1] opacity-80 group-hover:opacity-100" />
-
-          <Plug
-            className="relative h-18 w-18 text-[var(--color-foreground)] drop-shadow-[0_20px_70px_rgba(234,179,8,0.65)] group-hover:text-[#facc15]"
-            strokeWidth={1.8}
-          />
-        </div>
-      </motion.div>
-
-      <motion.div
-        variants={{
-          rest: {
-            rotate: 0,
-          },
-          hover: {
-            rotate: 4,
-          },
-        }}
-        className="pointer-events-none absolute inset-0 will-change-transform"
+      {/* ── Connection lines (SVG, behind nodes) ── */}
+      <svg
+        viewBox="0 0 360 360"
+        fill="none"
+        className="pointer-events-none absolute inset-0"
+        style={{ overflow: "visible" }}
       >
-        {nodes.map((node) => {
-          const x = Math.cos(node.angle) * node.ring;
-          const y = Math.sin(node.angle) * node.ring;
-          const delay = node.id * 0.12;
+        {WORKERS.map((w, i) => {
+          const { x, y } = polar(RADIUS, w.angle);
+          const isActive = hovered === i;
           return (
-            <motion.div
-              key={node.id}
-              initial={{ opacity: 0, scale: 0.3 }}
+            <motion.line
+              key={i}
+              x1={180}
+              y1={180}
+              x2={180 + x}
+              y2={180 + y}
+              stroke={w.color}
+              strokeWidth={isActive ? 1.5 : 0.8}
+              strokeDasharray="4 6"
+              initial={{ opacity: 0, pathLength: 0 }}
               animate={{
-                opacity: [0, 1, 1, 0],
-                scale: [0.3, 1, 1.1, 0.3],
+                opacity: isActive ? 1 : 0.35,
+                pathLength: 1,
               }}
-              transition={{
-                repeat: Infinity,
-                duration: 3.4,
-                delay,
-                ease: "easeInOut",
-              }}
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-              style={{ transform: `translate(${x}px, ${y}px)` }}
-            >
-              <div className="h-2 w-2 rounded-full bg-[var(--color-accent)] shadow-[0_12px_40px_rgba(129,140,248,0.7)] group-hover:bg-[#facc15]" />
-            </motion.div>
+              transition={{ duration: 0.9, delay: i * 0.12, ease: "easeOut" }}
+            />
           );
         })}
+      </svg>
+
+      {/* ── Pulsing rings on active node ── */}
+      {hovered !== null && (
+        <motion.div
+          key={hovered}
+          className="pointer-events-none absolute"
+          style={{
+            left: 180 + polar(RADIUS, WORKERS[hovered].angle).x,
+            top: 180 + polar(RADIUS, WORKERS[hovered].angle).y,
+            transform: "translate(-50%,-50%)",
+          }}
+          initial={{ scale: 0.6, opacity: 0.8 }}
+          animate={{ scale: 2.4, opacity: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <div
+            className="h-10 w-10 rounded-full border"
+            style={{ borderColor: WORKERS[hovered].color }}
+          />
+        </motion.div>
+      )}
+
+      {/* ── Worker nodes ── */}
+      {WORKERS.map((w, i) => {
+        const { x, y } = polar(RADIUS, w.angle);
+        const Icon = w.icon;
+        const isActive = hovered === i;
+
+        return (
+          <motion.div
+            key={i}
+            className="absolute flex flex-col items-center gap-1.5"
+            style={{
+              left: 180 + x,
+              top: 180 + y,
+              transform: "translate(-50%,-50%)",
+            }}
+            initial={{ opacity: 0, scale: 0.4 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: i * 0.12 + 0.2, duration: 0.55, type: "spring", bounce: 0.35 }}
+            onHoverStart={() => setHovered(i)}
+            onHoverEnd={() => setHovered(null)}
+          >
+            {/* chip */}
+            <motion.div
+              className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-2xl border backdrop-blur-md"
+              animate={{
+                borderColor: isActive ? w.color : "rgba(255,255,255,0.14)",
+                backgroundColor: isActive ? `${w.color}22` : "rgba(255,255,255,0.06)",
+                boxShadow: isActive ? `0 0 24px 4px ${w.color}55` : "none",
+                scale: isActive ? 1.18 : 1,
+              }}
+              transition={{ duration: 0.22 }}
+            >
+              <Icon
+                size={18}
+                style={{ color: isActive ? w.color : "rgba(255,255,255,0.75)" }}
+              />
+            </motion.div>
+
+            {/* label pill */}
+            <motion.div
+              className="rounded-full px-2 py-0.5 font-mono text-[9px] tracking-widest"
+              animate={{
+                opacity: isActive ? 1 : 0.5,
+                color: isActive ? w.color : "rgba(255,255,255,0.5)",
+              }}
+            >
+              {w.label.toUpperCase()}
+            </motion.div>
+          </motion.div>
+        );
+      })}
+
+      {/* ── Central hub ── */}
+      <motion.div
+        className="relative z-10 flex h-20 w-20 flex-col items-center justify-center rounded-3xl border border-[rgba(139,92,246,0.5)] bg-[rgba(139,92,246,0.12)] backdrop-blur-xl"
+        animate={{
+          boxShadow: [
+            "0 0 30px 6px rgba(139,92,246,0.35)",
+            "0 0 50px 12px rgba(139,92,246,0.20)",
+            "0 0 30px 6px rgba(139,92,246,0.35)",
+          ],
+        }}
+        transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+      >
+        {/* inner rotating arc */}
+        <motion.div
+          className="pointer-events-none absolute inset-1 rounded-[20px] border border-[rgba(139,92,246,0.35)]"
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+          style={{
+            backgroundImage:
+              "conic-gradient(from 0deg, rgba(139,92,246,0.4), transparent 60%)",
+          }}
+        />
+        <Plug
+          size={26}
+          className="relative text-white drop-shadow-[0_0_12px_rgba(139,92,246,0.9)]"
+          strokeWidth={1.6}
+        />
+        <span className="relative mt-1 font-mono text-[8px] tracking-[0.22em] text-white/70">
+          HUB
+        </span>
       </motion.div>
-    </motion.div>
+
+      {/* ── Floating "MATCH" badge that occasionally appears ── */}
+      <motion.div
+        className="pointer-events-none absolute right-4 top-6 rounded-full border border-[#facc1555] bg-[#facc1511] px-3 py-1 font-mono text-[10px] tracking-widest text-[#facc15]"
+        animate={{
+          opacity: [0, 1, 1, 0],
+          y: [6, 0, 0, -6],
+        }}
+        transition={{
+          duration: 2.4,
+          repeat: Infinity,
+          repeatDelay: 3.6,
+          ease: "easeInOut",
+        }}
+      >
+        ✓ MATCH
+      </motion.div>
+    </div>
   );
 }
-
