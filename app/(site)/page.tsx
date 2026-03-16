@@ -1,7 +1,5 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
-import { PlugSpinner } from "@/components/PlugSpinner";
+import { HomeHero } from "@/components/HomeHero";
 
 /**
  * Landing page (single-page style) for Pluggers.
@@ -20,35 +18,7 @@ export default function Home() {
           <SiteHeader label="PLUGGERS // COOMING SOON" />
         </div>
 
-        <main className="relative flex flex-1 flex-col items-center justify-center py-18 text-center">
-          <PlugSpinner />
-
-          <div className="mt-7 inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-panel)] px-5 py-2 font-mono text-xs tracking-[0.22em] text-[var(--color-muted)] backdrop-blur">
-            COOMING SOON
-          </div>
-
-          <h1 className="mt-10 max-w-3xl font-sans text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">
-            Il software di cui non sapevi avere bisogno a cui non potrai fare a
-            meno.
-          </h1>
-          <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--color-muted)] sm:text-lg">
-            Un’esperienza semplice, veloce e sorprendentemente utile.
-          </p>
-
-          <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row">
-            <Link
-              href="/blog"
-              className="group inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-panel)] px-6 py-3 font-mono text-sm text-[var(--color-foreground)] backdrop-blur transition hover:border-[var(--color-accent)]"
-            >
-              Entra nel Blog
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
-
-            <div className="rounded-full border border-[var(--color-border)] bg-[var(--color-panel)] px-5 py-3 font-mono text-xs text-[var(--color-muted)]">
-              accent: <span className="text-[var(--color-accent)]">purple</span>
-            </div>
-          </div>
-        </main>
+        <HomeHero />
 
         <footer className="relative flex flex-col items-center justify-between gap-3 border-t border-[var(--color-border)] pt-6 text-xs text-[var(--color-muted)] sm:flex-row">
           <div className="font-mono">© {new Date().getFullYear()} Pluggers</div>

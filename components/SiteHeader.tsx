@@ -39,12 +39,6 @@ export function SiteHeader({
         >
           Blog
         </Link>
-        <Link
-          href="/admin"
-          className="rounded-full border border-[var(--color-border)] bg-[var(--color-panel)] px-4 py-2 font-mono text-xs text-[var(--color-muted)] backdrop-blur transition hover:border-[var(--color-accent)]"
-        >
-          Admin
-        </Link>
         <ThemeToggle />
       </nav>
     </header>
