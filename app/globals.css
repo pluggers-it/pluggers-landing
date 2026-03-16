@@ -13,6 +13,22 @@
   --panel: rgba(255, 255, 255, 0.06);
   --panel-2: rgba(255, 255, 255, 0.10);
   --border: rgba(255, 255, 255, 0.14);
+
+  /* ── Spinner node colors (dark mode) ── */
+  --node-hydraulic:   #38bdf8;
+  --node-electric:    #facc15;
+  --node-mason:       #fb923c;
+  --node-carpenter:   #34d399;
+  --node-painter:     #c084fc;
+
+  --node-border-alpha: 0.40;
+  --node-bg-alpha:     0.12;
+  --node-label-alpha:  0.80;
+  --hub-border:        rgba(139, 92, 246, 0.60);
+  --hub-bg:            rgba(139, 92, 246, 0.16);
+  --orbit-stroke:      rgba(139, 92, 246, 0.20);
+  --line-alpha:        0.55;
+  --label-color:       var(--muted);
 }
 
 html.light {
@@ -24,6 +40,22 @@ html.light {
   --panel: rgba(20, 10, 40, 0.05);
   --panel-2: rgba(20, 10, 40, 0.08);
   --border: rgba(20, 10, 40, 0.16);
+
+  /* ── Spinner node colors (light mode) — saturated & dark ── */
+  --node-hydraulic:   #0369a1;   /* blue-700 */
+  --node-electric:    #a16207;   /* yellow-700 */
+  --node-mason:       #c2410c;   /* orange-700 */
+  --node-carpenter:   #047857;   /* emerald-700 */
+  --node-painter:     #7c3aed;   /* violet-600 */
+
+  --node-border-alpha: 0.90;
+  --node-bg-alpha:     0.10;
+  --node-label-alpha:  1.00;
+  --hub-border:        rgba(109, 40, 217, 0.85);
+  --hub-bg:            rgba(109, 40, 217, 0.10);
+  --orbit-stroke:      rgba(109, 40, 217, 0.35);
+  --line-alpha:        0.85;
+  --label-color:       #0b0b12;
 }
 
 @theme inline {
@@ -42,4 +74,9 @@ html.light {
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* Hide Next.js dev toolbar */
+nextjs-portal {
+  display: none !important;
 }
