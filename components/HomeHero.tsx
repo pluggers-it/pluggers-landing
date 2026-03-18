@@ -12,7 +12,6 @@ const PROFESSIONS = [
   "Carpentiere",
   "Muratore",
   "Imbianchino",
-  "...e molti altri",
 ];
 
 // Each word shown for 1.4s; spinner reveals after 3 professions (~4.2s)
@@ -28,6 +27,7 @@ export function HomeHero() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [profession, setProfession] = useState("");
+  const [otherProfession, setOtherProfession] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [waitlistError, setWaitlistError] = useState<string | null>(null);
@@ -88,13 +88,11 @@ export function HomeHero() {
                 key={wordIdx}
                 className="font-sans font-extrabold italic tracking-tight"
                 style={{
-                  fontSize: wordIdx === PROFESSIONS.length - 1
-                    ? "clamp(1.5rem, 3.8vw, 3.2rem)"
-                    : "clamp(2.8rem, 7vw, 5.6rem)",
+                  fontSize: "clamp(2.8rem, 7vw, 5.6rem)",
                   display: "inline-block",
                   lineHeight: 1.25,
                   paddingRight: "0.22em",
-                  whiteSpace: wordIdx === PROFESSIONS.length - 1 ? "nowrap" : "normal",
+                  whiteSpace: "normal",
                   background: "linear-gradient(135deg, var(--color-accent), #a855f7, #38bdf8)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -231,7 +229,12 @@ export function HomeHero() {
                     const res = await fetch("/api/waitlist", {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ email, firstName, lastName, profession }),
+                      body: JSON.stringify({
+                        email,
+                        firstName,
+                        lastName,
+                        profession: profession === "altro" ? otherProfession : profession
+                      }),
                     });
                     if (res.ok) {
                       setSubmitted(true);
@@ -279,11 +282,16 @@ export function HomeHero() {
                   <select
                     required
                     value={profession}
-                    onChange={(e) => setProfession(e.target.value)}
+                    onChange={(e) => {
+                      setProfession(e.target.value);
+                      if (e.target.value !== "altro") {
+                        setOtherProfession("");
+                      }
+                    }}
                     className="h-12 w-full rounded-2xl border border-[var(--color-border)] bg-black/10 px-4 font-mono text-sm text-[var(--color-foreground)] outline-none transition focus:border-[var(--color-accent)] appearance-none"
                     style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, backgroundRepeat: "no-repeat", backgroundPosition: "right 1rem center", backgroundSize: "1.25rem" }}
                   >
-                    <option value="" disabled className="bg-[#07070a]">Tipologia di professione</option>
+                    <option value="" disabled className="bg-[#07070a]">Professione</option>
                     <option value="idraulico" className="bg-[#07070a]">Idraulico</option>
                     <option value="elettricista" className="bg-[#07070a]">Elettricista</option>
                     <option value="muratore" className="bg-[#07070a]">Muratore</option>
@@ -292,6 +300,23 @@ export function HomeHero() {
                     <option value="altro" className="bg-[#07070a]">Altro</option>
                   </select>
                 </div>
+
+                {profession === "altro" && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <input
+                      type="text"
+                      required
+                      value={otherProfession}
+                      onChange={(e) => setOtherProfession(e.target.value)}
+                      placeholder="Specifica la tua professione"
+                      className="h-12 w-full rounded-2xl border border-[var(--color-border)] bg-black/10 px-4 font-mono text-sm text-[var(--color-foreground)] outline-none transition focus:border-[var(--color-accent)]"
+                    />
+                  </motion.div>
+                )}
 
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <button
