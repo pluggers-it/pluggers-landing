@@ -60,14 +60,20 @@ export function HomeHero() {
              lets long strings (e.g. "...e molti altri") breathe             */}
         <div
           style={{
-            overflowX: "visible",
-            overflowY: "hidden",
             marginTop: "clamp(0.25rem, 0.6vw, 0.5rem)",
             width: "100%",
             textAlign: "center",
+            overflow: "visible",
           }}
         >
-          <div style={{ padding: "0.35em 0" }}>
+          <div
+            style={{
+              padding: "0.35em 0",
+              overflow: "hidden",
+              paddingBottom: "0.2em",
+              paddingInline: "0.28em",
+            }}
+          >
             <AnimatePresence mode="wait">
               <motion.span
                 key={wordIdx}
@@ -77,7 +83,8 @@ export function HomeHero() {
                     ? "clamp(1.5rem, 3.8vw, 3.2rem)"
                     : "clamp(2.8rem, 7vw, 5.6rem)",
                   display: "inline-block",
-                  lineHeight: 1.15,
+                  lineHeight: 1.25,
+                  paddingRight: "0.22em",
                   whiteSpace: wordIdx === PROFESSIONS.length - 1 ? "nowrap" : "normal",
                   background: "linear-gradient(135deg, var(--color-accent), #a855f7, #38bdf8)",
                   WebkitBackgroundClip: "text",
@@ -113,7 +120,7 @@ export function HomeHero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
         >
-          Pluggers è il marketplace che connette chi ha un problema a chi ha una soluzione.
+          La piattaforma italiana per trovare professionisti qualificati nella tua zona — veloci, verificati e sempre disponibili al momento giusto.
         </motion.p>
 
         {/* CTAs */}
@@ -132,7 +139,7 @@ export function HomeHero() {
             }}
           >
             <BellRing className="h-4 w-4" />
-            Entra in Waitlist
+            Unisciti alla Waitlist
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
 
@@ -140,7 +147,7 @@ export function HomeHero() {
             href="/blog"
             className="group inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-panel)] px-7 py-4 font-mono text-sm text-[var(--color-foreground)] backdrop-blur transition hover:border-[var(--color-accent)]"
           >
-            Vai al Blog
+            Scopri il Blog
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </motion.div>
@@ -193,17 +200,17 @@ export function HomeHero() {
             </div>
 
             <h3 className="mt-3 font-sans text-xl font-semibold tracking-tight sm:text-2xl">
-              Sii tra i primi a provarlo.
+              Accedi prima di tutti gli altri.
             </h3>
             <p className="mt-2 text-sm text-[var(--color-muted)]">
-              Lascia la tua mail — ti avvisiamo non appena Pluggers arriva nella
-              tua zona. Zero spam, solo la notifica giusta.
+              Inserisci la tua email e ti contatteremo nel momento in cui il
+              servizio sarà attivo nella tua area. Aggiornamenti rari, mai irrilevanti.
             </p>
 
             <form className="mt-5 flex flex-col gap-3 sm:flex-row">
               <input
                 type="email"
-                placeholder="la-tua@mail.com"
+                placeholder="nome@email.com"
                 className="h-12 flex-1 rounded-2xl border border-[var(--color-border)] bg-black/10 px-4 font-mono text-sm text-[var(--color-foreground)] outline-none transition focus:border-[var(--color-accent)]"
               />
               <button
@@ -214,7 +221,7 @@ export function HomeHero() {
                   boxShadow: "0 4px 20px rgba(139,92,246,0.40)",
                 }}
               >
-                INVIA
+                ISCRIVITI
               </button>
             </form>
           </div>

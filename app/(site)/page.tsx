@@ -15,7 +15,7 @@ export default function Home() {
         </div>
 
         <div className="relative">
-          <SiteHeader label="PLUGGERS // COOMING SOON" />
+          <SiteHeader label="PLUGGERS // EARLY ACCESS" />
         </div>
 
         <HomeHero />
