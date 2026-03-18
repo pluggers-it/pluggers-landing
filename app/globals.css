@@ -88,7 +88,8 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  margin-left: -50px;  /* -HUB_SIZE / 2 */
+  margin-top: -50px;
   z-index: 10;
 }
 
