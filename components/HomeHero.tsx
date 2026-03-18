@@ -63,6 +63,7 @@ export function HomeHero() {
             overflowX: "visible",
             overflowY: "hidden",
             marginTop: "clamp(0.25rem, 0.6vw, 0.5rem)",
+            paddingBottom: "0.2em",
             width: "100%",
             textAlign: "center",
           }}
@@ -77,7 +78,7 @@ export function HomeHero() {
                     ? "clamp(1.5rem, 3.8vw, 3.2rem)"
                     : "clamp(2.8rem, 7vw, 5.6rem)",
                   display: "inline-block",
-                  lineHeight: 1.15,
+                  lineHeight: 1.25,
                   whiteSpace: wordIdx === PROFESSIONS.length - 1 ? "nowrap" : "normal",
                   background: "linear-gradient(135deg, var(--color-accent), #a855f7, #38bdf8)",
                   WebkitBackgroundClip: "text",

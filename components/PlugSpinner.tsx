@@ -6,12 +6,10 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 // ─── Pentagon geometry ────────────────────────────────────────────────────────
-const SIZE      = 560;
-const CX        = SIZE / 2;   // 280
-const CY        = SIZE / 2;   // 280
-const RADIUS    = 210;
-const HUB_SIZE  = 100;
+const SIZE = 600; // square wrapper, pixel-perfect
+const HUB_SIZE = 100;
 const NODE_SIZE = 60;
+const RADIUS_PCT = 35; // 35% of wrapper size → 210px when SIZE=600
 
 // Perfect regular pentagon: 5 vertices 72° apart, first at top (−90°)
 const WORKERS = [
@@ -22,9 +20,11 @@ const WORKERS = [
   { icon: Paintbrush, label: "Imbianchino",  dark: "#c084fc", light: "#7c3aed", angle: -90 + 72 * 4 },
 ];
 
-function polar(angleDeg: number, r = RADIUS) {
+function polarPct(angleDeg: number, rPct = RADIUS_PCT) {
   const rad = (angleDeg * Math.PI) / 180;
-  return { x: CX + Math.cos(rad) * r, y: CY + Math.sin(rad) * r };
+  const x = 50 + Math.cos(rad) * rPct;
+  const y = 50 + Math.sin(rad) * rPct;
+  return { xPct: x, yPct: y };
 }
 
 /** Convert hex #rrggbb to "r, g, b" string for rgba() */
@@ -52,8 +52,8 @@ export function PlugSpinner({ revealDelay = 0 }: Props) {
 
   return (
     <div
-      className="relative mx-auto select-none"
-      style={{ width: SIZE, height: SIZE, maxWidth: "100%", aspectRatio: "1 / 1" }}
+      className="radial-wrapper select-none"
+      style={{ width: SIZE, height: SIZE, maxWidth: "100%" }}
     >
       {/* Ambient purple glow */}
       <div
@@ -65,15 +65,14 @@ export function PlugSpinner({ revealDelay = 0 }: Props) {
         }}
       />
 
-      {/* ── SVG layer: orbit ring + connection lines + dots ── */}
+      {/* ── SVG overlay: orbit ring + connection lines + dots ── */}
       <svg
-        viewBox={`0 0 ${SIZE} ${SIZE}`}
         fill="none"
-        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "visible" }}
+        style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none" }}
       >
         {/* Orbit ring */}
         <motion.circle
-          cx={CX} cy={CY} r={RADIUS}
+          cx="50%" cy="50%" r={`${RADIUS_PCT}%`}
           stroke={isLight ? "rgba(109,40,217,0.35)" : "rgba(139,92,246,0.22)"}
           strokeWidth={isLight ? 1.8 : 1.5}
           strokeDasharray="5 10"
@@ -84,12 +83,12 @@ export function PlugSpinner({ revealDelay = 0 }: Props) {
 
         {/* Connection lines */}
         {WORKERS.map((w, i) => {
-          const { x, y } = polar(w.angle);
+          const { xPct, yPct } = polarPct(w.angle);
           const color = isLight ? w.light : w.dark;
           return (
             <motion.line
               key={`line-${i}`}
-              x1={CX} y1={CY} x2={x} y2={y}
+              x1="50%" y1="50%" x2={`${xPct.toFixed(6)}%`} y2={`${yPct.toFixed(6)}%`}
               stroke={color}
               strokeWidth={isLight ? 2.2 : 1.8}
               strokeLinecap="round"
@@ -106,7 +105,7 @@ export function PlugSpinner({ revealDelay = 0 }: Props) {
 
         {/* Travelling dots */}
         {WORKERS.map((w, i) => {
-          const { x, y } = polar(w.angle);
+          const { xPct, yPct } = polarPct(w.angle);
           const color = isLight ? w.light : w.dark;
           const rgb = hexToRgb(color);
           return (
@@ -114,10 +113,10 @@ export function PlugSpinner({ revealDelay = 0 }: Props) {
               key={`dot-${i}`}
               r={5}
               fill={color}
-              initial={{ cx: CX, cy: CY, opacity: 0 }}
+              initial={{ cx: "50%", cy: "50%", opacity: 0 }}
               animate={{
-                cx: [CX, x, CX],
-                cy: [CY, y, CY],
+                cx: ["50%", `${xPct.toFixed(6)}%`, "50%"],
+                cy: ["50%", `${yPct.toFixed(6)}%`, "50%"],
                 opacity: [0, 1, 1, 0],
               }}
               style={{ filter: `drop-shadow(0 0 7px rgba(${rgb}, 0.9))` }}
@@ -135,11 +134,9 @@ export function PlugSpinner({ revealDelay = 0 }: Props) {
 
       {/* ── Worker node chips ── */}
       {WORKERS.map((w, i) => {
-        // Convert absolute SVG coords to % of container so chips
-        // stay aligned with the SVG even when maxWidth is < SIZE
-        const { x, y } = polar(w.angle);
-        const leftPct  = (x / SIZE * 100).toFixed(4) + "%";
-        const topPct   = (y / SIZE * 100).toFixed(4) + "%";
+        const { xPct, yPct } = polarPct(w.angle);
+        const leftPct = `${xPct.toFixed(6)}%`;
+        const topPct = `${yPct.toFixed(6)}%`;
         const Icon = w.icon;
         const color = isLight ? w.light : w.dark;
         const rgb = hexToRgb(color);
@@ -206,17 +203,13 @@ export function PlugSpinner({ revealDelay = 0 }: Props) {
 
       {/* ── Central hub – always perfectly centered via % ── */}
       <motion.div
-        className="absolute flex flex-col items-center justify-center rounded-[28px]"
+        className="radial-hub flex flex-col items-center justify-center rounded-[28px]"
         style={{
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%)",
           width: HUB_SIZE,
           height: HUB_SIZE,
           border: isLight ? "2.5px solid rgba(109,40,217,0.85)" : "2.5px solid rgba(139,92,246,0.60)",
           backgroundColor: isLight ? "rgba(109,40,217,0.10)" : "rgba(139,92,246,0.16)",
           backdropFilter: "blur(16px)",
-          zIndex: 10,
         }}
         initial={{ opacity: 0, scale: 0.3 }}
         animate={{
