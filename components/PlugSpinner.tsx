@@ -148,7 +148,9 @@ export function PlugSpinner({ revealDelay = 0 }: Props) {
             style={{
               left: leftPct,
               top:  topPct,
-              transform: "translate(-50%, -50%)",
+              /* Offset so the chip center (not the whole container) sits on the orbit */
+              marginLeft: -(NODE_SIZE / 2),
+              marginTop: -(NODE_SIZE / 2),
               gap: 6,
             }}
             initial={{ opacity: 0, scale: 0.2 }}
@@ -188,7 +190,7 @@ export function PlugSpinner({ revealDelay = 0 }: Props) {
 
             {/* Label */}
             <span
-              className="font-mono font-semibold"
+              className="font-mono font-semibold text-center"
               style={{
                 fontSize: 10,
                 letterSpacing: "0.18em",

@@ -15,13 +15,19 @@ const PROFESSIONS = [
   "...e molti altri",
 ];
 
-// Each word shown for 1.4s → 6 × 1.4 = 8.4s for one full cycle
+// Each word shown for 1.4s; spinner reveals after 3 professions (~4.2s)
 const WORD_DURATION_MS = 1400;
-const ONE_CYCLE_MS = PROFESSIONS.length * WORD_DURATION_MS; // 8400 ms
+const SPINNER_REVEAL_MS = 3 * WORD_DURATION_MS;
 
 export function HomeHero() {
   const [wordIdx, setWordIdx] = useState(0);
   const [spinnerReady, setSpinnerReady] = useState(false);
+
+  // Waitlist form state
+  const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [waitlistError, setWaitlistError] = useState<string | null>(null);
 
   useEffect(() => {
     // Cycle words
@@ -29,8 +35,8 @@ export function HomeHero() {
       () => setWordIdx((i) => (i + 1) % PROFESSIONS.length),
       WORD_DURATION_MS
     );
-    // Reveal spinner after first full cycle
-    const revealId = setTimeout(() => setSpinnerReady(true), ONE_CYCLE_MS);
+    // Reveal spinner after 3 professions instead of a full cycle
+    const revealId = setTimeout(() => setSpinnerReady(true), SPINNER_REVEAL_MS);
     return () => {
       clearInterval(id);
       clearTimeout(revealId);
@@ -170,7 +176,7 @@ export function HomeHero() {
       {/* ── Waitlist form ── */}
       <motion.section
         id="waitlist"
-        className="mt-20 w-full max-w-2xl"
+        className="mt-20 w-full max-w-3xl"
         initial={{ opacity: 0, y: 32 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.0, duration: 0.6, ease: "easeOut" }}
@@ -207,23 +213,64 @@ export function HomeHero() {
               servizio sarà attivo nella tua area. Aggiornamenti rari, mai irrilevanti.
             </p>
 
-            <form className="mt-5 flex flex-col gap-3 sm:flex-row">
-              <input
-                type="email"
-                placeholder="nome@email.com"
-                className="h-12 flex-1 rounded-2xl border border-[var(--color-border)] bg-black/10 px-4 font-mono text-sm text-[var(--color-foreground)] outline-none transition focus:border-[var(--color-accent)]"
-              />
-              <button
-                type="button"
-                className="h-12 rounded-2xl px-8 font-mono text-xs font-semibold tracking-[0.2em] text-white transition hover:scale-[1.02]"
-                style={{
-                  background: "linear-gradient(135deg, var(--color-accent), #a855f7)",
-                  boxShadow: "0 4px 20px rgba(139,92,246,0.40)",
+            {submitted ? (
+              <div className="mt-5 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-4 text-center font-mono text-sm text-emerald-400">
+                Sei in lista! Ti contatteremo presto.
+              </div>
+            ) : (
+              <form
+                className="mt-5 flex flex-col gap-3 sm:flex-row"
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setWaitlistError(null);
+                  setSubmitting(true);
+                  try {
+                    const res = await fetch("/api/waitlist", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ email }),
+                    });
+                    if (res.ok) {
+                      setSubmitted(true);
+                    } else {
+                      const data = (await res.json().catch(() => null)) as
+                        | { error?: string }
+                        | null;
+                      setWaitlistError(data?.error ?? "Something went wrong");
+                    }
+                  } catch {
+                    setWaitlistError("Connection error");
+                  } finally {
+                    setSubmitting(false);
+                  }
                 }}
               >
-                ISCRIVITI
-              </button>
-            </form>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="nome@email.com"
+                  className="h-12 flex-1 rounded-2xl border border-[var(--color-border)] bg-black/10 px-4 font-mono text-sm text-[var(--color-foreground)] outline-none transition focus:border-[var(--color-accent)]"
+                />
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="h-12 rounded-2xl px-8 font-mono text-xs font-semibold tracking-[0.2em] text-white transition hover:scale-[1.02] disabled:opacity-50"
+                  style={{
+                    background: "linear-gradient(135deg, var(--color-accent), #a855f7)",
+                    boxShadow: "0 4px 20px rgba(139,92,246,0.40)",
+                  }}
+                >
+                  {submitting ? "..." : "ISCRIVITI"}
+                </button>
+                {waitlistError && (
+                  <div className="w-full font-mono text-xs text-red-500 sm:w-auto">
+                    {waitlistError}
+                  </div>
+                )}
+              </form>
+            )}
           </div>
         </div>
       </motion.section>

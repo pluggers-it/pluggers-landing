@@ -51,10 +51,30 @@ export function BlogAdminPanel({
     );
   }, [content, isAuthed, resolvedCategory, state.status, title]);
 
+  const [loginError, setLoginError] = useState<string | null>(null);
+  const [loginLoading, setLoginLoading] = useState(false);
+
   async function login(e: React.FormEvent) {
     e.preventDefault();
-    setIsAuthed(devKey.trim().length > 0);
-    setState({ status: "idle" });
+    setLoginError(null);
+    setLoginLoading(true);
+    try {
+      const res = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: devKey }),
+      });
+      if (res.ok) {
+        setIsAuthed(true);
+        setState({ status: "idle" });
+      } else {
+        setLoginError("Invalid credentials");
+      }
+    } catch {
+      setLoginError("Connection error");
+    } finally {
+      setLoginLoading(false);
+    }
   }
 
   async function createPost(e: React.FormEvent) {
@@ -167,13 +187,14 @@ export function BlogAdminPanel({
           </label>
           <button
             type="submit"
-            className="h-11 rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] font-mono text-sm text-[var(--color-foreground)] transition hover:border-[var(--color-accent)]"
+            disabled={loginLoading || devKey.trim().length === 0}
+            className="h-11 rounded-xl border border-[var(--color-border)] bg-[var(--color-panel)] font-mono text-sm text-[var(--color-foreground)] transition enabled:hover:border-[var(--color-accent)] disabled:opacity-50"
           >
-            Entra
+            {loginLoading ? "Verifying..." : "Login"}
           </button>
-          <div className="font-mono text-xs text-[var(--color-muted)]">
-            La verifica reale avviene lato server su <code>/api/posts</code>.
-          </div>
+          {loginError && (
+            <div className="font-mono text-xs text-red-500">{loginError}</div>
+          )}
         </form>
       ) : (
         <form onSubmit={createPost} className="mt-5 grid gap-4">

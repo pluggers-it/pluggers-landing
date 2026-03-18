@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { makeId, readPosts, writePosts } from "@/lib/posts";
+import { readPosts, createPost, deletePost } from "@/lib/posts";
 
 /**
- * Public endpoint: returns the full posts list.
+ * Public endpoint: returns all posts.
  */
 export async function GET() {
   const posts = await readPosts();
@@ -23,16 +23,10 @@ export async function POST(req: Request) {
   }
 
   const body = (await req.json().catch(() => null)) as
-    | {
-        title?: string;
-        category?: string;
-        content?: string;
-        devKey?: string;
-      }
+    | { title?: string; category?: string; content?: string; devKey?: string }
     | null;
 
-  const devKey = body?.devKey ?? "";
-  if (devKey !== adminPassword) {
+  if ((body?.devKey ?? "") !== adminPassword) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -47,18 +41,12 @@ export async function POST(req: Request) {
     );
   }
 
-  const posts = await readPosts();
-  const createdAt = new Date().toISOString();
-  const post = { id: makeId(), title, category, content, createdAt };
-
-  await writePosts([post, ...posts]);
-
+  const post = await createPost({ title, category, content });
   return NextResponse.json({ post }, { status: 201 });
 }
 
 /**
- * Protected endpoint: deletes an existing post by id.
- * Accepts `id` either in querystring (?id=...) or JSON body.
+ * Protected endpoint: deletes a post by id.
  */
 export async function DELETE(req: Request) {
   const adminPassword = process.env.ADMIN_PASSWORD;
@@ -69,32 +57,23 @@ export async function DELETE(req: Request) {
     );
   }
 
-  const url = new URL(req.url);
-  const idFromQuery = (url.searchParams.get("id") ?? "").trim();
-
   const body = (await req.json().catch(() => null)) as
     | { devKey?: string; id?: string }
     | null;
 
-  const devKey = body?.devKey ?? "";
-  if (devKey !== adminPassword) {
+  if ((body?.devKey ?? "") !== adminPassword) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const id = (body?.id ?? idFromQuery).trim();
+  const id = (body?.id ?? "").trim();
   if (!id) {
     return NextResponse.json({ error: "Missing id" }, { status: 400 });
   }
 
-  const posts = await readPosts();
-  const nextPosts = posts.filter((p) => p.id !== id);
-
-  if (nextPosts.length === posts.length) {
+  const deleted = await deletePost(id);
+  if (!deleted) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  await writePosts(nextPosts);
-
   return NextResponse.json({ ok: true });
 }
-

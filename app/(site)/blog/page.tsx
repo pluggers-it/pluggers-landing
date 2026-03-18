@@ -112,7 +112,7 @@ export default function BlogPage() {
                   Nessun post ancora.
                 </div>
                 <div className="mt-2 text-sm text-[var(--color-muted)]">
-                  Se sei admin, fai login qui a destra e pubblica.
+                  I contenuti arriveranno presto.
                 </div>
               </div>
             )}

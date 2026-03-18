@@ -1,14 +1,7 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
+import { supabase } from "@/lib/supabase";
 
-/**
- * Common categories (free text still allowed).
- */
 export type PostCategory = "Idraulico" | "Elettricista" | "Muratore" | "Altro";
 
-/**
- * Post model stored in the JSON "stupid DB".
- */
 export type Post = {
   id: string;
   title: string;
@@ -17,48 +10,56 @@ export type Post = {
   createdAt: string;
 };
 
-type PostsFile = {
-  posts: Post[];
+/** Row shape returned by Supabase */
+type PostRow = {
+  id: string;
+  title: string;
+  category: string;
+  content: string;
+  created_at: string;
 };
 
-/**
- * Absolute path to the local JSON file used as a zero-cost database.
- */
-const POSTS_FILE = path.join(process.cwd(), "data", "posts.json");
-
-function safeJsonParse<T>(raw: string, fallback: T): T {
-  try {
-    return JSON.parse(raw) as T;
-  } catch {
-    return fallback;
-  }
+function rowToPost(row: PostRow): Post {
+  return {
+    id: row.id,
+    title: row.title,
+    category: row.category,
+    content: row.content,
+    createdAt: row.created_at,
+  };
 }
 
-/**
- * Reads all posts from `data/posts.json`.
- */
 export async function readPosts(): Promise<Post[]> {
-  const raw = await fs.readFile(POSTS_FILE, "utf8");
-  const parsed = safeJsonParse<PostsFile>(raw, { posts: [] });
-  return Array.isArray(parsed.posts) ? parsed.posts : [];
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return (data as PostRow[]).map(rowToPost);
 }
 
-/**
- * Writes the posts list to `data/posts.json` (pretty-printed).
- */
-export async function writePosts(posts: Post[]): Promise<void> {
-  const payload: PostsFile = { posts };
-  await fs.writeFile(
-    POSTS_FILE,
-    JSON.stringify(payload, null, 2) + "\n",
-    "utf8",
-  );
+export async function createPost(input: {
+  title: string;
+  category: string;
+  content: string;
+}): Promise<Post> {
+  const { data, error } = await supabase
+    .from("posts")
+    .insert(input)
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return rowToPost(data as PostRow);
 }
 
-/**
- * Generates a simple unique id suitable for local JSON storage.
- */
-export function makeId(): string {
-  return `post-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-}
+export async function deletePost(id: string): Promise<boolean> {
+  const { error, count } = await supabase
+    .from("posts")
+    .delete()
+    .eq("id", id);
 
+  if (error) throw new Error(error.message);
+  return (count ?? 1) > 0;
+}
