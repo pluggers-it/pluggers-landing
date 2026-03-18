@@ -28,6 +28,7 @@ export function HomeHero() {
   const [lastName, setLastName] = useState("");
   const [profession, setProfession] = useState("");
   const [otherProfession, setOtherProfession] = useState("");
+  const [region, setRegion] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [waitlistError, setWaitlistError] = useState<string | null>(null);
@@ -233,6 +234,7 @@ export function HomeHero() {
                         email,
                         firstName,
                         lastName,
+                        region,
                         profession: profession === "altro" ? otherProfession : profession
                       }),
                     });
@@ -268,6 +270,35 @@ export function HomeHero() {
                     placeholder="Cognome"
                     className="h-12 w-full rounded-2xl border border-[var(--color-border)] bg-black/10 px-4 font-mono text-sm text-[var(--color-foreground)] outline-none transition focus:border-[var(--color-accent)]"
                   />
+                  <select
+                    required
+                    value={region}
+                    onChange={(e) => setRegion(e.target.value)}
+                    className="h-12 w-full rounded-2xl border border-[var(--color-border)] bg-black/10 px-4 font-mono text-sm text-[var(--color-foreground)] outline-none transition focus:border-[var(--color-accent)] appearance-none"
+                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, backgroundRepeat: "no-repeat", backgroundPosition: "right 1rem center", backgroundSize: "1.25rem" }}
+                  >
+                    <option value="" disabled className="bg-[#07070a]">Regione</option>
+                    <option value="Abruzzo" className="bg-[#07070a]">Abruzzo</option>
+                    <option value="Basilicata" className="bg-[#07070a]">Basilicata</option>
+                    <option value="Calabria" className="bg-[#07070a]">Calabria</option>
+                    <option value="Campania" className="bg-[#07070a]">Campania</option>
+                    <option value="Emilia-Romagna" className="bg-[#07070a]">Emilia-Romagna</option>
+                    <option value="Friuli-Venezia Giulia" className="bg-[#07070a]">Friuli-Venezia Giulia</option>
+                    <option value="Lazio" className="bg-[#07070a]">Lazio</option>
+                    <option value="Liguria" className="bg-[#07070a]">Liguria</option>
+                    <option value="Lombardia" className="bg-[#07070a]">Lombardia</option>
+                    <option value="Marche" className="bg-[#07070a]">Marche</option>
+                    <option value="Molise" className="bg-[#07070a]">Molise</option>
+                    <option value="Piemonte" className="bg-[#07070a]">Piemonte</option>
+                    <option value="Puglia" className="bg-[#07070a]">Puglia</option>
+                    <option value="Sardegna" className="bg-[#07070a]">Sardegna</option>
+                    <option value="Sicilia" className="bg-[#07070a]">Sicilia</option>
+                    <option value="Toscana" className="bg-[#07070a]">Toscana</option>
+                    <option value="Trentino-Alto Adige" className="bg-[#07070a]">Trentino-Alto Adige</option>
+                    <option value="Umbria" className="bg-[#07070a]">Umbria</option>
+                    <option value="Valle d'Aosta" className="bg-[#07070a]">Valle d'Aosta</option>
+                    <option value="Veneto" className="bg-[#07070a]">Veneto</option>
+                  </select>
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

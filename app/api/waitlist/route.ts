@@ -7,13 +7,14 @@ import { supabase } from "@/lib/supabase";
  */
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as
-    | { email?: string; firstName?: string; lastName?: string; profession?: string }
+    | { email?: string; firstName?: string; lastName?: string; profession?: string; region?: string }
     | null;
 
   const email = (body?.email ?? "").trim().toLowerCase();
   const firstName = (body?.firstName ?? "").trim();
   const lastName = (body?.lastName ?? "").trim();
   const profession = (body?.profession ?? "").trim();
+  const region = (body?.region ?? "").trim();
 
   if (!email || !email.includes("@")) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
@@ -23,7 +24,8 @@ export async function POST(req: Request) {
     email,
     first_name: firstName,
     last_name: lastName,
-    profession
+    profession,
+    region
   });
 
   if (error) {
