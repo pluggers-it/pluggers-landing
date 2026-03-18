@@ -7,16 +7,24 @@ import { supabase } from "@/lib/supabase";
  */
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as
-    | { email?: string }
+    | { email?: string; firstName?: string; lastName?: string; profession?: string }
     | null;
 
   const email = (body?.email ?? "").trim().toLowerCase();
+  const firstName = (body?.firstName ?? "").trim();
+  const lastName = (body?.lastName ?? "").trim();
+  const profession = (body?.profession ?? "").trim();
 
   if (!email || !email.includes("@")) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
-  const { error } = await supabase.from("waitlist").insert({ email });
+  const { error } = await supabase.from("waitlist").insert({ 
+    email,
+    first_name: firstName,
+    last_name: lastName,
+    profession
+  });
 
   if (error) {
     // Unique constraint violation — already registered

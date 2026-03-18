@@ -144,14 +144,10 @@ export function PlugSpinner({ revealDelay = 0 }: Props) {
         return (
           <motion.div
             key={`node-${i}`}
-            className="absolute flex flex-col items-center"
+            className="absolute"
             style={{
               left: leftPct,
               top:  topPct,
-              /* Offset so the chip center (not the whole container) sits on the orbit */
-              marginLeft: -(NODE_SIZE / 2),
-              marginTop: -(NODE_SIZE / 2),
-              gap: 6,
             }}
             initial={{ opacity: 0, scale: 0.2 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -162,43 +158,45 @@ export function PlugSpinner({ revealDelay = 0 }: Props) {
               bounce: 0.40,
             }}
           >
-            {/* Pulsing halo */}
-            <motion.div
-              className="absolute rounded-[18px]"
-              style={{
-                width: NODE_SIZE,
-                height: NODE_SIZE,
-                border: `2px solid ${color}`,
-              }}
-              animate={{ scale: [1, 1.65, 1], opacity: [0.50, 0, 0.50] }}
-              transition={{ duration: 2.8, delay: delaySec + i * 0.5, repeat: Infinity, ease: "easeInOut" }}
-            />
+            <div className="relative flex flex-col items-center" style={{ marginLeft: -(NODE_SIZE / 2), marginTop: -(NODE_SIZE / 2), gap: 6 }}>
+              {/* Pulsing halo */}
+              <motion.div
+                className="absolute rounded-[18px]"
+                style={{
+                  width: NODE_SIZE,
+                  height: NODE_SIZE,
+                  border: `2px solid ${color}`,
+                }}
+                animate={{ scale: [1, 1.65, 1], opacity: [0.50, 0, 0.50] }}
+                transition={{ duration: 2.8, delay: delaySec + i * 0.5, repeat: Infinity, ease: "easeInOut" }}
+              />
 
-            {/* Chip */}
-            <div
-              className="relative flex items-center justify-center rounded-[18px]"
-              style={{
-                width: NODE_SIZE,
-                height: NODE_SIZE,
-                border: `${isLight ? "2.5px" : "2px"} solid rgba(${rgb}, ${isLight ? 0.9 : 0.5})`,
-                backgroundColor: `rgba(${rgb}, ${isLight ? 0.10 : 0.12})`,
-                boxShadow: `0 0 ${isLight ? 18 : 22}px 4px rgba(${rgb}, ${isLight ? 0.20 : 0.28})`,
-              }}
-            >
-              <Icon size={22} strokeWidth={isLight ? 2.4 : 2.0} style={{ color }} />
+              {/* Chip */}
+              <div
+                className="relative flex items-center justify-center rounded-[18px]"
+                style={{
+                  width: NODE_SIZE,
+                  height: NODE_SIZE,
+                  border: `${isLight ? "2.5px" : "2px"} solid rgba(${rgb}, ${isLight ? 0.9 : 0.5})`,
+                  backgroundColor: `rgba(${rgb}, ${isLight ? 0.10 : 0.12})`,
+                  boxShadow: `0 0 ${isLight ? 18 : 22}px 4px rgba(${rgb}, ${isLight ? 0.20 : 0.28})`,
+                }}
+              >
+                <Icon size={22} strokeWidth={isLight ? 2.4 : 2.0} style={{ color }} />
+              </div>
+
+              {/* Label */}
+              <span
+                className="font-mono font-semibold text-center whitespace-nowrap"
+                style={{
+                  fontSize: 10,
+                  letterSpacing: "0.18em",
+                  color: isLight ? "#0b0b12" : `rgba(${rgb}, 0.85)`,
+                }}
+              >
+                {w.label.toUpperCase()}
+              </span>
             </div>
-
-            {/* Label */}
-            <span
-              className="font-mono font-semibold text-center"
-              style={{
-                fontSize: 10,
-                letterSpacing: "0.18em",
-                color: isLight ? "#0b0b12" : `rgba(${rgb}, 0.85)`,
-              }}
-            >
-              {w.label.toUpperCase()}
-            </span>
           </motion.div>
         );
       })}
@@ -212,6 +210,11 @@ export function PlugSpinner({ revealDelay = 0 }: Props) {
           border: isLight ? "2.5px solid rgba(109,40,217,0.85)" : "2.5px solid rgba(139,92,246,0.60)",
           backgroundColor: isLight ? "rgba(109,40,217,0.10)" : "rgba(139,92,246,0.16)",
           backdropFilter: "blur(16px)",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          marginLeft: -(HUB_SIZE / 2),
+          marginTop: -(HUB_SIZE / 2),
         }}
         initial={{ opacity: 0, scale: 0.3 }}
         animate={{

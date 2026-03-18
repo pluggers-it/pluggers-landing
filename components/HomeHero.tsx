@@ -25,6 +25,9 @@ export function HomeHero() {
 
   // Waitlist form state
   const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [profession, setProfession] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [waitlistError, setWaitlistError] = useState<string | null>(null);
@@ -126,7 +129,7 @@ export function HomeHero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
         >
-          La piattaforma italiana per trovare professionisti qualificati nella tua zona — veloci, verificati e sempre disponibili al momento giusto.
+          La piattaforma italiana per trovare professionisti qualificati nella tua zona. Veloci, verificati e sempre disponibili al momento giusto.
         </motion.p>
 
         {/* CTAs */}
@@ -219,7 +222,7 @@ export function HomeHero() {
               </div>
             ) : (
               <form
-                className="mt-5 flex flex-col gap-3 sm:flex-row"
+                className="mt-5 flex flex-col gap-3"
                 onSubmit={async (e) => {
                   e.preventDefault();
                   setWaitlistError(null);
@@ -228,7 +231,7 @@ export function HomeHero() {
                     const res = await fetch("/api/waitlist", {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ email }),
+                      body: JSON.stringify({ email, firstName, lastName, profession }),
                     });
                     if (res.ok) {
                       setSubmitted(true);
@@ -245,25 +248,64 @@ export function HomeHero() {
                   }
                 }}
               >
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="nome@email.com"
-                  className="h-12 flex-1 rounded-2xl border border-[var(--color-border)] bg-black/10 px-4 font-mono text-sm text-[var(--color-foreground)] outline-none transition focus:border-[var(--color-accent)]"
-                />
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="h-12 rounded-2xl px-8 font-mono text-xs font-semibold tracking-[0.2em] text-white transition hover:scale-[1.02] disabled:opacity-50"
-                  style={{
-                    background: "linear-gradient(135deg, var(--color-accent), #a855f7)",
-                    boxShadow: "0 4px 20px rgba(139,92,246,0.40)",
-                  }}
-                >
-                  {submitting ? "..." : "ISCRIVITI"}
-                </button>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <input
+                    type="text"
+                    required
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="Nome"
+                    className="h-12 w-full rounded-2xl border border-[var(--color-border)] bg-black/10 px-4 font-mono text-sm text-[var(--color-foreground)] outline-none transition focus:border-[var(--color-accent)]"
+                  />
+                  <input
+                    type="text"
+                    required
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="Cognome"
+                    className="h-12 w-full rounded-2xl border border-[var(--color-border)] bg-black/10 px-4 font-mono text-sm text-[var(--color-foreground)] outline-none transition focus:border-[var(--color-accent)]"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="nome@email.com"
+                    className="h-12 w-full rounded-2xl border border-[var(--color-border)] bg-black/10 px-4 font-mono text-sm text-[var(--color-foreground)] outline-none transition focus:border-[var(--color-accent)]"
+                  />
+                  <select
+                    required
+                    value={profession}
+                    onChange={(e) => setProfession(e.target.value)}
+                    className="h-12 w-full rounded-2xl border border-[var(--color-border)] bg-black/10 px-4 font-mono text-sm text-[var(--color-foreground)] outline-none transition focus:border-[var(--color-accent)] appearance-none"
+                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, backgroundRepeat: "no-repeat", backgroundPosition: "right 1rem center", backgroundSize: "1.25rem" }}
+                  >
+                    <option value="" disabled className="bg-[#07070a]">Tipologia di professione</option>
+                    <option value="idraulico" className="bg-[#07070a]">Idraulico</option>
+                    <option value="elettricista" className="bg-[#07070a]">Elettricista</option>
+                    <option value="muratore" className="bg-[#07070a]">Muratore</option>
+                    <option value="carpentiere" className="bg-[#07070a]">Carpentiere</option>
+                    <option value="imbianchino" className="bg-[#07070a]">Imbianchino</option>
+                    <option value="altro" className="bg-[#07070a]">Altro</option>
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="h-12 w-full rounded-2xl px-8 font-mono text-xs font-semibold tracking-[0.2em] text-white transition hover:scale-[1.02] disabled:opacity-50"
+                    style={{
+                      background: "linear-gradient(135deg, var(--color-accent), #a855f7)",
+                      boxShadow: "0 4px 20px rgba(139,92,246,0.40)",
+                    }}
+                  >
+                    {submitting ? "..." : "ISCRIVITI"}
+                  </button>
+                </div>
                 {waitlistError && (
                   <div className="w-full font-mono text-xs text-red-500 sm:w-auto">
                     {waitlistError}
