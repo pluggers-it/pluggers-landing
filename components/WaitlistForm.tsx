@@ -84,9 +84,9 @@ export function WaitlistForm({
           {badge}
         </div>
 
-        <h3 className="mt-3 font-sans text-xl font-semibold tracking-tight sm:text-2xl">
+        <h2 className="mt-3 font-sans text-xl font-semibold tracking-tight sm:text-2xl">
           {title}
-        </h3>
+        </h2>
         <p className="mt-2 text-sm text-[var(--color-muted)]">{description}</p>
 
         {submitted ? (

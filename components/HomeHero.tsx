@@ -51,7 +51,7 @@ export function HomeHero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.65, ease: "easeOut" }}
       >
-        {/* Line 1 – static */}
+        {/* Line 1 – static (h1 spans all three visual lines conceptually) */}
         <h1
           className="font-sans font-bold leading-[1.08] tracking-tight"
           style={{ fontSize: "clamp(2.4rem, 6vw, 5rem)" }}
@@ -102,16 +102,18 @@ export function HomeHero() {
           </div>
         </div>
 
-        {/* Line 3 – static */}
-        <h2
+        {/* Line 3 – static (visual continuation of h1, not a true subheading) */}
+        <span
+          aria-hidden="true"
           className="font-sans font-bold leading-[1.08] tracking-tight"
           style={{
             fontSize: "clamp(2.4rem, 6vw, 5rem)",
             marginTop: "clamp(0.3rem, 0.8vw, 0.6rem)",
+            display: "block",
           }}
         >
           AL MOMENTO GIUSTO.
-        </h2>
+        </span>
 
         {/* Subtitle */}
         <motion.p
@@ -156,11 +158,16 @@ export function HomeHero() {
       {/* ── Waitlist form ── */}
       <motion.section
         id="waitlist"
+        aria-labelledby="waitlist-heading"
         className="mt-20 w-full max-w-3xl"
         initial={{ opacity: 0, y: 32 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.0, duration: 0.6, ease: "easeOut" }}
       >
+        {/* Visually hidden h2 for correct document outline */}
+        <h2 id="waitlist-heading" className="sr-only">
+          Unisciti alla Waitlist
+        </h2>
         <WaitlistForm />
       </motion.section>
     </main>

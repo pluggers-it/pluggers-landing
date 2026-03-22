@@ -5,8 +5,11 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { readPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
-  title: "Blog — Pluggers",
-  description: "Articoli, guide e aggiornamenti dal team di Pluggers.",
+  title: "Blog",
+  description:
+    "Articoli, guide e aggiornamenti sul mondo degli artigiani e professionisti della mano d'opera. " +
+    "Consigli per idraulici, elettricisti, muratori e altri professionisti.",
+  alternates: { canonical: "https://pluggers.it/blog" },
 };
 
 function formatDate(iso: string) {

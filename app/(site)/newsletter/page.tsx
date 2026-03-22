@@ -10,8 +10,8 @@ import { WaitlistForm } from "@/components/WaitlistForm";
  * Not linked in SiteHeader, footer, or any navigation element.
  */
 export const metadata: Metadata = {
-  title: "Registrati — Pluggers",
-  description: "Iscriviti alla lista di attesa di Pluggers.",
+  title: "Newsletter — Pluggers",
+  description: "Iscriviti alla newsletter di Pluggers per rimanere aggiornato.",
   robots: { index: false, follow: false },
 };
 
