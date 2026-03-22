@@ -128,7 +128,7 @@ export function HomeHero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
         >
-          La piattaforma italiana per trovare professionisti qualificati nella tua zona. Veloci, verificati e sempre disponibili al momento giusto.
+          L'applicazione che mette in contatto chi ha un problema con chi ha la soluzione.
         </motion.p>
 
         {/* CTAs */}

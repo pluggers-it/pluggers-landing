@@ -32,14 +32,6 @@ export default function Home() {
             >
               Instagram
             </Link>
-            <Link
-              href="https://github.com/pluggers-it"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono transition hover:text-[var(--color-foreground)]"
-            >
-              GitHub
-            </Link>
           </div>
         </footer>
       </div>
