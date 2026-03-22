@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { ArrowRight, BellRing } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HourglassVisual } from "@/components/HourglassVisual";
 import { useEffect, useState } from "react";
 
 const PROFESSIONS = [
@@ -152,15 +151,6 @@ export function HomeHero() {
         </motion.div>
       </motion.div>
 
-      {/* ── Hourglass visual ── */}
-      <motion.div
-        className="mt-10 flex w-full items-center justify-center overflow-visible"
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <HourglassVisual />
-      </motion.div>
 
       {/* ── Waitlist form ── */}
       <motion.section
