@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, PenLine } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { readPosts } from "@/lib/posts";
 
@@ -39,25 +39,51 @@ export default async function BlogPage() {
         </div>
 
         <div className="relative">
-          <SiteHeader label="PLUGGERS // BLOG" />
+          <SiteHeader label="PLUGGERS // BLOG" showBlogAdmin />
 
           <main className="mt-14">
-            {/* Heading */}
-            <div className="mb-10">
-              <p className="font-mono text-xs tracking-[0.25em] text-[var(--color-accent)]">FEED</p>
-              <h1 className="mt-2 font-sans text-3xl font-bold tracking-tight sm:text-4xl">
-                Interventi & aggiornamenti
-              </h1>
-              <p className="mt-2 text-sm text-[var(--color-muted)]">
-                Articoli, guide e novità dal team di Pluggers.
-              </p>
+            {/* Heading + CTA pubblicazione */}
+            <div className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="font-mono text-xs tracking-[0.25em] text-[var(--color-accent)]">FEED</p>
+                <h1 className="mt-2 font-sans text-3xl font-bold tracking-tight sm:text-4xl">
+                  Interventi & aggiornamenti
+                </h1>
+                <p className="mt-2 text-sm text-[var(--color-muted)]">
+                  Articoli, guide e novità dal team di Pluggers.
+                </p>
+              </div>
+              <Link
+                href="/blog/admin"
+                className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl px-6 py-3 font-mono text-xs font-semibold tracking-[0.18em] text-white transition hover:scale-[1.02]"
+                style={{
+                  background: "linear-gradient(135deg, var(--color-accent), #a855f7)",
+                  boxShadow: "0 4px 24px rgba(139,92,246,0.45)",
+                }}
+              >
+                <PenLine className="h-4 w-4" aria-hidden />
+                AGGIUNGI ARTICOLO
+              </Link>
             </div>
 
             {posts.length === 0 ? (
               <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-panel)] p-10 text-center">
                 <p className="font-mono text-xs tracking-[0.25em] text-[var(--color-muted)]">EMPTY</p>
                 <p className="mt-3 font-sans text-xl font-semibold">Nessun articolo ancora.</p>
-                <p className="mt-2 text-sm text-[var(--color-muted)]">I contenuti arriveranno presto.</p>
+                <p className="mt-2 text-sm text-[var(--color-muted)]">
+                  Pubblica il primo articolo dalla console staff (serve la chiave di accesso).
+                </p>
+                <Link
+                  href="/blog/admin"
+                  className="mt-6 inline-flex items-center gap-2 rounded-2xl px-6 py-3 font-mono text-xs font-semibold tracking-[0.18em] text-white transition hover:scale-[1.02]"
+                  style={{
+                    background: "linear-gradient(135deg, var(--color-accent), #a855f7)",
+                    boxShadow: "0 4px 24px rgba(139,92,246,0.45)",
+                  }}
+                >
+                  <PenLine className="h-4 w-4" aria-hidden />
+                  VAI ALLA PUBBLICAZIONE
+                </Link>
               </div>
             ) : (
               <div className="grid gap-5 sm:grid-cols-2">

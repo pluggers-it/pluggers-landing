@@ -45,7 +45,7 @@ export default async function BlogPostPage(
         </div>
 
         <div className="relative">
-          <SiteHeader label="PLUGGERS // BLOG" />
+          <SiteHeader label="PLUGGERS // BLOG" showBlogAdmin />
 
           <main className="mt-12">
             {/* Back link */}
