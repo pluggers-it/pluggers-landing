@@ -3,23 +3,17 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
-import { getAllPosts, getPostBySlug } from "@/lib/blog";
+import { getPostById, markdownToHtml } from "@/lib/posts";
 
-// ── Static params for build-time generation ───────────────────────────────────
-export function generateStaticParams() {
-  return getAllPosts().map((p) => ({ slug: p.slug }));
-}
-
-// ── Per-page metadata from frontmatter ────────────────────────────────────────
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const post = await getPostById(slug);
   if (!post) return { title: "Articolo non trovato — Pluggers" };
   return {
     title: `${post.title} — Pluggers`,
-    description: post.description,
+    description: post.content.slice(0, 160),
   };
 }
 
@@ -32,13 +26,14 @@ function formatDate(iso: string) {
   });
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────────
 export default async function BlogPostPage(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const post = await getPostById(slug);
   if (!post) notFound();
+
+  const contentHtml = await markdownToHtml(post.content);
 
   return (
     <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-foreground)]">
@@ -64,7 +59,6 @@ export default async function BlogPostPage(
 
             {/* Article header */}
             <div className="mt-8">
-              {/* Category + date */}
               <div className="flex flex-wrap items-center gap-3">
                 <span
                   className="rounded-full px-3 py-1 font-mono text-[10px] tracking-[0.18em]"
@@ -77,30 +71,21 @@ export default async function BlogPostPage(
                   {post.category.toUpperCase()}
                 </span>
                 <time className="font-mono text-[11px] text-[var(--color-muted)]">
-                  {formatDate(post.date)}
+                  {formatDate(post.createdAt)}
                 </time>
               </div>
 
-              {/* Title */}
               <h1 className="mt-4 font-sans text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
                 {post.title}
               </h1>
-
-              {/* Description */}
-              {post.description && (
-                <p className="mt-3 text-base leading-7 text-[var(--color-muted)]">
-                  {post.description}
-                </p>
-              )}
             </div>
 
-            {/* Divider */}
             <hr className="my-8 border-[var(--color-border)]" />
 
-            {/* Article body */}
+            {/* Article body — rendered markdown */}
             <div
               className="blog-body"
-              dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+              dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
 
             {/* Footer nav */}

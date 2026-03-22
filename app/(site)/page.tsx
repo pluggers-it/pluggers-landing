@@ -32,6 +32,14 @@ export default function Home() {
             >
               Instagram
             </Link>
+            {/* Staff-only entry point — intentionally subtle */}
+            <Link
+              href="/blog/admin"
+              className="font-mono opacity-20 transition hover:opacity-60"
+              title="Staff"
+            >
+              ·
+            </Link>
           </div>
         </footer>
       </div>

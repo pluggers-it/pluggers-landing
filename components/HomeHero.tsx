@@ -9,9 +9,23 @@ import { useEffect, useState } from "react";
 const PROFESSIONS = [
   "Idraulico",
   "Elettricista",
-  "Carpentiere",
   "Muratore",
+  "Fabbro",
+  "Falegname",
   "Imbianchino",
+  "Piastrellista",
+  "Carpentiere",
+  "Saldatore",
+  "Serramentista",
+  "Vetraio",
+  "Tappezziere",
+  "Giardiniere",
+  "Manovale",
+  "Gessista",
+  "Lattoniere",
+  "Termoidraulico",
+  "Frigorista",
+  "Ascensorista",
 ];
 
 const WORD_DURATION_MS = 1400;

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import logo from "@/assets/logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { WaitlistForm } from "@/components/WaitlistForm";
@@ -28,12 +29,12 @@ export default function NewsletterPage() {
 
         {/* Minimal header — logo + theme toggle only, no nav links */}
         <header className="relative flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3">
             <Image src={logo} alt="Pluggers" width={34} height={34} className="rounded-lg" />
             <span className="font-mono text-xs tracking-[0.25em] text-[var(--color-muted)]">
               PLUGGERS
             </span>
-          </div>
+          </Link>
           <ThemeToggle />
         </header>
 
@@ -54,6 +55,7 @@ export default function NewsletterPage() {
             title="Ricevi i nostri aggiornamenti."
             description="Inserisci i tuoi dati per ricevere le nostre comunicazioni. Niente spam, solo contenuti rilevanti."
             successMessage="Registrazione completata! Ti contatteremo presto."
+            formName="newsletter"
           />
         </div>
 

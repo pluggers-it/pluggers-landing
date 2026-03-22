@@ -14,7 +14,7 @@ export function SiteHeader({
 }) {
   return (
     <header className="flex items-center justify-between">
-      <div className="flex items-center gap-3">
+      <Link href="/" className="flex items-center gap-3">
         <Image
           src={logo}
           alt="Pluggers"
@@ -25,7 +25,7 @@ export function SiteHeader({
         <div className="font-mono text-xs tracking-[0.25em] text-[var(--color-muted)]">
           {label}
         </div>
-      </div>
+      </Link>
       <nav className="flex items-center gap-3">
         <Link
           href="/"

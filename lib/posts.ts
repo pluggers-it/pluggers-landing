@@ -1,4 +1,7 @@
 import { supabase } from "@/lib/supabase";
+import { remark } from "remark";
+import remarkGfm from "remark-gfm";
+import remarkHtml from "remark-html";
 
 export type PostCategory = "Idraulico" | "Elettricista" | "Muratore" | "Altro";
 
@@ -21,12 +24,21 @@ type PostRow = {
 
 function rowToPost(row: PostRow): Post {
   return {
-    id: row.id,
-    title: row.title,
-    category: row.category,
-    content: row.content,
+    id:        String(row.id),
+    title:     row.title,
+    category:  row.category,
+    content:   row.content,
     createdAt: row.created_at,
   };
+}
+
+/** Convert markdown content to HTML */
+export async function markdownToHtml(markdown: string): Promise<string> {
+  const result = await remark()
+    .use(remarkGfm)
+    .use(remarkHtml, { sanitize: false })
+    .process(markdown);
+  return result.toString();
 }
 
 export async function readPosts(): Promise<Post[]> {
@@ -37,6 +49,17 @@ export async function readPosts(): Promise<Post[]> {
 
   if (error) throw new Error(error.message);
   return (data as PostRow[]).map(rowToPost);
+}
+
+export async function getPostById(id: string): Promise<Post | null> {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error || !data) return null;
+  return rowToPost(data as PostRow);
 }
 
 export async function createPost(input: {

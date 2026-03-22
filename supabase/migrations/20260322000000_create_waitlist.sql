@@ -1,12 +1,13 @@
 -- ─────────────────────────────────────────────────────────────────────────────
--- Migration: create_waitlist
+-- Migration: initial schema
 -- Created:   2026-03-22
--- Purpose:   Initial schema for the Pluggers waitlist.
---            Includes phone (NOT NULL), RLS enabled, INSERT-only for anon.
+-- Tables:    waitlist, posts
 -- ─────────────────────────────────────────────────────────────────────────────
 
 
--- ─── 1. TABLE ────────────────────────────────────────────────────────────────
+-- ════════════════════════════════════════════════════════════════════════════
+-- 1. WAITLIST
+-- ════════════════════════════════════════════════════════════════════════════
 
 CREATE TABLE IF NOT EXISTS public.waitlist (
   id          BIGSERIAL    PRIMARY KEY,
@@ -19,28 +20,44 @@ CREATE TABLE IF NOT EXISTS public.waitlist (
   created_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
-
--- ─── 2. ROW LEVEL SECURITY ───────────────────────────────────────────────────
-
--- Enable RLS: by default ALL operations are denied to everyone.
 ALTER TABLE public.waitlist ENABLE ROW LEVEL SECURITY;
 
--- Drop policies if they already exist (makes this migration idempotent).
 DROP POLICY IF EXISTS "allow_anon_insert" ON public.waitlist;
 
--- Allow anonymous users to INSERT (sign up) — no conditions needed.
+-- Anyone can sign up; nobody can read the data (privacy)
 CREATE POLICY "allow_anon_insert"
   ON public.waitlist
   FOR INSERT
   TO anon
   WITH CHECK (true);
 
--- SELECT / UPDATE / DELETE: no policy is defined → denied for everyone,
--- including authenticated users and the service role via PostgREST.
--- The service_role key used server-side bypasses RLS entirely by design,
--- so the backend API can still read data if ever needed.
-
-
--- ─── 3. INDEX (optional but recommended for lookups by email) ────────────────
-
 CREATE INDEX IF NOT EXISTS waitlist_email_idx ON public.waitlist (email);
+
+
+-- ════════════════════════════════════════════════════════════════════════════
+-- 2. POSTS (blog)
+-- ════════════════════════════════════════════════════════════════════════════
+
+CREATE TABLE IF NOT EXISTS public.posts (
+  id          BIGSERIAL    PRIMARY KEY,
+  title       TEXT         NOT NULL,
+  category    TEXT         NOT NULL DEFAULT '',
+  content     TEXT         NOT NULL,
+  created_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE public.posts ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "allow_public_read" ON public.posts;
+
+-- Posts are publicly readable (it's a blog)
+CREATE POLICY "allow_public_read"
+  ON public.posts
+  FOR SELECT
+  TO anon
+  USING (true);
+
+-- Inserts and deletes happen server-side via the service_role key,
+-- which bypasses RLS — no additional policies needed.
+
+CREATE INDEX IF NOT EXISTS posts_created_at_idx ON public.posts (created_at DESC);

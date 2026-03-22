@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
-import { getAllPosts } from "@/lib/blog";
+import { readPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
   title: "Blog — Pluggers",
@@ -18,14 +18,19 @@ function formatDate(iso: string) {
   });
 }
 
-export default function BlogPage() {
-  const posts = getAllPosts();
+export default async function BlogPage() {
+  let posts: Awaited<ReturnType<typeof readPosts>> = [];
+  try {
+    posts = await readPosts();
+  } catch {
+    // DB not yet set up or unreachable — show empty state
+  }
 
   return (
     <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-foreground)]">
       <div className="relative mx-auto w-full max-w-6xl px-6 py-12 sm:px-10">
 
-        {/* Background decorations */}
+        {/* Background decoration */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute -top-56 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(124,58,237,0.20),rgba(0,0,0,0)_60%)] blur-3xl" />
         </div>
@@ -34,11 +39,9 @@ export default function BlogPage() {
           <SiteHeader label="PLUGGERS // BLOG" />
 
           <main className="mt-14">
-            {/* Page heading */}
+            {/* Heading */}
             <div className="mb-10">
-              <p className="font-mono text-xs tracking-[0.25em] text-[var(--color-accent)]">
-                FEED
-              </p>
+              <p className="font-mono text-xs tracking-[0.25em] text-[var(--color-accent)]">FEED</p>
               <h1 className="mt-2 font-sans text-3xl font-bold tracking-tight sm:text-4xl">
                 Interventi & aggiornamenti
               </h1>
@@ -57,11 +60,10 @@ export default function BlogPage() {
               <div className="grid gap-5 sm:grid-cols-2">
                 {posts.map((post) => (
                   <Link
-                    key={post.slug}
-                    href={`/blog/${post.slug}`}
-                    className="group relative flex flex-col rounded-2xl border border-[var(--color-border)] bg-[var(--color-panel)] p-6 transition hover:border-[var(--color-accent)]"
+                    key={post.id}
+                    href={`/blog/${post.id}`}
+                    className="group flex flex-col rounded-2xl border border-[var(--color-border)] bg-[var(--color-panel)] p-6 transition hover:border-[var(--color-accent)]"
                   >
-                    {/* Category + date */}
                     <div className="flex items-center justify-between gap-2">
                       <span
                         className="rounded-full px-3 py-1 font-mono text-[10px] tracking-[0.18em]"
@@ -74,23 +76,15 @@ export default function BlogPage() {
                         {post.category.toUpperCase()}
                       </span>
                       <time className="font-mono text-[11px] text-[var(--color-muted)]">
-                        {formatDate(post.date)}
+                        {formatDate(post.createdAt)}
                       </time>
                     </div>
-
-                    {/* Title */}
                     <h2 className="mt-4 font-sans text-lg font-semibold leading-snug tracking-tight transition group-hover:text-[var(--color-accent)]">
                       {post.title}
                     </h2>
-
-                    {/* Description */}
-                    {post.description && (
-                      <p className="mt-2 line-clamp-3 text-sm leading-6 text-[var(--color-muted)]">
-                        {post.description}
-                      </p>
-                    )}
-
-                    {/* Read more */}
+                    <p className="mt-2 line-clamp-3 text-sm leading-6 text-[var(--color-muted)]">
+                      {post.content.slice(0, 200)}
+                    </p>
                     <div className="mt-5 flex items-center gap-1.5 font-mono text-xs text-[var(--color-accent)]">
                       Leggi
                       <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />

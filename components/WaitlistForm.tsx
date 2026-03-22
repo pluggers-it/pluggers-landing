@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { trackFormStart, trackFormSubmit } from "@/lib/analytics";
 
 const SELECT_ARROW = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`;
 
@@ -24,6 +25,8 @@ interface Props {
   title?: string;
   description?: string;
   successMessage?: string;
+  /** GA4 form_name used in form_start / form_submit events */
+  formName?: string;
 }
 
 export function WaitlistForm({
@@ -31,6 +34,7 @@ export function WaitlistForm({
   title = "Accedi prima di tutti gli altri.",
   description = "Inserisci la tua email e ti contatteremo nel momento in cui il servizio sarà attivo nella tua area. Aggiornamenti rari, mai irrilevanti.",
   successMessage = "Sei in lista! Ti contatteremo presto.",
+  formName = "waitlist",
 }: Props) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -42,6 +46,14 @@ export function WaitlistForm({
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Fire form_start only on the first interaction
+  const startFired = useRef(false);
+  function onFirstInteraction() {
+    if (startFired.current) return;
+    startFired.current = true;
+    trackFormStart(formName);
+  }
 
   return (
     <div
@@ -103,6 +115,7 @@ export function WaitlistForm({
                 });
                 if (res.ok) {
                   setSubmitted(true);
+                  trackFormSubmit(formName);
                 } else {
                   const data = (await res.json().catch(() => null)) as { error?: string } | null;
                   setError(data?.error ?? "Qualcosa è andato storto");
@@ -119,16 +132,19 @@ export function WaitlistForm({
               <input
                 type="text" required value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
+                onFocus={onFirstInteraction}
                 placeholder="Nome" className={INPUT_CLASS}
               />
               <input
                 type="text" required value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
+                onFocus={onFirstInteraction}
                 placeholder="Cognome" className={INPUT_CLASS}
               />
               <select
                 required value={region}
                 onChange={(e) => setRegion(e.target.value)}
+                onFocus={onFirstInteraction}
                 className={SELECT_CLASS} style={SELECT_STYLE}
               >
                 <option value="" disabled className={OPT}>Regione</option>
@@ -156,6 +172,7 @@ export function WaitlistForm({
               <input
                 type="tel" required value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                onFocus={onFirstInteraction}
                 placeholder="Numero di telefono"
                 pattern="^\+?[\d\s\-\(\)]{7,20}$"
                 className={INPUT_CLASS}
@@ -167,6 +184,7 @@ export function WaitlistForm({
               <input
                 type="email" required value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onFocus={onFirstInteraction}
                 placeholder="nome@email.com" className={INPUT_CLASS}
               />
               <select
@@ -175,6 +193,7 @@ export function WaitlistForm({
                   setProfession(e.target.value);
                   if (e.target.value !== "altro") setOtherProfession("");
                 }}
+                onFocus={onFirstInteraction}
                 className={SELECT_CLASS} style={SELECT_STYLE}
               >
                 <option value="" disabled className={OPT}>Professione</option>
