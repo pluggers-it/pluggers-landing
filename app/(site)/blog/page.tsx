@@ -1,133 +1,107 @@
-"use client";
-
-import { Suspense, useEffect, useMemo, useState } from "react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { getAllPosts } from "@/lib/blog";
 
-type Post = {
-  id: string;
-  title: string;
-  category: string;
-  content: string;
-  createdAt: string;
+export const metadata: Metadata = {
+  title: "Blog — Pluggers",
+  description: "Articoli, guide e aggiornamenti dal team di Pluggers.",
 };
 
-/**
- * Blog content component
- */
-function BlogContent() {
-  const [posts, setPosts] = useState<Post[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  const hasPosts = useMemo(() => (posts?.length ?? 0) > 0, [posts]);
-
-  async function load() {
-    setError(null);
-    try {
-      const res = await fetch("/api/posts", { method: "GET" });
-      const data = (await res.json()) as { posts: Post[] };
-      setPosts(data.posts ?? []);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error");
-      setPosts([]);
-    }
-  }
-
-  useEffect(() => {
-    void load();
-  }, []);
-
-  return (
-    <main className="mt-12 grid grid-cols-1 lg:items-start">
-      <section className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-panel)] p-6 sm:p-8">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <div className="font-mono text-xs tracking-[0.25em] text-[var(--color-muted)]">
-              FEED
-            </div>
-            <div className="mt-2 font-sans text-2xl font-semibold tracking-tight">
-              Interventi & aggiornamenti
-            </div>
-            <div className="mt-2 text-sm text-[var(--color-muted)]">
-              Quando ci sono post, li trovi qui. Se è vuoto, è normale.
-            </div>
-          </div>
-          <button
-            onClick={() => void load()}
-            type="button"
-            className="rounded-full border border-[var(--color-border)] bg-[var(--color-panel)] px-4 py-2 font-mono text-xs text-[var(--color-muted)] transition hover:border-[var(--color-accent)]"
-          >
-            Refresh
-          </button>
-        </div>
-
-        {error ? (
-          <div className="mt-4 rounded-xl border border-[var(--color-border)] bg-black/10 p-4 font-mono text-xs text-red-500">
-            {error}
-          </div>
-        ) : null}
-
-        {posts === null ? (
-          <div className="mt-6 grid place-items-center rounded-xl border border-[var(--color-border)] bg-black/10 p-10">
-            <div className="h-10 w-10 animate-spin rounded-full border-2 border-[var(--color-border)] border-t-[var(--color-accent)]" />
-            <div className="mt-3 font-mono text-xs tracking-[0.22em] text-[var(--color-muted)]">
-              LOADING
-            </div>
-          </div>
-        ) : hasPosts ? (
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            {posts.map((p) => (
-              <article
-                key={p.id}
-                className="rounded-2xl border border-[var(--color-border)] bg-black/10 p-5 transition hover:border-[var(--color-accent)]"
-              >
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="rounded-full border border-[var(--color-border)] bg-[var(--color-panel)] px-3 py-1 font-mono text-xs text-[var(--color-muted)]">
-                    {p.category}
-                  </span>
-                  <time className="font-mono text-[11px] text-[var(--color-muted)]">
-                    {new Date(p.createdAt).toLocaleDateString("it-IT")}
-                  </time>
-                </div>
-                <h2 className="mt-4 font-sans text-lg font-semibold leading-snug tracking-tight">
-                  {p.title}
-                </h2>
-                <p className="mt-3 line-clamp-4 text-sm leading-6 text-[var(--color-muted)]">
-                  {p.content}
-                </p>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div className="mt-6 rounded-2xl border border-[var(--color-border)] bg-black/10 p-8">
-            <div className="font-mono text-xs tracking-[0.25em] text-[var(--color-muted)]">
-              EMPTY
-            </div>
-            <div className="mt-3 font-sans text-2xl font-semibold tracking-tight">
-              Nessun post ancora.
-            </div>
-            <div className="mt-2 text-sm text-[var(--color-muted)]">
-              I contenuti arriveranno presto.
-            </div>
-          </div>
-        )}
-      </section>
-    </main>
-  );
+function formatDate(iso: string) {
+  if (!iso) return "";
+  return new Date(iso).toLocaleDateString("it-IT", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
 
-/**
- * Blog page: shows posts if present, otherwise empty state.
- */
 export default function BlogPage() {
+  const posts = getAllPosts();
+
   return (
     <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-foreground)]">
-      <div className="mx-auto w-full max-w-6xl px-6 py-12 sm:px-10">
-        <SiteHeader label="PLUGGERS // BLOG" />
-        <Suspense fallback={<div>Loading...</div>}>
-          <BlogContent />
-        </Suspense>
+      <div className="relative mx-auto w-full max-w-6xl px-6 py-12 sm:px-10">
+
+        {/* Background decorations */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute -top-56 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(124,58,237,0.20),rgba(0,0,0,0)_60%)] blur-3xl" />
+        </div>
+
+        <div className="relative">
+          <SiteHeader label="PLUGGERS // BLOG" />
+
+          <main className="mt-14">
+            {/* Page heading */}
+            <div className="mb-10">
+              <p className="font-mono text-xs tracking-[0.25em] text-[var(--color-accent)]">
+                FEED
+              </p>
+              <h1 className="mt-2 font-sans text-3xl font-bold tracking-tight sm:text-4xl">
+                Interventi & aggiornamenti
+              </h1>
+              <p className="mt-2 text-sm text-[var(--color-muted)]">
+                Articoli, guide e novità dal team di Pluggers.
+              </p>
+            </div>
+
+            {posts.length === 0 ? (
+              <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-panel)] p-10 text-center">
+                <p className="font-mono text-xs tracking-[0.25em] text-[var(--color-muted)]">EMPTY</p>
+                <p className="mt-3 font-sans text-xl font-semibold">Nessun articolo ancora.</p>
+                <p className="mt-2 text-sm text-[var(--color-muted)]">I contenuti arriveranno presto.</p>
+              </div>
+            ) : (
+              <div className="grid gap-5 sm:grid-cols-2">
+                {posts.map((post) => (
+                  <Link
+                    key={post.slug}
+                    href={`/blog/${post.slug}`}
+                    className="group relative flex flex-col rounded-2xl border border-[var(--color-border)] bg-[var(--color-panel)] p-6 transition hover:border-[var(--color-accent)]"
+                  >
+                    {/* Category + date */}
+                    <div className="flex items-center justify-between gap-2">
+                      <span
+                        className="rounded-full px-3 py-1 font-mono text-[10px] tracking-[0.18em]"
+                        style={{
+                          border: "1px solid rgba(139,92,246,0.35)",
+                          background: "rgba(139,92,246,0.08)",
+                          color: "var(--color-accent)",
+                        }}
+                      >
+                        {post.category.toUpperCase()}
+                      </span>
+                      <time className="font-mono text-[11px] text-[var(--color-muted)]">
+                        {formatDate(post.date)}
+                      </time>
+                    </div>
+
+                    {/* Title */}
+                    <h2 className="mt-4 font-sans text-lg font-semibold leading-snug tracking-tight transition group-hover:text-[var(--color-accent)]">
+                      {post.title}
+                    </h2>
+
+                    {/* Description */}
+                    {post.description && (
+                      <p className="mt-2 line-clamp-3 text-sm leading-6 text-[var(--color-muted)]">
+                        {post.description}
+                      </p>
+                    )}
+
+                    {/* Read more */}
+                    <div className="mt-5 flex items-center gap-1.5 font-mono text-xs text-[var(--color-accent)]">
+                      Leggi
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </main>
+        </div>
       </div>
     </div>
   );
 }
-

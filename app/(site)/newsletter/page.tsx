@@ -40,19 +40,19 @@ export default function NewsletterPage() {
         {/* Page heading */}
         <div className="relative mt-16 mb-8 text-center">
           <h1 className="font-sans text-3xl font-bold tracking-tight sm:text-4xl">
-            Entra nella lista.
+            Iscriviti alla Newsletter.
           </h1>
           <p className="mt-3 text-sm text-[var(--color-muted)]">
-            Registrati ora per essere tra i primi professionisti ad accedere a Pluggers.
+            Iscriviti per rimanere aggiornato sulle novità più utili per il tuo settore.
           </p>
         </div>
 
         {/* Form — same endpoint, same fields as the landing waitlist */}
         <div className="relative">
           <WaitlistForm
-            badge="REGISTRAZIONE"
-            title="Compila il modulo per iscriverti."
-            description="Inserisci i tuoi dati. Ti contatteremo non appena il servizio sarà attivo nella tua area."
+            badge="NEWSLETTER"
+            title="Ricevi i nostri aggiornamenti."
+            description="Inserisci i tuoi dati per ricevere le nostre comunicazioni. Niente spam, solo contenuti rilevanti."
             successMessage="Registrazione completata! Ti contatteremo presto."
           />
         </div>
