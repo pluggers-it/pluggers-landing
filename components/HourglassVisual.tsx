@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import {
   Wrench, Zap, HardHat, Hammer, Paintbrush,
   Plug,
-  User, Home, Briefcase, Car,
+  Home, Building2, Lightbulb,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -47,21 +47,23 @@ const WORKERS = [
   { icon: Paintbrush, label: "Imbianchino",  color: "#c084fc", ...topPos(60)  },
 ] as const;
 
+// 3 user categories: symmetric at −35°, 0°, +35°
 const CLIENTS = [
-  { icon: User,      label: "Privato",  color: "#94a3b8", ...botPos(-45) },
-  { icon: Home,      label: "Casa",     color: "#7dd3fc", ...botPos(-15) },
-  { icon: Briefcase, label: "Business", color: "#86efac", ...botPos(15)  },
-  { icon: Car,       label: "Mobilità", color: "#fda4af", ...botPos(45)  },
+  { icon: Home,      label: "Casa",        color: "#7dd3fc", ...botPos(-35) },
+  { icon: Building2, label: "Business",    color: "#86efac", ...botPos(0)   },
+  { icon: Lightbulb, label: "Apparecchio", color: "#fcd34d", ...botPos(35)  },
 ] as const;
 
 const HUB = { x: CX, y: WAIST_Y };
 
-// Each flow: a particle travels worker → hub → client in one animation
+// "UTENTI" section label: SVG y-coordinate above the bottom icon cluster
+const UTENTI_Y = 398;
+
+// Flows: each particle travels worker → hub → client
 const FLOWS = [
   { wi: 0, ci: 0 },
-  { wi: 1, ci: 1 },
-  { wi: 2, ci: 2 },
-  { wi: 4, ci: 3 },
+  { wi: 2, ci: 1 },
+  { wi: 4, ci: 2 },
 ] as const;
 
 function hexToRgb(hex: string) {
@@ -74,11 +76,9 @@ function hexToRgb(hex: string) {
 const pct = (v: number, total: number) => `${((v / total) * 100).toFixed(4)}%`;
 
 // ── Hourglass SVG paths ───────────────────────────────────────────────────────
-// top bulb: curves from waist (y≈248) to the top arch (y≈-5 beyond viewBox)
 const TOP_PATH =
   "M 62,26 Q 150,-6 238,26 C 238,96 194,204 170,246 Q 157,254 150,254 Q 143,254 130,246 C 106,204 62,96 62,26 Z";
 
-// bottom bulb: symmetric mirror
 const BOT_PATH =
   "M 130,258 Q 143,250 150,250 Q 157,250 170,258 C 194,308 238,404 238,472 Q 150,512 62,472 C 62,404 106,308 130,258 Z";
 // ─────────────────────────────────────────────────────────────────────────────
@@ -145,24 +145,9 @@ export function HourglassVisual() {
           transition={{ duration: 1.0, delay: 0.15 }}
         />
 
-        {/* Section labels */}
+        {/* "UTENTI" label — centered above the bottom icon cluster */}
         <motion.text
-          x={CX} y={14}
-          textAnchor="middle"
-          fontSize={7.5}
-          letterSpacing={3}
-          fontFamily="monospace"
-          fontWeight={600}
-          fill={isLight ? "rgba(0,0,0,0.38)" : "rgba(255,255,255,0.30)"}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-        >
-          PROFESSIONISTI
-        </motion.text>
-
-        <motion.text
-          x={CX} y={496}
+          x={CX} y={UTENTI_Y}
           textAnchor="middle"
           fontSize={7.5}
           letterSpacing={3}
@@ -173,7 +158,7 @@ export function HourglassVisual() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
-          CLIENTI
+          UTENTI
         </motion.text>
 
         {/* Worker → Hub connection lines */}
@@ -208,22 +193,22 @@ export function HourglassVisual() {
             initial={{ pathLength: 0, opacity: 0 }}
             animate={{ pathLength: 1, opacity: 1 }}
             transition={{
-              pathLength: { duration: 0.9, delay: i * 0.12 + 0.65, ease: "easeOut" },
-              opacity:    { duration: 0.4, delay: i * 0.12 + 0.65 },
+              pathLength: { duration: 0.9, delay: i * 0.14 + 0.65, ease: "easeOut" },
+              opacity:    { duration: 0.4, delay: i * 0.14 + 0.65 },
             }}
           />
         ))}
 
-        {/* Travelling particles: worker → hub → client */}
+        {/* Travelling particles: worker → hub → client (top-to-bottom flow) */}
         {FLOWS.map((f, i) => {
           const w = WORKERS[f.wi];
           const c = CLIENTS[f.ci];
           return (
             <motion.circle
               key={`flow-${i}`}
-              r={4.5}
+              r={5}
               fill={w.color}
-              style={{ filter: `drop-shadow(0 0 7px ${w.color})` }}
+              style={{ filter: `drop-shadow(0 0 8px ${w.color})` }}
               initial={{ opacity: 0 }}
               animate={{
                 cx: [w.x, HUB.x, c.x],
@@ -231,11 +216,11 @@ export function HourglassVisual() {
                 opacity: [0, 1, 1, 1, 0],
               }}
               transition={{
-                duration: 3.4,
-                times: [0, 0.42, 0.52, 0.90, 1.0],
-                delay: i * 0.8 + 1.1,
+                duration: 3.6,
+                times: [0, 0.40, 0.55, 0.92, 1.0],
+                delay: i * 0.9 + 1.1,
                 repeat: Infinity,
-                repeatDelay: 4.0,
+                repeatDelay: 4.2,
                 ease: "easeInOut",
               }}
             />
@@ -296,7 +281,7 @@ export function HourglassVisual() {
         );
       })}
 
-      {/* ── Client chips (bottom bulb) ── */}
+      {/* ── Client / Utenti chips (bottom bulb) ── */}
       {CLIENTS.map((c, i) => {
         const Icon = c.icon;
         const rgb = hexToRgb(c.color);
@@ -311,7 +296,7 @@ export function HourglassVisual() {
             }}
             initial={{ opacity: 0, scale: 0.2 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.12 + 0.45, duration: 0.6, type: "spring", bounce: 0.4 }}
+            transition={{ delay: i * 0.14 + 0.5, duration: 0.6, type: "spring", bounce: 0.4 }}
           >
             {/* Chip */}
             <div
