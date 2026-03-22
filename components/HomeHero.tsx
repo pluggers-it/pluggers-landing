@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, BellRing } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { PlugSpinner } from "@/components/PlugSpinner";
+import { HourglassVisual } from "@/components/HourglassVisual";
 import { useEffect, useState } from "react";
 
 const PROFESSIONS = [
@@ -14,13 +14,10 @@ const PROFESSIONS = [
   "Imbianchino",
 ];
 
-// Each word shown for 1.4s; spinner reveals after 3 professions (~4.2s)
 const WORD_DURATION_MS = 1400;
-const SPINNER_REVEAL_MS = 3 * WORD_DURATION_MS;
 
 export function HomeHero() {
   const [wordIdx, setWordIdx] = useState(0);
-  const [spinnerReady, setSpinnerReady] = useState(false);
 
   // Waitlist form state
   const [email, setEmail] = useState("");
@@ -34,17 +31,11 @@ export function HomeHero() {
   const [waitlistError, setWaitlistError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Cycle words
     const id = setInterval(
       () => setWordIdx((i) => (i + 1) % PROFESSIONS.length),
       WORD_DURATION_MS
     );
-    // Reveal spinner after 3 professions instead of a full cycle
-    const revealId = setTimeout(() => setSpinnerReady(true), SPINNER_REVEAL_MS);
-    return () => {
-      clearInterval(id);
-      clearTimeout(revealId);
-    };
+    return () => clearInterval(id);
   }, []);
 
   return (
@@ -161,19 +152,15 @@ export function HomeHero() {
         </motion.div>
       </motion.div>
 
-      {/* ── Radial animation (unfolds after first cycle) ── */}
-      <AnimatePresence>
-        {spinnerReady && (
-          <motion.div
-            className="mt-10 flex w-full items-center justify-center overflow-visible"
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <PlugSpinner revealDelay={0} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* ── Hourglass visual ── */}
+      <motion.div
+        className="mt-10 flex w-full items-center justify-center overflow-visible"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <HourglassVisual />
+      </motion.div>
 
       {/* ── Waitlist form ── */}
       <motion.section
