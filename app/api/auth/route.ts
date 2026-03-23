@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
+import { adminPasswordMatches, normalizeAdminPassword } from "@/lib/admin-auth";
 
 /**
  * Validates the admin password.
  * POST { password: string } → { ok: true } | 401
  */
 export async function POST(req: Request) {
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  if (!adminPassword) {
+  if (!normalizeAdminPassword(process.env.ADMIN_PASSWORD)) {
     return NextResponse.json(
       { error: "Missing ADMIN_PASSWORD env var" },
       { status: 500 },
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     | { password?: string }
     | null;
 
-  if (body?.password !== adminPassword) {
+  if (!adminPasswordMatches(process.env.ADMIN_PASSWORD, body?.password)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

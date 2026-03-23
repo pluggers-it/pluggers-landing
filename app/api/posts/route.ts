@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { readPosts, createPost, deletePost } from "@/lib/posts";
+import { adminPasswordMatches, normalizeAdminPassword } from "@/lib/admin-auth";
 
 /**
  * Public endpoint: returns all posts.
@@ -14,7 +15,7 @@ export async function GET() {
  * Requires `devKey` matching `process.env.ADMIN_PASSWORD`.
  */
 export async function POST(req: Request) {
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const adminPassword = normalizeAdminPassword(process.env.ADMIN_PASSWORD);
   if (!adminPassword) {
     return NextResponse.json(
       { error: "Missing ADMIN_PASSWORD env var" },
@@ -26,7 +27,7 @@ export async function POST(req: Request) {
     | { title?: string; category?: string; content?: string; devKey?: string }
     | null;
 
-  if ((body?.devKey ?? "") !== adminPassword) {
+  if (!adminPasswordMatches(process.env.ADMIN_PASSWORD, body?.devKey)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -49,7 +50,7 @@ export async function POST(req: Request) {
  * Protected endpoint: deletes a post by id.
  */
 export async function DELETE(req: Request) {
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const adminPassword = normalizeAdminPassword(process.env.ADMIN_PASSWORD);
   if (!adminPassword) {
     return NextResponse.json(
       { error: "Missing ADMIN_PASSWORD env var" },
@@ -61,7 +62,7 @@ export async function DELETE(req: Request) {
     | { devKey?: string; id?: string }
     | null;
 
-  if ((body?.devKey ?? "") !== adminPassword) {
+  if (!adminPasswordMatches(process.env.ADMIN_PASSWORD, body?.devKey)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
