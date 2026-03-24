@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, PenLine } from "lucide-react";
+
+// Always fetch fresh posts from Supabase — never use static cache.
+export const dynamic = "force-dynamic";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { readPosts } from "@/lib/posts";

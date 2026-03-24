@@ -6,6 +6,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getPostById, markdownToHtml } from "@/lib/posts";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
