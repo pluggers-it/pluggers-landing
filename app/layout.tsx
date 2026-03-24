@@ -93,6 +93,31 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="it" suppressHydrationWarning>
+      {/*
+       * Google Consent Mode v2 bootstrap — must execute synchronously before
+       * gtag.js loads so that GA4 never places cookies without explicit consent.
+       * Sets all storage types to "denied" by default; Analytics.tsx will call
+       * gtag('consent','update',...) once the user's stored preference is read.
+       * wait_for_update gives React 500 ms to restore a previous "granted" choice
+       * before GA4 sends its first ping.
+       */}
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('consent', 'default', {
+                analytics_storage:    'denied',
+                ad_storage:           'denied',
+                ad_user_data:         'denied',
+                ad_personalization:   'denied',
+                wait_for_update:      500
+              });
+            `,
+          }}
+        />
+      </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>
         <ConsentProvider>
           <ThemeProvider>{children}</ThemeProvider>

@@ -41,8 +41,6 @@ function ScrollDepthTracker() {
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
-
-    // Also check on mount in case the page is already scrolled (e.g. after accept)
     check();
 
     return () => window.removeEventListener("scroll", onScroll);
@@ -53,20 +51,46 @@ function ScrollDepthTracker() {
 
 // ── Main component ────────────────────────────────────────────────────────────
 /**
- * Conditionally loads GA4 and Clarity scripts only after explicit user consent.
- * Rendered in the root layout — outputs nothing until consent === "granted".
+ * Google Analytics 4 with Consent Mode v2 (EEA / GDPR compliant).
+ *
+ * Architecture:
+ *  1. layout.tsx sets gtag consent defaults to "denied" via an inline <script>
+ *     that executes synchronously before gtag.js loads.
+ *  2. This component always loads gtag.js (required for Consent Mode v2 to work).
+ *  3. A useEffect watches analyticsConsent and calls gtag('consent','update',…)
+ *     whenever the user makes or changes a choice — no cookies are ever set
+ *     until analyticsConsent === "granted".
+ *  4. Clarity and the scroll tracker are gated strictly on "granted".
+ *
+ * GDPR guarantee: analytics_storage remains "denied" (no cookies, no
+ * identifiable data) unless the user explicitly clicks "Accetta".
  */
 export function Analytics() {
   const { analyticsConsent } = useConsent();
 
-  if (analyticsConsent !== "granted") return null;
+  // Propagate consent changes to Google Consent Mode v2
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (typeof window.gtag !== "function") return;
+    if (analyticsConsent === null) return; // still reading localStorage — keep default "denied"
+
+    window.gtag("consent", "update", {
+      analytics_storage:  analyticsConsent,  // "granted" | "denied"
+      ad_storage:         "denied",          // we don't run ads — always denied
+      ad_user_data:       "denied",
+      ad_personalization: "denied",
+    });
+  }, [analyticsConsent]);
 
   return (
     <>
-      {/* ── Scroll depth tracker ── */}
-      <ScrollDepthTracker />
+      {/* Scroll depth tracker — active only after explicit consent */}
+      {analyticsConsent === "granted" && <ScrollDepthTracker />}
 
-      {/* ── Google Analytics 4 ── */}
+      {/* ── Google Analytics 4 ──────────────────────────────────────────────────
+       *  Loaded unconditionally so Consent Mode v2 signals reach Google.
+       *  No cookies are placed while analytics_storage === "denied".
+       */}
       {GA_ID && (
         <>
           <Script
@@ -78,15 +102,15 @@ export function Analytics() {
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', '${GA_ID}', {
-              send_page_view: true,
-              cookie_flags: 'SameSite=None;Secure'
+              send_page_view:  true,
+              cookie_flags:    'SameSite=None;Secure'
             });
           `}</Script>
         </>
       )}
 
-      {/* ── Microsoft Clarity ── */}
-      {CLARITY_ID && (
+      {/* ── Microsoft Clarity — strictly gated on consent ── */}
+      {CLARITY_ID && analyticsConsent === "granted" && (
         <Script id="clarity-init" strategy="afterInteractive">{`
           (function(c,l,a,r,i,t,y){
             c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
