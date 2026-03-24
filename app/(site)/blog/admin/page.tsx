@@ -4,11 +4,13 @@ import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
-import { ArrowLeft, Plus, Trash2, LogOut, Loader2 } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, LogOut, Loader2, User, Lock } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Post = { id: string; title: string; category: string; content: string; createdAt: string };
+
+const STORAGE_KEY = "pluggers_admin_token";
 
 const CATEGORIES = [
   "Prodotto", "Guida", "Notizie", "Aggiornamento",
@@ -33,36 +35,46 @@ function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" });
 }
 
-// ── Password gate ─────────────────────────────────────────────────────────────
-function PasswordGate({ onAuth }: { onAuth: (key: string) => void }) {
-  const [key, setKey] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
+// ── Authenticated fetch helper ────────────────────────────────────────────────
+function authFetch(token: string, url: string, options: RequestInit = {}) {
+  return fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+      ...(options.headers ?? {}),
+    },
+  });
+}
+
+// ── Login form ────────────────────────────────────────────────────────────────
+function LoginGate({ onAuth }: { onAuth: (token: string) => void }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading,  setLoading]  = useState(false);
+  const [err,      setErr]      = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setErr("");
     setLoading(true);
     try {
-      const trimmed = key.trim();
       const res = await fetch("/api/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: trimmed }),
+        body: JSON.stringify({ username: username.trim(), password }),
       });
-      if (res.status === 401) {
-        setErr("Chiave non valida.");
-        return;
-      }
-      if (res.status === 500) {
-        setErr("Errore di configurazione server. Controlla le variabili d'ambiente.");
-        return;
-      }
-      if (res.ok) {
-        onAuth(trimmed);
-        return;
-      }
-      setErr(`Errore server (${res.status}).`);
+
+      const data = (await res.json().catch(() => null)) as
+        | { token?: string; error?: string }
+        | null;
+
+      if (res.status === 429) { setErr("Troppi tentativi. Attendi 1 minuto."); return; }
+      if (res.status === 401) { setErr("Credenziali non valide."); return; }
+      if (!res.ok)            { setErr(data?.error ?? `Errore server (${res.status}).`); return; }
+      if (!data?.token)       { setErr("Risposta inattesa dal server."); return; }
+
+      onAuth(data.token);
     } catch {
       setErr("Errore di connessione.");
     } finally {
@@ -73,58 +85,82 @@ function PasswordGate({ onAuth }: { onAuth: (key: string) => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center px-6">
       <div
-        className="w-full max-w-sm rounded-3xl border border-[var(--color-border)] p-8"
+        className="w-full max-w-sm overflow-hidden rounded-3xl border border-[var(--color-border)]"
         style={{ background: "var(--color-panel)", backdropFilter: "blur(20px)" }}
       >
-        <Link href="/" className="mb-8 flex items-center gap-2">
-          <Image src={logo} alt="Pluggers" width={28} height={28} className="rounded-lg" />
-          <span className="font-mono text-xs tracking-[0.25em] text-[var(--color-muted)]">PLUGGERS // STAFF</span>
-        </Link>
+        {/* Top accent */}
+        <div className="h-1 w-full" style={{ background: "linear-gradient(90deg, var(--color-accent), #a855f7)" }} />
 
-        <h1 className="font-sans text-xl font-bold tracking-tight">Accesso riservato</h1>
-        <p className="mt-1 text-sm text-[var(--color-muted)]">Inserisci la chiave di accesso per continuare.</p>
+        <div className="p-8">
+          <Link href="/" className="mb-8 flex items-center gap-2">
+            <Image src={logo} alt="Pluggers" width={28} height={28} className="rounded-lg" />
+            <span className="font-mono text-xs tracking-[0.25em] text-[var(--color-muted)]">PLUGGERS // STAFF</span>
+          </Link>
 
-        <form className="mt-6 flex flex-col gap-3" onSubmit={handleSubmit}>
-          <input
-            type="password"
-            required
-            value={key}
-            onChange={(e) => setKey(e.target.value)}
-            placeholder="Chiave di accesso"
-            className={INPUT_CLASS}
-            autoFocus
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="h-12 rounded-2xl font-mono text-xs font-semibold tracking-[0.2em] text-white transition hover:scale-[1.02] disabled:opacity-50"
-            style={{ background: "linear-gradient(135deg, var(--color-accent), #a855f7)" }}
-          >
-            {loading ? <Loader2 className="mx-auto h-4 w-4 animate-spin" /> : "ENTRA"}
-          </button>
-          {err && <p className="text-center font-mono text-xs text-red-500">{err}</p>}
-        </form>
+          <h1 className="font-sans text-xl font-bold tracking-tight">Accesso riservato</h1>
+          <p className="mt-1 text-sm text-[var(--color-muted)]">Inserisci le tue credenziali per continuare.</p>
+
+          <form className="mt-6 flex flex-col gap-3" onSubmit={handleSubmit}>
+            {/* Username */}
+            <div className="relative">
+              <User className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted)]" />
+              <input
+                type="text"
+                required
+                autoComplete="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username"
+                className={`${INPUT_CLASS} pl-10`}
+                autoFocus
+              />
+            </div>
+
+            {/* Password */}
+            <div className="relative">
+              <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted)]" />
+              <input
+                type="password"
+                required
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                className={`${INPUT_CLASS} pl-10`}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="h-12 rounded-2xl font-mono text-xs font-semibold tracking-[0.2em] text-white transition hover:scale-[1.02] disabled:opacity-50"
+              style={{ background: "linear-gradient(135deg, var(--color-accent), #a855f7)" }}
+            >
+              {loading ? <Loader2 className="mx-auto h-4 w-4 animate-spin" /> : "ENTRA"}
+            </button>
+
+            {err && <p className="text-center font-mono text-xs text-red-500">{err}</p>}
+          </form>
+        </div>
       </div>
     </div>
   );
 }
 
 // ── Admin dashboard ───────────────────────────────────────────────────────────
-function AdminDashboard({ devKey, onLogout }: { devKey: string; onLogout: () => void }) {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // New post form
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("Prodotto");
-  const [content, setContent] = useState("");
+function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => void }) {
+  const [posts,      setPosts]      = useState<Post[]>([]);
+  const [loading,    setLoading]    = useState(true);
+  const [title,      setTitle]      = useState("");
+  const [category,   setCategory]   = useState("Prodotto");
+  const [content,    setContent]    = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [formErr, setFormErr] = useState("");
+  const [formErr,    setFormErr]    = useState("");
 
   const loadPosts = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/posts");
+      const res  = await fetch("/api/posts");
       const data = (await res.json()) as { posts: Post[] };
       setPosts(data.posts ?? []);
     } finally {
@@ -139,14 +175,18 @@ function AdminDashboard({ devKey, onLogout }: { devKey: string; onLogout: () => 
     setFormErr("");
     setSubmitting(true);
     try {
-      const res = await fetch("/api/posts", {
+      const res = await authFetch(token, "/api/posts", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ devKey, title, category, content }),
+        body: JSON.stringify({ title, category, content }),
       });
       if (!res.ok) {
         const d = (await res.json()) as { error?: string };
-        setFormErr(d.error ?? "Errore");
+        if (res.status === 401) {
+          setFormErr("Sessione scaduta. Rieffettua il login.");
+          onLogout();
+          return;
+        }
+        setFormErr(d.error ?? "Errore imprevisto.");
         return;
       }
       setTitle(""); setCategory("Prodotto"); setContent("");
@@ -160,12 +200,21 @@ function AdminDashboard({ devKey, onLogout }: { devKey: string; onLogout: () => 
 
   async function handleDelete(id: string) {
     if (!confirm("Eliminare questo articolo?")) return;
-    await fetch("/api/posts", {
+    const res = await authFetch(token, "/api/posts", {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ devKey, id }),
+      body: JSON.stringify({ id }),
     });
+    if (res.status === 401) { onLogout(); return; }
     await loadPosts();
+  }
+
+  async function handleLogout() {
+    // Invalidate session server-side
+    await fetch("/api/auth", {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    }).catch(() => null);
+    onLogout();
   }
 
   return (
@@ -190,7 +239,7 @@ function AdminDashboard({ devKey, onLogout }: { devKey: string; onLogout: () => 
             </Link>
             <ThemeToggle />
             <button
-              onClick={onLogout}
+              onClick={handleLogout}
               className="flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-panel)] px-4 py-2 font-mono text-xs text-[var(--color-muted)] transition hover:border-red-500/50 hover:text-red-400"
             >
               <LogOut className="h-3.5 w-3.5" />
@@ -199,7 +248,7 @@ function AdminDashboard({ devKey, onLogout }: { devKey: string; onLogout: () => 
           </div>
         </header>
 
-        {/* ── Create post form ── */}
+        {/* Create post form */}
         <section className="mt-10">
           <div
             className="relative overflow-hidden rounded-3xl border border-[var(--color-border)] p-6 sm:p-8"
@@ -221,8 +270,7 @@ function AdminDashboard({ devKey, onLogout }: { devKey: string; onLogout: () => 
                 <input
                   type="text" required value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Titolo"
-                  className={INPUT_CLASS}
+                  placeholder="Titolo" className={INPUT_CLASS}
                 />
                 <select
                   value={category}
@@ -246,9 +294,7 @@ function AdminDashboard({ devKey, onLogout }: { devKey: string; onLogout: () => 
                   className="h-12 rounded-2xl font-mono text-xs font-semibold tracking-[0.2em] text-white transition hover:scale-[1.02] disabled:opacity-50"
                   style={{ background: "linear-gradient(135deg, var(--color-accent), #a855f7)", boxShadow: "0 4px 20px rgba(139,92,246,0.35)" }}
                 >
-                  {submitting
-                    ? <Loader2 className="mx-auto h-4 w-4 animate-spin" />
-                    : "PUBBLICA"}
+                  {submitting ? <Loader2 className="mx-auto h-4 w-4 animate-spin" /> : "PUBBLICA"}
                 </button>
                 {formErr && <p className="font-mono text-xs text-red-500">{formErr}</p>}
               </form>
@@ -256,12 +302,11 @@ function AdminDashboard({ devKey, onLogout }: { devKey: string; onLogout: () => 
           </div>
         </section>
 
-        {/* ── Posts list ── */}
+        {/* Posts list */}
         <section className="mt-8">
           <h2 className="mb-4 font-mono text-xs tracking-[0.25em] text-[var(--color-muted)]">
             ARTICOLI PUBBLICATI
           </h2>
-
           {loading ? (
             <div className="grid place-items-center rounded-2xl border border-[var(--color-border)] bg-[var(--color-panel)] p-10">
               <Loader2 className="h-6 w-6 animate-spin text-[var(--color-accent)]" />
@@ -316,25 +361,25 @@ function AdminDashboard({ devKey, onLogout }: { devKey: string; onLogout: () => 
   );
 }
 
-// ── Root component ────────────────────────────────────────────────────────────
+// ── Root ──────────────────────────────────────────────────────────────────────
 export default function AdminPage() {
-  const [devKey, setDevKey] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const stored = sessionStorage.getItem("pluggers_admin_key");
-    if (stored) setDevKey(stored);
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored) setToken(stored);
   }, []);
 
-  function handleAuth(key: string) {
-    sessionStorage.setItem("pluggers_admin_key", key);
-    setDevKey(key);
+  function handleAuth(t: string) {
+    sessionStorage.setItem(STORAGE_KEY, t);
+    setToken(t);
   }
 
   function handleLogout() {
-    sessionStorage.removeItem("pluggers_admin_key");
-    setDevKey(null);
+    sessionStorage.removeItem(STORAGE_KEY);
+    setToken(null);
   }
 
-  if (!devKey) return <PasswordGate onAuth={handleAuth} />;
-  return <AdminDashboard devKey={devKey} onLogout={handleLogout} />;
+  if (!token) return <LoginGate onAuth={handleAuth} />;
+  return <AdminDashboard token={token} onLogout={handleLogout} />;
 }

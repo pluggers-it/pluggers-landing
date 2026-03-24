@@ -1,47 +1,74 @@
 import { NextResponse } from "next/server";
-import { adminPasswordMatches, normalizeAdminPassword } from "@/lib/admin-auth";
+import { verifyAdminUser, createSession, deleteSession } from "@/lib/auth-db";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 /**
- * Validates the admin password.
- * POST { password: string } → { ok: true } | 401
+ * POST /api/auth
+ * Body: { username: string; password: string }
+ * → 200 { token: string }   (24-hour session token)
+ * → 401                     (wrong credentials)
+ * → 429                     (rate limited)
  *
- * Rate limit: 5 attempts per IP per minute (brute-force protection).
+ * DELETE /api/auth
+ * Header: Authorization: Bearer <token>
+ * → 200 { ok: true }        (session invalidated)
  */
-export async function POST(req: Request) {
-  const ip = getClientIp(req);
-  const { allowed, remaining, resetAt } = rateLimit(ip, {
-    windowMs: 60_000,   // 1 minute
-    maxRequests: 5,
-  });
 
+// ── Login ─────────────────────────────────────────────────────────────────────
+export async function POST(req: Request) {
+  // 5 attempts per minute per IP — brute-force protection
+  const ip = getClientIp(req);
+  const { allowed, resetAt } = rateLimit(ip, { windowMs: 60_000, maxRequests: 5 });
   if (!allowed) {
     return NextResponse.json(
       { error: "Troppi tentativi. Riprova tra un minuto." },
       {
         status: 429,
-        headers: {
-          "Retry-After":          String(Math.ceil((resetAt - Date.now()) / 1000)),
-          "X-RateLimit-Remaining": "0",
-        },
+        headers: { "Retry-After": String(Math.ceil((resetAt - Date.now()) / 1000)) },
       },
     );
   }
 
-  if (!normalizeAdminPassword(process.env.ADMIN_PASSWORD)) {
+  const body = (await req.json().catch(() => null)) as
+    | { username?: string; password?: string }
+    | null;
+
+  const username = (body?.username ?? "").trim();
+  const password = (body?.password ?? "").trim();
+
+  if (!username || !password) {
     return NextResponse.json(
-      { error: "Missing ADMIN_PASSWORD env var" },
+      { error: "Username e password obbligatori." },
+      { status: 400 },
+    );
+  }
+
+  let userId: number | null;
+  try {
+    userId = await verifyAdminUser(username, password);
+  } catch {
+    return NextResponse.json(
+      { error: "Errore di configurazione server." },
       { status: 500 },
     );
   }
 
-  const body = (await req.json().catch(() => null)) as
-    | { password?: string }
-    | null;
-
-  if (!adminPasswordMatches(process.env.ADMIN_PASSWORD, body?.password)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) {
+    // Uniform message — don't reveal whether the username exists
+    return NextResponse.json(
+      { error: "Credenziali non valide." },
+      { status: 401 },
+    );
   }
 
+  const token = await createSession(userId);
+  return NextResponse.json({ token });
+}
+
+// ── Logout ────────────────────────────────────────────────────────────────────
+export async function DELETE(req: Request) {
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+  if (token) await deleteSession(token).catch(() => null);
   return NextResponse.json({ ok: true });
 }
