@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
-// Accepts digits, spaces, dashes, parentheses and a leading +
-// Minimum 7 chars (shortest valid numbers) — maximum 20.
 const PHONE_REGEX = /^\+?[\d\s\-()\u00B7]{7,20}$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 const ALLOWED_SOURCES = new Set(["waitlist", "newsletter"]);
+
+// Max field lengths (prevent oversized payloads)
+const MAX = { name: 80, phone: 20, profession: 60, region: 60, email: 254 };
 
 function genericDbError(): NextResponse {
   return NextResponse.json(
@@ -23,6 +26,19 @@ function genericDbError(): NextResponse {
  *   → 500 { error: string }             (database error)
  */
 export async function POST(req: Request) {
+  const ip = getClientIp(req);
+  const { allowed } = rateLimit(ip, {
+    windowMs: 3_600_000,  // 1 hour
+    maxRequests: 5,       // max 5 signups per IP per hour
+  });
+
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Hai inviato troppe richieste. Riprova più tardi." },
+      { status: 429 },
+    );
+  }
+
   if (!isSupabaseConfigured()) {
     return NextResponse.json(
       { error: "Configurazione server incompleta." },
@@ -58,27 +74,23 @@ export async function POST(req: Request) {
     );
   }
 
-  if (!email || !email.includes("@")) {
-    return NextResponse.json({ error: "Email non valida" }, { status: 400 });
+  if (!email || !EMAIL_REGEX.test(email) || email.length > MAX.email) {
+    return NextResponse.json({ error: "Email non valida." }, { status: 400 });
   }
 
-  if (!phone || !PHONE_REGEX.test(phone)) {
-    return NextResponse.json(
-      { error: "Numero di telefono non valido" },
-      { status: 400 }
-    );
+  if (!phone || !PHONE_REGEX.test(phone) || phone.length > MAX.phone) {
+    return NextResponse.json({ error: "Numero di telefono non valido." }, { status: 400 });
   }
 
-  if (!firstName || !lastName) {
-    return NextResponse.json({ error: "Nome e cognome obbligatori" }, { status: 400 });
+  if (!firstName || !lastName || firstName.length > MAX.name || lastName.length > MAX.name) {
+    return NextResponse.json({ error: "Nome e cognome obbligatori (max 80 caratteri)." }, { status: 400 });
   }
 
-  if (!region) {
+  if (!region || region.length > MAX.region) {
     return NextResponse.json({ error: "Seleziona una regione." }, { status: 400 });
   }
 
-  // "utente" is sent when the user is not a professional — it is valid.
-  if (!profession) {
+  if (!profession || profession.length > MAX.profession) {
     return NextResponse.json({ error: "Seleziona una professione o il tipo utente." }, { status: 400 });
   }
 
@@ -101,6 +113,7 @@ export async function POST(req: Request) {
     profession,
     region,
     source,
+    privacy_accepted_at: new Date().toISOString(),
   };
 
   const { error } = await supabase.from("waitlist").insert(row);

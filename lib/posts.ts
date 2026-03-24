@@ -34,9 +34,11 @@ function rowToPost(row: PostRow): Post {
 
 /** Convert markdown content to HTML */
 export async function markdownToHtml(markdown: string): Promise<string> {
+  // sanitize: true strips raw HTML injected in Markdown.
+  // GFM tables/task-lists still work; only raw <script>/<iframe> blocks are removed.
   const result = await remark()
     .use(remarkGfm)
-    .use(remarkHtml, { sanitize: false })
+    .use(remarkHtml, { sanitize: true })
     .process(markdown);
   return result.toString();
 }
