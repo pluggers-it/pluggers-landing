@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";
 import remarkHtml from "remark-html";
@@ -42,7 +42,7 @@ export async function markdownToHtml(markdown: string): Promise<string> {
 }
 
 export async function readPosts(): Promise<Post[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("posts")
     .select("*")
     .order("created_at", { ascending: false });
@@ -52,7 +52,7 @@ export async function readPosts(): Promise<Post[]> {
 }
 
 export async function getPostById(id: string): Promise<Post | null> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("posts")
     .select("*")
     .eq("id", id)
@@ -67,7 +67,7 @@ export async function createPost(input: {
   category: string;
   content: string;
 }): Promise<Post> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("posts")
     .insert(input)
     .select()
@@ -78,7 +78,7 @@ export async function createPost(input: {
 }
 
 export async function deletePost(id: string): Promise<boolean> {
-  const { error, count } = await supabase
+  const { error, count } = await getSupabase()
     .from("posts")
     .delete()
     .eq("id", id);

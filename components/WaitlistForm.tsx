@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { trackFormStart, trackFormSubmit } from "@/lib/analytics";
 
@@ -27,6 +28,8 @@ interface Props {
   successMessage?: string;
   /** GA4 form_name used in form_start / form_submit events */
   formName?: string;
+  /** Salvato su DB in `waitlist.source` (finalità GDPR). */
+  submissionSource?: "waitlist" | "newsletter";
 }
 
 export function WaitlistForm({
@@ -35,6 +38,7 @@ export function WaitlistForm({
   description = "Inserisci la tua email e ti contatteremo nel momento in cui il servizio sarà attivo nella tua area. Aggiornamenti rari, mai irrilevanti.",
   successMessage = "Sei in lista! Ti contatteremo presto.",
   formName = "waitlist",
+  submissionSource = "waitlist",
 }: Props) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -111,6 +115,8 @@ export function WaitlistForm({
                     phone,
                     region,
                     profession: profession === "altro" ? otherProfession : profession,
+                    source: submissionSource,
+                    privacyAccepted: true,
                   }),
                 });
                 if (res.ok) {
@@ -235,6 +241,27 @@ export function WaitlistForm({
                 />
               </motion.div>
             )}
+
+            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-[var(--color-border)] bg-black/5 px-4 py-3 text-sm text-[var(--color-muted)]">
+              <input
+                type="checkbox"
+                required
+                className="mt-1 h-4 w-4 shrink-0 rounded border-[var(--color-border)] accent-[var(--color-accent)]"
+                onFocus={onFirstInteraction}
+              />
+              <span className="leading-relaxed">
+                Ho letto l&apos;{" "}
+                <Link
+                  href="/privacy"
+                  className="text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-foreground)]"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  informativa sulla privacy
+                </Link>{" "}
+                e acconsento al trattamento dei dati per la finalità indicata.
+              </span>
+            </label>
 
             <button
               type="submit"

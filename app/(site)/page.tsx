@@ -38,6 +38,12 @@ export default function Home() {
           <div className="font-mono tracking-widest">PLUGGERS</div>
           <div className="flex items-center gap-5">
             <Link
+              href="/privacy"
+              className="font-mono transition hover:text-[var(--color-foreground)]"
+            >
+              Privacy
+            </Link>
+            <Link
               href="https://instagram.com/pluggers.it"
               target="_blank"
               rel="noopener noreferrer"

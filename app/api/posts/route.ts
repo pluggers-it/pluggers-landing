@@ -1,13 +1,21 @@
 import { NextResponse } from "next/server";
 import { readPosts, createPost, deletePost } from "@/lib/posts";
 import { adminPasswordMatches, normalizeAdminPassword } from "@/lib/admin-auth";
+import { isSupabaseConfigured } from "@/lib/supabase";
 
 /**
  * Public endpoint: returns all posts.
  */
 export async function GET() {
-  const posts = await readPosts();
-  return NextResponse.json({ posts });
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json({ posts: [] });
+  }
+  try {
+    const posts = await readPosts();
+    return NextResponse.json({ posts });
+  } catch {
+    return NextResponse.json({ posts: [] });
+  }
 }
 
 /**

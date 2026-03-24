@@ -56,6 +56,7 @@ export default function NewsletterPage() {
             description="Inserisci i tuoi dati per ricevere le nostre comunicazioni. Niente spam, solo contenuti rilevanti."
             successMessage="Registrazione completata! Ti contatteremo presto."
             formName="newsletter"
+            submissionSource="newsletter"
           />
         </div>
 
