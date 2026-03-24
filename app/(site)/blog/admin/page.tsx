@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
-import { ArrowLeft, Plus, Trash2, LogOut, Loader2, User, Lock } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, LogOut, Loader2, User, Lock, UserPlus, ShieldCheck } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -147,6 +147,9 @@ function LoginGate({ onAuth }: { onAuth: (token: string) => void }) {
   );
 }
 
+// ── Types ─────────────────────────────────────────────────────────────────────
+type AdminUser = { id: number; username: string; created_at: string; last_login_at: string | null };
+
 // ── Admin dashboard ───────────────────────────────────────────────────────────
 function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => void }) {
   const [posts,      setPosts]      = useState<Post[]>([]);
@@ -156,6 +159,14 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
   const [content,    setContent]    = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [formErr,    setFormErr]    = useState("");
+
+  // User management
+  const [users,        setUsers]       = useState<AdminUser[]>([]);
+  const [newUsername,  setNewUsername] = useState("");
+  const [newPassword,  setNewPassword] = useState("");
+  const [userErr,      setUserErr]     = useState("");
+  const [userOk,       setUserOk]      = useState("");
+  const [userLoading,  setUserLoading] = useState(false);
 
   const loadPosts = useCallback(async () => {
     setLoading(true);
@@ -168,7 +179,15 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
     }
   }, []);
 
-  useEffect(() => { void loadPosts(); }, [loadPosts]);
+  const loadUsers = useCallback(async () => {
+    try {
+      const res  = await authFetch(token, "/api/admin/users");
+      const data = (await res.json()) as { users: AdminUser[] };
+      setUsers(data.users ?? []);
+    } catch { /* ignore */ }
+  }, [token]);
+
+  useEffect(() => { void loadPosts(); void loadUsers(); }, [loadPosts, loadUsers]);
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
@@ -206,6 +225,36 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
     });
     if (res.status === 401) { onLogout(); return; }
     await loadPosts();
+  }
+
+  async function handleCreateUser(e: React.FormEvent) {
+    e.preventDefault();
+    setUserErr(""); setUserOk("");
+    setUserLoading(true);
+    try {
+      const res = await authFetch(token, "/api/admin/users", {
+        method: "POST",
+        body: JSON.stringify({ username: newUsername.trim(), password: newPassword }),
+      });
+      const data = (await res.json()) as { error?: string; username?: string };
+      if (!res.ok) { setUserErr(data.error ?? "Errore imprevisto."); return; }
+      setUserOk(`Utente "${data.username}" creato con successo.`);
+      setNewUsername(""); setNewPassword("");
+      await loadUsers();
+    } catch {
+      setUserErr("Errore di connessione.");
+    } finally {
+      setUserLoading(false);
+    }
+  }
+
+  async function handleDeleteUser(id: number, username: string) {
+    if (!confirm(`Eliminare l'utente "${username}"?`)) return;
+    await authFetch(token, "/api/admin/users", {
+      method: "DELETE",
+      body: JSON.stringify({ id }),
+    });
+    await loadUsers();
   }
 
   async function handleLogout() {
@@ -356,6 +405,97 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
             </div>
           )}
         </section>
+        {/* User management */}
+        <section className="mt-10">
+          <div
+            className="relative overflow-hidden rounded-3xl border border-[var(--color-border)] p-6 sm:p-8"
+            style={{ background: "var(--color-panel)", backdropFilter: "blur(20px)" }}
+          >
+            <div className="pointer-events-none absolute -top-16 right-0 h-32 w-64 rounded-full blur-2xl"
+                 style={{ background: "radial-gradient(circle, rgba(56,189,248,0.12), transparent 70%)" }} />
+
+            <div className="relative">
+              <div
+                className="mb-5 inline-flex items-center gap-2 rounded-full px-3 py-1 font-mono text-[10px] tracking-[0.24em]"
+                style={{ border: "1px solid rgba(56,189,248,0.35)", background: "rgba(56,189,248,0.08)", color: "#38bdf8" }}
+              >
+                <ShieldCheck className="h-3 w-3" />
+                GESTIONE UTENTI STAFF
+              </div>
+
+              {/* Existing users */}
+              {users.length > 0 && (
+                <div className="mb-5 flex flex-col gap-2">
+                  {users.map((u) => (
+                    <div
+                      key={u.id}
+                      className="flex items-center justify-between rounded-2xl border border-[var(--color-border)] px-4 py-3"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-border)] font-mono text-xs text-[var(--color-muted)]">
+                          {u.username.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <p className="font-mono text-sm font-semibold">{u.username}</p>
+                          <p className="font-mono text-[10px] text-[var(--color-muted)]">
+                            {u.last_login_at
+                              ? `Ultimo accesso: ${new Date(u.last_login_at).toLocaleDateString("it-IT")}`
+                              : "Nessun accesso registrato"}
+                          </p>
+                        </div>
+                      </div>
+                      {users.length > 1 && (
+                        <button
+                          onClick={() => handleDeleteUser(u.id, u.username)}
+                          className="rounded-xl border border-transparent p-2 text-[var(--color-muted)] transition hover:border-red-500/50 hover:text-red-400"
+                          title="Elimina utente"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Add new user form */}
+              <form className="flex flex-col gap-3" onSubmit={handleCreateUser}>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="relative">
+                    <User className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted)]" />
+                    <input
+                      type="text" required minLength={3} value={newUsername}
+                      onChange={(e) => setNewUsername(e.target.value)}
+                      placeholder="Nuovo username" autoComplete="off"
+                      className={`${INPUT_CLASS} pl-10`}
+                    />
+                  </div>
+                  <div className="relative">
+                    <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted)]" />
+                    <input
+                      type="password" required minLength={8} value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Password (min. 8 caratteri)" autoComplete="new-password"
+                      className={`${INPUT_CLASS} pl-10`}
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit" disabled={userLoading}
+                  className="flex h-11 items-center justify-center gap-2 rounded-2xl border font-mono text-xs font-semibold tracking-[0.16em] transition hover:scale-[1.01] disabled:opacity-50"
+                  style={{ borderColor: "rgba(56,189,248,0.40)", background: "rgba(56,189,248,0.08)", color: "#38bdf8" }}
+                >
+                  {userLoading
+                    ? <Loader2 className="h-4 w-4 animate-spin" />
+                    : <><UserPlus className="h-4 w-4" /> AGGIUNGI UTENTE STAFF</>}
+                </button>
+                {userErr && <p className="font-mono text-xs text-red-500">{userErr}</p>}
+                {userOk  && <p className="font-mono text-xs text-emerald-400">{userOk}</p>}
+              </form>
+            </div>
+          </div>
+        </section>
+
       </div>
     </div>
   );
