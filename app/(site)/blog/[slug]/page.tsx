@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { getPostById, markdownToHtml } from "@/lib/posts";
 
 export async function generateMetadata(
@@ -89,7 +90,7 @@ export default async function BlogPostPage(
             />
 
             {/* Footer nav */}
-            <div className="mt-14 border-t border-[var(--color-border)] pt-8">
+            <div className="mt-10 border-t border-[var(--color-border)] pt-6">
               <Link
                 href="/blog"
                 className="inline-flex items-center gap-1.5 font-mono text-xs text-[var(--color-muted)] transition hover:text-[var(--color-foreground)]"
@@ -97,6 +98,9 @@ export default async function BlogPostPage(
                 <ArrowLeft className="h-3.5 w-3.5" />
                 Torna al Blog
               </Link>
+            </div>
+            <div className="mt-8">
+              <SiteFooter />
             </div>
           </main>
         </div>

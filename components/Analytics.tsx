@@ -5,11 +5,10 @@ import { useEffect } from "react";
 import { useConsent } from "@/lib/consent";
 import { trackScrollDepth } from "@/lib/analytics";
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "";
+const GA_ID      = process.env.NEXT_PUBLIC_GA_ID      ?? "";
 const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID ?? "";
 
 // ── Scroll depth tracker ──────────────────────────────────────────────────────
-// Mounted only when consent is "granted" → starts listening immediately.
 function ScrollDepthTracker() {
   useEffect(() => {
     const thresholds: Array<25 | 50 | 90> = [25, 50, 90];
@@ -58,9 +57,9 @@ function ScrollDepthTracker() {
  * Rendered in the root layout — outputs nothing until consent === "granted".
  */
 export function Analytics() {
-  const { consent } = useConsent();
+  const { analyticsConsent } = useConsent();
 
-  if (consent !== "granted") return null;
+  if (analyticsConsent !== "granted") return null;
 
   return (
     <>

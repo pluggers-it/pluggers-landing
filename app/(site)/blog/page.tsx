@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, PenLine } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { readPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
@@ -123,6 +124,9 @@ export default async function BlogPage() {
               </div>
             )}
           </main>
+          <div className="mt-12">
+            <SiteFooter />
+          </div>
         </div>
       </div>
     </div>

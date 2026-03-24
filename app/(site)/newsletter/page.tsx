@@ -4,6 +4,7 @@ import Link from "next/link";
 import logo from "@/assets/logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { WaitlistForm } from "@/components/WaitlistForm";
+import { SiteFooter } from "@/components/SiteFooter";
 
 /**
  * Hidden registration page — reachable only via direct URL (/newsletter).
@@ -60,10 +61,9 @@ export default function NewsletterPage() {
           />
         </div>
 
-        {/* Minimal footer */}
-        <footer className="relative mt-auto pt-12 text-center font-mono text-[10px] tracking-widest text-[var(--color-muted)]">
-          PLUGGERS © {new Date().getFullYear()}
-        </footer>
+        <div className="relative mt-auto pt-12">
+          <SiteFooter />
+        </div>
       </div>
     </div>
   );

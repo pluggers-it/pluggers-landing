@@ -8,46 +8,70 @@ import React, {
   useState,
 } from "react";
 
-export type ConsentStatus = "granted" | "denied" | null;
+export type AnalyticsConsent = "granted" | "denied" | null;
 
-const STORAGE_KEY = "pluggers_cookie_consent";
+const TERMS_KEY     = "pluggers_terms_v1";      // accepted T&C + Privacy
+const ANALYTICS_KEY = "pluggers_analytics_v1";  // analytics cookie choice
 
 // ── Context ───────────────────────────────────────────────────────────────────
 interface ConsentContextValue {
-  /** null = not yet decided; "granted" / "denied" = user made a choice */
-  consent: ConsentStatus;
-  accept: () => void;
-  deny: () => void;
+  /**
+   * Has the user accepted Terms + Privacy?
+   * null  = not hydrated yet (SSR)
+   * false = not accepted (gate is visible)
+   * true  = accepted (gate is hidden)
+   */
+  termsAccepted: boolean | null;
+
+  /**
+   * Analytics cookie choice.
+   * null    = pending (no explicit decision yet)
+   * granted = user opted in
+   * denied  = user opted out
+   */
+  analyticsConsent: AnalyticsConsent;
+
+  /** Accept T&C + Privacy AND grant analytics cookies */
+  acceptAll: () => void;
+
+  /** Accept T&C + Privacy, but decline analytics cookies */
+  acceptNecessary: () => void;
 }
 
 const ConsentContext = createContext<ConsentContextValue>({
-  consent: null,
-  accept: () => {},
-  deny: () => {},
+  termsAccepted:    null,
+  analyticsConsent: null,
+  acceptAll:        () => {},
+  acceptNecessary:  () => {},
 });
 
 // ── Provider ──────────────────────────────────────────────────────────────────
 export function ConsentProvider({ children }: { children: React.ReactNode }) {
-  const [consent, setConsent] = useState<ConsentStatus>(null);
+  const [termsAccepted,    setTermsAccepted]    = useState<boolean | null>(null);
+  const [analyticsConsent, setAnalyticsConsent] = useState<AnalyticsConsent>(null);
 
-  // Hydrate from localStorage on mount (client-only)
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY) as ConsentStatus | null;
-    if (stored === "granted" || stored === "denied") setConsent(stored);
+    setTermsAccepted(localStorage.getItem(TERMS_KEY) === "true");
+    const stored = localStorage.getItem(ANALYTICS_KEY) as AnalyticsConsent | null;
+    if (stored === "granted" || stored === "denied") setAnalyticsConsent(stored);
   }, []);
 
-  const accept = useCallback(() => {
-    localStorage.setItem(STORAGE_KEY, "granted");
-    setConsent("granted");
+  const acceptAll = useCallback(() => {
+    localStorage.setItem(TERMS_KEY,     "true");
+    localStorage.setItem(ANALYTICS_KEY, "granted");
+    setTermsAccepted(true);
+    setAnalyticsConsent("granted");
   }, []);
 
-  const deny = useCallback(() => {
-    localStorage.setItem(STORAGE_KEY, "denied");
-    setConsent("denied");
+  const acceptNecessary = useCallback(() => {
+    localStorage.setItem(TERMS_KEY,     "true");
+    localStorage.setItem(ANALYTICS_KEY, "denied");
+    setTermsAccepted(true);
+    setAnalyticsConsent("denied");
   }, []);
 
   return (
-    <ConsentContext.Provider value={{ consent, accept, deny }}>
+    <ConsentContext.Provider value={{ termsAccepted, analyticsConsent, acceptAll, acceptNecessary }}>
       {children}
     </ConsentContext.Provider>
   );

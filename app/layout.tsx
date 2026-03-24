@@ -3,7 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ConsentProvider } from "@/lib/consent";
-import { CookieBanner } from "@/components/CookieBanner";
+import { ConsentGate } from "@/components/ConsentGate";
 import { Analytics } from "@/components/Analytics";
 
 const inter = Inter({
@@ -96,7 +96,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>
         <ConsentProvider>
           <ThemeProvider>{children}</ThemeProvider>
-          <CookieBanner />
+          <ConsentGate />
           <Analytics />
         </ConsentProvider>
       </body>

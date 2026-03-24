@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { HomeHero } from "@/components/HomeHero";
 import { JsonLd } from "@/components/JsonLd";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export const metadata: Metadata = {
   title: "Pluggers — Il professionista giusto, al momento giusto.",
@@ -34,33 +34,7 @@ export default function Home() {
 
         <HomeHero />
 
-        <footer className="relative flex flex-col items-center gap-4 border-t border-[var(--color-border)] pt-6 text-xs text-[var(--color-muted)] sm:flex-row sm:justify-between">
-          <div className="font-mono tracking-widest">PLUGGERS</div>
-          <div className="flex items-center gap-5">
-            <Link
-              href="/privacy"
-              className="font-mono transition hover:text-[var(--color-foreground)]"
-            >
-              Privacy
-            </Link>
-            <Link
-              href="https://instagram.com/pluggers.it"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono transition hover:text-[var(--color-foreground)]"
-            >
-              Instagram
-            </Link>
-            {/* Staff-only entry point — intentionally subtle */}
-            <Link
-              href="/blog/admin"
-              className="font-mono opacity-20 transition hover:opacity-60"
-              title="Staff"
-            >
-              ·
-            </Link>
-          </div>
-        </footer>
+        <SiteFooter />
       </div>
     </div>
   );
