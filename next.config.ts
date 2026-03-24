@@ -7,17 +7,15 @@ const SUPABASE_HOST = "zfmcltiraiyxryjfahgw.supabase.co";
  * Content Security Policy
  *
  * script-src rationale:
- *  - 'self'                         → Next.js JS bundles served from origin
- *  - 'unsafe-inline'                → required for Next.js inline hydration chunks
- *                                     and the gtag Consent Mode v2 bootstrap script
- *                                     in layout.tsx. Nonce-based CSP would be
- *                                     stricter but requires Edge Middleware.
- *  - googletagmanager.com           → GA4 gtag.js loader
+ *  - 'self'              → Next.js JS bundles served from origin
+ *  - 'unsafe-inline'     → required for Next.js inline hydration chunks and
+ *                          next-plausible's inline script tag. Nonce-based CSP
+ *                          would be stricter but requires Edge Middleware.
+ *  - plausible.io        → Plausible Analytics script (cookie-free, GDPR by default)
  *
  * connect-src rationale:
- *  - google-analytics.com / analytics.google.com → GA4 measurement hits
- *  - region1.* variants             → EU-routed GA4 endpoints
- *  - *.supabase.co (https + wss)    → Supabase REST, Auth, Realtime
+ *  - plausible.io        → Plausible measurement endpoint
+ *  - *.supabase.co       → Supabase REST, Auth, Realtime (https + wss)
  *
  * style-src 'unsafe-inline': required by Tailwind CSS v4 and framer-motion.
  * font-src data:             Next.js inlines small fonts as data URIs at build time.
@@ -29,16 +27,13 @@ const SUPABASE_HOST = "zfmcltiraiyxryjfahgw.supabase.co";
  */
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
+  "script-src 'self' 'unsafe-inline' https://plausible.io",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
-  "img-src 'self' data: blob: https://www.google-analytics.com",
+  "img-src 'self' data: blob:",
   [
     "connect-src 'self'",
-    "https://www.google-analytics.com",
-    "https://analytics.google.com",
-    "https://region1.google-analytics.com",
-    "https://region1.analytics.google.com",
+    "https://plausible.io",
     `https://${SUPABASE_HOST}`,
     `wss://${SUPABASE_HOST}`,
   ].join(" "),
