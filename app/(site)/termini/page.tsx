@@ -248,7 +248,7 @@ export default function TerminiPage() {
                 <li>
                   <Bold>Foro B2B (Professionisti):</Bold> Per ogni controversia derivante dall&apos;utilizzo della
                   Piattaforma da parte di Utenti Professionisti (soggetti con Partita IVA), la competenza
-                  territoriale spetta in via esclusiva al <Bold>Foro di Decimoputzu (SU)</Bold>; a seguito della
+                  territoriale spetta in via esclusiva al <Bold>Foro di Cagliari</Bold>; a seguito della
                   costituzione della società Pluggers s.r.l., la competenza esclusiva si trasferirà
                   inderogabilmente al <Bold>Foro di Torino</Bold>.
                 </li>
