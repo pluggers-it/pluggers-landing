@@ -44,34 +44,25 @@ function PasswordGate({ onAuth }: { onAuth: (key: string) => void }) {
     setErr("");
     setLoading(true);
     try {
-      // Verify by attempting a protected request — a POST with empty fields
-      // will return 400 (bad request) if the key is valid, or 401 if not.
       const trimmed = key.trim();
-      const res = await fetch("/api/posts", {
+      const res = await fetch("/api/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          devKey: trimmed,
-          title: "",
-          category: "",
-          content: "",
-        }),
+        body: JSON.stringify({ password: trimmed }),
       });
       if (res.status === 401) {
         setErr("Chiave non valida.");
         return;
       }
-      // 400 = password OK, campi vuoti (flusso di verifica)
-      if (res.status === 400) {
+      if (res.status === 500) {
+        setErr("Errore di configurazione server. Controlla le variabili d'ambiente.");
+        return;
+      }
+      if (res.ok) {
         onAuth(trimmed);
         return;
       }
-      if (!res.ok) {
-        const data = (await res.json().catch(() => null)) as { error?: string } | null;
-        setErr(data?.error ?? `Errore server (${res.status}). Controlla le variabili d'ambiente sul deploy.`);
-        return;
-      }
-      onAuth(trimmed);
+      setErr(`Errore server (${res.status}).`);
     } catch {
       setErr("Errore di connessione.");
     } finally {
