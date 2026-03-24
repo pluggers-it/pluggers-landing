@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { trackFormStart, trackFormSubmit } from "@/lib/analytics";
 
 const SELECT_ARROW = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`;
@@ -21,14 +21,14 @@ const SELECT_CLASS = `${INPUT_CLASS} appearance-none`;
 
 const OPT = "bg-[#07070a]";
 
+type UserType = "professionista" | "utente";
+
 interface Props {
   badge?: string;
   title?: string;
   description?: string;
   successMessage?: string;
-  /** GA4 form_name used in form_start / form_submit events */
   formName?: string;
-  /** Salvato su DB in `waitlist.source` (finalità GDPR). */
   submissionSource?: "waitlist" | "newsletter";
 }
 
@@ -40,24 +40,40 @@ export function WaitlistForm({
   formName = "waitlist",
   submissionSource = "waitlist",
 }: Props) {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [region, setRegion] = useState("");
-  const [email, setEmail] = useState("");
-  const [profession, setProfession] = useState("");
+  const [userType, setUserType]             = useState<UserType>("professionista");
+  const [firstName, setFirstName]           = useState("");
+  const [lastName, setLastName]             = useState("");
+  const [phone, setPhone]                   = useState("");
+  const [region, setRegion]                 = useState("");
+  const [email, setEmail]                   = useState("");
+  const [profession, setProfession]         = useState("");
   const [otherProfession, setOtherProfession] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [privacyChecked, setPrivacyChecked] = useState(false);
+  const [termsChecked, setTermsChecked]     = useState(false);
+  const [submitting, setSubmitting]         = useState(false);
+  const [submitted, setSubmitted]           = useState(false);
+  const [error, setError]                   = useState<string | null>(null);
 
-  // Fire form_start only on the first interaction
   const startFired = useRef(false);
   function onFirstInteraction() {
     if (startFired.current) return;
     startFired.current = true;
     trackFormStart(formName);
   }
+
+  function handleUserTypeChange(type: UserType) {
+    setUserType(type);
+    setProfession("");
+    setOtherProfession("");
+    onFirstInteraction();
+  }
+
+  const resolvedProfession =
+    userType === "utente"
+      ? "utente"
+      : profession === "altro"
+      ? otherProfession
+      : profession;
 
   return (
     <div
@@ -67,7 +83,10 @@ export function WaitlistForm({
       {/* Purple glow */}
       <div
         className="pointer-events-none absolute -top-20 left-1/2 h-40 w-80 -translate-x-1/2 rounded-full blur-2xl"
-        style={{ background: "radial-gradient(circle, rgba(139,92,246,0.25), transparent 70%)" }}
+        style={{
+          background:
+            "radial-gradient(circle, rgba(139,92,246,0.25), transparent 70%)",
+        }}
       />
 
       <div className="relative">
@@ -102,6 +121,10 @@ export function WaitlistForm({
             className="mt-5 flex flex-col gap-3"
             onSubmit={async (e) => {
               e.preventDefault();
+              if (!privacyChecked || !termsChecked) {
+                setError("Devi accettare la Privacy Policy e i Termini e Condizioni.");
+                return;
+              }
               setError(null);
               setSubmitting(true);
               try {
@@ -114,7 +137,7 @@ export function WaitlistForm({
                     lastName,
                     phone,
                     region,
-                    profession: profession === "altro" ? otherProfession : profession,
+                    profession: resolvedProfession,
                     source: submissionSource,
                     privacyAccepted: true,
                   }),
@@ -123,7 +146,9 @@ export function WaitlistForm({
                   setSubmitted(true);
                   trackFormSubmit(formName);
                 } else {
-                  const data = (await res.json().catch(() => null)) as { error?: string } | null;
+                  const data = (await res.json().catch(() => null)) as {
+                    error?: string;
+                  } | null;
                   setError(data?.error ?? "Qualcosa è andato storto");
                 }
               } catch {
@@ -133,7 +158,36 @@ export function WaitlistForm({
               }
             }}
           >
-            {/* Row 1: Nome | Cognome | Regione | Telefono */}
+            {/* ── User type toggle ─────────────────────────────────────────── */}
+            <div
+              className="flex gap-2 rounded-2xl border border-[var(--color-border)] p-1"
+              style={{ background: "rgba(255,255,255,0.02)" }}
+            >
+              {(["professionista", "utente"] as UserType[]).map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => handleUserTypeChange(type)}
+                  className="flex-1 rounded-xl py-2.5 font-mono text-xs tracking-[0.14em] transition-all"
+                  style={
+                    userType === type
+                      ? {
+                          background:
+                            "linear-gradient(135deg, var(--color-accent), #a855f7)",
+                          color: "#fff",
+                          boxShadow: "0 2px 12px rgba(139,92,246,0.35)",
+                        }
+                      : {
+                          color: "var(--color-muted)",
+                        }
+                  }
+                >
+                  {type === "professionista" ? "SONO UN PROFESSIONISTA" : "SONO UN UTENTE"}
+                </button>
+              ))}
+            </div>
+
+            {/* ── Common fields: Nome | Cognome | Regione | Telefono ───────── */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <input
                 type="text" required value={firstName}
@@ -172,7 +226,7 @@ export function WaitlistForm({
                 <option value="Toscana" className={OPT}>Toscana</option>
                 <option value="Trentino-Alto Adige" className={OPT}>Trentino-Alto Adige</option>
                 <option value="Umbria" className={OPT}>Umbria</option>
-                <option value="Valle d'Aosta" className={OPT}>Valle d'Aosta</option>
+                <option value="Valle d&apos;Aosta" className={OPT}>Valle d&apos;Aosta</option>
                 <option value="Veneto" className={OPT}>Veneto</option>
               </select>
               <input
@@ -185,7 +239,7 @@ export function WaitlistForm({
               />
             </div>
 
-            {/* Row 2: Email | Professione */}
+            {/* ── Email + Profession (profession only for professionals) ────── */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <input
                 type="email" required value={email}
@@ -193,80 +247,129 @@ export function WaitlistForm({
                 onFocus={onFirstInteraction}
                 placeholder="nome@email.com" className={INPUT_CLASS}
               />
-              <select
-                required value={profession}
-                onChange={(e) => {
-                  setProfession(e.target.value);
-                  if (e.target.value !== "altro") setOtherProfession("");
-                }}
-                onFocus={onFirstInteraction}
-                className={SELECT_CLASS} style={SELECT_STYLE}
-              >
-                <option value="" disabled className={OPT}>Professione</option>
-                <option value="idraulico" className={OPT}>Idraulico</option>
-                <option value="elettricista" className={OPT}>Elettricista</option>
-                <option value="muratore" className={OPT}>Muratore</option>
-                <option value="fabbro" className={OPT}>Fabbro</option>
-                <option value="falegname" className={OPT}>Falegname</option>
-                <option value="imbianchino" className={OPT}>Imbianchino</option>
-                <option value="piastrellista" className={OPT}>Piastrellista</option>
-                <option value="carpentiere" className={OPT}>Carpentiere</option>
-                <option value="saldatore" className={OPT}>Saldatore</option>
-                <option value="serramentista" className={OPT}>Serramentista</option>
-                <option value="vetraio" className={OPT}>Vetraio</option>
-                <option value="tappezziere" className={OPT}>Tappezziere</option>
-                <option value="giardiniere" className={OPT}>Giardiniere</option>
-                <option value="manovale" className={OPT}>Manovale</option>
-                <option value="gessista" className={OPT}>Gessista</option>
-                <option value="lattoniere" className={OPT}>Lattoniere</option>
-                <option value="termoidraulico" className={OPT}>Termoidraulico</option>
-                <option value="frigorista" className={OPT}>Frigorista</option>
-                <option value="ascensorista" className={OPT}>Ascensorista</option>
-                <option value="altro" className={OPT}>Altro</option>
-              </select>
+
+              <AnimatePresence mode="wait">
+                {userType === "professionista" ? (
+                  <motion.div
+                    key="profession-select"
+                    initial={{ opacity: 0, x: 8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <select
+                      required value={profession}
+                      onChange={(e) => {
+                        setProfession(e.target.value);
+                        if (e.target.value !== "altro") setOtherProfession("");
+                      }}
+                      onFocus={onFirstInteraction}
+                      className={SELECT_CLASS} style={SELECT_STYLE}
+                    >
+                      <option value="" disabled className={OPT}>Professione</option>
+                      <option value="idraulico" className={OPT}>Idraulico</option>
+                      <option value="elettricista" className={OPT}>Elettricista</option>
+                      <option value="muratore" className={OPT}>Muratore</option>
+                      <option value="fabbro" className={OPT}>Fabbro</option>
+                      <option value="falegname" className={OPT}>Falegname</option>
+                      <option value="imbianchino" className={OPT}>Imbianchino</option>
+                      <option value="piastrellista" className={OPT}>Piastrellista</option>
+                      <option value="carpentiere" className={OPT}>Carpentiere</option>
+                      <option value="saldatore" className={OPT}>Saldatore</option>
+                      <option value="serramentista" className={OPT}>Serramentista</option>
+                      <option value="vetraio" className={OPT}>Vetraio</option>
+                      <option value="tappezziere" className={OPT}>Tappezziere</option>
+                      <option value="giardiniere" className={OPT}>Giardiniere</option>
+                      <option value="manovale" className={OPT}>Manovale</option>
+                      <option value="gessista" className={OPT}>Gessista</option>
+                      <option value="lattoniere" className={OPT}>Lattoniere</option>
+                      <option value="termoidraulico" className={OPT}>Termoidraulico</option>
+                      <option value="frigorista" className={OPT}>Frigorista</option>
+                      <option value="ascensorista" className={OPT}>Ascensorista</option>
+                      <option value="altro" className={OPT}>Altro</option>
+                    </select>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="user-label"
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -8 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex h-12 items-center rounded-2xl border border-[var(--color-border)] bg-black/10 px-4"
+                  >
+                    <span className="font-mono text-sm text-[var(--color-muted)]">
+                      👤 Utente finale
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* "Altro" profession free-text */}
-            {profession === "altro" && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                transition={{ duration: 0.3 }}
-              >
-                <input
-                  type="text" required value={otherProfession}
-                  onChange={(e) => setOtherProfession(e.target.value)}
-                  placeholder="Specifica la tua professione"
-                  className={INPUT_CLASS}
-                />
-              </motion.div>
-            )}
+            <AnimatePresence>
+              {userType === "professionista" && profession === "altro" && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <input
+                    type="text" required value={otherProfession}
+                    onChange={(e) => setOtherProfession(e.target.value)}
+                    placeholder="Specifica la tua professione"
+                    className={INPUT_CLASS}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-            <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-[var(--color-border)] bg-black/5 px-4 py-3 text-sm text-[var(--color-muted)]">
-              <input
-                type="checkbox"
-                required
-                className="mt-1 h-4 w-4 shrink-0 rounded border-[var(--color-border)] accent-[var(--color-accent)]"
+            {/* ── Legal checkboxes ─────────────────────────────────────────── */}
+            <div className="flex flex-col gap-2">
+              <LegalCheckbox
+                id="privacy-check"
+                checked={privacyChecked}
+                onChange={setPrivacyChecked}
                 onFocus={onFirstInteraction}
-              />
-              <span className="leading-relaxed">
-                Ho letto l&apos;{" "}
+              >
+                Ho letto e accetto la{" "}
                 <Link
                   href="/privacy"
-                  className="text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-foreground)]"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-foreground)]"
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  informativa sulla privacy
-                </Link>{" "}
-                e acconsento al trattamento dei dati per la finalità indicata.
-              </span>
-            </label>
+                  Privacy Policy
+                </Link>
+                {" "}e acconsento al trattamento dei dati.
+              </LegalCheckbox>
+
+              <LegalCheckbox
+                id="terms-check"
+                checked={termsChecked}
+                onChange={setTermsChecked}
+                onFocus={onFirstInteraction}
+              >
+                Ho letto e accetto i{" "}
+                <Link
+                  href="/termini"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--color-accent)] underline underline-offset-2 hover:text-[var(--color-foreground)]"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Termini e Condizioni
+                </Link>
+                {" "}di utilizzo del servizio.
+              </LegalCheckbox>
+            </div>
 
             <button
               type="submit"
-              disabled={submitting}
-              className="h-12 w-full rounded-2xl px-8 font-mono text-xs font-semibold tracking-[0.2em] text-white transition hover:scale-[1.02] disabled:opacity-50"
+              disabled={submitting || !privacyChecked || !termsChecked}
+              className="h-12 w-full rounded-2xl px-8 font-mono text-xs font-semibold tracking-[0.2em] text-white transition hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               style={{
                 background: "linear-gradient(135deg, var(--color-accent), #a855f7)",
                 boxShadow: "0 4px 20px rgba(139,92,246,0.40)",
@@ -282,5 +385,63 @@ export function WaitlistForm({
         )}
       </div>
     </div>
+  );
+}
+
+// ── Reusable legal checkbox ────────────────────────────────────────────────────
+function LegalCheckbox({
+  id,
+  checked,
+  onChange,
+  onFocus,
+  children,
+}: {
+  id: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+  onFocus: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <label
+      htmlFor={id}
+      className={`flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-3 text-sm transition-colors ${
+        checked
+          ? "border-[var(--color-accent)]/40 bg-[var(--color-accent)]/5"
+          : "border-[var(--color-border)] bg-black/5"
+      }`}
+    >
+      {/* Custom checkbox */}
+      <div className="relative mt-0.5 h-4 w-4 shrink-0">
+        <input
+          id={id}
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+          onFocus={onFocus}
+          className="peer absolute inset-0 cursor-pointer opacity-0"
+        />
+        <div
+          className={`flex h-4 w-4 items-center justify-center rounded border transition-all ${
+            checked
+              ? "border-[var(--color-accent)] bg-[var(--color-accent)]"
+              : "border-[var(--color-border)] bg-transparent"
+          }`}
+        >
+          {checked && (
+            <svg className="h-2.5 w-2.5 text-white" viewBox="0 0 12 12" fill="none">
+              <path
+                d="M2 6l3 3 5-5"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
+        </div>
+      </div>
+      <span className="leading-relaxed text-[var(--color-muted)]">{children}</span>
+    </label>
   );
 }

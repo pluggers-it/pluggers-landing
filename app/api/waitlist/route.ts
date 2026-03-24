@@ -77,8 +77,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Seleziona una regione." }, { status: 400 });
   }
 
+  // "utente" is sent when the user is not a professional — it is valid.
   if (!profession) {
-    return NextResponse.json({ error: "Seleziona una professione." }, { status: 400 });
+    return NextResponse.json({ error: "Seleziona una professione o il tipo utente." }, { status: 400 });
   }
 
   // ── Insert ──────────────────────────────────────────────────────────────────
