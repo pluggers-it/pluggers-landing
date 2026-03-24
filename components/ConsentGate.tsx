@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { Shield } from "lucide-react";
@@ -7,18 +8,30 @@ import { useConsent } from "@/lib/consent";
 
 /**
  * Full-page consent gate — blocks all interaction until the user
- * accepts the Terms of Service and Privacy Policy.
+ * explicitly accepts Privacy Policy and Terms of Service.
  *
  * GDPR compliance notes:
- *  - T&C + Privacy: required to access the service (Art. 6(1)(b) GDPR).
- *  - Analytics cookies: freely given, separate choice (Art. 7 GDPR).
- *    "Accetta tutto"         → T&C + Privacy + analytics granted.
- *    "Solo cookie tecnici"   → T&C + Privacy accepted, analytics denied.
- *  - No pre-ticked boxes; no deceptive UI patterns.
- *  - Gate disappears permanently once a choice is stored in localStorage.
+ *  - Privacy Policy + T&C: required to access the service (Art. 6(1)(b) GDPR).
+ *    Both require an explicit tick — no pre-checked boxes.
+ *  - Analytics cookies: freely given, separate optional checkbox (Art. 7 GDPR).
+ *    Pre-checked for convenience but the user can uncheck it — this is valid
+ *    because the service is accessible regardless of this choice.
+ *  - The "Continua" button stays disabled until both required boxes are ticked.
+ *  - Both documents open in a new tab so the user can read without losing state.
  */
 export function ConsentGate() {
   const { termsAccepted, acceptAll, acceptNecessary } = useConsent();
+
+  const [privacyChecked,   setPrivacyChecked]   = useState(false);
+  const [termsChecked,     setTermsChecked]      = useState(false);
+  const [analyticsChecked, setAnalyticsChecked]  = useState(true);
+
+  const canProceed = privacyChecked && termsChecked;
+
+  function handleContinue() {
+    if (!canProceed) return;
+    analyticsChecked ? acceptAll() : acceptNecessary();
+  }
 
   // null = still hydrating (SSR) → don't flash the gate
   if (termsAccepted !== false) return null;
@@ -33,9 +46,9 @@ export function ConsentGate() {
         transition={{ duration: 0.25 }}
         className="fixed inset-0 z-[9999] flex items-end justify-center px-4 pb-4 sm:items-center sm:pb-0"
         style={{
-          background: "rgba(0,0,0,0.72)",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
+          background: "rgba(0,0,0,0.75)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
         }}
         aria-modal="true"
         role="dialog"
@@ -47,11 +60,11 @@ export function ConsentGate() {
           transition={{ delay: 0.05, duration: 0.35, ease: "easeOut" }}
           className="w-full max-w-lg overflow-hidden rounded-3xl border border-[var(--color-border)]"
           style={{
-            background: "rgba(7,7,10,0.95)",
+            background: "rgba(7,7,10,0.97)",
             backdropFilter: "blur(32px)",
             WebkitBackdropFilter: "blur(32px)",
             boxShadow:
-              "0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05)",
+              "0 24px 80px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.05)",
           }}
         >
           {/* Top accent bar */}
@@ -80,97 +93,107 @@ export function ConsentGate() {
                   Prima di continuare
                 </h2>
                 <p className="mt-1 text-sm leading-relaxed text-[var(--color-muted)]">
-                  Per accedere al sito è necessario accettare i nostri documenti
-                  legali. Utilizziamo anche cookie analitici per migliorare
-                  l&apos;esperienza — puoi scegliere se includerli.
+                  Per accedere al sito conferma di aver letto e di accettare i
+                  documenti qui sotto. Puoi anche scegliere se abilitare i
+                  cookie analitici.
                 </p>
               </div>
             </div>
 
-            {/* Legal docs summary */}
-            <div
-              className="mt-5 space-y-2 rounded-2xl border border-[var(--color-border)] p-4"
-              style={{ background: "rgba(255,255,255,0.03)" }}
-            >
-              <div className="flex items-center justify-between gap-3 text-sm">
-                <div className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
-                  <span className="text-[var(--color-muted)]">
+            {/* Checkboxes */}
+            <div className="mt-5 space-y-3">
+
+              {/* Privacy Policy — required */}
+              <CheckRow
+                id="consent-privacy"
+                checked={privacyChecked}
+                onChange={setPrivacyChecked}
+                required
+                label={
+                  <>
+                    Ho letto e accetto la{" "}
                     <Link
                       href="/privacy"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-medium text-[var(--color-foreground)] underline underline-offset-2 hover:text-[var(--color-accent)]"
+                      onClick={(e) => e.stopPropagation()}
                     >
                       Privacy Policy
                     </Link>
-                    {" "}— trattamento dei tuoi dati (GDPR)
-                  </span>
-                </div>
-                <span className="shrink-0 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] text-emerald-400">
-                  RICHIESTO
-                </span>
-              </div>
+                    {" "}(trattamento dati personali — GDPR)
+                  </>
+                }
+                badge="RICHIESTO"
+                badgeColor="emerald"
+              />
 
-              <div className="flex items-center justify-between gap-3 text-sm">
-                <div className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
-                  <span className="text-[var(--color-muted)]">
+              {/* T&C — required */}
+              <CheckRow
+                id="consent-terms"
+                checked={termsChecked}
+                onChange={setTermsChecked}
+                required
+                label={
+                  <>
+                    Ho letto e accetto i{" "}
                     <Link
                       href="/termini"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-medium text-[var(--color-foreground)] underline underline-offset-2 hover:text-[var(--color-accent)]"
+                      onClick={(e) => e.stopPropagation()}
                     >
                       Termini e Condizioni
                     </Link>
-                    {" "}— regole di utilizzo del servizio
-                  </span>
-                </div>
-                <span className="shrink-0 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] text-emerald-400">
-                  RICHIESTO
-                </span>
-              </div>
+                    {" "}di utilizzo del servizio
+                  </>
+                }
+                badge="RICHIESTO"
+                badgeColor="emerald"
+              />
 
-              <div className="flex items-center justify-between gap-3 text-sm">
-                <div className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
-                  <span className="text-[var(--color-muted)]">
+              {/* Analytics — optional */}
+              <CheckRow
+                id="consent-analytics"
+                checked={analyticsChecked}
+                onChange={setAnalyticsChecked}
+                label={
+                  <>
+                    Acconsento all&apos;uso di{" "}
                     <span className="font-medium text-[var(--color-foreground)]">
-                      Cookie analitici
+                      cookie analitici
                     </span>
-                    {" "}— statistiche anonime (GA4 + Clarity)
-                  </span>
-                </div>
-                <span className="shrink-0 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 font-mono text-[10px] text-amber-400">
-                  OPZIONALE
-                </span>
-              </div>
+                    {" "}(GA4 + Clarity, statistiche anonime)
+                  </>
+                }
+                badge="OPZIONALE"
+                badgeColor="amber"
+              />
             </div>
 
-            {/* Actions */}
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-              {/* Primary CTA */}
-              <button
-                onClick={acceptAll}
-                className="flex-1 rounded-2xl py-3.5 font-mono text-xs font-bold tracking-[0.18em] text-white transition hover:scale-[1.02] active:scale-[0.98]"
-                style={{
-                  background:
-                    "linear-gradient(135deg, var(--color-accent), #a855f7)",
-                  boxShadow: "0 4px 24px rgba(139,92,246,0.45)",
-                }}
-              >
-                ACCETTA E CONTINUA
-              </button>
-
-              {/* Secondary: accept terms, deny analytics */}
-              <button
-                onClick={acceptNecessary}
-                className="flex-1 rounded-2xl border border-[var(--color-border)] py-3.5 font-mono text-xs text-[var(--color-muted)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-foreground)]"
-              >
-                Solo cookie tecnici
-              </button>
-            </div>
+            {/* CTA */}
+            <button
+              onClick={handleContinue}
+              disabled={!canProceed}
+              className="mt-6 w-full rounded-2xl py-3.5 font-mono text-xs font-bold tracking-[0.18em] text-white transition"
+              style={
+                canProceed
+                  ? {
+                      background:
+                        "linear-gradient(135deg, var(--color-accent), #a855f7)",
+                      boxShadow: "0 4px 24px rgba(139,92,246,0.45)",
+                      transform: "scale(1)",
+                    }
+                  : {
+                      background: "rgba(255,255,255,0.06)",
+                      color: "rgba(255,255,255,0.25)",
+                      cursor: "not-allowed",
+                    }
+              }
+            >
+              {canProceed ? "CONTINUA" : "SPUNTA LE VOCI OBBLIGATORIE PER CONTINUARE"}
+            </button>
 
             <p className="mt-4 text-center font-mono text-[10px] leading-relaxed text-[var(--color-muted)] opacity-60">
               Puoi revocare il consenso in qualsiasi momento scrivendo a{" "}
@@ -185,5 +208,96 @@ export function ConsentGate() {
         </motion.div>
       </motion.div>
     </AnimatePresence>
+  );
+}
+
+// ── Internal checkbox row component ───────────────────────────────────────────
+function CheckRow({
+  id,
+  checked,
+  onChange,
+  label,
+  badge,
+  badgeColor,
+  required = false,
+}: {
+  id: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+  label: React.ReactNode;
+  badge: string;
+  badgeColor: "emerald" | "amber";
+  required?: boolean;
+}) {
+  const colors = {
+    emerald: {
+      border: "border-emerald-500/30",
+      bg: "bg-emerald-500/10",
+      text: "text-emerald-400",
+    },
+    amber: {
+      border: "border-amber-500/30",
+      bg: "bg-amber-500/10",
+      text: "text-amber-400",
+    },
+  }[badgeColor];
+
+  return (
+    <label
+      htmlFor={id}
+      className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-4 transition-colors ${
+        checked
+          ? "border-[var(--color-accent)]/40 bg-[var(--color-accent)]/5"
+          : "border-[var(--color-border)] bg-white/[0.02] hover:border-[var(--color-accent)]/20"
+      }`}
+    >
+      {/* Custom checkbox */}
+      <div className="relative mt-0.5 h-5 w-5 shrink-0">
+        <input
+          id={id}
+          type="checkbox"
+          checked={checked}
+          required={required}
+          onChange={(e) => onChange(e.target.checked)}
+          className="peer absolute inset-0 cursor-pointer opacity-0"
+        />
+        <div
+          className={`flex h-5 w-5 items-center justify-center rounded-md border transition-all ${
+            checked
+              ? "border-[var(--color-accent)] bg-[var(--color-accent)]"
+              : "border-[var(--color-border)] bg-transparent"
+          }`}
+        >
+          {checked && (
+            <svg
+              className="h-3 w-3 text-white"
+              viewBox="0 0 12 12"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M2 6l3 3 5-5"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
+        </div>
+      </div>
+
+      {/* Label + badge */}
+      <div className="flex flex-1 flex-wrap items-start justify-between gap-2">
+        <span className="text-sm leading-relaxed text-[var(--color-muted)]">
+          {label}
+        </span>
+        <span
+          className={`shrink-0 self-start rounded-full border px-2 py-0.5 font-mono text-[10px] ${colors.border} ${colors.bg} ${colors.text}`}
+        >
+          {badge}
+        </span>
+      </div>
+    </label>
   );
 }

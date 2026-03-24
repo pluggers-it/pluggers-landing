@@ -108,6 +108,13 @@ export async function POST(req: Request) {
     if (error.code === "23505") {
       return NextResponse.json({ ok: true, already: true });
     }
+    // Log details server-side only (never exposed to client)
+    console.error("[waitlist] Supabase insert error:", {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+    });
     return genericDbError();
   }
 
