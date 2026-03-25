@@ -187,7 +187,16 @@ export function MarkdownEditor({ value, onChange, placeholder, rows = 16 }: Prop
         <button type="button" title="Separatore  →  ---" onClick={() => wrap("\n\n---\n\n", "", "")} className={btn}>
           <Minus className="h-4 w-4" />
         </button>
-        <button type="button" title="Link  →  [testo](url)" onClick={() => wrap("[", "](https://)", "testo del link")} className={btn}>
+        <button
+          type="button"
+          title="Link  →  [testo](url)"
+          onClick={() => {
+            const url = window.prompt("URL del link (es. https://example.com):");
+            if (!url) return;
+            wrap("[", `](${url})`, "testo del link");
+          }}
+          className={btn}
+        >
           <Link2 className="h-4 w-4" />
         </button>
 

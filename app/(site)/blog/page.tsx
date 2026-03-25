@@ -16,6 +16,25 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://pluggers.it/blog" },
 };
 
+/** Strip markdown syntax and HTML tags to produce a plain-text excerpt. */
+function stripMarkdown(md: string): string {
+  return md
+    .replace(/<[^>]+>/g, "")                          // HTML tags
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")         // images → alt text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")          // links → link text
+    .replace(/^#{1,6}\s+/gm, "")                      // headings
+    .replace(/(\*\*|__)(.*?)\1/gs, "$2")              // bold
+    .replace(/(\*|_)(.*?)\1/gs, "$2")                 // italic
+    .replace(/~~(.*?)~~/gs, "$1")                     // strikethrough
+    .replace(/`([^`]+)`/g, "$1")                      // inline code
+    .replace(/^>\s*/gm, "")                           // blockquotes
+    .replace(/^[\-*+]\s+/gm, "")                      // unordered lists
+    .replace(/^\d+\.\s+/gm, "")                       // ordered lists
+    .replace(/^---+$/gm, "")                           // hr
+    .replace(/\n+/g, " ")
+    .trim();
+}
+
 function formatDate(iso: string) {
   if (!iso) return "";
   return new Date(iso).toLocaleDateString("it-IT", {
@@ -107,7 +126,7 @@ export default async function BlogPage() {
                       {post.title}
                     </h2>
                     <p className="mt-2 line-clamp-3 text-sm leading-6 text-[var(--color-muted)]">
-                      {post.content.slice(0, 200)}
+                      {stripMarkdown(post.content).slice(0, 200)}
                     </p>
                     <div className="mt-5 flex items-center gap-1.5 font-mono text-xs text-[var(--color-accent)]">
                       Leggi
