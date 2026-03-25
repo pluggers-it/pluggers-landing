@@ -23,9 +23,9 @@ function stripMarkdown(md: string): string {
     .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")         // images → alt text
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")          // links → link text
     .replace(/^#{1,6}\s+/gm, "")                      // headings
-    .replace(/(\*\*|__)(.*?)\1/gs, "$2")              // bold
-    .replace(/(\*|_)(.*?)\1/gs, "$2")                 // italic
-    .replace(/~~(.*?)~~/gs, "$1")                     // strikethrough
+    .replace(/(\*\*|__)([\s\S]*?)\1/g, "$2")           // bold
+    .replace(/(\*|_)([\s\S]*?)\1/g, "$2")             // italic
+    .replace(/~~([\s\S]*?)~~/g, "$1")                 // strikethrough
     .replace(/`([^`]+)`/g, "$1")                      // inline code
     .replace(/^>\s*/gm, "")                           // blockquotes
     .replace(/^[\-*+]\s+/gm, "")                      // unordered lists
