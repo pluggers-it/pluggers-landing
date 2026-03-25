@@ -50,9 +50,18 @@ export default async function BlogPage() {
             {/* Heading */}
             <div className="mb-10">
               <p className="font-mono text-xs tracking-[0.25em] text-[var(--color-accent)]">FEED</p>
-              <h1 className="mt-2 font-sans text-3xl font-bold tracking-tight sm:text-4xl">
-                Interventi & aggiornamenti
-              </h1>
+              <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
+                <h1 className="font-sans text-3xl font-bold tracking-tight sm:text-4xl">
+                  Interventi & aggiornamenti
+                </h1>
+                <Link
+                  href="/newsletter"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--color-border)] px-4 py-2 font-mono text-[11px] tracking-[0.12em] text-[var(--color-muted)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-foreground)]"
+                >
+                  Iscriviti alla newsletter
+                  <ArrowRight className="h-3 w-3" aria-hidden />
+                </Link>
+              </div>
               <p className="mt-2 text-sm text-[var(--color-muted)]">
                 Articoli, guide e novità dal team di Pluggers.
               </p>
