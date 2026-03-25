@@ -6,6 +6,7 @@ import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { ArrowLeft, Plus, Trash2, LogOut, Loader2, User, Lock, UserPlus, ShieldCheck } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { MarkdownEditor } from "@/components/MarkdownEditor";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Post = { id: string; title: string; category: string; content: string; createdAt: string };
@@ -192,6 +193,10 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
     setFormErr("");
+    if (!content.trim()) {
+      setFormErr("Il contenuto non può essere vuoto.");
+      return;
+    }
     setSubmitting(true);
     try {
       const res = await authFetch(token, "/api/posts", {
@@ -331,12 +336,11 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
                     <option key={c} value={c} className="bg-[#07070a]">{c}</option>
                   ))}
                 </select>
-                <textarea
-                  required value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder={"Contenuto (Markdown supportato)\n\n## Titolo\n\nParagrafo..."}
-                  rows={12}
-                  className={`${INPUT_CLASS} resize-y font-mono text-xs leading-relaxed`}
+                <MarkdownEditor
+                  value={content}
+                  onChange={setContent}
+                  placeholder={"Scrivi il contenuto in Markdown...\n\n## Titolo sezione\n\nParagrafo con **grassetto**, *corsivo* o [un link](https://)\n\n### Sottotitolo\n\n- Voce lista"}
+                  rows={16}
                 />
                 <button
                   type="submit" disabled={submitting}

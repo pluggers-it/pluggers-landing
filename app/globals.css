@@ -105,6 +105,15 @@ nextjs-portal {
   color: var(--foreground);
 }
 
+.blog-body h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-top: 3rem;
+  margin-bottom: 0.75rem;
+  color: var(--foreground);
+}
+
 .blog-body h2 {
   font-size: 1.5rem;
   font-weight: 700;
@@ -128,6 +137,19 @@ nextjs-portal {
   font-weight: 600;
   margin-top: 1.5rem;
   margin-bottom: 0.4rem;
+  color: var(--foreground);
+}
+
+.blog-body u {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.blog-body img {
+  max-width: 100%;
+  border-radius: 0.75rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .blog-body p {

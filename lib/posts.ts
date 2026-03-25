@@ -32,13 +32,14 @@ function rowToPost(row: PostRow): Post {
   };
 }
 
-/** Convert markdown content to HTML */
+/** Convert markdown content to HTML.
+ *  sanitize: false allows inline HTML (colors, underline, etc.) written by staff.
+ *  Only authenticated staff can publish posts, so XSS risk is acceptable.
+ */
 export async function markdownToHtml(markdown: string): Promise<string> {
-  // sanitize: true strips raw HTML injected in Markdown.
-  // GFM tables/task-lists still work; only raw <script>/<iframe> blocks are removed.
   const result = await remark()
     .use(remarkGfm)
-    .use(remarkHtml, { sanitize: true })
+    .use(remarkHtml, { sanitize: false })
     .process(markdown);
   return result.toString();
 }
