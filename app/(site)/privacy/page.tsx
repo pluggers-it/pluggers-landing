@@ -90,11 +90,6 @@ export default function PrivacyPage() {
                   <Bold>Dati forniti volontariamente dall&apos;utente:</Bold> Nome, cognome, indirizzo email, numero
                   di telefono, regione di residenza e tipologia professionale.
                 </li>
-                <li>
-                  <Bold>Dati di navigazione:</Bold> Tramite <Bold>Google Analytics 4 (GA4)</Bold> raccogliamo
-                  informazioni statistiche anonimizzate su come utilizzi il nostro sito (es. pagine visitate,
-                  tempo di permanenza), <Bold>previo tuo esplicito consenso</Bold> tramite il nostro Cookie Banner.
-                </li>
               </ul>
             </Section>
 
@@ -121,11 +116,6 @@ export default function PrivacyPage() {
                   <Bold>C. Contatto Commerciale:</Bold> Per poterti contattare telefonicamente con proposte
                   commerciali relative ai nostri futuri servizi.{" "}
                   <em>(Base giuridica: Consenso espresso ai sensi dell&apos;Art. 6(1)(a))</em>
-                </li>
-                <li>
-                  <Bold>D. Statistiche di navigazione:</Bold> Per analizzare il traffico sul sito e migliorarne
-                  le prestazioni.{" "}
-                  <em>(Base giuridica: Consenso espresso ai sensi dell&apos;Art. 6(1)(a) tramite Cookie Banner)</em>
                 </li>
               </ul>
             </Section>
