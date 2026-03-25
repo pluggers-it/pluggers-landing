@@ -12,7 +12,7 @@ import { useConsent } from "@/lib/consent";
  * - Visible at the bottom only when the user hasn't made a cookie choice yet.
  * - Does NOT block access to the site (GDPR Art. 7 — consent must be freely given).
  * - Privacy Policy + T&C acceptance is handled at form level (waitlist/newsletter).
- * - "Accetta" → analytics granted.  "Solo tecnici" → analytics denied.
+ * - "Accetta" → consent granted.  "Solo tecnici" → consent denied.
  */
 export function ConsentGate() {
   const { analyticsConsent, acceptAll, acceptNecessary } = useConsent();
@@ -63,8 +63,7 @@ export function ConsentGate() {
               Utilizziamo i cookie
             </p>
             <p className="mt-0.5 text-xs leading-relaxed text-[var(--color-muted)]">
-              Usiamo cookie analitici anonimi (GA4 + Clarity) per migliorare
-              il servizio. Nessun dato ceduto a terzi.{" "}
+              Usiamo cookie tecnici necessari al funzionamento del sito.{" "}
               <Link
                 href="/privacy"
                 className="underline underline-offset-2 transition hover:text-[var(--color-foreground)]"

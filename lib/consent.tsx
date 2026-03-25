@@ -15,17 +15,17 @@ const ANALYTICS_KEY = "pluggers_analytics_v1";
 // ── Context ───────────────────────────────────────────────────────────────────
 interface ConsentContextValue {
   /**
-   * Analytics cookie choice.
+   * Cookie choice.
    * null    = not yet decided (banner is visible)
-   * granted = user opted in  (GA4 + Clarity load)
-   * denied  = user opted out (no tracking)
+   * granted = user opted in
+   * denied  = user opted out
    */
   analyticsConsent: AnalyticsConsent;
 
-  /** Accept analytics cookies */
+  /** Accept cookies */
   acceptAll: () => void;
 
-  /** Decline analytics cookies */
+  /** Decline optional cookies */
   acceptNecessary: () => void;
 }
 

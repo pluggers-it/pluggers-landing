@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
-import PlausibleProvider from "next-plausible";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ConsentProvider } from "@/lib/consent";
 import { ConsentGate } from "@/components/ConsentGate";
-import { Analytics } from "@/components/Analytics";
 
 const inter = Inter({
   variable: "--font-geist-sans",
@@ -95,23 +93,10 @@ export default function RootLayout({
   return (
     <html lang="it" suppressHydrationWarning>
       <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>
-        {/*
-         * PlausibleProvider injects the Plausible script once for the entire app.
-         * Cookie-free and GDPR compliant by default — no consent banner required.
-         * trackOutboundLinks: fires an "Outbound Link: Click" event on external links.
-         * taggedEvents: exposes window.plausible() for custom events (trackEvent, etc.).
-         */}
-        <PlausibleProvider
-          domain="pluggers.it"
-          trackOutboundLinks
-          taggedEvents
-        >
-          <ConsentProvider>
-            <ThemeProvider>{children}</ThemeProvider>
-            <ConsentGate />
-            <Analytics />
-          </ConsentProvider>
-        </PlausibleProvider>
+        <ConsentProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+          <ConsentGate />
+        </ConsentProvider>
       </body>
     </html>
   );

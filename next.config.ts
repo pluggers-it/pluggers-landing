@@ -6,34 +6,25 @@ const SUPABASE_HOST = "zfmcltiraiyxryjfahgw.supabase.co";
 /**
  * Content Security Policy
  *
- * script-src rationale:
- *  - 'self'              → Next.js JS bundles served from origin
- *  - 'unsafe-inline'     → required for Next.js inline hydration chunks and
- *                          next-plausible's inline script tag. Nonce-based CSP
- *                          would be stricter but requires Edge Middleware.
- *  - plausible.io        → Plausible Analytics script (cookie-free, GDPR by default)
- *
- * connect-src rationale:
- *  - plausible.io        → Plausible measurement endpoint
- *  - *.supabase.co       → Supabase REST, Auth, Realtime (https + wss)
- *
- * style-src 'unsafe-inline': required by Tailwind CSS v4 and framer-motion.
- * font-src data:             Next.js inlines small fonts as data URIs at build time.
- * img-src blob:              Next.js <Image> uses blob: for local previews.
- * frame-src 'none'           We have no iframes; blocks clickjacking vectors.
- * object-src 'none'          Blocks Flash / legacy plugin execution.
- * base-uri 'self'            Prevents <base href="…"> injection attacks.
- * form-action 'self'         Restricts where forms may POST.
+ * script-src 'unsafe-inline': required for Next.js inline hydration chunks.
+ *                             Nonce-based CSP would be stricter but requires Edge Middleware.
+ * style-src 'unsafe-inline':  required by Tailwind CSS v4 and framer-motion.
+ * font-src data:              Next.js inlines small fonts as data URIs at build time.
+ * img-src blob:               Next.js <Image> uses blob: for local previews.
+ * connect-src *.supabase.co:  Supabase REST, Auth, Realtime (https + wss).
+ * frame-src 'none':           No iframes — blocks clickjacking vectors.
+ * object-src 'none':          Blocks Flash / legacy plugin execution.
+ * base-uri 'self':            Prevents <base href="…"> injection attacks.
+ * form-action 'self':         Restricts where forms may POST.
  */
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://plausible.io",
+  "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
   "img-src 'self' data: blob:",
   [
     "connect-src 'self'",
-    "https://plausible.io",
     `https://${SUPABASE_HOST}`,
     `wss://${SUPABASE_HOST}`,
   ].join(" "),
