@@ -1,6 +1,7 @@
 import { getSupabase } from "@/lib/supabase";
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
 import remarkHtml from "remark-html";
 
 export type PostCategory = "Idraulico" | "Elettricista" | "Muratore" | "Altro";
@@ -39,6 +40,7 @@ function rowToPost(row: PostRow): Post {
 export async function markdownToHtml(markdown: string): Promise<string> {
   const result = await remark()
     .use(remarkGfm)
+    .use(remarkBreaks)
     .use(remarkHtml, { sanitize: false })
     .process(markdown);
   return result.toString();
