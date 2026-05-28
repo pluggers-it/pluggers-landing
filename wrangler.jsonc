@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/wrangler.json",
+  "name": "pluggers-landing",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".open-next/assets"
+  },
+  "vars": {
+    // Public, baked into the client bundle. Override per-env with
+    // `wrangler secret` for any value that must NOT end up in JS.
+    "NEXT_PUBLIC_SUPABASE_URL": "https://zfmcltiraiyxryjfahgw.supabase.co"
+  }
+  // Secrets (set via `wrangler secret put NAME` after first deploy):
+  //   SUPABASE_SERVICE_ROLE_KEY  — server-side waitlist insert
+}

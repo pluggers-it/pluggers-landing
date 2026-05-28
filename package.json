@@ -8,7 +8,11 @@
     "start": "next start",
     "lint": "eslint",
     "db:push": "supabase db push --yes",
-    "db:apply-source": "bash scripts/apply-waitlist-source.sh"
+    "db:apply-source": "bash scripts/apply-waitlist-source.sh",
+    "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf:upload": "opennextjs-cloudflare upload",
+    "cf:types": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.99.2",
@@ -27,6 +31,7 @@
     "remark-html": "^16.0.1"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "^1.10.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -34,6 +39,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.40.0"
   }
 }
