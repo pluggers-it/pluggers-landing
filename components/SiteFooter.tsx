@@ -38,6 +38,12 @@ export function SiteFooter() {
         >
           Termini e Condizioni
         </Link>
+        <Link
+          href="/cookie"
+          className="font-mono transition hover:text-[var(--color-foreground)]"
+        >
+          Cookie
+        </Link>
 
         {SOCIAL_LINKS.map(({ label, href }) => (
           <Link
