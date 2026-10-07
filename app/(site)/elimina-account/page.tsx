@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Eliminazione dell'account",
   description:
     "Come richiedere l'eliminazione dell'account Pluggers e dei dati associati: passaggi, dati cancellati, dati conservati per obbligo di legge.",
-  alternates: { canonical: "https://pluggers.it/elimina-account" },
+  alternates: { canonical: "https://www.plggrs.it/elimina-account" },
 };
 
 const SUPPORTO = "supporto@plggrs.it";

@@ -13,7 +13,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: "https://pluggers.it/sitemap.xml",
-    host: "https://pluggers.it",
+    sitemap: "https://www.plggrs.it/sitemap.xml",
+    host: "https://www.plggrs.it",
   };
 }

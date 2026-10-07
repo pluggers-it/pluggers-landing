@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     "Articoli, guide e aggiornamenti sul mondo degli artigiani e professionisti della mano d'opera. " +
     "Consigli per idraulici, elettricisti, muratori e altri professionisti.",
-  alternates: { canonical: "https://pluggers.it/blog" },
+  alternates: { canonical: "https://www.plggrs.it/blog" },
 };
 
 /** Strip markdown syntax and HTML tags to produce a plain-text excerpt. */

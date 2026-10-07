@@ -12,7 +12,7 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 // ── Canonical base for all absolute URLs (og:image, sitemap, etc.) ────────────
-const BASE_URL = "https://pluggers.it";
+const BASE_URL = "https://www.plggrs.it";
 
 const DESCRIPTION =
   "Racconta il problema con testo e foto: Pluggers capisce di che si tratta e ti collega " +

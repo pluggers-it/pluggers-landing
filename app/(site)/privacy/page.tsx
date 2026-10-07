@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "Informativa sul trattamento dei dati personali per Pluggers: iscrizione waitlist, newsletter e utilizzo del sito.",
-  alternates: { canonical: "https://pluggers.it/privacy" },
+  alternates: { canonical: "https://www.plggrs.it/privacy" },
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {

@@ -11,7 +11,7 @@
  *     sitelinks search box and knowledge panel features.
  */
 
-const BASE_URL = "https://pluggers.it";
+const BASE_URL = "https://www.plggrs.it";
 
 const organizationSchema = {
   "@context": "https://schema.org",

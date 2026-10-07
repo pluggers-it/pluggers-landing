@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "Racconta il problema con testo e foto: Pluggers capisce di che si tratta e ti collega " +
     "ai professionisti della tua zona. Costo Chiamata indicato prima della visita, chat e preventivo in app.",
   alternates: {
-    canonical: "https://pluggers.it",
+    canonical: "https://www.plggrs.it",
   },
 };
 
