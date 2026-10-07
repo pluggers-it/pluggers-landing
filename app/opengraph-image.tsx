@@ -1,11 +1,21 @@
 import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
-export const runtime = "edge";
-export const alt = "Pluggers — Trova professionisti qualificati nella tua zona";
+export const alt = "Pluggers — Il professionista giusto, al momento giusto.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OGImage() {
+export default async function OGImage() {
+  const root = process.cwd();
+  const [icon, bold, medium] = await Promise.all([
+    readFile(join(root, "public/brand/app-icon-512.png")),
+    readFile(join(root, "assets/fonts/PlusJakartaSans-800.ttf")),
+    readFile(join(root, "assets/fonts/PlusJakartaSans-500.ttf")),
+  ]);
+  // Satori takes the raw bytes as `src`; the img type still says string.
+  const iconSrc = Uint8Array.from(icon).buffer as unknown as string;
+
   return new ImageResponse(
     (
       <div
@@ -13,148 +23,51 @@ export default function OGImage() {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
-          background: "#07070a",
-          position: "relative",
-          overflow: "hidden",
+          padding: "72px 80px",
+          background: "#f2f2f7",
+          backgroundImage:
+            "radial-gradient(60% 80% at 85% 20%, rgba(109,40,217,0.14), rgba(109,40,217,0) 70%)",
+          fontFamily: "Jakarta",
+          color: "#17151a",
         }}
       >
-        {/* Grid pattern */}
-        <div
+        <img
+          src={iconSrc}
+          width={300}
+          height={300}
+          alt=""
           style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), " +
-              "linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)",
-            backgroundSize: "44px 44px",
+            borderRadius: 66,
+            boxShadow: "0 40px 70px -30px rgba(76,29,149,0.55)",
+            flexShrink: 0,
           }}
         />
-
-        {/* Purple radial glow - top */}
-        <div
-          style={{
-            position: "absolute",
-            top: -200,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: 900,
-            height: 600,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle at center, rgba(124,58,237,0.50) 0%, transparent 65%)",
-            filter: "blur(60px)",
-          }}
-        />
-
-        {/* Bottom right accent */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: -150,
-            right: -100,
-            width: 500,
-            height: 500,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle at center, rgba(168,85,247,0.28) 0%, transparent 65%)",
-            filter: "blur(60px)",
-          }}
-        />
-
-        {/* Content */}
-        <div
-          style={{
-            position: "relative",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 0,
-          }}
-        >
-          {/* Badge */}
+        <div style={{ display: "flex", flexDirection: "column", marginLeft: 72, maxWidth: 700 }}>
+          <div style={{ fontSize: 30, fontWeight: 500, color: "#6f6a76" }}>Pluggers</div>
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              border: "1px solid rgba(139,92,246,0.5)",
-              borderRadius: 999,
-              padding: "10px 24px",
-              background: "rgba(139,92,246,0.12)",
-              marginBottom: 36,
-            }}
-          >
-            <div
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                background: "#facc15",
-              }}
-            />
-            <span
-              style={{
-                fontFamily: "monospace",
-                fontSize: 18,
-                letterSpacing: "0.22em",
-                color: "#a78bfa",
-                fontWeight: 600,
-              }}
-            >
-              EARLY ACCESS
-            </span>
-          </div>
-
-          {/* Logo / Brand name */}
-          <div
-            style={{
-              fontFamily: "sans-serif",
-              fontWeight: 900,
-              fontSize: 110,
-              letterSpacing: "-0.03em",
-              lineHeight: 1,
-              background: "linear-gradient(135deg, #ffffff 20%, #c4b5fd 60%, #7c3aed)",
-              backgroundClip: "text",
-              color: "transparent",
-            }}
-          >
-            PLUGGERS
-          </div>
-
-          {/* Tagline */}
-          <div
-            style={{
-              fontFamily: "sans-serif",
-              fontSize: 30,
-              color: "rgba(255,255,255,0.55)",
-              marginTop: 20,
-              letterSpacing: "0.01em",
-              textAlign: "center",
-              maxWidth: 720,
-              lineHeight: 1.4,
+              marginTop: 14,
+              fontSize: 72,
+              fontWeight: 800,
+              lineHeight: 1.04,
+              letterSpacing: "-0.035em",
             }}
           >
             Il professionista giusto, al momento giusto.
           </div>
-
-          {/* Sub-tagline */}
-          <div
-            style={{
-              fontFamily: "monospace",
-              fontSize: 18,
-              color: "rgba(255,255,255,0.28)",
-              marginTop: 28,
-              letterSpacing: "0.18em",
-            }}
-          >
-            PLUGGERS.IT
+          <div style={{ marginTop: 26, fontSize: 28, fontWeight: 500, color: "#6f6a76", lineHeight: 1.4 }}>
+            Racconta il problema: Pluggers capisce di che si tratta e ti collega a chi può risolverlo, vicino a te.
           </div>
         </div>
       </div>
     ),
-    { ...size }
+    {
+      ...size,
+      fonts: [
+        { name: "Jakarta", data: bold, weight: 800, style: "normal" },
+        { name: "Jakarta", data: medium, weight: 500, style: "normal" },
+      ],
+    }
   );
 }

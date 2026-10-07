@@ -1,42 +1,46 @@
 import type { Metadata } from "next";
-import { SiteHeader } from "@/components/SiteHeader";
-import { HomeHero } from "@/components/HomeHero";
 import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
+import { LandingHeader } from "@/components/landing/LandingHeader";
+import { Hero } from "@/components/landing/Hero";
+import { HowItWorks } from "@/components/landing/HowItWorks";
+import { TradesMarquee } from "@/components/landing/TradesMarquee";
+import { ForPros } from "@/components/landing/ForPros";
+import { TrustRows } from "@/components/landing/TrustRows";
+import { Faq } from "@/components/landing/Faq";
+import { CONTAINER } from "@/components/landing/styles";
 
 export const metadata: Metadata = {
   title: "Pluggers — Il professionista giusto, al momento giusto.",
   description:
-    "L'applicazione che mette in contatto chi ha un problema con chi ha la soluzione. " +
-    "Trova idraulici, elettricisti, muratori e altri artigiani qualificati vicino a te.",
+    "Racconta il problema con testo e foto: Pluggers capisce di che si tratta e ti collega " +
+    "ai professionisti della tua zona. Costo Chiamata indicato prima della visita, chat e preventivo in app.",
   alternates: {
     canonical: "https://pluggers.it",
   },
 };
 
-/**
- * Landing page (single-page style) for Pluggers.
- */
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-foreground)]">
+    <div className="min-h-screen bg-page text-ink">
       <JsonLd />
-      <div className="relative mx-auto flex min-h-screen w-full max-w-7xl flex-col overflow-visible px-6 py-16 sm:px-10 lg:px-16">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -top-56 left-1/2 h-[620px] w-[920px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(124,58,237,0.32),rgba(0,0,0,0)_60%)] blur-3xl" />
-          <div className="absolute bottom-[-280px] right-[-220px] h-[560px] w-[560px] rounded-full bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.20),rgba(0,0,0,0)_62%)] blur-3xl" />
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:44px_44px] opacity-[0.18]" />
-        </div>
-
-        <div className="relative">
-          <SiteHeader label="PLUGGERS // EARLY ACCESS" />
-        </div>
-
-        <HomeHero />
-
+      <LandingHeader />
+      <main>
+        <Hero />
+        <HowItWorks />
+        <TradesMarquee />
+        <ForPros />
+        <TrustRows />
+        <Faq />
+      </main>
+      <div className={CONTAINER}>
+        {/* The mark alone, in the quiet text colour, so it reads in both themes. */}
+        <div
+          aria-hidden
+          className="mx-auto mb-8 h-[30px] w-[30px] bg-[color-mix(in_srgb,var(--ink)_30%,transparent)] [mask-image:url(/brand/brand-mark.png)] [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain]"
+        />
         <SiteFooter />
       </div>
     </div>
   );
 }
-
