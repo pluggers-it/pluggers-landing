@@ -3,6 +3,7 @@ import { remark } from "remark";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import remarkHtml from "remark-html";
+import { formatPost, postText } from "@/lib/postFormat";
 
 export type PostCategory = "Idraulico" | "Elettricista" | "Muratore" | "Altro";
 
@@ -33,7 +34,7 @@ function rowToPost(row: PostRow): Post {
   };
 }
 
-/** Convert markdown content to HTML.
+/** Convert markdown content to HTML, after formatPost has given the newsletter lines their structure.
  *  sanitize: false allows inline HTML (colors, underline, etc.) written by staff.
  *  Only authenticated staff can publish posts, so XSS risk is acceptable.
  */
@@ -42,13 +43,13 @@ export async function markdownToHtml(markdown: string): Promise<string> {
     .use(remarkGfm)
     .use(remarkBreaks)
     .use(remarkHtml, { sanitize: false })
-    .process(markdown);
+    .process(formatPost(markdown));
   return result.toString();
 }
 
-/** Plain-text excerpt: markdown syntax and HTML tags stripped. */
+/** Plain-text excerpt: menu and sign-off left out, markdown syntax and HTML tags stripped. */
 export function excerpt(md: string): string {
-  return md
+  return postText(md)
     .replace(/<[^>]+>/g, "")                          // HTML tags
     .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")         // images → alt text
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")          // links → link text
@@ -70,6 +71,9 @@ export function metaDescription(md: string, max = 155): string {
   const text = excerpt(md).replace(/\s+/g, " ");
   if (text.length <= max) return text;
   const cut = text.slice(0, max - 1);
+  // A whole first sentence reads better than one cut mid-way, when it fills most of the space.
+  const sentenceEnd = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("? "), cut.lastIndexOf("! "));
+  if (sentenceEnd >= max * 0.6) return cut.slice(0, sentenceEnd + 1);
   const words = cut.slice(0, cut.lastIndexOf(" "));
   return /[.!?]$/.test(words) ? words : `${words}…`;
 }

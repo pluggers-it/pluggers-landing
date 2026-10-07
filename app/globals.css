@@ -216,23 +216,28 @@ nextjs-portal {
 }
 
 .blog-body h2 {
-  font-size: 1.3rem;
+  font-size: 1.625rem;
   font-weight: 800;
   letter-spacing: -0.025em;
-  margin-top: 2.2em;
-  margin-bottom: 0.5em;
+  margin-top: 2.4em;
+  margin-bottom: 0.55em;
 }
 
 .blog-body h3 {
-  font-size: 1.15rem;
+  font-size: 1.3125rem;
   font-weight: 700;
   letter-spacing: -0.015em;
-  margin-top: 1.9em;
+  margin-top: 1.8em;
   margin-bottom: 0.4em;
 }
 
+/* Two headings in a row (a section, then its first topic) stay together. */
+.blog-body h2 + h3 {
+  margin-top: 0.9em;
+}
+
 .blog-body h4 {
-  font-size: 1.0625rem;
+  font-size: 1em;
   font-weight: 700;
   margin-top: 1.6em;
   margin-bottom: 0.3em;
@@ -368,6 +373,95 @@ nextjs-portal {
 
 .blog-body tr:last-child td {
   border-bottom: none;
+}
+
+/* Structure given to the newsletter posts by lib/postFormat.ts. */
+.blog-body .post-emoji {
+  margin-right: 0.1em;
+}
+
+.blog-body .post-box {
+  margin-top: 1.75em;
+  padding: 1.125rem 1.25rem;
+  border-radius: 16px;
+}
+
+@media (min-width: 640px) {
+  .blog-body .post-box {
+    padding: 1.375rem 1.625rem;
+  }
+}
+
+.blog-body .post-box > :first-child,
+.blog-body .post-box .post-label + * {
+  margin-top: 0;
+}
+
+.blog-body .post-box p {
+  margin-top: 0.7em;
+}
+
+.blog-body .post-label {
+  margin-bottom: 0.45em;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--accent-text);
+}
+
+.blog-body .post-menu,
+.blog-body .post-cta {
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.blog-body .post-menu ol {
+  margin-top: 0;
+}
+
+.blog-body .post-menu li {
+  margin-top: 0.35em;
+}
+
+.blog-body .post-menu li::marker {
+  color: var(--accent-text);
+  font-weight: 700;
+}
+
+.blog-body .post-menu--icons ol {
+  list-style: none;
+  padding-left: 0;
+}
+
+.blog-body .post-menu--icons li {
+  padding-left: 0;
+}
+
+.blog-body .post-tip {
+  background: var(--accent-soft);
+}
+
+.blog-body .post-note {
+  margin-top: 2em;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.blog-body .post-note p {
+  margin-top: 0;
+}
+
+.blog-body .post-signoff {
+  margin-top: 2em;
+  padding-top: 1.25em;
+  border-top: 1px solid var(--hair);
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.blog-body .post-signoff p {
+  margin-top: 0;
 }
 
 /* ── Legal pages body ────────────────────────────────────────────────────── */
