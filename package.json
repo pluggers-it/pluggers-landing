@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "node --test lib/*.test.mjs",
     "db:push": "supabase db push --yes",
     "db:apply-source": "bash scripts/apply-waitlist-source.sh",
     "indexnow": "node scripts/indexnow.mjs"
