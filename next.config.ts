@@ -54,6 +54,18 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   devIndicators: false,
 
+  // The apex must move permanently to www (308). Vercel's own domain redirect, if set to 307, runs first and wins.
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "plggrs.it" }],
+        destination: "https://www.plggrs.it/:path*",
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {

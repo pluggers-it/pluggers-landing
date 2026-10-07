@@ -147,7 +147,22 @@ html.dark {
   animation: caret 1s steps(1) infinite;
 }
 
+/* Cookie banner entrance */
+@keyframes consent-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+.consent-in {
+  animation: consent-in 0.35s ease-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .consent-in {
+    animation: none;
+  }
   .marquee-track {
     animation: none;
   }

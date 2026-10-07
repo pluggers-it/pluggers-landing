@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { LegalPage, SupportEmail, type LegalSection } from "@/components/LegalPage";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
   description:
-    "Informativa sul trattamento dei dati personali per Pluggers: iscrizione waitlist, newsletter e utilizzo del sito.",
-  alternates: { canonical: "https://www.plggrs.it/privacy" },
-};
+    "Come Pluggers S.r.l. tratta i dati di chi usa l'app e il sito: dati raccolti, finalità, intelligenza artificiale, con chi li condivide, conservazione e diritti.",
+  path: "/privacy",
+});
 
 // All sections but the last are the app's notice (pluggers-it/mvp, app/web/legal/privacy.html)
 // word for word: it is the text users accept, so it changes only together with kLegalVersion.

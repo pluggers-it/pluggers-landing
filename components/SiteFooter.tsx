@@ -1,19 +1,6 @@
 import Link from "next/link";
-
-const SOCIAL_LINKS = [
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/pluggers.it?igsh=bzQ4a3ByaXdsajd0",
-  },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/company/pluggers-it/about/?viewAsMember=true",
-  },
-  {
-    label: "Facebook",
-    href: "https://www.facebook.com/profile.php?id=61578519760330",
-  },
-];
+import { ORG, ORG_ADDRESS_LINE, SOCIAL_LINKS } from "@/lib/site";
+import { TRADES } from "@/lib/trades";
 
 const LEGAL_LINKS = [
   { label: "Privacy", href: "/privacy" },
@@ -30,42 +17,74 @@ const LINK_CLASS =
  */
 export function SiteFooter() {
   return (
-    <footer className="flex flex-col gap-2 border-t border-hair pb-8 pt-6 text-sm sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex min-h-12 items-center text-muted">
-        © {new Date().getFullYear()} Pluggers S.r.l.
+    <footer className="border-t border-hair pt-8 text-sm">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <nav aria-labelledby="footer-trades">
+          <h2 id="footer-trades" className="font-semibold text-ink">
+            <Link href="/torino" className="inline-flex min-h-12 items-center underline-offset-4 hover:underline">
+              Mestieri a Torino
+            </Link>
+          </h2>
+          <ul className="grid grid-cols-2 gap-x-6 sm:grid-cols-3">
+            {TRADES.map((t) => (
+              <li key={t.slug}>
+                <Link href={`/torino/${t.slug}`} className={LINK_CLASS}>
+                  {t.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div>
+          <h2 className="flex min-h-12 items-center font-semibold text-ink">{ORG.legalName}</h2>
+          <address className="not-italic leading-6 text-muted">
+            {ORG_ADDRESS_LINE}
+            <br />
+            <a href={`mailto:${ORG.email}`} className="inline-flex min-h-12 items-center underline-offset-4 hover:text-ink hover:underline">
+              {ORG.email}
+            </a>
+          </address>
+          <Link href="/chi-siamo" className={LINK_CLASS}>
+            Chi siamo
+          </Link>
+        </div>
       </div>
 
-      <nav
-        aria-label="Collegamenti"
-        className="flex flex-wrap items-center gap-x-6 gap-y-1"
-      >
-        {LEGAL_LINKS.map(({ label, href }) => (
-          <Link key={href} href={href} className={LINK_CLASS}>
-            {label}
-          </Link>
-        ))}
+      {/* Extra room on phones so the fixed «torna su» button never sits on the last links. */}
+      <div className="mt-6 flex flex-col gap-2 border-t border-hair pb-24 pt-6 sm:flex-row sm:items-center sm:justify-between md:pb-8">
+        <div className="flex min-h-12 items-center text-muted">
+          © {new Date().getFullYear()} {ORG.legalName}
+        </div>
 
-        {SOCIAL_LINKS.map(({ label, href }) => (
+        <nav aria-label="Collegamenti" className="flex flex-wrap items-center gap-x-6 gap-y-1">
+          <Link href="/blog" className={LINK_CLASS}>
+            Blog
+          </Link>
+          {LEGAL_LINKS.map(({ label, href }) => (
+            <Link key={href} href={href} className={LINK_CLASS}>
+              {label}
+            </Link>
+          ))}
+
+          {SOCIAL_LINKS.map(({ label, href }) => (
+            <a key={label} href={href} target="_blank" rel="noopener noreferrer me" className={LINK_CLASS}>
+              {label}
+            </a>
+          ))}
+
+          {/* Staff-only entry point — intentionally subtle */}
           <Link
-            key={label}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={LINK_CLASS}
+            href="/blog/admin"
+            className="inline-flex h-12 w-6 items-center justify-center text-muted opacity-20 transition hover:opacity-60"
+            title="Staff"
+            aria-label="Area staff"
+            rel="nofollow"
           >
-            {label}
+            ·
           </Link>
-        ))}
-
-        {/* Staff-only entry point — intentionally subtle */}
-        <Link
-          href="/blog/admin"
-          className="inline-flex h-12 w-6 items-center justify-center text-muted opacity-20 transition hover:opacity-60"
-          title="Staff"
-        >
-          ·
-        </Link>
-      </nav>
+        </nav>
+      </div>
     </footer>
   );
 }

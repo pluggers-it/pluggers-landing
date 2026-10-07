@@ -3,6 +3,7 @@ import { FieldCanvas } from "./FieldCanvas";
 import { HeroDemo } from "./HeroDemo";
 import { HeroIcon } from "./HeroIcon";
 import { StoreBadges } from "./StoreBadges";
+import { HERO } from "@/lib/home";
 import { WEB_APP_URL } from "./links";
 import { BTN_PRIMARY, CONTAINER } from "./styles";
 
@@ -15,11 +16,10 @@ export function Hero() {
       >
         <div>
           <h1 className="text-balance text-[clamp(2.5rem,4.6vw,3.9rem)] font-extrabold leading-[1.02] tracking-[-0.035em]">
-            Il professionista giusto, al momento giusto.
+            {HERO.title}
           </h1>
           <p className="mt-5 max-w-[44ch] text-[17px] leading-[1.55] text-muted sm:text-lg">
-            Racconta il problema. Pluggers capisce di che si tratta e ti collega a
-            chi può risolverlo, vicino a te.
+            {HERO.lede}
           </p>
           <p className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-muted">
             <MapPin className="h-4 w-4 text-accent-text" strokeWidth={2} aria-hidden />

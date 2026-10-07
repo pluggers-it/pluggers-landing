@@ -6,6 +6,9 @@ export const H2 =
 
 export const LEDE = "mt-3 max-w-[52ch] text-[17px] leading-[1.55] text-muted";
 
+/** A section's opening answer: long enough to stand alone when quoted, so a little wider. */
+export const LEDE_ANSWER = "mt-3 max-w-[64ch] text-[17px] leading-[1.6] text-muted";
+
 export const BTN_PRIMARY =
   "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-accent px-6 text-[15px] font-semibold text-white transition hover:bg-accent-deep active:scale-[0.98] dark:hover:bg-accent-bright";
 

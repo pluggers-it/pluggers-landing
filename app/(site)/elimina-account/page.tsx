@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { LegalPage, SupportEmail, type LegalSection } from "@/components/LegalPage";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Eliminazione dell'account",
   description:
-    "Come richiedere l'eliminazione dell'account Pluggers e dei dati associati: passaggi, dati cancellati, dati conservati per obbligo di legge.",
-  alternates: { canonical: "https://www.plggrs.it/elimina-account" },
-};
+    "Come chiedere l'eliminazione dell'account Pluggers e dei dati collegati: i passaggi da seguire, cosa viene cancellato e cosa si conserva per obbligo di legge.",
+  path: "/elimina-account",
+});
 
 const SECTIONS: LegalSection[] = [
   {

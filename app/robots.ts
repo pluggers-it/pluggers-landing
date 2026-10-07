@@ -1,19 +1,30 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site";
+
+const DISALLOW = ["/blog/admin", "/api/"];
+
+/** Search and AI crawlers are welcome on every public page; named so a blanket rule elsewhere can't shut them out. */
+const AI_AGENTS = [
+  "GPTBot",
+  "OAI-SearchBot",
+  "ChatGPT-User",
+  "ClaudeBot",
+  "Claude-User",
+  "Claude-SearchBot",
+  "PerplexityBot",
+  "Perplexity-User",
+  "Google-Extended",
+  "Applebot-Extended",
+  "Bingbot",
+  "CCBot",
+];
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: [
-          "/newsletter",   // hidden signup page — not for crawling
-          "/blog/admin",   // staff-only admin panel
-          "/api/",         // internal API routes
-        ],
-      },
+      { userAgent: "*", allow: "/", disallow: DISALLOW },
+      { userAgent: AI_AGENTS, allow: "/", disallow: DISALLOW },
     ],
-    sitemap: "https://www.plggrs.it/sitemap.xml",
-    host: "https://www.plggrs.it",
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

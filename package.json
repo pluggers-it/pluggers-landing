@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "db:push": "supabase db push --yes",
-    "db:apply-source": "bash scripts/apply-waitlist-source.sh"
+    "db:apply-source": "bash scripts/apply-waitlist-source.sh",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.99.2",

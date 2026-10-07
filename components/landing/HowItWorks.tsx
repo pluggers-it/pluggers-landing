@@ -2,29 +2,9 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { CONTAINER, H2, LEDE } from "./styles";
+import { CONTAINER, H2, LEDE_ANSWER } from "./styles";
+import { HOW } from "@/lib/home";
 import { useReducedMotionSafe } from "./useReducedMotionSafe";
-
-const STEPS = [
-  {
-    title: "Racconta il problema",
-    text: "Scrivi due righe e aggiungi una foto. Se serve, l'assistente ti fa qualche domanda senza termini tecnici.",
-    src: "/screens/step-describe.png",
-    alt: "Schermata iniziale dell'app: campo «Di cosa hai bisogno?» con la descrizione di un rubinetto che perde, una foto allegata e il bottone «Trova professionisti».",
-  },
-  {
-    title: "Pluggers capisce di che si tratta",
-    text: "Riconosce il mestiere e l'urgenza e mostra i professionisti che lavorano nella tua zona. Scegli tu chi contattare, fino a tre.",
-    src: "/screens/step-triage.png",
-    alt: "Schermata «Cosa abbiamo capito»: chi serve (Idraulico), urgenza 2 su 5, cause probabili e bottone «Cerca un professionista».",
-  },
-  {
-    title: "Stima prima, QR dopo",
-    text: "Il professionista ti scrive in chat con il Costo Chiamata e una stima. All'arrivo registrate inizio e fine intervento con un QR, poi lasci la recensione.",
-    src: "/screens/step-estimate.png",
-    alt: "Chat con il professionista: la foto del guasto, un messaggio e una stima di 85 euro con i bottoni Accetta e Rifiuta.",
-  },
-];
 
 const VIEWPORT = { once: true, amount: 0.35 } as const;
 
@@ -63,9 +43,9 @@ export function HowItWorks() {
   return (
     <section id="come-funziona" className={`${CONTAINER} py-20 lg:py-28`} aria-labelledby="how-title">
       <h2 id="how-title" className={H2}>
-        Come funziona
+        {HOW.title}
       </h2>
-      <p className={LEDE}>Tre passaggi, dal problema alla visita.</p>
+      <p className={LEDE_ANSWER}>{HOW.lede}</p>
 
       <div className="relative mt-12">
         {/* The current that joins the steps: a row on desktop, a column on phones */}
@@ -99,7 +79,7 @@ export function HowItWorks() {
         </svg>
 
         <ol className="grid gap-14 md:grid-cols-3 md:gap-0">
-          {STEPS.map((step, i) => (
+          {HOW.steps.map((step, i) => (
             <li
               key={step.title}
               className="relative grid grid-cols-[48px_minmax(0,1fr)] gap-x-4 md:grid-cols-1 md:content-start md:justify-items-center md:px-4 md:text-center"

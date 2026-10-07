@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight, PenLine } from "lucide-react";
 
@@ -8,13 +9,12 @@ import { PageShell } from "@/components/landing/PageShell";
 import { CONTAINER, LEDE } from "@/components/landing/styles";
 import { excerpt, formatPostDate, readPosts, readingMinutes, type Post } from "@/lib/posts";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Blog",
   description:
-    "Articoli, guide e aggiornamenti sul mondo degli artigiani e professionisti della mano d'opera. " +
-    "Consigli per idraulici, elettricisti, muratori e altri professionisti.",
-  alternates: { canonical: "https://www.plggrs.it/blog" },
-};
+    "Articoli di Pluggers per artigiani e professionisti della casa: impianti, normative, fisco e consigli pratici per lavorare meglio con i clienti.",
+  path: "/blog",
+});
 
 /** Separator that wraps together with the item after it. */
 const SEP = "before:mr-2 before:content-['·']";
