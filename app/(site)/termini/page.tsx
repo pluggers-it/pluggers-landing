@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "Termini e Condizioni",
   description:
     "Termini e Condizioni Generali di Utilizzo della piattaforma Pluggers.",
-  alternates: { canonical: "https://pluggers.it/termini" },
+  alternates: { canonical: "https://www.plggrs.it/termini" },
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {

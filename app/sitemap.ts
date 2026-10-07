@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { readPosts } from "@/lib/posts";
 
-const BASE = "https://pluggers.it";
+const BASE = "https://www.plggrs.it";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages
