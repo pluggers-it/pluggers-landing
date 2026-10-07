@@ -1,96 +1,147 @@
 @import "tailwindcss";
 
-/**
- * Global design tokens (CSS variables).
- * Theme switching is handled via the `class` on <html> set by next-themes.
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Design tokens shared with the Pluggers app ("base 2").
+ * Light is the default; next-themes puts `.dark` on <html>.
  */
 :root {
-  --background: #07070a;
-  --foreground: #f4f4f5;
-  --accent: #8b5cf6; /* purple */
-  --accent-2: #a855f7;
-  --muted: rgba(244, 244, 245, 0.68);
-  --panel: rgba(255, 255, 255, 0.06);
-  --panel-2: rgba(255, 255, 255, 0.10);
-  --border: rgba(255, 255, 255, 0.14);
+  color-scheme: light;
+  --page: #f2f2f7;
+  --surface: #ffffff;
+  --surface-rest: #fdfcff;
+  --ink: #17151a;
+  --muted: #6f6a76;
+  --hair: rgba(23, 21, 26, 0.09);
+  --line: rgba(23, 21, 26, 0.48);
+  --accent: #6d28d9;
+  --accent-deep: #4c1d95;
+  --accent-bright: #863bff;
+  --accent-text: #6d28d9;
+  --accent-soft: rgba(109, 40, 217, 0.1);
+  --amber: #c2861b;
+  --success: #2bb673;
+  --danger: #d6334c;
+  --phone: #141216;
+  --shadow-card: 0 1px 2px rgba(23, 21, 26, 0.04),
+    0 24px 48px -32px rgba(23, 21, 26, 0.28);
+  --shadow-lit: 0 0 0 2px var(--accent),
+    0 24px 56px -24px rgba(109, 40, 217, 0.55);
 
-  /* ── Spinner node colors (dark mode) ── */
-  --node-hydraulic:   #38bdf8;
-  --node-electric:    #facc15;
-  --node-mason:       #fb923c;
-  --node-carpenter:   #34d399;
-  --node-painter:     #c084fc;
-
-  --node-border-alpha: 0.40;
-  --node-bg-alpha:     0.12;
-  --node-label-alpha:  0.80;
-  --hub-border:        rgba(139, 92, 246, 0.60);
-  --hub-bg:            rgba(139, 92, 246, 0.16);
-  --orbit-stroke:      rgba(139, 92, 246, 0.20);
-  --line-alpha:        0.55;
-  --label-color:       var(--muted);
+  /* Names still used by the blog and legal pages. */
+  --background: var(--page);
+  --foreground: var(--ink);
+  --accent-2: var(--accent-bright);
+  --panel: var(--surface);
+  --panel-2: var(--page);
+  --border: var(--hair);
 }
 
-html.light {
-  --background: #fbfaff;
-  --foreground: #0b0b12;
-  --accent: #6d28d9;
-  --accent-2: #7c3aed;
-  --muted: rgba(11, 11, 18, 0.70);
-  --panel: rgba(20, 10, 40, 0.05);
-  --panel-2: rgba(20, 10, 40, 0.08);
-  --border: rgba(20, 10, 40, 0.16);
-
-  /* ── Spinner node colors (light mode) — saturated & dark ── */
-  --node-hydraulic:   #0369a1;   /* blue-700 */
-  --node-electric:    #a16207;   /* yellow-700 */
-  --node-mason:       #c2410c;   /* orange-700 */
-  --node-carpenter:   #047857;   /* emerald-700 */
-  --node-painter:     #7c3aed;   /* violet-600 */
-
-  --node-border-alpha: 0.90;
-  --node-bg-alpha:     0.10;
-  --node-label-alpha:  1.00;
-  --hub-border:        rgba(109, 40, 217, 0.85);
-  --hub-bg:            rgba(109, 40, 217, 0.10);
-  --orbit-stroke:      rgba(109, 40, 217, 0.35);
-  --line-alpha:        0.85;
-  --label-color:       #0b0b12;
+html.dark {
+  color-scheme: dark;
+  --page: #0f1115;
+  --surface: #1a1622;
+  --surface-rest: #241e30;
+  --ink: #f4f1fb;
+  --muted: rgba(244, 241, 251, 0.7);
+  --hair: rgba(244, 241, 251, 0.08);
+  --line: rgba(244, 241, 251, 0.38);
+  --accent-text: #a78bfa;
+  --accent-soft: rgba(167, 139, 250, 0.14);
+  --danger: #ff7a8a;
+  --phone: #2e2740;
+  --shadow-card: 0 0 0 1px rgba(244, 241, 251, 0.06),
+    0 24px 48px -32px rgba(0, 0, 0, 0.6);
+  --shadow-lit: 0 0 0 2px var(--accent-text),
+    0 24px 56px -24px rgba(134, 59, 255, 0.6);
+  --panel-2: #241e30;
 }
 
 @theme inline {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-rest: var(--surface-rest);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-hair: var(--hair);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
+  --color-accent-bright: var(--accent-bright);
+  --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+  --color-amber: var(--amber);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-accent: var(--accent);
   --color-accent-2: var(--accent-2);
-  --color-muted: var(--muted);
   --color-panel: var(--panel);
   --color-panel-2: var(--panel-2);
   --color-border: var(--border);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --shadow-card: var(--shadow-card);
+  --shadow-lit: var(--shadow-lit);
+  --radius-card: 24px;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+@layer base {
+  body {
+    background: var(--page);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: rgba(109, 40, 217, 0.22);
+  }
 }
 
-/* ── Radial spinner geometry (pixel-perfect coordinate system) ── */
-.radial-wrapper {
-  width: 600px;
-  height: 600px;
-  position: relative;
-  margin: 0 auto;
+/* Trades strip */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
-.radial-hub {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -50px;  /* -HUB_SIZE / 2 */
-  margin-top: -50px;
-  z-index: 10;
+.marquee-track {
+  animation: marquee 70s linear infinite;
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Typing caret in the hero demo */
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+.caret {
+  animation: caret 1s steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+  .marquee {
+    overflow-x: auto;
+  }
+  .caret {
+    animation: none;
+  }
 }
 
 /* Hide Next.js dev toolbar */
@@ -158,7 +209,7 @@ nextjs-portal {
 }
 
 .blog-body a {
-  color: var(--accent);
+  color: var(--accent-text);
   text-decoration: underline;
   text-underline-offset: 3px;
   transition: opacity 0.15s;
@@ -193,7 +244,7 @@ nextjs-portal {
   margin-top: 1.5rem;
   padding: 0.75rem 1.25rem;
   border-left: 3px solid var(--accent);
-  background: rgba(139, 92, 246, 0.07);
+  background: var(--accent-soft);
   border-radius: 0 0.5rem 0.5rem 0;
   color: var(--muted);
   font-style: italic;
@@ -206,19 +257,19 @@ nextjs-portal {
 }
 
 .blog-body code {
-  font-family: var(--font-geist-mono), monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.85em;
-  background: rgba(139, 92, 246, 0.10);
-  border: 1px solid rgba(139, 92, 246, 0.20);
+  background: var(--accent-soft);
+  border: 1px solid rgba(109, 40, 217, 0.2);
   border-radius: 0.3rem;
   padding: 0.1em 0.4em;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .blog-body pre {
   margin-top: 1.5rem;
   padding: 1.25rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--panel-2);
   border: 1px solid var(--border);
   border-radius: 0.75rem;
   overflow-x: auto;
@@ -243,9 +294,7 @@ nextjs-portal {
 .blog-body th {
   text-align: left;
   font-weight: 600;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
+  font-size: 0.8rem;
   padding: 0.6rem 0.75rem;
   border-bottom: 1px solid var(--border);
   color: var(--muted);

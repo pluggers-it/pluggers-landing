@@ -15,27 +15,27 @@ const SOCIAL_LINKS = [
   },
 ];
 
+const LINK_CLASS =
+  "inline-flex min-h-12 items-center text-muted underline-offset-4 transition hover:text-ink hover:underline";
+
 /**
  * Shared footer — rendered on all public-facing pages.
  */
 export function SiteFooter() {
   return (
-    <footer className="relative flex flex-col items-center gap-4 border-t border-[var(--color-border)] pt-6 text-xs text-[var(--color-muted)] sm:flex-row sm:justify-between">
-      <div className="font-mono tracking-widest">
-        PLUGGERS © {new Date().getFullYear()}
+    <footer className="flex flex-col gap-2 border-t border-hair pb-8 pt-6 text-sm sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex min-h-12 items-center text-muted">
+        © {new Date().getFullYear()} Pluggers S.r.l.
       </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-5">
-        <Link
-          href="/privacy"
-          className="font-mono transition hover:text-[var(--color-foreground)]"
-        >
+      <nav
+        aria-label="Collegamenti"
+        className="flex flex-wrap items-center gap-x-6 gap-y-1"
+      >
+        <Link href="/privacy" className={LINK_CLASS}>
           Privacy Policy
         </Link>
-        <Link
-          href="/termini"
-          className="font-mono transition hover:text-[var(--color-foreground)]"
-        >
+        <Link href="/termini" className={LINK_CLASS}>
           Termini e Condizioni
         </Link>
 
@@ -45,7 +45,7 @@ export function SiteFooter() {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono transition hover:text-[var(--color-foreground)]"
+            className={LINK_CLASS}
           >
             {label}
           </Link>
@@ -54,12 +54,12 @@ export function SiteFooter() {
         {/* Staff-only entry point — intentionally subtle */}
         <Link
           href="/blog/admin"
-          className="font-mono opacity-20 transition hover:opacity-60"
+          className="inline-flex h-12 w-6 items-center justify-center text-muted opacity-20 transition hover:opacity-60"
           title="Staff"
         >
           ·
         </Link>
-      </div>
+      </nav>
     </footer>
   );
 }
