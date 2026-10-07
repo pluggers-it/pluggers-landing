@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { CONTAINER, H2, LEDE } from "./styles";
+import { useReducedMotionSafe } from "./useReducedMotionSafe";
 
 const STEPS = [
   {
@@ -48,7 +49,7 @@ function PhoneFrame({ src, alt }: { src: string; alt: string }) {
 }
 
 export function HowItWorks() {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
 
   const lineProps = reduce
     ? {}
@@ -101,7 +102,7 @@ export function HowItWorks() {
           {STEPS.map((step, i) => (
             <li
               key={step.title}
-              className="relative grid grid-cols-[48px_minmax(0,1fr)] gap-x-4 md:grid-cols-1 md:justify-items-center md:px-4 md:text-center"
+              className="relative grid grid-cols-[48px_minmax(0,1fr)] gap-x-4 md:grid-cols-1 md:content-start md:justify-items-center md:px-4 md:text-center"
             >
               <motion.span
                 className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-[17px] font-bold text-white ring-4 ring-page"

@@ -146,7 +146,7 @@ export function WaitlistForm({
                 onClick={() => handleUserTypeChange(type)}
                 className="h-12 rounded-xl text-sm font-semibold text-muted transition hover:text-ink aria-pressed:bg-surface aria-pressed:text-ink aria-pressed:shadow-sm"
               >
-                {type === "professionista" ? "Sono un professionista" : "Sono un cliente"}
+                {type === "professionista" ? "Professionista" : "Cliente"}
               </button>
             ))}
           </div>

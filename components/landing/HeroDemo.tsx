@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { Camera, Check, Sparkles, Star, X } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SparkCanvas, type SparkHandle } from "./SparkCanvas";
+import { useReducedMotionSafe } from "./useReducedMotionSafe";
 
 type Scenario = {
   text: string;
@@ -46,7 +47,7 @@ const HOLD_MS = 3200;
 type Path = { d: string; end: [number, number] };
 
 export function HeroDemo() {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("idle");
   const [typed, setTyped] = useState(0);
@@ -170,7 +171,7 @@ export function HeroDemo() {
         style={{ opacity: out ? 0 : 1 }}
       >
         {/* The current */}
-        <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
+        <svg className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-visible">
           {path && (
             <>
               <path d={path.d} fill="none" stroke="var(--hair)" strokeWidth={2} />
@@ -193,7 +194,7 @@ export function HeroDemo() {
         </svg>
         {path && !reduce && (
           <motion.div
-            className="pointer-events-none absolute left-0 top-0 h-3.5 w-3.5 rounded-full"
+            className="pointer-events-none absolute left-0 top-0 z-0 h-3.5 w-3.5 rounded-full"
             style={{
               offsetPath: `path("${path.d}")`,
               offsetRotate: "0deg",
@@ -212,7 +213,7 @@ export function HeroDemo() {
         <SparkCanvas ref={sparks} className="pointer-events-none absolute inset-0 z-20" />
 
         {/* Composer, as in the app's home */}
-        <div className="w-full max-w-[440px]">
+        <div className="relative z-10 w-full max-w-[440px]">
           <p className="mb-3 text-[20px] font-bold tracking-[-0.01em]">Di cosa hai bisogno?</p>
           <div className="rounded-card bg-surface p-4 shadow-card ring-1 ring-hair">
             <div className="flex items-start gap-3">
@@ -256,16 +257,16 @@ export function HeroDemo() {
         </div>
 
         {/* What Pluggers understood */}
-        <div className="flex h-[88px] items-center sm:h-[104px]">
+        <div className="relative z-10 flex h-[104px] items-center justify-end sm:justify-start">
           <div
-            className="flex flex-wrap items-center gap-2 transition-all duration-300"
+            className="flex flex-col items-end gap-2 transition-all duration-300 sm:items-start"
             style={{ opacity: showTriage ? 1 : 0, transform: showTriage ? "none" : "translateY(6px)" }}
           >
-            <span className="inline-flex h-9 items-center gap-1.5 rounded-full bg-accent-soft px-3 text-sm font-semibold text-accent-deep dark:text-accent-text">
+            <span className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,var(--page))] px-3 text-sm font-semibold text-accent-deep dark:bg-[color-mix(in_srgb,var(--accent-text)_16%,var(--page))] dark:text-accent-text">
               <Sparkles className="h-4 w-4" />
-              Chi serve: {scenario.trade}
+              {scenario.trade}
             </span>
-            <span className="inline-flex h-9 items-center rounded-full px-3 text-sm font-semibold ring-1 ring-line">
+            <span className="inline-flex h-9 items-center rounded-full bg-page px-3 text-sm font-semibold ring-1 ring-line">
               Urgenza {scenario.urgency}/5
             </span>
           </div>
@@ -274,7 +275,7 @@ export function HeroDemo() {
         {/* The professional who lights up */}
         <div
           ref={cardRef}
-          className="w-full max-w-[400px] rounded-card bg-surface p-4 ring-1 ring-hair transition-all duration-300 sm:justify-self-end"
+          className="relative z-10 w-full max-w-[400px] rounded-card bg-surface p-4 ring-1 ring-hair transition-all duration-300 sm:justify-self-end"
           style={{
             boxShadow: lit ? "var(--shadow-lit)" : "var(--shadow-card)",
             transform: lit ? "scale(1.02)" : "none",
