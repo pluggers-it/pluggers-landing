@@ -39,22 +39,16 @@ export function ConsentGate() {
         <div
           className="flex flex-col gap-4 rounded-3xl border border-[var(--color-border)] p-5 sm:flex-row sm:items-center sm:gap-5"
           style={{
-            background: "rgba(7,7,10,0.92)",
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            boxShadow:
-              "0 8px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04)",
+            background: "var(--surface)",
+            boxShadow: "0 24px 48px -24px rgba(23,21,26,0.35)",
           }}
         >
           {/* Icon */}
           <div
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl"
-            style={{
-              background: "rgba(139,92,246,0.15)",
-              border: "1px solid rgba(139,92,246,0.30)",
-            }}
+            style={{ background: "var(--accent-soft)" }}
           >
-            <Cookie className="h-5 w-5 text-[var(--color-accent)]" />
+            <Cookie className="h-5 w-5 text-[var(--accent-text)]" />
           </div>
 
           {/* Text */}
@@ -77,18 +71,13 @@ export function ConsentGate() {
           <div className="flex shrink-0 items-center gap-2">
             <button
               onClick={acceptNecessary}
-              className="rounded-xl border border-[var(--color-border)] px-4 py-2 font-mono text-[11px] tracking-[0.12em] text-[var(--color-muted)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-foreground)]"
+              className="h-11 rounded-full border border-[var(--line)] px-4 text-sm font-semibold text-[var(--ink)] transition hover:bg-[var(--page)]"
             >
               Solo tecnici
             </button>
             <button
               onClick={acceptAll}
-              className="rounded-xl px-4 py-2 font-mono text-[11px] font-semibold tracking-[0.12em] text-white transition hover:scale-[1.03]"
-              style={{
-                background:
-                  "linear-gradient(135deg, var(--color-accent), #a855f7)",
-                boxShadow: "0 2px 12px rgba(139,92,246,0.40)",
-              }}
+              className="h-11 rounded-full bg-[var(--accent)] px-5 text-sm font-semibold text-white transition hover:bg-[var(--accent-deep)]"
             >
               Accetta
             </button>
