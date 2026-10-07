@@ -46,6 +46,41 @@ export async function markdownToHtml(markdown: string): Promise<string> {
   return result.toString();
 }
 
+/** Plain-text excerpt: markdown syntax and HTML tags stripped. */
+export function excerpt(md: string): string {
+  return md
+    .replace(/<[^>]+>/g, "")                          // HTML tags
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")         // images → alt text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")          // links → link text
+    .replace(/^#{1,6}\s+/gm, "")                      // headings
+    .replace(/(\*\*|__)([\s\S]*?)\1/g, "$2")           // bold
+    .replace(/(\*|_)([\s\S]*?)\1/g, "$2")             // italic
+    .replace(/~~([\s\S]*?)~~/g, "$1")                 // strikethrough
+    .replace(/`([^`]+)`/g, "$1")                      // inline code
+    .replace(/^>\s*/gm, "")                           // blockquotes
+    .replace(/^[\-*+]\s+/gm, "")                      // unordered lists
+    .replace(/^\d+\.\s+/gm, "")                       // ordered lists
+    .replace(/^---+$/gm, "")                           // hr
+    .replace(/\n+/g, " ")
+    .trim();
+}
+
+/** "5 maggio 2026", in Italian time. */
+export function formatPostDate(iso: string): string {
+  if (!iso) return "";
+  return new Date(iso).toLocaleDateString("it-IT", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "Europe/Rome",
+  });
+}
+
+/** Minutes of reading at ~200 words a minute. */
+export function readingMinutes(md: string): number {
+  return Math.max(1, Math.round(excerpt(md).split(/\s+/).length / 200));
+}
+
 export async function readPosts(): Promise<Post[]> {
   const { data, error } = await getSupabase()
     .from("posts")

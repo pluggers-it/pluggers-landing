@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { SiteHeader } from "@/components/SiteHeader";
-import { SiteFooter } from "@/components/SiteFooter";
-import { getPostById, markdownToHtml } from "@/lib/posts";
+import { ChevronRight } from "lucide-react";
+import { PageShell } from "@/components/landing/PageShell";
+import { WEB_APP_URL } from "@/components/landing/links";
+import { BTN_PRIMARY, CONTAINER } from "@/components/landing/styles";
+import {
+  excerpt,
+  formatPostDate,
+  getPostById,
+  markdownToHtml,
+  readPosts,
+  readingMinutes,
+  type Post,
+} from "@/lib/posts";
 
 export const dynamic = "force-dynamic";
 
@@ -20,13 +29,16 @@ export async function generateMetadata(
   };
 }
 
-function formatDate(iso: string) {
-  if (!iso) return "";
-  return new Date(iso).toLocaleDateString("it-IT", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+/** Up to three other posts: same category first, then the most recent. */
+async function relatedPosts(post: Post): Promise<Post[]> {
+  try {
+    const others = (await readPosts()).filter((p) => p.id !== post.id);
+    const same = others.filter((p) => p.category === post.category);
+    const rest = others.filter((p) => p.category !== post.category);
+    return [...same, ...rest].slice(0, 3);
+  } catch {
+    return [];
+  }
 }
 
 export default async function BlogPostPage(
@@ -36,77 +48,99 @@ export default async function BlogPostPage(
   const post = await getPostById(slug);
   if (!post) notFound();
 
-  const contentHtml = await markdownToHtml(post.content);
+  const [contentHtml, related] = await Promise.all([
+    markdownToHtml(post.content),
+    relatedPosts(post),
+  ]);
 
   return (
-    <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-foreground)]">
-      <div className="relative mx-auto w-full max-w-3xl px-6 py-12 sm:px-10">
-
-        {/* Background decoration */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 left-1/2 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(124,58,237,0.18),rgba(0,0,0,0)_60%)] blur-3xl" />
-        </div>
-
-        <div className="relative">
-          <SiteHeader label="PLUGGERS // BLOG" />
-
-          <main className="mt-12">
-            {/* Back link */}
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-1.5 font-mono text-xs text-[var(--color-muted)] transition hover:text-[var(--color-foreground)]"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              Torna al Blog
-            </Link>
-
-            {/* Article header */}
-            <div className="mt-8">
-              <div className="flex flex-wrap items-center gap-3">
-                <span
-                  className="rounded-full px-3 py-1 font-mono text-[10px] tracking-[0.18em]"
-                  style={{
-                    border: "1px solid rgba(139,92,246,0.35)",
-                    background: "rgba(139,92,246,0.08)",
-                    color: "var(--color-accent)",
-                  }}
+    <PageShell>
+      <div className={CONTAINER}>
+        <article className="mx-auto max-w-[38rem] pt-4 sm:pt-10">
+          <nav aria-label="Percorso">
+            <ol className="flex min-w-0 items-center gap-1.5 text-[15px] text-muted">
+              <li className="shrink-0">
+                <Link
+                  href="/blog"
+                  className="inline-flex min-h-12 items-center font-semibold text-ink underline-offset-4 hover:underline"
                 >
-                  {post.category.toUpperCase()}
-                </span>
-                <time className="font-mono text-[11px] text-[var(--color-muted)]">
-                  {formatDate(post.createdAt)}
-                </time>
-              </div>
-
-              <h1 className="mt-4 font-sans text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
+                  Blog
+                </Link>
+              </li>
+              <li aria-hidden className="shrink-0">
+                <ChevronRight className="h-4 w-4" />
+              </li>
+              <li aria-current="page" className="min-w-0 truncate">
                 {post.title}
-              </h1>
-            </div>
+              </li>
+            </ol>
+          </nav>
 
-            <hr className="my-8 border-[var(--color-border)]" />
+          <header className="mt-4 sm:mt-6">
+            <p className="text-[14px] font-semibold text-accent-text">{post.category}</p>
+            <h1 className="mt-2 text-balance text-[clamp(2rem,4.6vw,2.9rem)] font-extrabold leading-[1.08] tracking-[-0.035em]">
+              {post.title}
+            </h1>
+            <p className="mt-5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[15px] text-muted">
+              <span className="font-semibold text-ink">Il team di Pluggers</span>
+              <time dateTime={post.createdAt} className="before:mr-2 before:content-['·']">
+                {formatPostDate(post.createdAt)}
+              </time>
+              <span className="before:mr-2 before:content-['·']">
+                {readingMinutes(post.content)} min di lettura
+              </span>
+            </p>
+          </header>
 
-            {/* Article body — rendered markdown */}
-            <div
-              className="blog-body"
-              dangerouslySetInnerHTML={{ __html: contentHtml }}
-            />
+          <div
+            className="blog-body mt-10 border-t border-hair pt-8"
+            dangerouslySetInnerHTML={{ __html: contentHtml }}
+          />
+        </article>
 
-            {/* Footer nav */}
-            <div className="mt-10 border-t border-[var(--color-border)] pt-6">
-              <Link
-                href="/blog"
-                className="inline-flex items-center gap-1.5 font-mono text-xs text-[var(--color-muted)] transition hover:text-[var(--color-foreground)]"
-              >
-                <ArrowLeft className="h-3.5 w-3.5" />
-                Torna al Blog
-              </Link>
-            </div>
-            <div className="mt-8">
-              <SiteFooter />
-            </div>
-          </main>
-        </div>
+        <aside
+          aria-labelledby="cta-title"
+          className="mx-auto mt-16 max-w-[38rem] rounded-card bg-surface p-6 shadow-card sm:p-8"
+        >
+          <h2 id="cta-title" className="text-[22px] font-extrabold leading-tight tracking-[-0.02em]">
+            Pluggers per i professionisti
+          </h2>
+          <p className="mt-2 text-[16px] leading-[1.55] text-muted">
+            Richieste già descritte e classificate, dai clienti dentro il raggio che scegli tu.
+          </p>
+          <a href={WEB_APP_URL} className={`${BTN_PRIMARY} mt-6`}>
+            Apri Pluggers
+          </a>
+        </aside>
+
+        {related.length > 0 && (
+          <section aria-labelledby="related-title" className="mt-20">
+            <h2 id="related-title" className="text-[24px] font-extrabold tracking-[-0.02em]">
+              Altri articoli
+            </h2>
+            <ul className="mt-6 grid gap-4 md:grid-cols-3">
+              {related.map((p) => (
+                <li key={p.id} className="min-w-0">
+                  <Link
+                    href={`/blog/${p.id}`}
+                    className="group flex h-full flex-col rounded-card bg-surface p-6 shadow-card transition hover:shadow-lit"
+                  >
+                    <p className="text-[14px] text-muted">
+                      <time dateTime={p.createdAt}>{formatPostDate(p.createdAt)}</time>
+                    </p>
+                    <h3 className="mt-2 line-clamp-3 text-[18px] font-bold leading-snug tracking-[-0.01em]">
+                      {p.title}
+                    </h3>
+                    <p className="mt-2 line-clamp-2 text-[15px] leading-[1.55] text-muted">
+                      {excerpt(p.content)}
+                    </p>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
-    </div>
+    </PageShell>
   );
 }
