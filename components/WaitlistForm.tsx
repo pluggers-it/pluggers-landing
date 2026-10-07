@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import Link from "next/link";
 import { Check } from "lucide-react";
 
@@ -17,6 +17,20 @@ const INPUT_CLASS =
   "h-12 w-full rounded-2xl border border-line bg-surface px-4 text-[15px] text-ink outline-none transition placeholder:text-muted hover:border-ink focus:border-accent focus:ring-2 focus:ring-accent/25";
 
 const SELECT_CLASS = `${INPUT_CLASS} appearance-none pr-11`;
+
+const LABEL_CLASS = "mb-1.5 block text-sm font-medium text-ink";
+
+/** A visible label tied to its control, so people, screen readers and agents read the same name. */
+function Field({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label htmlFor={id} className={LABEL_CLASS}>
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
 
 const PROFESSIONS: [string, string][] = [
   ["idraulico", "Idraulico"], ["elettricista", "Elettricista"], ["muratore", "Muratore"],
@@ -45,6 +59,8 @@ export function WaitlistForm({
   successMessage = "Dati ricevuti. Ti scriviamo noi.",
   submissionSource = "waitlist",
 }: Props) {
+  const uid = useId();
+  const fid = (name: string) => `${uid}-${name}`;
   const [userType, setUserType]             = useState<UserType>("professionista");
   const [firstName, setFirstName]           = useState("");
   const [lastName, setLastName]             = useState("");
@@ -130,7 +146,11 @@ export function WaitlistForm({
           }}
         >
           {/* ── User type toggle ─────────────────────────────────────────── */}
-          <div className="grid grid-cols-2 gap-1 rounded-2xl bg-page p-1 dark:bg-surface-rest">
+          <div
+            role="group"
+            aria-label="Ti iscrivi come"
+            className="grid grid-cols-2 gap-1 rounded-2xl bg-page p-1 dark:bg-surface-rest"
+          >
             {(["professionista", "utente"] as UserType[]).map((type) => (
               <button
                 key={type}
@@ -146,65 +166,87 @@ export function WaitlistForm({
 
           {/* ── Common fields: Nome | Cognome | Città | Telefono ──────────── */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <input
-              type="text" required value={firstName} autoComplete="given-name"
-              onChange={(e) => setFirstName(e.target.value)}
-              placeholder="Nome" aria-label="Nome" className={INPUT_CLASS}
-            />
-            <input
-              type="text" required value={lastName} autoComplete="family-name"
-              onChange={(e) => setLastName(e.target.value)}
-              placeholder="Cognome" aria-label="Cognome" className={INPUT_CLASS}
-            />
-            <input
-              type="text" required value={city} maxLength={60}
-              autoCapitalize="words" autoComplete="address-level2"
-              onChange={(e) => setCity(e.target.value)}
-              placeholder="Città" aria-label="Città" className={INPUT_CLASS}
-            />
-            <input
-              type="tel" required value={phone} autoComplete="tel"
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="Numero di telefono" aria-label="Numero di telefono"
-              pattern="^\+?[\d\s\-\(\)]{7,20}$"
-              className={INPUT_CLASS}
-            />
+            <Field id={fid("first-name")} label="Nome">
+              <input
+                id={fid("first-name")} name="firstName"
+                type="text" required value={firstName} autoComplete="given-name"
+                onChange={(e) => setFirstName(e.target.value)}
+                className={INPUT_CLASS}
+              />
+            </Field>
+            <Field id={fid("last-name")} label="Cognome">
+              <input
+                id={fid("last-name")} name="lastName"
+                type="text" required value={lastName} autoComplete="family-name"
+                onChange={(e) => setLastName(e.target.value)}
+                className={INPUT_CLASS}
+              />
+            </Field>
+            <Field id={fid("city")} label="Città">
+              <input
+                id={fid("city")} name="city"
+                type="text" required value={city} maxLength={60}
+                autoCapitalize="words" autoComplete="address-level2"
+                onChange={(e) => setCity(e.target.value)}
+                className={INPUT_CLASS}
+              />
+            </Field>
+            <Field id={fid("phone")} label="Telefono">
+              <input
+                id={fid("phone")} name="phone"
+                type="tel" required value={phone} autoComplete="tel"
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+39 333 123 4567"
+                pattern="^\+?[\d\s\-\(\)]{7,20}$"
+                className={INPUT_CLASS}
+              />
+            </Field>
           </div>
 
           {/* ── Email + Profession (profession only for professionals) ────── */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <input
-              type="email" required value={email} autoComplete="email"
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="nome@email.com" aria-label="Email"
-              className={`${INPUT_CLASS} ${userType === "utente" ? "sm:col-span-2" : ""}`}
-            />
+            <div className={userType === "utente" ? "sm:col-span-2" : ""}>
+              <Field id={fid("email")} label="Email">
+                <input
+                  id={fid("email")} name="email"
+                  type="email" required value={email} autoComplete="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="nome@email.com"
+                  className={INPUT_CLASS}
+                />
+              </Field>
+            </div>
 
             {userType === "professionista" && (
-              <select
-                required value={profession} aria-label="Professione"
-                onChange={(e) => {
-                  setProfession(e.target.value);
-                  if (e.target.value !== "altro") setOtherProfession("");
-                }}
-                className={`${SELECT_CLASS} ${profession ? "" : "text-muted"}`} style={SELECT_STYLE}
-              >
-                <option value="" disabled>Professione</option>
-                {PROFESSIONS.map(([value, label]) => (
-                  <option key={value} value={value}>{label}</option>
-                ))}
-              </select>
+              <Field id={fid("profession")} label="Professione">
+                <select
+                  id={fid("profession")} name="profession"
+                  required value={profession}
+                  onChange={(e) => {
+                    setProfession(e.target.value);
+                    if (e.target.value !== "altro") setOtherProfession("");
+                  }}
+                  className={`${SELECT_CLASS} ${profession ? "" : "text-muted"}`} style={SELECT_STYLE}
+                >
+                  <option value="" disabled>Scegli</option>
+                  {PROFESSIONS.map(([value, label]) => (
+                    <option key={value} value={value}>{label}</option>
+                  ))}
+                </select>
+              </Field>
             )}
           </div>
 
           {/* "Altro" profession free-text */}
           {userType === "professionista" && profession === "altro" && (
-            <input
-              type="text" required value={otherProfession}
-              onChange={(e) => setOtherProfession(e.target.value)}
-              placeholder="Specifica la tua professione" aria-label="Specifica la tua professione"
-              className={INPUT_CLASS}
-            />
+            <Field id={fid("other-profession")} label="La tua professione">
+              <input
+                id={fid("other-profession")} name="otherProfession"
+                type="text" required value={otherProfession}
+                onChange={(e) => setOtherProfession(e.target.value)}
+                className={INPUT_CLASS}
+              />
+            </Field>
           )}
 
           {/* ── Legal checkboxes ─────────────────────────────────────────── */}

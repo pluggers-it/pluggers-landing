@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { Cookie } from "lucide-react";
 import { useConsent } from "@/lib/consent";
@@ -18,20 +17,19 @@ export function ConsentGate() {
   const { analyticsConsent, acceptAll, acceptNecessary } = useConsent();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => { setMounted(true); }, []);
+  // Show it from the frame after hydration, once the stored choice has been read.
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   // Don't render during SSR or once a choice has been made
   if (!mounted || analyticsConsent !== null) return null;
 
+  // CSS entrance instead of framer-motion: keeps the animation library off every page but the home.
   return (
-    <AnimatePresence>
-      <motion.div
-        key="cookie-banner"
-        initial={{ y: 24, opacity: 0 }}
-        animate={{ y: 0,  opacity: 1 }}
-        exit={{ y: 24,  opacity: 0 }}
-        transition={{ duration: 0.35, ease: "easeOut" }}
-        className="fixed bottom-4 left-1/2 z-50 w-[calc(100%-2rem)] max-w-xl -translate-x-1/2"
+      <div
+        className="consent-in fixed bottom-4 left-1/2 z-50 w-[calc(100%-2rem)] max-w-xl -translate-x-1/2"
         role="dialog"
         aria-label="Preferenze cookie"
         aria-live="polite"
@@ -83,7 +81,6 @@ export function ConsentGate() {
             </button>
           </div>
         </div>
-      </motion.div>
-    </AnimatePresence>
+      </div>
   );
 }

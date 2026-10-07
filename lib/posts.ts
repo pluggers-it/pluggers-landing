@@ -65,6 +65,15 @@ export function excerpt(md: string): string {
     .trim();
 }
 
+/** Plain-text excerpt cut at a word boundary, for meta descriptions. */
+export function metaDescription(md: string, max = 155): string {
+  const text = excerpt(md).replace(/\s+/g, " ");
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1);
+  const words = cut.slice(0, cut.lastIndexOf(" "));
+  return /[.!?]$/.test(words) ? words : `${words}…`;
+}
+
 /** "5 maggio 2026", in Italian time. */
 export function formatPostDate(iso: string): string {
   if (!iso) return "";

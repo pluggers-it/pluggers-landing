@@ -1,0 +1,31 @@
+/**
+ * The organisation and the site, stated once. JSON-LD, footer, /chi-siamo,
+ * llms.txt and the social preview all read from here so they never disagree.
+ */
+export const SITE_URL = "https://www.plggrs.it";
+
+export const ORG = {
+  name: "Pluggers",
+  legalName: "Pluggers S.r.l.",
+  foundingDate: "2026-10-06",
+  email: "supporto@plggrs.it",
+  address: {
+    street: "Corso Valdocco 2",
+    postalCode: "10122",
+    city: "Torino",
+    region: "TO",
+    country: "IT",
+  },
+  /** The one-sentence description used everywhere the brand is introduced. */
+  summary:
+    "Pluggers è un'app che parte dal problema che hai in casa, capisce quale professionista serve " +
+    "e ti mette in contatto con chi lavora nella tua zona. Oggi è attiva a Torino.",
+} as const;
+
+export const ORG_ADDRESS_LINE = `${ORG.address.street}, ${ORG.address.postalCode} ${ORG.address.city}`;
+
+export const SOCIAL_LINKS = [
+  { label: "Instagram", href: "https://www.instagram.com/pluggers.it/" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/pluggers-it/" },
+  { label: "Facebook", href: "https://www.facebook.com/profile.php?id=61578519760330" },
+] as const;

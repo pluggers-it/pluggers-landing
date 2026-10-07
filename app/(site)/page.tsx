@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
+import { FAQ, HOME, HOW } from "@/lib/home";
+import { appSchema, faqSchema, graph, pageMetadata, serviceSchema } from "@/lib/seo";
 import { SiteFooter } from "@/components/SiteFooter";
 import { LandingHeader } from "@/components/landing/LandingHeader";
 import { Hero } from "@/components/landing/Hero";
@@ -10,20 +12,28 @@ import { TrustRows } from "@/components/landing/TrustRows";
 import { Faq } from "@/components/landing/Faq";
 import { CONTAINER } from "@/components/landing/styles";
 
-export const metadata: Metadata = {
-  title: "Pluggers — Il professionista giusto, al momento giusto.",
-  description:
-    "Racconta il problema con testo e foto: Pluggers capisce di che si tratta e ti collega " +
-    "ai professionisti della tua zona. Costo Chiamata indicato prima della visita, chat e preventivo in app.",
-  alternates: {
-    canonical: "https://www.plggrs.it",
-  },
-};
+export const metadata: Metadata = pageMetadata({
+  title: HOME.title,
+  description: HOME.description,
+  path: "/",
+  absolute: true,
+});
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-page text-ink">
-      <JsonLd />
+      <JsonLd
+        data={graph(
+          appSchema,
+          serviceSchema({
+            name: "Pluggers",
+            serviceType: "Ricerca di professionisti per interventi in casa",
+            description: HOW.lede,
+            path: "/",
+          }),
+          faqSchema(FAQ)
+        )}
+      />
       <LandingHeader />
       <main>
         <Hero />

@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { LegalPage, SupportEmail, type LegalSection } from "@/components/LegalPage";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Assistenza",
   description:
-    "Assistenza Pluggers: come contattarci per un problema con l'app, una prenotazione o il tuo account, ed eliminare l'account.",
-  alternates: { canonical: "https://www.plggrs.it/supporto" },
-};
+    "Assistenza Pluggers: come contattarci per un problema con l'app, una prenotazione o il tuo account, e come chiedere l'eliminazione dell'account e dei dati.",
+  path: "/supporto",
+});
 
 const LINK = "font-semibold text-accent-text underline underline-offset-4";
 

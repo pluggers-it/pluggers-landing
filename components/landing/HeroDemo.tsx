@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SparkCanvas, type SparkHandle } from "./SparkCanvas";
 import { useReducedMotionSafe } from "./useReducedMotionSafe";
+import { onIdle } from "./idle";
 
 type Scenario = {
   text: string;
@@ -60,12 +61,17 @@ export function HeroDemo() {
   const sparks = useRef<SparkHandle>(null);
   const pathRef = useRef<Path | null>(null);
 
-  // Run only while on screen and in a visible tab.
+  // Run only while on screen and in a visible tab, and not before the browser is idle after the first paint.
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
     let inView = false;
-    const update = () => setActive(inView && document.visibilityState === "visible");
+    let idle = false;
+    const update = () => setActive(idle && inView && document.visibilityState === "visible");
+    const cancelIdle = onIdle(() => {
+      idle = true;
+      update();
+    });
     const io = new IntersectionObserver(
       ([entry]) => {
         inView = entry.isIntersecting;
@@ -76,6 +82,7 @@ export function HeroDemo() {
     io.observe(el);
     document.addEventListener("visibilitychange", update);
     return () => {
+      cancelIdle();
       io.disconnect();
       document.removeEventListener("visibilitychange", update);
     };

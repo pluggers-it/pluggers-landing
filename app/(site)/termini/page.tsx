@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { LegalPage, SupportEmail, type LegalSection } from "@/components/LegalPage";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Termini e Condizioni",
   description:
-    "Termini e Condizioni Generali di Utilizzo della piattaforma Pluggers.",
-  alternates: { canonical: "https://www.plggrs.it/termini" },
-};
+    "Le condizioni d'uso di Pluggers per clienti e professionisti: ruolo della piattaforma, Costo Chiamata, preventivi, pagamenti, chat, recensioni, responsabilità.",
+  path: "/termini",
+});
 
 // The terms and the professionals' terms are the app's (pluggers-it/mvp, app/web/legal/termini.html
 // and the proTerms* strings of app_it.arb) word for word: they are the texts users accept.
