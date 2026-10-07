@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ConsentProvider } from "@/lib/consent";
 import { ConsentGate } from "@/components/ConsentGate";
+import { BackToTop } from "@/components/BackToTop";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -92,6 +93,7 @@ export default function RootLayout({
         <ConsentProvider>
           <ThemeProvider>{children}</ThemeProvider>
           <ConsentGate />
+          <BackToTop />
         </ConsentProvider>
       </body>
     </html>
