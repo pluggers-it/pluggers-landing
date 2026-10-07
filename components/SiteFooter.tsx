@@ -51,7 +51,8 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div className="mt-6 flex flex-col gap-2 border-t border-hair pb-8 pt-6 sm:flex-row sm:items-center sm:justify-between">
+      {/* Extra room on phones so the fixed «torna su» button never sits on the last links. */}
+      <div className="mt-6 flex flex-col gap-2 border-t border-hair pb-24 pt-6 sm:flex-row sm:items-center sm:justify-between md:pb-8">
         <div className="flex min-h-12 items-center text-muted">
           © {new Date().getFullYear()} {ORG.legalName}
         </div>
