@@ -15,6 +15,13 @@ const SOCIAL_LINKS = [
   },
 ];
 
+const LEGAL_LINKS = [
+  { label: "Privacy", href: "/privacy" },
+  { label: "Termini", href: "/termini" },
+  { label: "Supporto", href: "/supporto" },
+  { label: "Elimina account", href: "/elimina-account" },
+];
+
 const LINK_CLASS =
   "inline-flex min-h-12 items-center text-muted underline-offset-4 transition hover:text-ink hover:underline";
 
@@ -32,12 +39,11 @@ export function SiteFooter() {
         aria-label="Collegamenti"
         className="flex flex-wrap items-center gap-x-6 gap-y-1"
       >
-        <Link href="/privacy" className={LINK_CLASS}>
-          Privacy Policy
-        </Link>
-        <Link href="/termini" className={LINK_CLASS}>
-          Termini e Condizioni
-        </Link>
+        {LEGAL_LINKS.map(({ label, href }) => (
+          <Link key={href} href={href} className={LINK_CLASS}>
+            {label}
+          </Link>
+        ))}
 
         {SOCIAL_LINKS.map(({ label, href }) => (
           <Link
