@@ -8,7 +8,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const ALLOWED_SOURCES = new Set(["waitlist", "newsletter"]);
 
 // Max field lengths (prevent oversized payloads)
-const MAX = { name: 80, phone: 20, profession: 60, region: 60, email: 254 };
+const MAX = { name: 80, phone: 20, profession: 60, city: 60, region: 60, email: 254 };
 
 function genericDbError(): NextResponse {
   return NextResponse.json(
@@ -19,7 +19,8 @@ function genericDbError(): NextResponse {
 
 /**
  * Collects waitlist signups.
- * POST { email, firstName, lastName, phone, profession, region, source? }
+ * POST { email, firstName, lastName, phone, profession, city, region?, source? }
+ *   `region` is the pre-city column: still accepted, never required.
  *   → 201 { ok: true }
  *   → 200 { ok: true, already: true }   (duplicate email)
  *   → 400 { error: string }             (validation failure)
@@ -52,6 +53,7 @@ export async function POST(req: Request) {
     lastName?: string;
     phone?: string;
     profession?: string;
+    city?: string;
     region?: string;
     source?: string;
     privacyAccepted?: boolean;
@@ -62,6 +64,7 @@ export async function POST(req: Request) {
   const lastName   = (body?.lastName   ?? "").trim();
   const phone      = (body?.phone      ?? "").trim();
   const profession = (body?.profession ?? "").trim();
+  const city       = (body?.city       ?? "").trim();
   const region     = (body?.region     ?? "").trim();
   const rawSource  = (body?.source ?? "waitlist").trim().toLowerCase();
   const source     = ALLOWED_SOURCES.has(rawSource) ? rawSource : "waitlist";
@@ -86,8 +89,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Nome e cognome obbligatori (max 80 caratteri)." }, { status: 400 });
   }
 
-  if (!region || region.length > MAX.region) {
-    return NextResponse.json({ error: "Seleziona una regione." }, { status: 400 });
+  if (!city || city.length > MAX.city) {
+    return NextResponse.json({ error: "Scrivi la tua città (max 60 caratteri)." }, { status: 400 });
+  }
+
+  if (region.length > MAX.region) {
+    return NextResponse.json({ error: "Regione non valida." }, { status: 400 });
   }
 
   if (!profession || profession.length > MAX.profession) {
@@ -111,6 +118,7 @@ export async function POST(req: Request) {
     last_name: lastName,
     phone,
     profession,
+    city,
     region,
     source,
     privacy_accepted_at: new Date().toISOString(),

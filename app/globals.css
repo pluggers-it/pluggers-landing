@@ -121,6 +121,21 @@ html.dark {
   animation-play-state: paused;
 }
 
+/* The app icon drifting beside the demo */
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.hero-float {
+  animation: hero-float 6s ease-in-out infinite;
+}
+
 /* Typing caret in the hero demo */
 @keyframes caret {
   50% {
@@ -139,7 +154,8 @@ html.dark {
   .marquee {
     overflow-x: auto;
   }
-  .caret {
+  .caret,
+  .hero-float {
     animation: none;
   }
 }

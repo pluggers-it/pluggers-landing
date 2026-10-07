@@ -34,6 +34,11 @@ export default function Home() {
         <Faq />
       </main>
       <div className={CONTAINER}>
+        {/* The mark alone, in the quiet text colour, so it reads in both themes. */}
+        <div
+          aria-hidden
+          className="mx-auto mb-8 h-[30px] w-[30px] bg-[color-mix(in_srgb,var(--ink)_30%,transparent)] [mask-image:url(/brand/brand-mark.png)] [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain]"
+        />
         <SiteFooter />
       </div>
     </div>

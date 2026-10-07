@@ -18,13 +18,6 @@ const INPUT_CLASS =
 
 const SELECT_CLASS = `${INPUT_CLASS} appearance-none pr-11`;
 
-const REGIONS = [
-  "Abruzzo", "Basilicata", "Calabria", "Campania", "Emilia-Romagna",
-  "Friuli-Venezia Giulia", "Lazio", "Liguria", "Lombardia", "Marche", "Molise",
-  "Piemonte", "Puglia", "Sardegna", "Sicilia", "Toscana", "Trentino-Alto Adige",
-  "Umbria", "Valle d'Aosta", "Veneto",
-];
-
 const PROFESSIONS: [string, string][] = [
   ["idraulico", "Idraulico"], ["elettricista", "Elettricista"], ["muratore", "Muratore"],
   ["fabbro", "Fabbro"], ["falegname", "Falegname"], ["imbianchino", "Imbianchino"],
@@ -56,7 +49,7 @@ export function WaitlistForm({
   const [firstName, setFirstName]           = useState("");
   const [lastName, setLastName]             = useState("");
   const [phone, setPhone]                   = useState("");
-  const [region, setRegion]                 = useState("");
+  const [city, setCity]                     = useState("");
   const [email, setEmail]                   = useState("");
   const [profession, setProfession]         = useState("");
   const [otherProfession, setOtherProfession] = useState("");
@@ -115,7 +108,7 @@ export function WaitlistForm({
                   firstName,
                   lastName,
                   phone,
-                  region,
+                  city,
                   profession: resolvedProfession,
                   source: submissionSource,
                   privacyAccepted: true,
@@ -151,7 +144,7 @@ export function WaitlistForm({
             ))}
           </div>
 
-          {/* ── Common fields: Nome | Cognome | Regione | Telefono ───────── */}
+          {/* ── Common fields: Nome | Cognome | Città | Telefono ──────────── */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <input
               type="text" required value={firstName} autoComplete="given-name"
@@ -163,16 +156,12 @@ export function WaitlistForm({
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Cognome" aria-label="Cognome" className={INPUT_CLASS}
             />
-            <select
-              required value={region} aria-label="Regione"
-              onChange={(e) => setRegion(e.target.value)}
-              className={`${SELECT_CLASS} ${region ? "" : "text-muted"}`} style={SELECT_STYLE}
-            >
-              <option value="" disabled>Regione</option>
-              {REGIONS.map((r) => (
-                <option key={r} value={r}>{r}</option>
-              ))}
-            </select>
+            <input
+              type="text" required value={city} maxLength={60}
+              autoCapitalize="words" autoComplete="address-level2"
+              onChange={(e) => setCity(e.target.value)}
+              placeholder="Città" aria-label="Città" className={INPUT_CLASS}
+            />
             <input
               type="tel" required value={phone} autoComplete="tel"
               onChange={(e) => setPhone(e.target.value)}

@@ -1,5 +1,7 @@
+import { MapPin } from "lucide-react";
 import { FieldCanvas } from "./FieldCanvas";
 import { HeroDemo } from "./HeroDemo";
+import { HeroIcon } from "./HeroIcon";
 import { StoreBadges } from "./StoreBadges";
 import { WEB_APP_URL } from "./links";
 import { BTN_PRIMARY, CONTAINER } from "./styles";
@@ -19,6 +21,10 @@ export function Hero() {
             Racconta il problema. Pluggers capisce di che si tratta e ti collega a
             chi può risolverlo, vicino a te.
           </p>
+          <p className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-muted">
+            <MapPin className="h-4 w-4 text-accent-text" strokeWidth={2} aria-hidden />
+            Oggi attivo a Torino
+          </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a href={WEB_APP_URL} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
               Apri Pluggers
@@ -27,7 +33,11 @@ export function Hero() {
           </div>
         </div>
 
-        <HeroDemo />
+        <div className="relative">
+          <HeroDemo />
+          {/* Beside the demo label on phones; in the free corner left of the professional card from sm up. */}
+          <HeroIcon className="absolute -top-3 right-0 z-0 h-12 w-12 sm:bottom-1 sm:left-0 sm:right-auto sm:top-auto sm:h-32 sm:w-32" />
+        </div>
       </div>
     </section>
   );

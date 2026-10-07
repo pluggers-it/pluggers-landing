@@ -55,7 +55,10 @@ export function ForPros() {
         </div>
 
         <div className="lg:pt-2">
-          <WaitlistForm />
+          <WaitlistForm
+            title="Non sei a Torino? Lasciaci la tua città."
+            description="Le prossime zone le scegliamo da lì. Ti scriviamo quando arriviamo da te."
+          />
         </div>
       </div>
     </section>

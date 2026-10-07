@@ -7,6 +7,10 @@ const FAQ = [
     a: "Niente: descrivere il problema, ricevere le stime e prenotare non ha costi. Paghi solo il professionista, per la visita e per il lavoro che accetti, direttamente a lui.",
   },
   {
+    q: "Dove funziona Pluggers?",
+    a: "Oggi a Torino e dintorni. Se sei altrove, lascia la tua città nel modulo: le prossime zone le scegliamo da lì.",
+  },
+  {
     q: "Come fa Pluggers a capire di che si tratta?",
     a: "Un assistente di intelligenza artificiale legge la descrizione e le foto, se serve ti fa poche domande senza termini tecnici e indica il mestiere e l'urgenza. Può sbagliare: il professionista verifica sul posto. Le foto usate per questa valutazione vengono cancellate subito dopo.",
   },
@@ -20,7 +24,7 @@ const FAQ = [
   },
   {
     q: "Serve scaricare un'app?",
-    a: "No: Pluggers si usa dal browser, su app.plggrs.it. Le app per iPhone e Android sono in arrivo. Se nella tua zona non ci sono ancora professionisti, lasciaci i dati e ti avvisiamo noi.",
+    a: "No: Pluggers si usa dal browser, su app.plggrs.it. Le app per iPhone e Android sono in arrivo.",
   },
 ];
 
