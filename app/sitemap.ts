@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { readPosts } from "@/lib/posts";
+import { readPosts, postPath } from "@/lib/posts";
 import { SITE_URL } from "@/lib/site";
 import { HOME_UPDATED } from "@/lib/home";
 import { TRADES, TRADES_UPDATED } from "@/lib/trades";
@@ -36,7 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...TRADES.map((t) => page(`/torino/${t.slug}`, TRADES_UPDATED, 0.8)),
     page("/chi-siamo", ABOUT_UPDATED, 0.5),
     page("/blog", posts[0]?.createdAt ?? HOME_UPDATED, 0.6),
-    ...posts.map((p) => page(`/blog/${p.id}`, p.createdAt, 0.5)),
+    ...posts.map((p) => page(postPath(p), p.createdAt, 0.5)),
     page("/privacy", PRIVACY_UPDATED, 0.2),
     page("/termini", TERMS_UPDATED, 0.2),
     page("/supporto", SUPPORT_UPDATED, 0.3),

@@ -1,3 +1,5 @@
+import { cache } from "react";
+export { slugify, postPath, idFromSegment } from "./postPath";
 import { getSupabase } from "@/lib/supabase";
 import { remark } from "remark";
 import remarkGfm from "remark-gfm";
@@ -68,7 +70,9 @@ export function excerpt(md: string): string {
 
 /** Plain-text excerpt cut at a word boundary, for meta descriptions. */
 export function metaDescription(md: string, max = 155): string {
-  const text = excerpt(md).replace(/\s+/g, " ");
+  // Every newsletter opens with the same greeting ("Benvenuti su Pluggers News…"): left in,
+  // it became the description of every post.
+  const text = excerpt(md).replace(/\s+/g, " ").replace(/^[^.!?]*Pluggers News[^.!?]*[.!?]\s*/i, "");
   if (text.length <= max) return text;
   const cut = text.slice(0, max - 1);
   // A whole first sentence reads better than one cut mid-way, when it fills most of the space.
@@ -104,7 +108,9 @@ export async function readPosts(): Promise<Post[]> {
   return (data as PostRow[]).map(rowToPost);
 }
 
-export async function getPostById(id: string): Promise<Post | null> {
+// cached: metadata and page ask for the same post in one request
+export const getPostById = cache(async (id: string): Promise<Post | null> => {
+  if (!/^[1-9]\d*$/.test(id)) return null;
   const { data, error } = await getSupabase()
     .from("posts")
     .select("*")
@@ -113,7 +119,7 @@ export async function getPostById(id: string): Promise<Post | null> {
 
   if (error || !data) return null;
   return rowToPost(data as PostRow);
-}
+});
 
 export async function createPost(input: {
   title: string;

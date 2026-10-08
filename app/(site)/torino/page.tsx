@@ -7,7 +7,7 @@ import { FaqList } from "@/components/landing/FaqList";
 import { SitePage } from "@/components/landing/SitePage";
 import { WEB_APP_URL } from "@/components/landing/links";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
-import { breadcrumbSchema, faqSchema, graph, pageMetadata, serviceSchema } from "@/lib/seo";
+import { breadcrumbSchema, faqSchema, graph, pageMetadata, pageSchema, serviceSchema } from "@/lib/seo";
 import { SITE_URL } from "@/lib/site";
 import { TORINO, TRADE_GROUPS, TRADES } from "@/lib/trades";
 
@@ -24,6 +24,7 @@ export default function TorinoPage() {
     <SitePage trail={trail}>
       <JsonLd
         data={graph(
+          pageSchema({ path: "/torino", name: "Professionisti per la casa a Torino", type: "CollectionPage", mainEntity: `${SITE_URL}/torino#service` }),
           serviceSchema({
             name: "Professionisti per la casa a Torino con Pluggers",
             serviceType: "Ricerca di professionisti per interventi in casa",

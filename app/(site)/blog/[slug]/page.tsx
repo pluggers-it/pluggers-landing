@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { PageShell } from "@/components/landing/PageShell";
@@ -7,25 +7,34 @@ import { WEB_APP_URL } from "@/components/landing/links";
 import { BTN_PRIMARY, CONTAINER } from "@/components/landing/styles";
 import { JsonLd } from "@/components/JsonLd";
 import { ORG_ID, breadcrumbSchema, graph, pageMetadata } from "@/lib/seo";
-import { SITE_URL } from "@/lib/site";
+import { ORG, SITE_URL } from "@/lib/site";
 import {
   excerpt,
   formatPostDate,
   getPostById,
+  idFromSegment,
   markdownToHtml,
   metaDescription,
+  postPath,
   readPosts,
   readingMinutes,
   type Post,
 } from "@/lib/posts";
 
-export const dynamic = "force-dynamic";
+// served from the cache and rebuilt at most every five minutes; publishing revalidates at once
+export const revalidate = 300;
+
+// none at build time: each post is rendered on its first visit, then served from the cache
+export async function generateStaticParams() {
+  return [];
+}
 
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostById(slug);
+  const id = idFromSegment(slug);
+  const post = id ? await getPostById(id) : null;
   if (!post) return { title: "Articolo non trovato", robots: { index: false } };
   // Long headlines go out as they are rather than with the brand suffix: Google cuts them anyway.
   const withBrand = `${post.title} — Pluggers`;
@@ -33,7 +42,7 @@ export async function generateMetadata(
     title: post.title,
     absolute: withBrand.length > 60,
     description: metaDescription(post.content),
-    path: `/blog/${post.id}`,
+    path: postPath(post),
     publishedTime: new Date(post.createdAt).toISOString(),
   });
 }
@@ -54,15 +63,18 @@ export default async function BlogPostPage(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const post = await getPostById(slug);
+  const id = idFromSegment(slug);
+  const post = id ? await getPostById(id) : null;
   if (!post) notFound();
+  // /blog/16 and any old or mistyped words lead to the one canonical address
+  if (`/blog/${slug}` !== postPath(post)) permanentRedirect(postPath(post));
 
   const [contentHtml, related] = await Promise.all([
     markdownToHtml(post.content),
     relatedPosts(post),
   ]);
 
-  const path = `/blog/${post.id}`;
+  const path = postPath(post);
   const published = new Date(post.createdAt).toISOString();
 
   return (
@@ -75,14 +87,19 @@ export default async function BlogPostPage(
             headline: post.title,
             description: metaDescription(post.content),
             datePublished: published,
-            dateModified: published,
             inLanguage: "it-IT",
             articleSection: post.category,
             url: `${SITE_URL}${path}`,
-            mainEntityOfPage: `${SITE_URL}${path}`,
+            mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${path}` },
             image: `${SITE_URL}/opengraph-image`,
-            author: { "@id": ORG_ID },
-            publisher: { "@id": ORG_ID },
+            // inline, not only by @id: the Organization node lives in another <script> (layout)
+            author: { "@type": "Organization", "@id": ORG_ID, name: ORG.name, url: SITE_URL },
+            publisher: {
+              "@type": "Organization",
+              "@id": ORG_ID,
+              name: ORG.name,
+              logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
+            },
           },
           breadcrumbSchema([
             { name: "Blog", path: "/blog" },
@@ -157,7 +174,7 @@ export default async function BlogPostPage(
               {related.map((p) => (
                 <li key={p.id} className="min-w-0">
                   <Link
-                    href={`/blog/${p.id}`}
+                    href={postPath(p)}
                     className="group flex h-full flex-col rounded-card bg-surface p-6 shadow-card transition hover:shadow-lit"
                   >
                     <p className="text-[14px] text-muted">

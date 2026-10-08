@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { pageMetadata } from "@/lib/seo";
+import { ORG_ID, breadcrumbSchema, graph, pageMetadata, pageSchema } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 import Link from "next/link";
 import { LegalPage, SupportEmail, type LegalSection } from "@/components/LegalPage";
 
@@ -70,6 +71,13 @@ const SECTIONS: LegalSection[] = [
 
 export default function SupportoPage() {
   return (
+    <>
+    <JsonLd
+      data={graph(
+        { ...pageSchema({ path: "/supporto", name: "Assistenza", type: "ContactPage" }), about: { "@id": ORG_ID } },
+        breadcrumbSchema([{ name: "Assistenza", path: "/supporto" }])
+      )}
+    />
     <LegalPage
       title="Assistenza"
       updated="7 ottobre 2026"
@@ -78,5 +86,6 @@ export default function SupportoPage() {
       }
       sections={SECTIONS}
     />
+    </>
   );
 }

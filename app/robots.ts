@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 
-const DISALLOW = ["/blog/admin", "/api/"];
+// /blog/admin is not here on purpose: it carries its own noindex, which a Disallow would hide
+const DISALLOW = ["/api/"];
 
 /** Search and AI crawlers are welcome on every public page; named so a blanket rule elsewhere can't shut them out. */
 const AI_AGENTS = [

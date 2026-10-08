@@ -1,7 +1,15 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { readPosts, createPost, deletePost } from "@/lib/posts";
 import { verifySession } from "@/lib/auth-db";
 import { isSupabaseConfigured } from "@/lib/supabase";
+
+// the blog and the sitemap are cached: a new or deleted post shows at once
+function aggiornaPagine() {
+  revalidatePath("/blog");
+  revalidatePath("/blog/[slug]", "page");
+  revalidatePath("/sitemap.xml");
+}
 
 // ── Auth helper ───────────────────────────────────────────────────────────────
 async function authenticate(req: Request): Promise<boolean> {
@@ -51,6 +59,7 @@ export async function POST(req: Request) {
   }
 
   const post = await createPost({ title, category, content });
+  aggiornaPagine();
   return NextResponse.json({ post }, { status: 201 });
 }
 
@@ -77,5 +86,6 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ error: "Post non trovato." }, { status: 404 });
   }
 
+  aggiornaPagine();
   return NextResponse.json({ ok: true });
 }
