@@ -48,7 +48,7 @@ const securityHeaders = [
   // Disable camera/mic/geolocation access
   { key: "Permissions-Policy",       value: "camera=(), microphone=(), geolocation=()" },
   // Basic XSS protection (legacy browsers)
-  { key: "X-XSS-Protection",         value: "1; mode=block" },
+  { key: "X-XSS-Protection",         value: "0" },
 ];
 
 const nextConfig: NextConfig = {

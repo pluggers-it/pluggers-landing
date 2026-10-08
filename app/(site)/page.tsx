@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
 import { FAQ, HOME, HOW } from "@/lib/home";
-import { appSchema, faqSchema, graph, pageMetadata, serviceSchema } from "@/lib/seo";
+import { appSchema, faqSchema, graph, pageMetadata, pageSchema, serviceSchema } from "@/lib/seo";
+import { SITE_URL } from "@/lib/site";
 import { SiteFooter } from "@/components/SiteFooter";
 import { LandingHeader } from "@/components/landing/LandingHeader";
 import { Hero } from "@/components/landing/Hero";
@@ -24,6 +25,7 @@ export default function Home() {
     <div className="min-h-screen bg-page text-ink">
       <JsonLd
         data={graph(
+          pageSchema({ path: "/", name: "Pluggers", mainEntity: `${SITE_URL}/#app` }),
           appSchema,
           serviceSchema({
             name: "Pluggers",

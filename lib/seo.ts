@@ -52,7 +52,7 @@ export function pageMetadata({ title, description, path, absolute, publishedTime
 // ── Structured data (schema.org) ────────────────────────────────────────────
 
 export const ORG_ID = `${SITE_URL}/#organization`;
-const WEBSITE_ID = `${SITE_URL}/#website`;
+export const WEBSITE_ID = `${SITE_URL}/#website`;
 const TORINO = { "@type": "City", name: "Torino" };
 
 export function graph(...nodes: object[]) {
@@ -83,6 +83,7 @@ export const organizationSchema = {
     "@type": "ContactPoint",
     contactType: "customer support",
     email: ORG.email,
+    url: `${SITE_URL}/supporto`,
     availableLanguage: "it",
   },
 };
@@ -99,13 +100,14 @@ export const websiteSchema = {
 
 const storeUrls = [APP_STORE_URL, PLAY_STORE_URL].filter(Boolean);
 
+// Until the store apps are out, only the web app exists: declaring iOS and Android would be false.
 export const appSchema = {
-  "@type": "MobileApplication",
+  "@type": storeUrls.length > 0 ? "MobileApplication" : "WebApplication",
   "@id": `${SITE_URL}/#app`,
   name: ORG.name,
   description: ORG.summary,
   url: WEB_APP_URL,
-  operatingSystem: "iOS, Android",
+  operatingSystem: storeUrls.length > 0 ? "iOS, Android, Web" : "Web",
   applicationCategory: "LifestyleApplication",
   inLanguage: "it",
   offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
@@ -125,9 +127,30 @@ export function serviceSchema({ name, serviceType, description, path }: {
     name,
     serviceType,
     description,
-    url: `${SITE_URL}${path}`,
+    url: `${SITE_URL}${path === "/" ? "" : path}`,
     areaServed: TORINO,
-    provider: { "@id": ORG_ID },
+    // Pluggers connects people with the professionals who do the work: it brokers, it doesn't provide
+    broker: { "@id": ORG_ID },
+  };
+}
+
+/** The page node that ties breadcrumb and main entity to the WebSite. */
+export function pageSchema({ path, name, type = "WebPage", mainEntity }: {
+  path: string;
+  name: string;
+  type?: "WebPage" | "CollectionPage" | "AboutPage" | "ContactPage";
+  mainEntity?: string;
+}) {
+  const url = `${SITE_URL}${path === "/" ? "" : path}`;
+  return {
+    "@type": type,
+    "@id": `${url}#webpage`,
+    url,
+    name,
+    inLanguage: "it-IT",
+    isPartOf: { "@id": WEBSITE_ID },
+    ...(path !== "/" && { breadcrumb: { "@id": `${url}#breadcrumb` } }),
+    ...(mainEntity && { mainEntity: { "@id": mainEntity } }),
   };
 }
 
@@ -144,8 +167,10 @@ export function faqSchema(items: readonly { q: string; a: string }[]) {
 
 /** Pass the trail without the home page; it is added first. */
 export function breadcrumbSchema(trail: { name: string; path: string }[]) {
+  const last = trail.at(-1)?.path ?? "/";
   return {
     "@type": "BreadcrumbList",
+    "@id": `${SITE_URL}${last === "/" ? "" : last}#breadcrumb`,
     itemListElement: [{ name: "Home", path: "/" }, ...trail].map((item, i) => ({
       "@type": "ListItem",
       position: i + 1,

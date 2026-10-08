@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import { postPath } from "@/lib/postPath";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { ArrowLeft, Plus, Trash2, LogOut, Loader2, User, Lock, UserPlus, ShieldCheck } from "lucide-react";
@@ -391,7 +392,7 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
                   </div>
                   <div className="flex shrink-0 gap-2">
                     <Link
-                      href={`/blog/${post.id}`}
+                      href={postPath(post)}
                       target="_blank"
                       className="rounded-xl border border-[var(--color-border)] px-3 py-2 font-mono text-[11px] text-[var(--color-muted)] transition hover:border-[var(--color-accent)]"
                     >

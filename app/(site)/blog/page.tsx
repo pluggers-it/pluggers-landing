@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
-import { pageMetadata } from "@/lib/seo";
+import { ORG_ID, breadcrumbSchema, graph, pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
+import { SITE_URL } from "@/lib/site";
 import Link from "next/link";
 import { ArrowRight, PenLine } from "lucide-react";
 
-// Always fetch fresh posts from Supabase — never use static cache.
-export const dynamic = "force-dynamic";
+// served from the cache and rebuilt at most every five minutes; publishing revalidates at once
+export const revalidate = 300;
 import { PageShell } from "@/components/landing/PageShell";
 import { CONTAINER, LEDE } from "@/components/landing/styles";
-import { excerpt, formatPostDate, readPosts, readingMinutes, type Post } from "@/lib/posts";
+import { excerpt, formatPostDate, postPath, readPosts, readingMinutes, type Post } from "@/lib/posts";
 
 export const metadata: Metadata = pageMetadata({
   title: "Blog",
@@ -42,6 +44,19 @@ export default async function BlogPage() {
 
   return (
     <PageShell>
+      <JsonLd
+        data={graph(
+          {
+            "@type": "Blog",
+            "@id": `${SITE_URL}/blog#blog`,
+            name: "Blog di Pluggers",
+            url: `${SITE_URL}/blog`,
+            inLanguage: "it-IT",
+            publisher: { "@id": ORG_ID },
+          },
+          breadcrumbSchema([{ name: "Blog", path: "/blog" }])
+        )}
+      />
       <div className={`${CONTAINER} pt-8 sm:pt-14`}>
         <header className="max-w-[46rem]">
           <h1 className="text-[clamp(2.25rem,5vw,3.5rem)] font-extrabold leading-[1.05] tracking-[-0.035em]">
@@ -69,7 +84,7 @@ export default async function BlogPage() {
         ) : (
           <>
             <Link
-              href={`/blog/${latest.id}`}
+              href={postPath(latest)}
               className="group mt-10 block rounded-card bg-surface p-6 shadow-card transition hover:shadow-lit sm:p-10"
             >
               <PostMeta post={latest} />
@@ -90,7 +105,7 @@ export default async function BlogPage() {
                 {older.map((post) => (
                   <li key={post.id}>
                     <Link
-                      href={`/blog/${post.id}`}
+                      href={postPath(post)}
                       className="group grid gap-2 py-6 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-8 sm:py-8"
                     >
                       <time
@@ -126,6 +141,7 @@ export default async function BlogPage() {
         <div className="mt-12 flex justify-center">
           <Link
             href="/blog/admin"
+            rel="nofollow"
             className="inline-flex min-h-12 items-center gap-2 px-3 text-[14px] text-muted underline-offset-4 transition hover:text-ink hover:underline"
           >
             <PenLine className="h-4 w-4" aria-hidden />

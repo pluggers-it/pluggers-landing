@@ -4,7 +4,7 @@ import { SitePage } from "@/components/landing/SitePage";
 import { WEB_APP_URL } from "@/components/landing/links";
 import { BTN_PRIMARY, H2 } from "@/components/landing/styles";
 import { ABOUT, COMPANY_FACTS } from "@/lib/about";
-import { ORG_ID, breadcrumbSchema, graph, pageMetadata } from "@/lib/seo";
+import { ORG_ID, breadcrumbSchema, graph, pageMetadata, pageSchema } from "@/lib/seo";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
@@ -20,13 +20,7 @@ export default function ChiSiamoPage() {
     <SitePage trail={trail}>
       <JsonLd
         data={graph(
-          {
-            "@type": "AboutPage",
-            url: `${SITE_URL}/chi-siamo`,
-            name: ABOUT.title,
-            about: { "@id": ORG_ID },
-            inLanguage: "it-IT",
-          },
+          { ...pageSchema({ path: "/chi-siamo", name: ABOUT.title, type: "AboutPage" }), about: { "@id": ORG_ID } },
           breadcrumbSchema(trail)
         )}
       />

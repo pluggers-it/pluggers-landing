@@ -4,11 +4,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MapPin, TriangleAlert } from "lucide-react";
 import { JsonLd } from "@/components/JsonLd";
+import { SITE_URL } from "@/lib/site";
 import { FaqList } from "@/components/landing/FaqList";
 import { SitePage } from "@/components/landing/SitePage";
 import { WEB_APP_URL } from "@/components/landing/links";
 import { BTN_OUTLINE, BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
-import { breadcrumbSchema, faqSchema, graph, pageMetadata, serviceSchema } from "@/lib/seo";
+import { breadcrumbSchema, faqSchema, graph, pageMetadata, pageSchema, serviceSchema } from "@/lib/seo";
 import { TRADES, getTrade } from "@/lib/trades";
 
 type Props = { params: Promise<{ mestiere: string }> };
@@ -44,6 +45,7 @@ export default async function TradePage({ params }: Props) {
     <SitePage trail={trail}>
       <JsonLd
         data={graph(
+          pageSchema({ path, name: `${trade.label} a Torino`, mainEntity: `${SITE_URL}${path}#service` }),
           serviceSchema({
             name: `${trade.label} a Torino con Pluggers`,
             serviceType: trade.label,
@@ -79,6 +81,7 @@ export default async function TradePage({ params }: Props) {
           width={800}
           height={450}
           priority
+          fetchPriority="high"
           sizes="(min-width: 1200px) 480px, (min-width: 1024px) 40vw, calc(100vw - 40px)"
           className="aspect-[16/10] w-full rounded-card object-cover shadow-card"
         />

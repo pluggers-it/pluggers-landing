@@ -20,11 +20,11 @@ export function SiteFooter() {
     <footer className="border-t border-hair pt-8 text-sm">
       <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <nav aria-labelledby="footer-trades">
-          <h2 id="footer-trades" className="font-semibold text-ink">
+          <p id="footer-trades" className="font-semibold text-ink">
             <Link href="/torino" className="inline-flex min-h-12 items-center underline-offset-4 hover:underline">
               Mestieri a Torino
             </Link>
-          </h2>
+          </p>
           <ul className="grid grid-cols-2 gap-x-6 sm:grid-cols-3">
             {TRADES.map((t) => (
               <li key={t.slug}>
@@ -37,7 +37,7 @@ export function SiteFooter() {
         </nav>
 
         <div>
-          <h2 className="flex min-h-12 items-center font-semibold text-ink">{ORG.legalName}</h2>
+          <p className="flex min-h-12 items-center font-semibold text-ink">{ORG.legalName}</p>
           <address className="not-italic leading-6 text-muted">
             {ORG_ADDRESS_LINE}
             <br />
