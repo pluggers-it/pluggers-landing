@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/seo";
+import { CookiePreferencesButton } from "@/components/CookiePreferencesButton";
 import { LegalPage, SupportEmail, type LegalSection } from "@/components/LegalPage";
 
 export const metadata: Metadata = pageMetadata({
@@ -137,11 +138,24 @@ const SECTIONS: LegalSection[] = [
           Il modulo è riservato ai maggiorenni. Se ci accorgiamo di aver raccolto dati di un
           minore senza il consenso di chi ne ha la responsabilità genitoriale, li cancelliamo.
         </p>
-        <h3>Cookie</h3>
+        <h3>Cookie e statistiche</h3>
         <p>
-          Il sito non usa cookie di profilazione né strumenti di statistica. Nel tuo browser
-          salva solo il tema chiaro o scuro e la scelta fatta sul banner dei cookie; a chi
-          gestisce il blog, anche l&apos;accesso all&apos;area riservata.
+          Il sito usa cookie tecnici, necessari al suo funzionamento: nel tuo browser salva il
+          tema chiaro o scuro e la scelta fatta sul banner dei cookie; a chi gestisce il blog,
+          anche l&apos;accesso all&apos;area riservata. Per questi non serve il consenso.
+        </p>
+        <p>
+          Solo se tocchi «Accetta» sul banner usiamo anche Google Analytics 4, fornito da Google
+          Ireland Limited, per misurare in forma aggregata come viene usato il sito: pagine
+          visitate, provenienza della visita, tipo di dispositivo e durata. Google Analytics usa
+          cookie e un identificativo del browser; non lo usiamo per pubblicità né per profilarti,
+          e i segnali pubblicitari sono disattivati. Base giuridica: consenso (art. 6(1)(a)).
+          Google conserva questi dati per il periodo impostato nel servizio, da 2 a 14 mesi, e
+          può trasferirli negli Stati Uniti nell&apos;ambito del Data Privacy Framework UE-USA.
+        </p>
+        <p>
+          Se scegli «Solo tecnici», Google Analytics non viene caricato. Puoi cambiare la tua
+          scelta in qualsiasi momento: <CookiePreferencesButton />
         </p>
         <h3>Reclamo</h3>
         <p>

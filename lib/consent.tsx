@@ -27,12 +27,16 @@ interface ConsentContextValue {
 
   /** Decline optional cookies */
   acceptNecessary: () => void;
+
+  /** Forget the choice: the banner shows again */
+  resetChoice: () => void;
 }
 
 const ConsentContext = createContext<ConsentContextValue>({
   analyticsConsent: null,
   acceptAll:        () => {},
   acceptNecessary:  () => {},
+  resetChoice:      () => {},
 });
 
 // ── Provider ──────────────────────────────────────────────────────────────────
@@ -54,8 +58,15 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
     setAnalyticsConsent("denied");
   }, []);
 
+  const resetChoice = useCallback(() => {
+    localStorage.removeItem(ANALYTICS_KEY);
+    // GA keeps running until the page reloads: a reload is the clean way to stop it
+    if (analyticsConsent === "granted") window.location.reload();
+    else setAnalyticsConsent(null);
+  }, [analyticsConsent]);
+
   return (
-    <ConsentContext.Provider value={{ analyticsConsent, acceptAll, acceptNecessary }}>
+    <ConsentContext.Provider value={{ analyticsConsent, acceptAll, acceptNecessary, resetChoice }}>
       {children}
     </ConsentContext.Provider>
   );

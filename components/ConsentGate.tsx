@@ -58,7 +58,8 @@ export function ConsentGate() {
               Utilizziamo i cookie
             </p>
             <p className="mt-0.5 text-xs leading-relaxed text-[var(--color-muted)]">
-              Usiamo cookie tecnici necessari al funzionamento del sito.{" "}
+              Usiamo cookie tecnici necessari al sito e, se accetti, cookie di statistica di Google
+              Analytics per capire come viene usato.{" "}
               <Link
                 href="/privacy"
                 className="underline underline-offset-2 transition hover:text-[var(--color-foreground)]"
