@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/logo.png";
@@ -9,23 +10,35 @@ import { BTN_PRIMARY, CONTAINER } from "@/components/landing/styles";
 import { inviteCode, readInvite } from "@/lib/invite";
 import { OG_IMAGE } from "@/lib/seo";
 import { ORG } from "@/lib/site";
+import { CopyCode } from "./CopyCode";
 
-const SHARE_TITLE = "Ti hanno invitato su Pluggers";
+type Props = { params: Promise<{ code: string }> };
+
+// One lookup per request for both the metadata and the page (a fetch with a timeout signal isn't deduplicated by Next).
+const lookup = cache(async (raw: string) => {
+  const code = inviteCode(raw);
+  const invite = code ? await readInvite(code) : { known: false };
+  const title = invite.firstName ? `${invite.firstName} ti ha invitato su Pluggers` : "Ti hanno invitato su Pluggers";
+  // A code core-api says doesn't exist is neither shown nor passed to the app.
+  return { code: code && invite.known ? code : null, title };
+});
 
 // The preview WhatsApp shows when the link is shared. Not in the sitemap, kept out of search.
-export const metadata: Metadata = {
-  title: { absolute: "Invito su Pluggers" },
-  description: ORG.summary,
-  robots: { index: false, follow: false },
-  openGraph: { type: "website", locale: "it_IT", siteName: ORG.name, title: SHARE_TITLE, description: ORG.summary, images: [OG_IMAGE] },
-  twitter: { card: "summary_large_image", title: SHARE_TITLE, description: ORG.summary, images: [OG_IMAGE.url] },
-};
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { title } = await lookup((await params).code);
+  return {
+    title: { absolute: "Invito su Pluggers" },
+    description: ORG.summary,
+    robots: { index: false, follow: false },
+    openGraph: { type: "website", locale: "it_IT", siteName: ORG.name, title, description: ORG.summary, images: [OG_IMAGE] },
+    twitter: { card: "summary_large_image", title, description: ORG.summary, images: [OG_IMAGE.url] },
+  };
+}
 
 // Opened from a friend's or colleague's message: who invited you, what Pluggers is, one way in.
-export default async function InvitePage({ params }: { params: Promise<{ code: string }> }) {
-  const code = inviteCode((await params).code);
-  const invite = code ? await readInvite(code) : { known: false };
-  const appUrl = code && invite.known ? `${WEB_APP_URL}/?ref=${code}` : WEB_APP_URL;
+export default async function InvitePage({ params }: Props) {
+  const { code, title } = await lookup((await params).code);
+  const appUrl = code ? `${WEB_APP_URL}/?ref=${code}` : WEB_APP_URL;
 
   return (
     <main className="min-h-[100dvh] bg-page text-ink">
@@ -40,7 +53,7 @@ export default async function InvitePage({ params }: { params: Promise<{ code: s
         <section className="grid items-center gap-12 pb-20 pt-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16 lg:pt-12">
           <div>
             <h1 className="max-w-[16ch] text-balance break-words text-[clamp(2.2rem,4.4vw,3.6rem)] font-extrabold leading-[1.05] tracking-[-0.035em]">
-              {invite.firstName ? `${invite.firstName} ti ha invitato su Pluggers` : SHARE_TITLE}
+              {title}
             </h1>
             <p className="mt-5 max-w-[52ch] text-[17px] leading-[1.6] text-muted sm:text-lg">{ORG.summary}</p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -49,7 +62,8 @@ export default async function InvitePage({ params }: { params: Promise<{ code: s
               </a>
               <StoreBadges />
             </div>
-            <p className="mt-6 text-[15px] text-muted">
+            {code && <CopyCode code={code} />}
+            <p className="mt-4 text-[15px] text-muted">
               Sei un professionista?{" "}
               <Link href="/professionisti" className="inline-flex min-h-12 items-center font-semibold text-accent-text underline-offset-4 hover:underline">
                 Leggi la guida
