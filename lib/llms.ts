@@ -37,6 +37,7 @@ ${FACTS}
 - [Per i professionisti](${SITE_URL}/#professionisti): cosa offre Pluggers a chi lavora nella casa
 - [Domande frequenti](${SITE_URL}/#domande-frequenti): costi, zone, assistente, professionisti
 - [Chi siamo](${SITE_URL}/chi-siamo): la società, la sede e i contatti
+- [Per i professionisti](${SITE_URL}/professionisti): l'app per artigiani di Torino, come si ricevono le richieste dei clienti vicini e chi decide il prezzo
 - [Apri Pluggers](${WEB_APP_URL}): la web app per descrivere il problema
 
 ## Mestieri a Torino

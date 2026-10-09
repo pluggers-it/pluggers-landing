@@ -50,6 +50,10 @@ export function SiteFooter() {
           <Link href="/chi-siamo" className={LINK_CLASS}>
             Chi siamo
           </Link>
+          <br />
+          <Link href="/professionisti" className={LINK_CLASS}>
+            Per i professionisti
+          </Link>
         </div>
       </div>
 

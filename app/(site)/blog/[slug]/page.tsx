@@ -8,6 +8,7 @@ import { BTN_PRIMARY, CONTAINER } from "@/components/landing/styles";
 import { JsonLd } from "@/components/JsonLd";
 import { ORG_ID, breadcrumbSchema, graph, pageMetadata } from "@/lib/seo";
 import { ORG, SITE_URL } from "@/lib/site";
+import { tradesForPost } from "@/lib/tradeLinks";
 import {
   excerpt,
   formatPostDate,
@@ -75,6 +76,7 @@ export default async function BlogPostPage(
   ]);
 
   const path = postPath(post);
+  const trades = tradesForPost(`${post.title} ${excerpt(post.content)}`);
   const published = new Date(post.createdAt).toISOString();
 
   return (
@@ -150,6 +152,24 @@ export default async function BlogPostPage(
           />
         </article>
 
+        {trades.length > 0 && (
+          <nav aria-label="Professionisti a Torino" className="mx-auto mt-12 max-w-[38rem] border-t border-hair pt-6">
+            <p className="text-[15px] text-muted">I mestieri di questo articolo, a Torino su Pluggers</p>
+            <ul className="mt-1 flex flex-wrap gap-x-6">
+              {trades.map((t) => (
+                <li key={t.slug}>
+                  <Link
+                    href={`/torino/${t.slug}`}
+                    className="inline-flex min-h-12 items-center font-semibold text-accent-text underline underline-offset-4"
+                  >
+                    {t.label} a Torino
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
         <aside
           aria-labelledby="cta-title"
           className="mx-auto mt-16 max-w-[38rem] rounded-card bg-surface p-6 shadow-card sm:p-8"
@@ -160,9 +180,14 @@ export default async function BlogPostPage(
           <p className="mt-2 text-[16px] leading-[1.55] text-muted">
             Richieste già descritte e classificate, dai clienti dentro il raggio che scegli tu.
           </p>
-          <a href={WEB_APP_URL} className={`${BTN_PRIMARY} mt-6`}>
-            Apri Pluggers
-          </a>
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
+            <a href={WEB_APP_URL} className={BTN_PRIMARY}>
+              Apri Pluggers
+            </a>
+            <Link href="/professionisti" className="inline-flex min-h-12 items-center font-semibold underline underline-offset-4">
+              Come funziona per i professionisti
+            </Link>
+          </div>
         </aside>
 
         {related.length > 0 && (

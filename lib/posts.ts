@@ -72,7 +72,10 @@ export function excerpt(md: string): string {
 export function metaDescription(md: string, max = 155): string {
   // Every newsletter opens with the same greeting ("Benvenuti su Pluggers News…"): left in,
   // it became the description of every post.
-  const text = excerpt(md).replace(/\s+/g, " ").replace(/^[^.!?]*Pluggers News[^.!?]*[.!?]\s*/i, "");
+  const text = excerpt(md)
+    .replace(/\s+/g, " ")
+    .replace(/^\W*(?:buongiorno|ciao|salve)\b[^.!?]*[.!?]\s*/i, "")
+    .replace(/^[^.!?]*Pluggers News[^.!?]*[.!?]\s*/i, "");
   if (text.length <= max) return text;
   const cut = text.slice(0, max - 1);
   // A whole first sentence reads better than one cut mid-way, when it fills most of the space.
