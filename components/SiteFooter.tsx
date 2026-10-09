@@ -41,6 +41,8 @@ export function SiteFooter() {
           <address className="not-italic leading-6 text-muted">
             {ORG_ADDRESS_LINE}
             <br />
+            P.IVA e C.F. {ORG.vatNumber}
+            <br />
             <a href={`mailto:${ORG.email}`} className="inline-flex min-h-12 items-center underline-offset-4 hover:text-ink hover:underline">
               {ORG.email}
             </a>

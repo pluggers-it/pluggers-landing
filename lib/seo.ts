@@ -64,6 +64,8 @@ export const organizationSchema = {
   "@id": ORG_ID,
   name: ORG.name,
   legalName: ORG.legalName,
+  vatID: `IT${ORG.vatNumber}`,
+  taxID: ORG.vatNumber,
   url: SITE_URL,
   logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
   description: ORG.summary,

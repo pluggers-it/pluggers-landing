@@ -176,8 +176,7 @@ const SECTIONS: LegalSection[] = [
       <>
         <p>
           Il sito e l&apos;app Pluggers sono gestiti da Pluggers S.r.l., con sede legale in
-          Torino, Corso Valdocco 2. La Partita IVA sarà pubblicata all&apos;iscrizione nel
-          Registro delle Imprese.
+          Torino, Corso Valdocco 2, Partita IVA e codice fiscale 13523080011.
         </p>
         <p>
           Sul sito puoi iscriverti gratuitamente alla lista d&apos;attesa e alla newsletter. Se ti
@@ -198,7 +197,7 @@ export default function TerminiPage() {
   return (
     <LegalPage
       title="Termini e condizioni"
-      updated="6 ottobre 2026"
+      updated="9 ottobre 2026"
       version="2026-10-06"
       intro={
         <p>
