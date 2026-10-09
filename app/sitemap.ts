@@ -36,6 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     page("/torino", TRADES_UPDATED, 0.9),
     ...TRADES.map((t) => page(`/torino/${t.slug}`, TRADES_UPDATED, 0.8)),
     page("/professionisti", PROS_UPDATED, 0.8),
+    page("/clienti", PROS_UPDATED, 0.8),
     page("/chi-siamo", ABOUT_UPDATED, 0.5),
     page("/blog", posts[0]?.createdAt ?? HOME_UPDATED, 0.6),
     ...posts.map((p) => page(postPath(p), p.createdAt, 0.5)),

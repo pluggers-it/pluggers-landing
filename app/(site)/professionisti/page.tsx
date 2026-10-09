@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Inbox, Radar, Receipt } from "lucide-react";
 import { JsonLd } from "@/components/JsonLd";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { FaqList } from "@/components/landing/FaqList";
@@ -11,6 +12,7 @@ import { breadcrumbSchema, faqSchema, graph, pageMetadata, pageSchema } from "@/
 import { TRADES } from "@/lib/trades";
 
 const PATH = "/professionisti";
+const ICONS = [Inbox, Radar, Receipt];
 
 export const metadata: Metadata = pageMetadata({
   title: "App per artigiani e professionisti a Torino",
@@ -66,12 +68,18 @@ export default function ProfessionistiPage() {
       <section className={`${CONTAINER} pb-12 lg:pb-16`} aria-labelledby="benefits-title">
         <h2 id="benefits-title" className={H2}>Cosa cambia nel tuo lavoro</h2>
         <ul className="mt-8 grid gap-8 md:grid-cols-3">
-          {PROS.benefits.map((b) => (
+          {PROS.benefits.map((b, i) => {
+            const Icon = ICONS[i];
+            return (
             <li key={b.title}>
-              <h3 className="text-[17px] font-bold leading-snug">{b.title}</h3>
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent-deep dark:text-accent-text">
+                <Icon className="h-5 w-5" strokeWidth={1.8} aria-hidden />
+              </span>
+              <h3 className="mt-4 text-[17px] font-bold leading-snug">{b.title}</h3>
               <p className="mt-2 text-[15px] leading-[1.6] text-muted">{b.text}</p>
             </li>
-          ))}
+            );
+          })}
         </ul>
       </section>
 
