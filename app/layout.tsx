@@ -1,3 +1,4 @@
+import { Analytics } from "@/components/Analytics";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
@@ -43,6 +44,7 @@ export default function RootLayout({
         <ConsentProvider>
           <ThemeProvider>{children}</ThemeProvider>
           <ConsentGate />
+          <Analytics />
           <BackToTop />
         </ConsentProvider>
       </body>
