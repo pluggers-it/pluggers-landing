@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Menu } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { HomeLink } from "./HomeLink";
 import { WEB_APP_URL } from "./links";
 import { BTN_OUTLINE, CONTAINER } from "./styles";
 
@@ -22,10 +23,9 @@ export function LandingHeader() {
       <header
         className={`${CONTAINER} flex h-16 items-center justify-between sm:h-20`}
       >
-        <Link
-          href="/"
+        <HomeLink
           className="flex items-center gap-2.5 rounded-full py-2 pr-2"
-          aria-label="Pluggers, pagina iniziale"
+          label="Pluggers, pagina iniziale"
         >
           <Image
             src={logo}
@@ -38,7 +38,7 @@ export function LandingHeader() {
           <span className="hidden text-lg font-bold tracking-[-0.02em] sm:inline">
             Pluggers
           </span>
-        </Link>
+        </HomeLink>
 
         <nav
           className="flex items-center gap-1 sm:gap-2"
