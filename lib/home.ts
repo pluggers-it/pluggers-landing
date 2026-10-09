@@ -4,6 +4,8 @@
  * Every product claim is checked against the app and backend code.
  */
 
+import { APP_STORE_URL, PLAY_STORE_URL } from "@/components/landing/links";
+
 export const HOME_UPDATED = "2026-10-07";
 
 export const HOME = {
@@ -130,6 +132,8 @@ export const FAQ = [
   },
   {
     q: "Serve scaricare un'app?",
-    a: "No: Pluggers si usa dal browser, su app.plggrs.it. Le app per iPhone e Android sono in arrivo.",
+    a: APP_STORE_URL || PLAY_STORE_URL
+      ? "Sì: Pluggers è un'app per iPhone e Android, la scarichi da App Store o Google Play. Da computer la usi anche dal browser, su app.plggrs.it."
+      : "Sì: Pluggers è un'app per iPhone e Android, in arrivo su App Store e Google Play. La stessa app si usa anche dal browser, su app.plggrs.it.",
   },
 ] as const;

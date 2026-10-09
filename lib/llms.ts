@@ -12,7 +12,7 @@ const FACTS =
   `${ORG.name} è gestita da ${ORG.legalName}, sede legale in ${ORG_ADDRESS_LINE}, P.IVA ${ORG.vatNumber}. ` +
   "Per chi cerca un professionista è gratis: se il professionista chiede un Costo Chiamata lo indica " +
   "nell'app prima della visita, e il compenso si paga direttamente a lui, non nell'app. " +
-  `Si usa dal browser su ${WEB_APP_URL}; le app per iPhone e Android sono in arrivo. ` +
+  `È un'app per iPhone e Android, in arrivo su App Store e Google Play, e si usa anche dal browser su ${WEB_APP_URL}. ` +
   `Contatti: ${ORG.email}.`;
 
 const faqMd = (items: readonly { q: string; a: string }[]) =>
@@ -39,7 +39,7 @@ ${FACTS}
 - [Chi siamo](${SITE_URL}/chi-siamo): la società, la sede e i contatti
 - [Per i clienti](${SITE_URL}/clienti): come si trova un idraulico, un elettricista o un altro artigiano a Torino con Pluggers
 - [Per i professionisti](${SITE_URL}/professionisti): l'app per artigiani di Torino, come si ricevono le richieste dei clienti vicini e chi decide il prezzo
-- [Apri Pluggers](${WEB_APP_URL}): la web app per descrivere il problema
+- [Apri Pluggers](${WEB_APP_URL}): la versione web dell'app, per descrivere il problema dal browser
 
 ## Mestieri a Torino
 
