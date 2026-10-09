@@ -54,8 +54,8 @@ interface Props {
 }
 
 export function WaitlistForm({
-  title = "Non sei ancora nella tua zona? Lasciaci i dati.",
-  description = "Ti scriviamo quando Pluggers arriva da te.",
+  title = "Lasciaci i tuoi contatti",
+  description = "Ti scriviamo quando Pluggers arriva nella tua città.",
   successMessage = "Dati ricevuti. Ti scriviamo noi.",
   submissionSource = "waitlist",
 }: Props) {
