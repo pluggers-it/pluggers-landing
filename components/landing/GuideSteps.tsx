@@ -33,7 +33,7 @@ export function GuidePhone({ src, alt, priority = false, className = "" }: { src
 export function GuideSteps({ steps, label }: { steps: GuideStep[]; label: string }) {
   return (
     <section aria-label={label} className="pb-8">
-      <nav aria-label={`Indice: ${label}`} className="sticky top-0 z-30 border-y border-hair bg-page/90 backdrop-blur">
+      <nav aria-label={`Indice: ${label}`} className="sticky top-16 z-30 border-y sm:top-20 lg:top-0 border-hair bg-page/90 backdrop-blur">
         <ol className={`${CONTAINER} flex gap-2 overflow-x-auto py-3 [scrollbar-width:none]`}>
           {steps.map((s, i) => (
             <li key={s.id} className="shrink-0">
