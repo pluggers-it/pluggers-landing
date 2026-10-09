@@ -104,7 +104,7 @@ export const websiteSchema = {
 
 const storeUrls = [APP_STORE_URL, PLAY_STORE_URL].filter(Boolean);
 
-// Until the store apps are out, only the web app exists: declaring iOS and Android would be false.
+// Until the store links exist, declare only the platform people can open today: the web version.
 export const appSchema = {
   "@type": storeUrls.length > 0 ? "MobileApplication" : "WebApplication",
   "@id": `${SITE_URL}/#app`,
