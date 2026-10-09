@@ -71,10 +71,14 @@ export default function ChiSiamoPage() {
           <ul className="mt-6 grid gap-x-8 gap-y-8 sm:grid-cols-2">
             {TEAM.map((m) => <Member key={m.name} m={m} />)}
           </ul>
-          <h3 className="mt-10 text-[15px] font-semibold uppercase tracking-[0.06em] text-muted">Advisor</h3>
-          <ul className="mt-4 grid gap-x-8 gap-y-8 sm:grid-cols-2">
-            {ADVISORS.map((m) => <Member key={m.name} m={m} />)}
-          </ul>
+          {ADVISORS.length > 0 && (
+            <>
+              <h3 className="mt-10 text-[15px] font-semibold uppercase tracking-[0.06em] text-muted">Advisor</h3>
+              <ul className="mt-4 grid gap-x-8 gap-y-8 sm:grid-cols-2">
+                {ADVISORS.map((m) => <Member key={m.name} m={m} />)}
+              </ul>
+            </>
+          )}
         </section>
 
         {ABOUT.sections.map((s) => (
