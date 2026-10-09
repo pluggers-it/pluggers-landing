@@ -9,7 +9,7 @@ import { APP_STORE_URL, PLAY_STORE_URL } from "@/components/landing/links";
 export const HOME_UPDATED = "2026-10-07";
 
 export const HOME = {
-  title: "Pluggers — Il professionista giusto, al momento giusto.",
+  title: "Pluggers | Il professionista giusto, al momento giusto.",
   description:
     "Descrivi il problema di casa con parole e foto: Pluggers capisce quale professionista serve " +
     "e ti mette in contatto con chi lavora vicino a te. Oggi a Torino.",

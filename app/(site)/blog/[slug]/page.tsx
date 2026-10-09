@@ -39,7 +39,7 @@ export async function generateMetadata(
   const post = id ? await getPostById(id) : null;
   if (!post) return { title: "Articolo non trovato", robots: { index: false } };
   // Long headlines go out as they are rather than with the brand suffix: Google cuts them anyway.
-  const withBrand = `${post.title} — Pluggers`;
+  const withBrand = `${post.title} | Pluggers`;
   return pageMetadata({
     title: post.title,
     absolute: withBrand.length > 60,

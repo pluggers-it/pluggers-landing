@@ -22,7 +22,7 @@ const home = pageMetadata({ title: HOME.title, description: HOME.description, pa
 // Defaults for every page; each page sets its own title, description, canonical and preview.
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: HOME.title, template: `%s — ${ORG.name}` },
+  title: { default: HOME.title, template: `%s | ${ORG.name}` },
   description: HOME.description,
   applicationName: ORG.name,
   authors: [{ name: ORG.legalName, url: SITE_URL }],
