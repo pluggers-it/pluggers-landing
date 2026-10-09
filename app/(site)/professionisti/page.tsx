@@ -117,6 +117,10 @@ export default function ProfessionistiPage() {
         </div>
       </section>
 
+      <section id="lista-attesa" className={`${CONTAINER} scroll-mt-6 pb-12 lg:pb-16`}>
+        <WaitlistForm title={PROS.waitlistTitle} description={PROS.waitlistText} />
+      </section>
+
       <section className={`${CONTAINER} pb-12 lg:pb-16`} aria-labelledby="benefits-title">
         <h2 id="benefits-title" className={H2}>Cosa cambia nel tuo lavoro</h2>
         <ul className="mt-8 grid gap-8 md:grid-cols-3">
@@ -172,9 +176,6 @@ export default function ProfessionistiPage() {
         <FaqList items={FAQ} />
       </section>
 
-      <section className={`${CONTAINER} pb-16`}>
-        <WaitlistForm title={PROS.waitlistTitle} description={PROS.waitlistText} />
-      </section>
     </SitePage>
   );
 }
