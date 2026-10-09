@@ -74,10 +74,8 @@ export const TEAM: TeamMember[] = [
     bio: "Data engineer su sistemi big data e cloud in Reply S.p.A. e ricercatore sui modelli di intelligenza artificiale generativa all'INRIM; tesi sperimentale all'ETH di Zurigo." },
 ];
 
-export const ADVISORS: TeamMember[] = [
-  { name: "Alessandro Antonini", role: "Advisor",
-    bio: "Più di tredici anni tra consulenza di direzione e organizzazioni pubbliche e private complesse, con ruoli di guida anche in istituzioni internazionali. Insegna all'università." },
-];
+// Advisors appear only after they have agreed to be named on the public site.
+export const ADVISORS: TeamMember[] = [];
 
 export const COMPANY_FACTS: { label: string; value: string; href?: string }[] = [
   { label: "Ragione sociale", value: ORG.legalName },
