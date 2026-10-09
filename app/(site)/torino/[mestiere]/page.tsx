@@ -153,7 +153,7 @@ export default async function TradePage({ params }: Props) {
             Sei un {trade.label.toLowerCase()} a Torino?
           </h2>
           <p className="mt-2 max-w-[60ch] text-[16px] leading-[1.55] text-muted">
-            Ricevi le richieste dei clienti vicini già descritte, nel raggio che scegli tu, e decidi tu Costo Chiamata e preventivo.
+            I clienti vicini ti trovano su Pluggers e ti scrivono con le foto del guasto. Costo Chiamata, stima e preventivo li scrivi tu.
           </p>
           <Link href="/professionisti" className="mt-4 inline-flex min-h-12 items-center font-semibold text-accent-text underline underline-offset-4">
             Come funziona per i professionisti

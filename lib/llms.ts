@@ -3,7 +3,7 @@
  * built from the same copy the pages render.
  */
 import { WEB_APP_URL } from "@/components/landing/links";
-import { ABOUT, COMPANY_FACTS } from "@/lib/about";
+import { ABOUT, COMPANY_FACTS, NEXT, PRINCIPLES, STORY, WHAT, WHERE } from "@/lib/about";
 import { FAQ, HERO, HOW, PROS, TRADES_SECTION, TRUST } from "@/lib/home";
 import { ORG, ORG_ADDRESS_LINE, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 import { TORINO, TRADE_GROUPS, TRADES, type Trade } from "@/lib/trades";
@@ -164,7 +164,25 @@ URL: ${SITE_URL}/chi-siamo
 
 ${ABOUT.intro}
 
-${ABOUT.sections.map((s) => `## ${s.title}\n\n${s.text}`).join("\n\n")}
+## Come è nato Pluggers
+
+${STORY}
+
+## Cosa fa Pluggers
+
+${WHAT}
+
+## Cosa facciamo e cosa no
+
+${PRINCIPLES.map((p) => `- ${p.title}: ${p.text}`).join("\n")}
+
+## Cosa arriva dopo
+
+${NEXT}
+
+## Dove siamo
+
+${WHERE}
 
 ## Dati della società
 

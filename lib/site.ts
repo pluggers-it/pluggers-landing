@@ -20,8 +20,8 @@ export const ORG = {
   },
   /** The one-sentence description used everywhere the brand is introduced. */
   summary:
-    "Pluggers è un'app che parte dal problema che hai in casa, capisce quale professionista serve " +
-    "e ti mette in contatto con chi lavora nella tua zona. Oggi è attiva a Torino.",
+    "Pluggers è una piattaforma per gli interventi in casa, attiva a Torino. Descrivi il guasto: " +
+    "Pluggers capisce che mestiere serve e ti mostra chi lavora vicino a te.",
 } as const;
 
 export const ORG_ADDRESS_LINE = `${ORG.address.street}, ${ORG.address.postalCode} ${ORG.address.city}`;

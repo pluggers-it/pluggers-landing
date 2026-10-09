@@ -78,7 +78,7 @@ export const PROS = {
       text: "Indichi il costo della visita prima dell'appuntamento e mandi la stima in chat. Agenda e check-in con QR sono già dentro.",
     },
   ],
-  cta: "Entra come professionista",
+  cta: "Iscriviti come professionista",
   waitlistTitle: "Non sei a Torino? Lasciaci la tua città.",
   waitlistText: "Le prossime zone le scegliamo da lì. Ti scriviamo quando arriviamo da te.",
 };
