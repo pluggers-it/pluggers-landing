@@ -41,7 +41,6 @@ const STEPS: GuideStep[] = [
     title: "Decidi fin dove ti sposti",
     text: "Inserisci l'indirizzo da cui parti e il raggio, da 1 a 100 km. Ti trovano solo i clienti entro quella distanza.",
     points: ["Il raggio si imposta con il cursore", "Le città in cui lavori, anche più di una", "La descrizione dell'attività e la partita IVA"],
-    tip: "Il documento d'identità serve a verificare che sei tu. I clienti vedono solo il badge della verifica, mai il documento.",
   },
   {
     id: "disponibilita", short: "Orari", src: `${G}/03.webp`,

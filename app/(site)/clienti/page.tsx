@@ -42,7 +42,7 @@ const STEPS: GuideStep[] = [
   },
   {
     id: "diagnosi", short: "Il riepilogo", src: `${G}/03.webp`,
-    alt: "Schermata «Cosa abbiamo capito»: chi serve, Idraulico, urgenza 2 su 5, le cause più probabili e il bottone «Cerca un professionista».",
+    alt: "Schermata «Cosa abbiamo capito»: chi serve, Idraulico, urgenza 2 su 5, la spiegazione dell'assistente e le cause più probabili.",
     title: "Controlla cosa ha capito Pluggers",
     text: "Prima di cercare vedi il riepilogo: quale professionista serve, quanto è urgente e le cause più probabili.",
     points: ["Il mestiere, per esempio idraulico", "L'urgenza, da 1 a 5", "Se il riepilogo è sbagliato, tocca «Non è questo il problema» e correggi"],
