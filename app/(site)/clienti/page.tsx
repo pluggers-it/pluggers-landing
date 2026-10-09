@@ -64,18 +64,25 @@ const STEPS: GuideStep[] = [
     points: ["I giorni cerchiati in viola sono quelli disponibili", "Se hai scelto più professionisti, la stessa richiesta arriva anche a loro", "Tocca «Richiedi stima» per mandarla"],
   },
   {
-    id: "stima", short: "Stima in chat", src: `${G}/06.webp`,
-    alt: "Chat con il professionista: la foto del rubinetto, un messaggio e una stima con la descrizione del lavoro, i materiali e i bottoni «Accetta» e «Rifiuta».",
+    id: "stima", short: "La stima", src: `${G}/06.webp`,
+    alt: "Chat con il professionista: la foto del rubinetto, un messaggio e la scheda «Stima» con il lavoro previsto, i materiali e i bottoni «Accetta» e «Rifiuta».",
     title: "Ricevi la stima in chat",
-    text: "Il professionista guarda la tua descrizione e le foto e ti manda la stima in chat. Se chiede un Costo Chiamata, lo vedi prima della visita.",
-    points: ["Leggi cosa comprende: lavoro e materiali", "Tocca «Accetta» o «Rifiuta»", "Scrivigli per qualsiasi dubbio, anche con una foto"],
-    tip: "Il compenso lo concordi direttamente con il professionista: Pluggers non incassa pagamenti nell'app.",
+    text: "Il professionista guarda la descrizione e le foto e ti risponde in chat con una stima di quanto può costare il lavoro. Se chiede un Costo Chiamata per venire a vedere, lo trovi scritto lì.",
+    points: ["La stima è indicativa: il prezzo vero arriva dopo la visita", "Tocca «Accetta» e l'appuntamento è confermato, oppure «Rifiuta»", "Scrivigli per qualsiasi dubbio, anche con una foto"],
   },
   {
-    id: "intervento", short: "Intervento", src: `${G}/07.webp`,
+    id: "preventivo", short: "Il preventivo", src: `${G}/07.webp`,
+    alt: "Schermata «Preventivo»: tre voci con il loro prezzo, imponibile, IVA 22% e totale, e i bottoni «Apri» e «Scarica» per il PDF.",
+    title: "Dopo la visita, il preventivo",
+    text: "Visto il guasto, il professionista ti manda il preventivo in chat: ogni voce con il suo prezzo, poi imponibile, IVA e totale.",
+    points: ["Toccalo per vedere il dettaglio e aprire o scaricare il PDF", "Tocca «Accetta» o «Rifiuta» sulla scheda in chat", "Se durante il lavoro il prezzo cambia, ricevi un preventivo aggiornato con il motivo e le foto: decidi tu se accettarlo"],
+    tip: "Se il preventivo non ti convince, al professionista devi solo il Costo Chiamata, se l'avevi accettato.",
+  },
+  {
+    id: "intervento", short: "Intervento", src: `${G}/08.webp`,
     alt: "Schermata «Dettaglio intervento»: il professionista, quando e dove, il problema, la stima, lo stato e il bottone «Scansiona QR».",
     title: "Il giorno dell'intervento, inizio e fine con un QR",
-    text: "Nel dettaglio dell'intervento trovi quando, dove, il problema e la stima. Quando il professionista arriva, registrate insieme l'inizio.",
+    text: "Nel dettaglio dell'intervento trovi quando, dove, il problema e quanto avete concordato. Quando il professionista arriva, registrate insieme l'inizio.",
     points: ["Tocca «Scansiona QR» e inquadra il codice che ti mostra il professionista", "Fate lo stesso a lavoro finito", "Poi puoi lasciare una recensione"],
     tip: "Lo stato si aggiorna da solo: in attesa, confermato, in corso, completato.",
   },
@@ -94,7 +101,7 @@ export default function ClientiPage() {
             Come si usa Pluggers, passo per passo
           </h1>
           <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-muted sm:text-lg">
-            Dal guasto in casa all&apos;intervento finito in sette passi. Non serve sapere quale professionista ti serve: lo capisce l&apos;assistente dalla tua descrizione. Per chi cerca è gratis.
+            Dal guasto in casa all&apos;intervento finito in otto passi. Non serve sapere quale professionista ti serve: lo capisce l&apos;assistente dalla tua descrizione. Per chi cerca è gratis.
           </p>
           <a href={WEB_APP_URL} className={`${BTN_PRIMARY} mt-8`}>
             Racconta il tuo problema
@@ -107,6 +114,16 @@ export default function ClientiPage() {
       </section>
 
       <GuideSteps steps={STEPS} label="Guida per i clienti" />
+
+      <section className={`${CONTAINER} pb-12 lg:pb-16`} aria-labelledby="pay-title">
+        <div className="rounded-card bg-surface p-6 shadow-card sm:p-8">
+          <p className="text-[15px] font-bold uppercase tracking-[0.08em] text-accent-text">In arrivo</p>
+          <h2 id="pay-title" className="mt-2 text-[22px] font-extrabold leading-tight tracking-[-0.02em]">Il pagamento nell&apos;app</h2>
+          <p className="mt-2 max-w-[62ch] text-[16px] leading-[1.55] text-muted">
+            Presto potrai pagare il Costo Chiamata e il preventivo accettato direttamente da Pluggers. Fino ad allora li paghi al professionista, come vi accordate.
+          </p>
+        </div>
+      </section>
 
       <TrustRows />
 
