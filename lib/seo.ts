@@ -9,7 +9,7 @@ const OG_IMAGE = {
   url: "/opengraph-image",
   width: 1200,
   height: 630,
-  alt: "Pluggers — Il professionista giusto, al momento giusto.",
+  alt: "Pluggers | Il professionista giusto, al momento giusto.",
 };
 
 type PageMeta = {
@@ -24,7 +24,7 @@ type PageMeta = {
 };
 
 export function pageMetadata({ title, description, path, absolute, publishedTime }: PageMeta): Metadata {
-  const fullTitle = absolute ? title : `${title} — ${ORG.name}`;
+  const fullTitle = absolute ? title : `${title} | ${ORG.name}`;
   const shared = {
     locale: "it_IT",
     siteName: ORG.name,

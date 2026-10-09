@@ -11,7 +11,7 @@ import { SiteFooter } from "@/components/SiteFooter";
  * Not linked in SiteHeader, footer, or any navigation element.
  */
 export const metadata: Metadata = {
-  title: "Newsletter — Pluggers",
+  title: "Newsletter",
   description: "Iscriviti alla newsletter di Pluggers per rimanere aggiornato.",
   robots: { index: false, follow: false },
 };
