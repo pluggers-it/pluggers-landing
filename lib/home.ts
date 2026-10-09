@@ -16,14 +16,24 @@ export const HOME = {
 };
 
 export const HERO = {
+  eyebrow: "La piattaforma per gli interventi in casa",
   title: "Il professionista giusto, al momento giusto.",
-  lede: "Racconta il problema. Pluggers capisce di che si tratta e ti collega a chi può risolverlo, vicino a te.",
+  lede: "Racconti il guasto con una foto: Pluggers capisce che mestiere serve e ti mette in contatto con i professionisti della zona. Stima, preventivo e appuntamento si gestiscono nell'app.",
+};
+
+export const COMING = {
+  title: "In arrivo su Pluggers",
+  items: [
+    { title: "App per iPhone e Android", text: "Pluggers arriva su App Store e Google Play. Intanto si usa dal browser, su app.plggrs.it." },
+    { title: "Pagamenti nell'app", text: "Costo Chiamata e preventivo si potranno pagare direttamente dall'app." },
+    { title: "Imprese e amministratori di condominio", text: "Anche chi gestisce condomini e più immobili potrà chiedere interventi su Pluggers." },
+  ],
 };
 
 export const HOW = {
   title: "Come funziona",
   lede:
-    "Pluggers è un'app per chi ha un problema in casa a Torino. Descrivi il guasto con parole e foto: " +
+    "Pluggers è una piattaforma per chi ha un problema in casa a Torino. Descrivi il guasto con parole e foto: " +
     "un assistente di intelligenza artificiale capisce quale professionista serve e quanto è urgente, " +
     "e ti mostra chi lavora nella tua zona. Per te usarla è gratis: se il professionista chiede un " +
     "Costo Chiamata te lo indica prima della visita, e lo paghi a lui.",
