@@ -14,6 +14,7 @@ const PRIVACY_UPDATED = "2026-10-06";
 const TERMS_UPDATED = "2026-10-06";
 const ACCOUNT_DELETION_UPDATED = "2026-10-07";
 const SUPPORT_UPDATED = "2026-10-07";
+const PROS_UPDATED = "2026-10-09";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Falls back to no posts if the database is unreachable (e.g. a build without env vars).
@@ -34,6 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     page("", HOME_UPDATED, 1),
     page("/torino", TRADES_UPDATED, 0.9),
     ...TRADES.map((t) => page(`/torino/${t.slug}`, TRADES_UPDATED, 0.8)),
+    page("/professionisti", PROS_UPDATED, 0.8),
     page("/chi-siamo", ABOUT_UPDATED, 0.5),
     page("/blog", posts[0]?.createdAt ?? HOME_UPDATED, 0.6),
     ...posts.map((p) => page(postPath(p), p.createdAt, 0.5)),

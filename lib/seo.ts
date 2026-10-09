@@ -64,6 +64,8 @@ export const organizationSchema = {
   "@id": ORG_ID,
   name: ORG.name,
   legalName: ORG.legalName,
+  // plggrs.it is the domain; people search the name, sometimes spelled like the domain
+  alternateName: ["Plggrs", "Pluggers app"],
   vatID: `IT${ORG.vatNumber}`,
   taxID: ORG.vatNumber,
   url: SITE_URL,

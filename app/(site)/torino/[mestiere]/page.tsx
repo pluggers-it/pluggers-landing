@@ -147,6 +147,20 @@ export default async function TradePage({ params }: Props) {
         </div>
       </section>
 
+      <section className={`${CONTAINER} pb-4`} aria-labelledby="pro-title">
+        <div className="rounded-card bg-surface p-6 shadow-card sm:p-8">
+          <h2 id="pro-title" className="text-[22px] font-extrabold leading-tight tracking-[-0.02em]">
+            Sei un {trade.label.toLowerCase()} a Torino?
+          </h2>
+          <p className="mt-2 max-w-[60ch] text-[16px] leading-[1.55] text-muted">
+            Ricevi le richieste dei clienti vicini già descritte, nel raggio che scegli tu, e decidi tu Costo Chiamata e preventivo.
+          </p>
+          <Link href="/professionisti" className="mt-4 inline-flex min-h-12 items-center font-semibold text-accent-text underline underline-offset-4">
+            Come funziona per i professionisti
+          </Link>
+        </div>
+      </section>
+
       <section className={`${CONTAINER} py-12 lg:py-16`} aria-labelledby="others-title">
         <h2 id="others-title" className={H2}>
           Altri mestieri a Torino
