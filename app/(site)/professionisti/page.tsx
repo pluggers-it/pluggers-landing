@@ -4,6 +4,7 @@ import { Inbox, Radar, Receipt } from "lucide-react";
 import { JsonLd } from "@/components/JsonLd";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { FaqList } from "@/components/landing/FaqList";
+import { GuidePhone, GuideSteps, type GuideStep } from "@/components/landing/GuideSteps";
 import { SitePage } from "@/components/landing/SitePage";
 import { WEB_APP_URL } from "@/components/landing/links";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
@@ -21,13 +22,57 @@ export const metadata: Metadata = pageMetadata({
   path: PATH,
 });
 
-// Only what the app does today (see PROS in lib/home.ts and the about page): no payments in the app.
-const STEPS = [
-  { title: "Crei il profilo", text: "Scegli il mestiere, l'indirizzo da cui parti, il raggio in cui lavori, da 1 a 100 km, e il tuo Costo Chiamata." },
-  { title: "Ricevi le richieste dei clienti vicini", text: "Arrivano già descritte, con le foto quando il cliente le carica, e classificate per mestiere e urgenza." },
-  { title: "Mandi la stima in chat", text: "Il cliente vede il Costo Chiamata e la stima prima della visita. Il compenso lo concordate direttamente voi." },
-  { title: "Fissi l'appuntamento", text: "L'intervento finisce nell'agenda dell'app, insieme agli altri." },
-  { title: "Registri inizio e fine con il QR", text: "Dopo l'intervento il cliente può lasciarti una recensione, che compare nel tuo profilo." },
+const G = "/guida/professionisti";
+
+// Every line describes what the real screen shows (screens rendered from the app, sample data).
+const STEPS: GuideStep[] = [
+  {
+    id: "mestieri", short: "Mestieri", src: `${G}/01.webp`,
+    alt: "Profilo professionista, passo 1 di 5: «Di cosa ti occupi?» con l'elenco dei mestieri e la descrizione di ciascuno.",
+    title: "Scegli i mestieri di cui ti occupi",
+    text: "Nel profilo professionista indichi tutto quello che fai: è così che i clienti ti trovano.",
+    points: ["Puoi scegliere più di un mestiere", "Per ogni mestiere i lavori di base arrivano già spuntati", "Le specializzazioni le aggiungi a parte"],
+    tip: "Lascia spuntati solo i lavori che fai davvero: le richieste che ricevi saranno più giuste.",
+  },
+  {
+    id: "raggio", short: "Raggio", src: `${G}/02.webp`,
+    alt: "Profilo professionista: «Fin dove ti sposti» con il cursore del raggio d'azione a 20 km e la sezione «Dove lavori».",
+    title: "Decidi fin dove ti sposti",
+    text: "Indichi il tuo indirizzo operativo e il raggio d'azione: i clienti ti trovano solo entro quella distanza.",
+    points: ["Raggio d'azione da 1 a 100 km, con il cursore", "Le città in cui accetti interventi, anche più di una", "Descrizione dell'attività, partita IVA e documento d'identità"],
+    tip: "I clienti vedono solo il badge della verifica, mai il tuo documento.",
+  },
+  {
+    id: "disponibilita", short: "Disponibilità", src: `${G}/03.webp`,
+    alt: "Profilo professionista, passo 5 di 5: «La tua disponibilità» con l'orario dalle 9 alle 18 e i giorni lavorativi selezionati.",
+    title: "Indica quando lavori",
+    text: "Imposti la fascia oraria e i giorni in cui accetti interventi, poi salvi il profilo.",
+    points: ["L'orario: dalle, alle", "I giorni lavorativi, uno per uno", "Tocca «Salva» e il profilo è pronto"],
+  },
+  {
+    id: "richieste", short: "Richieste", src: `${G}/04.webp`,
+    alt: "Sezione «Richieste»: tre richieste da decidere con giorno e orario, mestiere, il problema, la stima indicativa, la distanza e «Rifiuta».",
+    title: "Ricevi le richieste dei clienti vicini",
+    text: "Nella sezione Richieste trovi quelle dei clienti dentro il tuo raggio, già descritte e classificate.",
+    points: ["Per ognuna: giorno e orario, mestiere e il problema in breve", "La stima indicativa e la distanza da te", "Apri quelle che ti interessano, rifiuta le altre"],
+    tip: "La richiesta arriva con la descrizione e le foto del cliente: spesso capisci il lavoro prima di uscire.",
+  },
+  {
+    id: "preventivo", short: "Preventivo", src: `${G}/05.webp`,
+    alt: "Schermata «Nuovo preventivo»: la stima automatica con la fascia tipica, le voci del preventivo e il bottone «Invia preventivo».",
+    title: "Prepara il preventivo in pochi tocchi",
+    text: "Pluggers ti suggerisce una stima automatica come riferimento; tu aggiungi le voci e mandi il preventivo al cliente.",
+    points: ["Una riga per ogni lavorazione o materiale", "Totale e IVA li calcola l'app", "Il cliente vede il dettaglio e può scaricare il PDF"],
+    tip: "La stima automatica è solo un riferimento: il prezzo lo decidi sempre tu.",
+  },
+  {
+    id: "agenda", short: "Agenda", src: `${G}/06.webp`,
+    alt: "Agenda del professionista: il calendario di ottobre, i prossimi interventi con lo stato e il bottone «Appuntamento cliente esterno».",
+    title: "Tieni tutto in agenda",
+    text: "Gli interventi confermati finiscono nell'agenda dell'app, insieme agli appuntamenti con i clienti che hai già.",
+    points: ["Il calendario del mese e i prossimi interventi", "Lo stato di ogni appuntamento: confermato, da inviare, invito inviato", "All'arrivo mostri al cliente il QR per registrare inizio e fine"],
+    tip: "Aggiungi anche i clienti che non usano Pluggers con «Appuntamento cliente esterno»: la settimana sta tutta in un posto.",
+  },
 ];
 
 const FAQ = [
@@ -55,14 +100,21 @@ export default function ProfessionistiPage() {
     <SitePage trail={trail}>
       <JsonLd data={graph(pageSchema({ path: PATH, name: "App per artigiani e professionisti a Torino" }), faqSchema(FAQ), breadcrumbSchema(trail))} />
 
-      <section className={`${CONTAINER} pb-12 pt-4 lg:pb-16 lg:pt-8`}>
-        <h1 className="max-w-[20ch] text-balance text-[clamp(2.4rem,4.4vw,3.6rem)] font-extrabold leading-[1.04] tracking-[-0.035em]">
-          L&apos;app per artigiani e professionisti della casa a Torino
-        </h1>
-        <p className="mt-5 max-w-[62ch] text-[17px] leading-[1.6] text-muted sm:text-lg">{PROS.lede}</p>
-        <a href={WEB_APP_URL} className={`${BTN_PRIMARY} mt-8`}>
-          {PROS.cta}
-        </a>
+      <section className={`${CONTAINER} grid items-center gap-12 pb-12 pt-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16 lg:pt-8`}>
+        <div>
+          <p className="text-[15px] font-bold uppercase tracking-[0.08em] text-accent-text">Guida per i professionisti</p>
+          <h1 className="mt-3 max-w-[20ch] text-balance text-[clamp(2.4rem,4.4vw,3.6rem)] font-extrabold leading-[1.04] tracking-[-0.035em]">
+            L&apos;app per artigiani e professionisti della casa a Torino
+          </h1>
+          <p className="mt-5 max-w-[58ch] text-[17px] leading-[1.6] text-muted sm:text-lg">{PROS.lede}</p>
+          <a href={WEB_APP_URL} className={`${BTN_PRIMARY} mt-8`}>
+            {PROS.cta}
+          </a>
+        </div>
+        <div className="relative mx-auto flex h-[560px] w-[340px] justify-center sm:w-[420px]">
+          <GuidePhone src={`${G}/04.webp`} alt="" priority className="absolute left-0 top-6 rotate-[-4deg] scale-[0.86] opacity-95" />
+          <GuidePhone src={`${G}/05.webp`} alt="Il preventivo preparato nell'app" priority className="absolute right-0 top-0 rotate-[3deg]" />
+        </div>
       </section>
 
       <section className={`${CONTAINER} pb-12 lg:pb-16`} aria-labelledby="benefits-title">
@@ -83,24 +135,7 @@ export default function ProfessionistiPage() {
         </ul>
       </section>
 
-      <section className="border-y border-hair bg-surface py-16 lg:py-20" aria-labelledby="steps-title">
-        <div className={CONTAINER}>
-          <h2 id="steps-title" className={H2}>Come funziona</h2>
-          <ol className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {STEPS.map((s, i) => (
-              <li key={s.title} className="flex gap-4">
-                <span aria-hidden className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-accent-soft font-extrabold text-accent-text">
-                  {i + 1}
-                </span>
-                <div>
-                  <h3 className="font-bold leading-snug">{s.title}</h3>
-                  <p className="mt-1 text-[15px] leading-[1.6] text-muted">{s.text}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
+      <GuideSteps steps={STEPS} label="Guida per i professionisti" />
 
       <section className={`${CONTAINER} py-12 lg:py-16`} aria-labelledby="trades-title">
         <h2 id="trades-title" className={H2}>I clienti di Torino ti cercano per questi mestieri</h2>
