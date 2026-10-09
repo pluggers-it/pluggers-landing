@@ -40,8 +40,8 @@ export function Hero() {
 
         <div className="relative">
           <HeroDemo />
-          {/* Beside the demo label on phones; from sm up, in the free corner left of the professional card, no taller than the card so it clears the triage chips. */}
-          <HeroIcon className="absolute -top-3 right-0 z-0 h-12 w-12 sm:bottom-0 sm:left-0 sm:right-auto sm:top-auto sm:h-24 sm:w-24" />
+          {/* Beside the demo label on phones; from sm up, in the free corner left of the list of professionals. */}
+          <HeroIcon className="absolute -top-3 right-0 z-0 h-12 w-12 sm:bottom-0 sm:left-0 sm:right-auto sm:top-auto sm:h-32 sm:w-32" />
         </div>
       </div>
     </section>
