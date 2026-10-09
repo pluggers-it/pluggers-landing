@@ -5,7 +5,7 @@ import { WEB_APP_URL } from "@/components/landing/links";
 import { GuidePhone } from "@/components/landing/GuideSteps";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
 import Image from "next/image";
-import { ABOUT, ADVISORS, COMPANY_FACTS, MISSION, STORY, TEAM, VALUES, VISION, type TeamMember } from "@/lib/about";
+import { ABOUT, ADVISORS, COMPANY_FACTS, NEXT, PRINCIPLES, STORY, TEAM, WHAT, WHERE, type TeamMember } from "@/lib/about";
 import { ORG_ID, breadcrumbSchema, graph, pageMetadata, pageSchema } from "@/lib/seo";
 import { SITE_URL } from "@/lib/site";
 
@@ -49,31 +49,30 @@ export default function ChiSiamoPage() {
       <div className="mx-auto w-full max-w-[760px] px-5 pb-8 sm:px-8">
 
         <section className="mt-12" aria-labelledby="story-title">
-          <h2 id="story-title" className={H2}>La nostra storia</h2>
+          <h2 id="story-title" className={H2}>Come è nato Pluggers</h2>
           <p className="mt-4 text-[16px] leading-[1.65]">{STORY}</p>
         </section>
 
-        <section className="mt-12 grid gap-8 sm:grid-cols-2" aria-label="Visione e missione">
-          <div>
-            <h2 className={H2}>Visione</h2>
-            <p className="mt-4 text-[16px] leading-[1.65]">{VISION}</p>
-          </div>
-          <div>
-            <h2 className={H2}>Missione</h2>
-            <p className="mt-4 text-[16px] leading-[1.65]">{MISSION}</p>
-          </div>
+        <section className="mt-12" aria-labelledby="what-title">
+          <h2 id="what-title" className={H2}>Cosa fa Pluggers</h2>
+          <p className="mt-4 text-[16px] leading-[1.65]">{WHAT}</p>
         </section>
 
-        <section className="mt-12" aria-labelledby="values-title">
-          <h2 id="values-title" className={H2}>In cosa crediamo</h2>
-          <dl className="mt-6 grid gap-6 sm:grid-cols-3">
-            {VALUES.map((v) => (
+        <section className="mt-12" aria-labelledby="principles-title">
+          <h2 id="principles-title" className={H2}>Cosa facciamo e cosa no</h2>
+          <dl className="mt-6 grid gap-6 sm:grid-cols-2">
+            {PRINCIPLES.map((v) => (
               <div key={v.title}>
                 <dt className="font-bold">{v.title}</dt>
                 <dd className="mt-2 text-[15px] leading-[1.6] text-muted">{v.text}</dd>
               </div>
             ))}
           </dl>
+        </section>
+
+        <section className="mt-12" aria-labelledby="next-title">
+          <h2 id="next-title" className={H2}>Cosa arriva dopo</h2>
+          <p className="mt-4 text-[16px] leading-[1.65]">{NEXT}</p>
         </section>
 
         <section className="mt-12" aria-labelledby="team-title">
@@ -91,12 +90,10 @@ export default function ChiSiamoPage() {
           )}
         </section>
 
-        {ABOUT.sections.map((s) => (
-          <section key={s.title} className="mt-12">
-            <h2 className={H2}>{s.title}</h2>
-            <p className="mt-4 text-[16px] leading-[1.65]">{s.text}</p>
-          </section>
-        ))}
+        <section className="mt-12" aria-labelledby="where-title">
+          <h2 id="where-title" className={H2}>Dove siamo</h2>
+          <p className="mt-4 text-[16px] leading-[1.65]">{WHERE}</p>
+        </section>
 
         <section className="mt-12" aria-labelledby="company-title">
           <h2 id="company-title" className={H2}>

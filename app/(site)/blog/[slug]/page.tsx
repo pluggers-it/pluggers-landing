@@ -154,7 +154,7 @@ export default async function BlogPostPage(
 
         {trades.length > 0 && (
           <nav aria-label="Professionisti a Torino" className="mx-auto mt-12 max-w-[38rem] border-t border-hair pt-6">
-            <p className="text-[15px] text-muted">I mestieri di questo articolo, a Torino su Pluggers</p>
+            <p className="text-[15px] text-muted">Professionisti su Pluggers</p>
             <ul className="mt-1 flex flex-wrap gap-x-6">
               {trades.map((t) => (
                 <li key={t.slug}>
