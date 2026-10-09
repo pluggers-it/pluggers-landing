@@ -6,6 +6,7 @@ import { WaitlistForm } from "@/components/WaitlistForm";
 import { FaqList } from "@/components/landing/FaqList";
 import { GuidePhone, GuideSteps, type GuideStep } from "@/components/landing/GuideSteps";
 import { SitePage } from "@/components/landing/SitePage";
+import { StoreBadges } from "@/components/landing/StoreBadges";
 import { WEB_APP_URL } from "@/components/landing/links";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
 import { PROS } from "@/lib/home";
@@ -107,9 +108,12 @@ export default function ProfessionistiPage() {
             L&apos;app per artigiani e professionisti della casa a Torino
           </h1>
           <p className="mt-5 max-w-[58ch] text-[17px] leading-[1.6] text-muted sm:text-lg">{PROS.lede}</p>
-          <a href={WEB_APP_URL} className={`${BTN_PRIMARY} mt-8`}>
-            {PROS.cta}
-          </a>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <a href={WEB_APP_URL} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+              {PROS.cta}
+            </a>
+            <StoreBadges />
+          </div>
         </div>
         <div className="relative mx-auto flex h-[560px] w-[340px] justify-center sm:w-[420px]">
           <GuidePhone src={`${G}/04.webp`} alt="" priority className="absolute left-0 top-6 rotate-[-4deg] scale-[0.86] opacity-95" />

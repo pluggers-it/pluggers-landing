@@ -56,7 +56,7 @@ export type TeamMember = { name: string; role: string; bio: string; photo?: stri
 
 /** Bios from the Team page on Notion (March 2026), condensed. A photo goes in public/team/ when its owner sends it. */
 export const TEAM: TeamMember[] = [
-  { name: "Gianmarco Piras", role: "Chief Executive Officer",
+  { name: "Gianmarco Piras", role: "Chief Executive Officer", photo: "/team/gianmarco-piras.webp",
     bio: "Si occupa di crescita e di organizzazioni che scalano. Laurea magistrale in Psicologia del lavoro, certificazioni PRINCE2 e PROSCI; è HR Business Partner in aziende in forte crescita, dopo esperienze in consulenza e startup." },
   { name: "Simone Marras", role: "Chief Strategy Officer",
     bio: "Definisce la strategia di Pluggers. Viene dalla strategia e dalla comunicazione, con esperienza in startup internazionali tra l'Italia e l'estero." },

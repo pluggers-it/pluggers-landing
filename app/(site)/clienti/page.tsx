@@ -6,6 +6,7 @@ import { FaqList } from "@/components/landing/FaqList";
 import { GuidePhone, GuideSteps, type GuideStep } from "@/components/landing/GuideSteps";
 import { SitePage } from "@/components/landing/SitePage";
 import { TrustRows } from "@/components/landing/TrustRows";
+import { StoreBadges } from "@/components/landing/StoreBadges";
 import { WEB_APP_URL } from "@/components/landing/links";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
 import { FAQ } from "@/lib/home";
@@ -103,9 +104,12 @@ export default function ClientiPage() {
           <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-muted sm:text-lg">
             Dal guasto in casa all&apos;intervento finito in otto passi. Non serve sapere quale professionista ti serve: lo capisce l&apos;assistente dalla tua descrizione. Per chi cerca è gratis.
           </p>
-          <a href={WEB_APP_URL} className={`${BTN_PRIMARY} mt-8`}>
-            Racconta il tuo problema
-          </a>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <a href={WEB_APP_URL} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+              Racconta il tuo problema
+            </a>
+            <StoreBadges />
+          </div>
         </div>
         <div className="relative mx-auto flex h-[560px] w-[340px] justify-center sm:w-[420px]">
           <GuidePhone src={`${G}/01.webp`} alt="" priority className="absolute left-0 top-6 rotate-[-4deg] scale-[0.86] opacity-95" />

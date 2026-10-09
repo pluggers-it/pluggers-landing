@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
 import { SitePage } from "@/components/landing/SitePage";
 import { WEB_APP_URL } from "@/components/landing/links";
-import { BTN_PRIMARY, H2 } from "@/components/landing/styles";
+import { GuidePhone } from "@/components/landing/GuideSteps";
+import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
 import Image from "next/image";
 import { ABOUT, ADVISORS, COMPANY_FACTS, MISSION, STORY, TEAM, VALUES, VISION, type TeamMember } from "@/lib/about";
 import { ORG_ID, breadcrumbSchema, graph, pageMetadata, pageSchema } from "@/lib/seo";
@@ -32,11 +33,20 @@ export default function ChiSiamoPage() {
         )}
       />
 
-      <div className="mx-auto w-full max-w-[760px] px-5 pb-8 pt-4 sm:px-8 lg:pt-8">
-        <h1 className="text-balance text-[clamp(2.4rem,4.4vw,3.6rem)] font-extrabold leading-[1.04] tracking-[-0.035em]">
-          Chi siamo
-        </h1>
-        <p className="mt-5 text-[17px] leading-[1.6] text-muted sm:text-lg">{ABOUT.intro}</p>
+      <section className={`${CONTAINER} grid items-center gap-12 pb-4 pt-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16 lg:pt-8`}>
+        <div>
+          <h1 className="text-balance text-[clamp(2.4rem,4.4vw,3.6rem)] font-extrabold leading-[1.04] tracking-[-0.035em]">
+            Chi siamo
+          </h1>
+          <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-muted sm:text-lg">{ABOUT.intro}</p>
+        </div>
+        <div className="relative mx-auto flex h-[560px] w-[340px] justify-center sm:w-[420px]">
+          <GuidePhone src="/guida/professionisti/04.webp" alt="Le richieste dei clienti vicini, nell'app del professionista" priority className="absolute left-0 top-6 rotate-[-4deg] scale-[0.86] opacity-95" />
+          <GuidePhone src="/guida/clienti/01.webp" alt="La richiesta del cliente: il problema descritto con una foto" priority className="absolute right-0 top-0 rotate-[3deg]" />
+        </div>
+      </section>
+
+      <div className="mx-auto w-full max-w-[760px] px-5 pb-8 sm:px-8">
 
         <section className="mt-12" aria-labelledby="story-title">
           <h2 id="story-title" className={H2}>La nostra storia</h2>
