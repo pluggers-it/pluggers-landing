@@ -8,12 +8,14 @@ import { SparkCanvas, type SparkHandle } from "./SparkCanvas";
 import { useReducedMotionSafe } from "./useReducedMotionSafe";
 import { onIdle } from "./idle";
 
+type Pro = { name: string; rating: string; reviews: number; jobs: number; distance: string };
+
 type Scenario = {
   text: string;
   photo: string;
   trade: string;
   urgency: number;
-  pro: { name: string; initial: string; rating: string; reviews: number; distance: string };
+  pros: [Pro, Pro, Pro];
 };
 
 const SCENARIOS: Scenario[] = [
@@ -22,46 +24,84 @@ const SCENARIOS: Scenario[] = [
     photo: "/demo/tap.jpg",
     trade: "Idraulico",
     urgency: 2,
-    pro: { name: "Giuseppe L.", initial: "G", rating: "4,8", reviews: 32, distance: "1,2 km" },
+    pros: [
+      { name: "Giuseppe L.", rating: "4,9", reviews: 126, jobs: 214, distance: "1,2 km" },
+      { name: "Marco R.", rating: "4,8", reviews: 98, jobs: 167, distance: "2,4 km" },
+      { name: "Salvatore A.", rating: "4,7", reviews: 61, jobs: 103, distance: "3,1 km" },
+    ],
   },
   {
     text: "Salta il salvavita ogni volta che accendo il forno",
     photo: "/demo/breaker.jpg",
     trade: "Elettricista",
     urgency: 4,
-    pro: { name: "Marco R.", initial: "M", rating: "4,9", reviews: 17, distance: "2,4 km" },
+    pros: [
+      { name: "Andrea B.", rating: "4,9", reviews: 143, jobs: 238, distance: "0,9 km" },
+      { name: "Luca F.", rating: "4,8", reviews: 87, jobs: 152, distance: "1,7 km" },
+      { name: "Paolo M.", rating: "4,7", reviews: 54, jobs: 96, distance: "2,8 km" },
+    ],
   },
   {
     text: "La chiave gira a vuoto e la porta di casa non si apre",
     photo: "/demo/lock.jpg",
     trade: "Fabbro",
     urgency: 5,
-    pro: { name: "Davide C.", initial: "D", rating: "4,7", reviews: 41, distance: "0,8 km" },
+    pros: [
+      { name: "Davide C.", rating: "4,9", reviews: 112, jobs: 189, distance: "0,8 km" },
+      { name: "Roberto G.", rating: "4,8", reviews: 76, jobs: 141, distance: "1,9 km" },
+      { name: "Antonio S.", rating: "4,6", reviews: 48, jobs: 88, distance: "3,4 km" },
+    ],
   },
 ];
 
-type Phase = "idle" | "typing" | "photo" | "sending" | "triage" | "current" | "lit" | "out";
-const ORDER: Phase[] = ["idle", "typing", "photo", "sending", "triage", "current", "lit", "out"];
+/** As in the app: one request goes to at most this many professionals. */
+const MAX_PICKS = 3;
+
+type Phase = "idle" | "typing" | "photo" | "sending" | "searching" | "results" | "current" | "lit" | "out";
+const ORDER: Phase[] = ["idle", "typing", "photo", "sending", "searching", "results", "current", "lit", "out"];
 /** The step after each phase, and how long the phase lasts. "out" moves to the next scenario. */
 const NEXT: Record<Exclude<Phase, "out">, [Phase, number]> = {
   idle: ["typing", 250],
   typing: ["photo", 350],
   photo: ["sending", 700],
-  sending: ["triage", 650],
-  triage: ["current", 550],
+  sending: ["searching", 300],
+  searching: ["results", 1800],
+  results: ["current", 1600],
   current: ["lit", 1000],
   lit: ["out", 3200],
 };
+/** With reduced motion the search is only its line of text, for an instant. */
+const SEARCH_REDUCED_MS = 600;
 /** Phases the demo stops on while someone is playing with it; the others always run to the next one. */
-const RESTING: Phase[] = ["idle", "typing", "photo", "triage", "lit"];
+const RESTING: Phase[] = ["idle", "typing", "photo", "results", "lit"];
 const TYPE_MS = 36;
 /** With no touch for this long, the demo goes back to playing by itself. */
 const RESUME_MS = 6000;
+/** Gap between one result and the next coming in. */
+const ROW_STAGGER_MS = 160;
 
 /** Every control: a hand cursor and no grey tap flash, the press feedback is the control's own. */
 const TAP = "cursor-pointer touch-manipulation [-webkit-tap-highlight-color:transparent]";
 
 type Path = { d: string; end: [number, number] };
+
+/** The logo plug running round the circle of its own cable, like the app's loader. */
+function SearchPlug() {
+  return (
+    <span aria-hidden className="relative block h-10 w-10 shrink-0 motion-reduce:hidden">
+      <svg viewBox="0 0 40 40" className="absolute inset-0 h-full w-full">
+        <circle cx="20" cy="20" r="14" fill="none" stroke="var(--accent-soft)" strokeWidth="2.5" />
+      </svg>
+      <span className="orbit absolute inset-0">
+        <svg viewBox="0 0 40 40" className="absolute inset-0 h-full w-full">
+          {/* The cable trailing 150 degrees behind the plug, which sits at 12 o'clock */}
+          <path d="M 13 32.12 A 14 14 0 0 1 20 6" fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
+        </svg>
+        <span className="absolute left-1/2 top-[6px] h-[18px] w-[18px] -translate-x-1/2 -translate-y-1/2 rotate-45 bg-accent-text [mask:url(/brand/brand-mark.png)_center/contain_no-repeat]" />
+      </span>
+    </span>
+  );
+}
 
 export function HeroDemo() {
   const reduce = useReducedMotionSafe();
@@ -71,7 +111,7 @@ export function HeroDemo() {
   const [edited, setEdited] = useState(false);
   const [photo, setPhoto] = useState(false);
   const [chip, setChip] = useState<number | null>(null);
-  const [picked, setPicked] = useState(false);
+  const [picked, setPicked] = useState<number[]>([]);
   const [manual, setManual] = useState(false);
   const [active, setActive] = useState(false);
   const [path, setPath] = useState<Path | null>(null);
@@ -79,7 +119,7 @@ export function HeroDemo() {
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const cameraRef = useRef<HTMLButtonElement>(null);
-  const cardRef = useRef<HTMLButtonElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const sparks = useRef<SparkHandle>(null);
   const pathRef = useRef<Path | null>(null);
   const resumeRef = useRef<number | undefined>(undefined);
@@ -124,7 +164,7 @@ export function HeroDemo() {
       step = () => {
         setText(full);
         setPhoto(true);
-        setPicked(true);
+        setPicked([0]);
         setPhase("lit");
       };
     } else if ((manual || reduce) && RESTING.includes(phase)) {
@@ -140,15 +180,15 @@ export function HeroDemo() {
         setEdited(false);
         setPhoto(false);
         setChip(null);
-        setPicked(false);
+        setPicked([]);
         setPhase("idle");
       };
     } else {
       const [next, wait] = NEXT[phase];
-      ms = wait;
+      ms = phase === "searching" && reduce ? SEARCH_REDUCED_MS : wait;
       step = () => {
         if (next === "photo") setPhoto(true);
-        if (next === "lit") setPicked(true);
+        if (next === "lit") setPicked((p) => (p.includes(0) || p.length >= MAX_PICKS ? p : [0, ...p]));
         setPhase(next);
       };
     }
@@ -174,15 +214,15 @@ export function HeroDemo() {
     touch();
   };
 
-  // The current runs from the composer button to the professional card.
+  // The current runs from the composer button to the list of professionals.
   const measure = useCallback(() => {
     const root = rootRef.current;
     const button = buttonRef.current;
-    const card = cardRef.current;
-    if (!root || !button || !card) return;
+    const list = listRef.current;
+    if (!root || !button || !list) return;
     const r = root.getBoundingClientRect();
     const b = button.getBoundingClientRect();
-    const c = card.getBoundingClientRect();
+    const c = list.getBoundingClientRect();
     const sx = b.left + b.width / 2 - r.left;
     const sy = b.bottom - r.top;
     const ex = c.left + 44 - r.left;
@@ -208,29 +248,32 @@ export function HeroDemo() {
     };
   }, [measure]);
 
-  const burst = useCallback(() => {
-    const end = pathRef.current?.end;
-    if (end && !reduce) sparks.current?.burst(end[0], end[1]);
-  }, [reduce]);
-
   useEffect(() => {
-    if (phase === "lit") burst();
-  }, [phase, burst]);
+    const end = pathRef.current?.end;
+    if (phase === "lit" && end && !reduce) sparks.current?.burst(end[0], end[1]);
+  }, [phase, reduce]);
 
   const scenario = SCENARIOS[index];
   const atLeast = (p: Phase) => ORDER.indexOf(phase) >= ORDER.indexOf(p);
   const autoTyping = phase === "typing" && !manual && !edited && !reduce && text.length < scenario.text.length;
   const canSend = text.trim().length > 0 || photo;
   const pressed = phase === "sending";
-  const showTriage = atLeast("triage");
+  const searching = phase === "searching";
+  const showTriage = atLeast("searching");
+  const showResults = atLeast("results");
   const flow = atLeast("current");
   const out = phase === "out";
 
-  // Sending from the composer opens the triage; once it is open, it runs the current to the professional again.
+  const search = () => {
+    setPicked([]);
+    setPhase("searching");
+  };
+
+  // From the composer it sends; once the search has run, it runs it again.
   const send = () => {
     touch();
-    if (atLeast("triage")) {
-      setPhase("current");
+    if (showTriage) {
+      search();
       return;
     }
     // A half-typed example is finished before it goes; text written by hand goes as it is.
@@ -249,17 +292,27 @@ export function HeroDemo() {
     cameraRef.current?.focus();
   };
 
+  // Picking what Pluggers understood searches again with it.
   const pickChip = (i: number) => {
     touch();
     const selecting = chip !== i;
     setChip(selecting ? i : null);
-    if (selecting && phase === "triage") setPhase("current");
+    if (selecting && !searching) search();
   };
 
-  const togglePro = () => {
+  const togglePro = (i: number, el: HTMLElement) => {
     touch();
-    setPicked(!picked);
-    if (!picked) burst();
+    if (picked.includes(i)) {
+      setPicked(picked.filter((p) => p !== i));
+      return;
+    }
+    if (picked.length >= MAX_PICKS) return;
+    setPicked([...picked, i]);
+    const root = rootRef.current;
+    if (!root || reduce) return;
+    const r = root.getBoundingClientRect();
+    const b = el.getBoundingClientRect();
+    sparks.current?.burst(b.right - 36 - r.left, b.top + b.height / 2 - r.top);
   };
 
   const chipClass = (i: number, rest: string) =>
@@ -435,54 +488,99 @@ export function HeroDemo() {
           </div>
         </div>
 
-        {/* The professional who lights up */}
-        <button
-          ref={cardRef}
-          type="button"
-          aria-pressed={picked}
-          aria-label={`Scegli ${scenario.pro.name}`}
-          aria-describedby={proId}
-          onClick={togglePro}
-          className={`${TAP} relative z-10 block w-full max-w-[400px] rounded-card bg-surface p-4 text-left ring-1 ring-hair transition-all duration-300 hover:ring-line motion-safe:active:scale-[0.98] motion-reduce:transition-none sm:justify-self-end`}
-          style={{
-            boxShadow: picked ? "var(--shadow-lit)" : "var(--shadow-card)",
-            transform: picked ? "scale(1.02)" : "none",
-            opacity: picked || reduce ? 1 : 0.9,
-          }}
+        {/* The professionals Pluggers finds, as in the app's list */}
+        <div
+          ref={listRef}
+          className="relative z-10 w-full max-w-[400px] overflow-hidden rounded-card bg-surface ring-1 ring-hair transition-shadow duration-300 sm:justify-self-end"
+          style={{ boxShadow: phase === "lit" ? "var(--shadow-lit)" : "var(--shadow-card)" }}
         >
-          <span className="flex items-center gap-3">
-            <span
-              aria-hidden
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,#4c1d95,#863bff)] text-lg font-bold text-white"
-            >
-              {scenario.pro.initial}
-            </span>
-            <span className="block min-w-0 flex-1">
-              <span className="block text-[17px] font-bold leading-tight">
-                {scenario.pro.name}
-              </span>
-              <span id={proId} className="block">
-                <span className="mt-1 flex items-center gap-1 text-sm text-muted">
-                  <Star className="h-3.5 w-3.5 fill-amber text-amber" />
-                  <span className="font-semibold text-ink">{scenario.pro.rating}</span>
-                  <span>({scenario.pro.reviews} recensioni)</span>
+          <div aria-live={manual ? "polite" : "off"} className="flex min-h-14 items-center gap-3 border-b border-hair px-4 py-2">
+            {searching ? (
+              <>
+                <SearchPlug />
+                <p className="text-[15px] font-semibold">Cerco i professionisti vicino a te…</p>
+              </>
+            ) : showResults ? (
+              <p>
+                <span className="block text-[17px] font-bold leading-tight">{scenario.pros.length} professionisti</span>
+                <span className="mt-0.5 block text-[13px] text-muted">
+                  Scegline fino a {MAX_PICKS}: la richiesta arriva a tutti.
                 </span>
-                <span className="mt-0.5 block text-sm">
-                  <span className="font-semibold text-accent-text">{scenario.trade}</span>
-                  <span className="text-muted">, a {scenario.pro.distance} da te</span>
-                </span>
-              </span>
-            </span>
-            <span
-              aria-hidden
-              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors duration-300 ${
-                picked ? "bg-accent text-white" : "text-muted ring-1 ring-line"
-              }`}
-            >
-              {picked ? <Check className="h-4 w-4" strokeWidth={3} /> : <Plus className="h-4 w-4" strokeWidth={2.5} />}
-            </span>
-          </span>
-        </button>
+              </p>
+            ) : (
+              <p className="text-[15px] font-semibold text-muted">Professionisti vicino a te</p>
+            )}
+          </div>
+          <ul>
+            {scenario.pros.map((pro, i) => {
+              const on = picked.includes(i);
+              return (
+                <li key={pro.name} className="h-[72px] border-b border-hair last:border-b-0">
+                  {showResults ? (
+                    <button
+                      type="button"
+                      aria-pressed={on}
+                      aria-label={`Scegli ${pro.name}`}
+                      aria-describedby={`${proId}-${i}`}
+                      onClick={(e) => togglePro(i, e.currentTarget)}
+                      className={`${TAP} row-in flex h-full w-full items-center gap-3 px-4 text-left transition-colors duration-200 motion-safe:active:scale-[0.99] ${
+                        on ? "bg-accent-soft" : "hover:bg-page"
+                      }`}
+                      style={{ animationDelay: `${i * ROW_STAGGER_MS}ms` }}
+                    >
+                      <span
+                        aria-hidden
+                        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,#4c1d95,#863bff)] text-lg font-bold text-white"
+                      >
+                        {pro.name[0]}
+                      </span>
+                      <span className="block min-w-0 flex-1">
+                        <span className="flex items-baseline gap-1.5">
+                          <span className="text-[16px] font-bold leading-tight">{pro.name}</span>
+                          <span id={`${proId}-${i}`} className="sr-only">
+                            {scenario.trade}, {pro.rating} stelle su {pro.reviews} recensioni, {pro.jobs} interventi, a{" "}
+                            {pro.distance} da te
+                          </span>
+                          <span aria-hidden className="text-[13px] font-semibold text-accent-text">
+                            {scenario.trade}
+                          </span>
+                        </span>
+                        <span aria-hidden className="mt-0.5 flex items-center gap-1 text-[13px] leading-[18px] text-muted">
+                          <Star className="h-3.5 w-3.5 fill-amber text-amber" />
+                          <span className="font-semibold text-ink">{pro.rating}</span>
+                          <span>({pro.reviews} recensioni)</span>
+                        </span>
+                        <span aria-hidden className="mt-0.5 block text-[13px] leading-[18px] text-muted">
+                          <span className="font-semibold text-ink">{pro.jobs} interventi</span> · a {pro.distance} da te
+                        </span>
+                      </span>
+                      <span
+                        aria-hidden
+                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors duration-300 ${
+                          on ? "bg-accent text-white" : "text-muted ring-1 ring-line"
+                        }`}
+                      >
+                        {on ? <Check className="h-4 w-4" strokeWidth={3} /> : <Plus className="h-4 w-4" strokeWidth={2.5} />}
+                      </span>
+                    </button>
+                  ) : (
+                    <span
+                      aria-hidden
+                      className={`flex h-full items-center gap-3 px-4 ${searching && !reduce ? "animate-pulse" : ""}`}
+                    >
+                      <span className="h-12 w-12 shrink-0 rounded-full bg-ink/6" />
+                      <span className="grid flex-1 gap-2">
+                        <span className="h-3.5 w-2/5 rounded-full bg-ink/8" />
+                        <span className="h-3 w-3/5 rounded-full bg-ink/6" />
+                        <span className="h-3 w-1/2 rounded-full bg-ink/6" />
+                      </span>
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </div>
   );
