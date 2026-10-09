@@ -49,7 +49,7 @@ export function HeroIcon({ className = "" }: { className?: string }) {
             alt=""
             width={512}
             height={512}
-            sizes="(min-width: 640px) 128px, 56px"
+            sizes="(min-width: 640px) 96px, 56px"
             className="h-full w-full rounded-[22%] [filter:drop-shadow(0_24px_28px_rgba(76,29,149,0.35))]"
             priority
           />
