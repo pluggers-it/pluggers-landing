@@ -83,7 +83,6 @@ const STEPS: GuideStep[] = [
     title: "Il giorno dell'intervento",
     text: "Nella scheda dell'appuntamento trovi data, indirizzo, problema e prezzo concordato. Quando il professionista arriva, registrate l'inizio insieme.",
     points: ["Tocca «Scansiona QR» e inquadra il codice sul telefono del professionista", "A lavoro finito fate lo stesso", "Poi puoi lasciare una recensione"],
-    tip: "Lo stato si aggiorna da solo: in attesa, confermato, in corso, completato.",
   },
 ];
 
