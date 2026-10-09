@@ -506,3 +506,14 @@ nextjs-portal {
 @media (max-width: 1023px) {
   html { scroll-padding-top: 5rem; }
 }
+
+.blog-body h2[id] {
+  scroll-margin-top: 2rem;
+}
+
+/* the contents column on the left replaces the menu inside the post */
+@media (min-width: 1024px) {
+  .blog-body--toc .post-menu {
+    display: none;
+  }
+}
