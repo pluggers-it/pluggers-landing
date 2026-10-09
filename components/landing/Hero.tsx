@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { MapPin } from "lucide-react";
 import { FieldCanvas } from "./FieldCanvas";
 import { HeroDemo } from "./HeroDemo";
@@ -15,6 +16,7 @@ export function Hero() {
         className={`${CONTAINER} relative z-10 grid items-center gap-12 pb-16 pt-6 sm:pt-10 lg:grid-cols-[minmax(0,10fr)_minmax(0,11fr)] lg:gap-16 lg:pb-28 lg:pt-16`}
       >
         <div>
+          <p className="mb-4 text-[15px] font-bold uppercase tracking-[0.08em] text-accent-text">{HERO.eyebrow}</p>
           <h1 className="text-balance text-[clamp(2.5rem,4.6vw,3.9rem)] font-extrabold leading-[1.02] tracking-[-0.035em]">
             {HERO.title}
           </h1>
@@ -27,10 +29,13 @@ export function Hero() {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a href={WEB_APP_URL} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
-              Apri Pluggers
+              Racconta il problema
             </a>
             <StoreBadges />
           </div>
+          <Link href="/professionisti" className="mt-4 inline-flex min-h-12 items-center gap-1.5 text-[15px] font-semibold underline underline-offset-4">
+            Sei un professionista? Ecco come funziona
+          </Link>
         </div>
 
         <div className="relative">
