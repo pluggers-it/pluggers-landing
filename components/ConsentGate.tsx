@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Cookie } from "lucide-react";
 import { useConsent } from "@/lib/consent";
 
@@ -16,6 +17,7 @@ import { useConsent } from "@/lib/consent";
 export function ConsentGate() {
   const { analyticsConsent, acceptAll, acceptNecessary } = useConsent();
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
   // Show it from the frame after hydration, once the stored choice has been read.
   useEffect(() => {
@@ -24,7 +26,8 @@ export function ConsentGate() {
   }, []);
 
   // Don't render during SSR or once a choice has been made
-  if (!mounted || analyticsConsent !== null) return null;
+  // the QR page is held up to someone else's camera
+  if (!mounted || analyticsConsent !== null || pathname === "/qr") return null;
 
   // CSS entrance instead of framer-motion: keeps the animation library off every page but the home.
   return (
