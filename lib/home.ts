@@ -89,8 +89,8 @@ export const PROS = {
     },
   ],
   cta: "Iscriviti come professionista",
-  waitlistTitle: "Non sei a Torino? Lasciaci la tua città.",
-  waitlistText: "Le prossime zone le scegliamo da lì. Ti scriviamo quando arriviamo da te.",
+  waitlistTitle: "Lasciaci i tuoi contatti",
+  waitlistText: "Ti ricontattiamo noi per iniziare su Pluggers.",
 };
 
 export const TRUST = {
