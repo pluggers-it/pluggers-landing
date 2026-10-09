@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import remarkHtml from "remark-html";
 import { formatPost, postText } from "@/lib/postFormat";
+import { slugify } from "./postPath";
 
 export type PostCategory = "Idraulico" | "Elettricista" | "Muratore" | "Altro";
 
@@ -47,6 +48,19 @@ export async function markdownToHtml(markdown: string): Promise<string> {
     .use(remarkHtml, { sanitize: false })
     .process(formatPost(markdown));
   return result.toString();
+}
+
+/** Gives every h2 an id and returns them, for the article's table of contents. */
+export function withHeadingIds(html: string): { html: string; toc: { id: string; text: string }[] } {
+  const toc: { id: string; text: string }[] = [];
+  const out = html.replace(/<h2>([\s\S]*?)<\/h2>/g, (_, inner: string) => {
+    const text = inner.replace(/<[^>]+>/g, "").replace(/[^\p{L}\p{N}\s'’.,:;!?()-]/gu, "").trim();
+    let id = slugify(text, 60) || `sezione-${toc.length + 1}`;
+    if (toc.some((t) => t.id === id)) id = `${id}-${toc.length + 1}`;
+    toc.push({ id, text });
+    return `<h2 id="${id}">${inner}</h2>`;
+  });
+  return { html: out, toc };
 }
 
 /** Plain-text excerpt: menu and sign-off left out, markdown syntax and HTML tags stripped. */

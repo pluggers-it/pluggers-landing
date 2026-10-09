@@ -20,6 +20,7 @@ import {
   readPosts,
   readingMinutes,
   type Post,
+  withHeadingIds,
 } from "@/lib/posts";
 
 // served from the cache and rebuilt at most every five minutes; publishing revalidates at once
@@ -70,10 +71,11 @@ export default async function BlogPostPage(
   // /blog/16 and any old or mistyped words lead to the one canonical address
   if (`/blog/${slug}` !== postPath(post)) permanentRedirect(postPath(post));
 
-  const [contentHtml, related] = await Promise.all([
+  const [rawHtml, related] = await Promise.all([
     markdownToHtml(post.content),
     relatedPosts(post),
   ]);
+  const { html: contentHtml, toc } = withHeadingIds(rawHtml);
 
   const path = postPath(post);
   const trades = tradesForPost(`${post.title} ${excerpt(post.content)}`);
@@ -110,29 +112,28 @@ export default async function BlogPostPage(
         )}
       />
       <div className={CONTAINER}>
-        <article className="mx-auto max-w-[38rem] pt-4 sm:pt-10">
-          <nav aria-label="Percorso">
-            <ol className="flex min-w-0 items-center gap-1.5 text-[15px] text-muted">
-              <li className="shrink-0">
-                <Link
-                  href="/blog"
-                  className="inline-flex min-h-12 items-center font-semibold text-ink underline-offset-4 hover:underline"
-                >
-                  Blog
-                </Link>
-              </li>
-              <li aria-hidden className="shrink-0">
-                <ChevronRight className="h-4 w-4" />
-              </li>
-              <li aria-current="page" className="min-w-0 truncate">
-                {post.title}
-              </li>
-            </ol>
-          </nav>
-
-          <header className="mt-4 sm:mt-6">
-            <p className="text-[14px] font-semibold text-accent-text">{post.category}</p>
-            <h1 className="mt-2 text-balance text-[clamp(2rem,4.6vw,2.9rem)] font-extrabold leading-[1.08] tracking-[-0.035em]">
+        <div className="pt-4 sm:pt-10 lg:grid lg:grid-cols-[12rem_minmax(0,40rem)_17rem] lg:justify-between lg:gap-x-12">
+          <header className="lg:col-span-2 lg:col-start-2">
+            <nav aria-label="Percorso">
+              <ol className="flex min-w-0 items-center gap-1.5 text-[15px] text-muted">
+                <li className="shrink-0">
+                  <Link
+                    href="/blog"
+                    className="inline-flex min-h-12 items-center font-semibold text-ink underline-offset-4 hover:underline"
+                  >
+                    Blog
+                  </Link>
+                </li>
+                <li aria-hidden className="shrink-0">
+                  <ChevronRight className="h-4 w-4" />
+                </li>
+                <li aria-current="page" className="min-w-0 truncate">
+                  {post.title}
+                </li>
+              </ol>
+            </nav>
+            <p className="mt-4 text-[14px] font-semibold text-accent-text sm:mt-6">{post.category}</p>
+            <h1 className="mt-2 max-w-[24ch] text-balance text-[clamp(2rem,4.6vw,3.2rem)] font-extrabold leading-[1.06] tracking-[-0.035em]">
               {post.title}
             </h1>
             <p className="mt-5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[15px] text-muted">
@@ -146,49 +147,62 @@ export default async function BlogPostPage(
             </p>
           </header>
 
-          <div
-            className="blog-body mt-10 border-t border-hair pt-8"
+          {toc.length > 1 && (
+            <nav aria-label="In questo articolo" className="hidden lg:col-start-1 lg:row-start-2 lg:mt-10 lg:block">
+              <div className="sticky top-8 border-t border-hair pt-8">
+                <p className="text-[13px] font-bold uppercase tracking-[0.08em] text-muted">In questo articolo</p>
+                <ol className="mt-3 grid gap-1">
+                  {toc.map((t) => (
+                    <li key={t.id}>
+                      <a href={`#${t.id}`} className="block py-1.5 text-[15px] leading-snug text-muted transition hover:text-ink">
+                        {t.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </nav>
+          )}
+
+          <article
+            className={`blog-body mt-10 border-t border-hair pt-8 lg:col-start-2 lg:row-start-2 ${toc.length > 1 ? "blog-body--toc" : ""}`}
             dangerouslySetInnerHTML={{ __html: contentHtml }}
           />
-        </article>
 
-        {trades.length > 0 && (
-          <nav aria-label="Professionisti a Torino" className="mx-auto mt-12 max-w-[38rem] border-t border-hair pt-6">
-            <p className="text-[15px] text-muted">I mestieri di questo articolo, a Torino su Pluggers</p>
-            <ul className="mt-1 flex flex-wrap gap-x-6">
-              {trades.map((t) => (
-                <li key={t.slug}>
-                  <Link
-                    href={`/torino/${t.slug}`}
-                    className="inline-flex min-h-12 items-center font-semibold text-accent-text underline underline-offset-4"
-                  >
-                    {t.label} a Torino
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
-
-        <aside
-          aria-labelledby="cta-title"
-          className="mx-auto mt-16 max-w-[38rem] rounded-card bg-surface p-6 shadow-card sm:p-8"
-        >
-          <h2 id="cta-title" className="text-[22px] font-extrabold leading-tight tracking-[-0.02em]">
-            Pluggers per i professionisti
-          </h2>
-          <p className="mt-2 text-[16px] leading-[1.55] text-muted">
-            Richieste già descritte e classificate, dai clienti dentro il raggio che scegli tu.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
-            <a href={WEB_APP_URL} className={BTN_PRIMARY}>
-              Apri Pluggers
-            </a>
-            <Link href="/professionisti" className="inline-flex min-h-12 items-center font-semibold underline underline-offset-4">
-              Come funziona per i professionisti
-            </Link>
-          </div>
-        </aside>
+          <aside aria-label="Pluggers" className="mt-12 lg:col-start-3 lg:row-start-2 lg:mt-10">
+            <div className="grid gap-8 lg:sticky lg:top-8">
+              <div className="rounded-card bg-surface p-6 shadow-card">
+                <h2 className="text-[20px] font-extrabold leading-tight tracking-[-0.02em]">Pluggers per i professionisti</h2>
+                <p className="mt-2 text-[15px] leading-[1.55] text-muted">
+                  Richieste già descritte e classificate, dai clienti dentro il raggio che scegli tu.
+                </p>
+                <a href={WEB_APP_URL} className={`${BTN_PRIMARY} mt-5 w-full`}>
+                  Apri Pluggers
+                </a>
+                <Link href="/professionisti" className="mt-2 inline-flex min-h-12 items-center text-[15px] font-semibold underline underline-offset-4">
+                  Come funziona per i professionisti
+                </Link>
+              </div>
+              {trades.length > 0 && (
+                <nav aria-label="Professionisti a Torino">
+                  <p className="text-[13px] font-bold uppercase tracking-[0.08em] text-muted">Professionisti su Pluggers</p>
+                  <ul className="mt-2">
+                    {trades.map((t) => (
+                      <li key={t.slug}>
+                        <Link
+                          href={`/torino/${t.slug}`}
+                          className="inline-flex min-h-12 items-center font-semibold text-accent-text underline underline-offset-4"
+                        >
+                          {t.label} a Torino
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              )}
+            </div>
+          </aside>
+        </div>
 
         {related.length > 0 && (
           <section aria-labelledby="related-title" className="mt-20">
