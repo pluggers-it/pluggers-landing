@@ -115,6 +115,23 @@ export default function ProfessionistiPage() {
         </ul>
       </section>
 
+      <section className={`${CONTAINER} pb-12 lg:pb-16`} aria-labelledby="news-title">
+        <div className="rounded-card bg-surface p-6 shadow-card sm:p-8">
+          <h2 id="news-title" className="text-[22px] font-extrabold leading-tight tracking-[-0.02em]">Pluggers News, la newsletter per i professionisti</h2>
+          <p className="mt-2 max-w-[62ch] text-[16px] leading-[1.55] text-muted">
+            Ogni settimana consigli pratici per chi fa un mestiere della casa: norme che cambiano, lavori di stagione, errori da evitare e come proporli ai clienti.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-x-6">
+            <Link href="/newsletter" className="inline-flex min-h-12 items-center font-semibold text-accent-text underline underline-offset-4">
+              Iscriviti alla newsletter
+            </Link>
+            <Link href="/blog" className="inline-flex min-h-12 items-center font-semibold underline underline-offset-4">
+              Leggi gli articoli
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto w-full max-w-[760px] px-5 py-12 sm:px-8 lg:py-16" aria-labelledby="faq-title">
         <h2 id="faq-title" className={H2}>Domande dei professionisti</h2>
         <FaqList items={FAQ} />
