@@ -17,8 +17,8 @@ const SECTIONS: LegalSection[] = [
     title: "Titolare del trattamento",
     content: (
       <p>
-        Pluggers S.r.l., con sede legale in Torino, Corso Valdocco 2. La Partita IVA sarà
-        pubblicata all&apos;iscrizione nel Registro delle Imprese. Per qualsiasi richiesta:{" "}
+        Pluggers S.r.l., con sede legale in Torino, Corso Valdocco 2, Partita IVA e codice
+        fiscale 13523080011. Per qualsiasi richiesta:{" "}
         <SupportEmail />.
       </p>
     ),
@@ -166,7 +166,7 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       title="Informativa sulla privacy"
-      updated="6 ottobre 2026"
+      updated="9 ottobre 2026"
       version="2026-10-06"
       intro={
         <p>

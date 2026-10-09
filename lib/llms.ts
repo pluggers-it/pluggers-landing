@@ -9,7 +9,7 @@ import { ORG, ORG_ADDRESS_LINE, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 import { TORINO, TRADE_GROUPS, TRADES, type Trade } from "@/lib/trades";
 
 const FACTS =
-  `${ORG.name} è gestita da ${ORG.legalName}, sede legale in ${ORG_ADDRESS_LINE}. ` +
+  `${ORG.name} è gestita da ${ORG.legalName}, sede legale in ${ORG_ADDRESS_LINE}, P.IVA ${ORG.vatNumber}. ` +
   "Per chi cerca un professionista è gratis: se il professionista chiede un Costo Chiamata lo indica " +
   "nell'app prima della visita, e il compenso si paga direttamente a lui, non nell'app. " +
   `Si usa dal browser su ${WEB_APP_URL}; le app per iPhone e Android sono in arrivo. ` +

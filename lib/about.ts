@@ -33,6 +33,7 @@ export const ABOUT = {
 export const COMPANY_FACTS: { label: string; value: string; href?: string }[] = [
   { label: "Ragione sociale", value: ORG.legalName },
   { label: "Sede legale", value: ORG_ADDRESS_LINE },
+  { label: "Partita IVA e codice fiscale", value: ORG.vatNumber },
   { label: "Costituita il", value: FOUNDED },
   { label: "Email", value: ORG.email, href: `mailto:${ORG.email}` },
   ...SOCIAL_LINKS.map((s) => ({ label: s.label, value: s.href.replace("https://www.", ""), href: s.href })),
