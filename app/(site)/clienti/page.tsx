@@ -99,7 +99,7 @@ export default function ClientiPage() {
         <div>
           <p className="text-[15px] font-bold uppercase tracking-[0.08em] text-accent-text">Guida per chi cerca un professionista</p>
           <h1 className="mt-3 max-w-[18ch] text-balance text-[clamp(2.4rem,4.4vw,3.6rem)] font-extrabold leading-[1.04] tracking-[-0.035em]">
-            Come si usa Pluggers, passo per passo
+            Scrivi il guasto, scegli chi lo ripara
           </h1>
           <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-muted sm:text-lg">
             Dal guasto in casa all&apos;intervento finito in otto passi. Non serve sapere quale professionista ti serve: lo capisce l&apos;assistente dalla tua descrizione. Per chi cerca è gratis.
