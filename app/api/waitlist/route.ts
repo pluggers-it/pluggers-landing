@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { addToNewsletterList } from "@/lib/brevo";
+import { addToNewsletterList } from "@/lib/beehiiv";
 import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
@@ -127,9 +127,9 @@ export async function POST(req: Request) {
 
   const { error } = await supabase.from("waitlist").insert(row);
 
-  // newsletter sign-ups also go to the Brevo list; a Brevo failure never fails the sign-up
+  // newsletter sign-ups also go to beehiiv; a beehiiv failure never fails the sign-up
   if (source === "newsletter" && (!error || error.code === "23505")) {
-    await addToNewsletterList({ email, firstName, lastName });
+    await addToNewsletterList(email);
   }
 
   if (error) {
