@@ -3,7 +3,8 @@ import { JsonLd } from "@/components/JsonLd";
 import { SitePage } from "@/components/landing/SitePage";
 import { WEB_APP_URL } from "@/components/landing/links";
 import { BTN_PRIMARY, H2 } from "@/components/landing/styles";
-import { ABOUT, COMPANY_FACTS } from "@/lib/about";
+import Image from "next/image";
+import { ABOUT, ADVISORS, COMPANY_FACTS, MISSION, STORY, TEAM, VALUES, VISION, type TeamMember } from "@/lib/about";
 import { ORG_ID, breadcrumbSchema, graph, pageMetadata, pageSchema } from "@/lib/seo";
 import { SITE_URL } from "@/lib/site";
 
@@ -21,6 +22,12 @@ export default function ChiSiamoPage() {
       <JsonLd
         data={graph(
           { ...pageSchema({ path: "/chi-siamo", name: ABOUT.title, type: "AboutPage" }), about: { "@id": ORG_ID } },
+          ...[...TEAM, ...ADVISORS].map((m) => ({
+            "@type": "Person",
+            name: m.name,
+            jobTitle: m.role,
+            worksFor: { "@id": ORG_ID },
+          })),
           breadcrumbSchema(trail)
         )}
       />
@@ -30,6 +37,45 @@ export default function ChiSiamoPage() {
           Chi siamo
         </h1>
         <p className="mt-5 text-[17px] leading-[1.6] text-muted sm:text-lg">{ABOUT.intro}</p>
+
+        <section className="mt-12" aria-labelledby="story-title">
+          <h2 id="story-title" className={H2}>La nostra storia</h2>
+          <p className="mt-4 text-[16px] leading-[1.65]">{STORY}</p>
+        </section>
+
+        <section className="mt-12 grid gap-8 sm:grid-cols-2" aria-label="Visione e missione">
+          <div>
+            <h2 className={H2}>Visione</h2>
+            <p className="mt-4 text-[16px] leading-[1.65]">{VISION}</p>
+          </div>
+          <div>
+            <h2 className={H2}>Missione</h2>
+            <p className="mt-4 text-[16px] leading-[1.65]">{MISSION}</p>
+          </div>
+        </section>
+
+        <section className="mt-12" aria-labelledby="values-title">
+          <h2 id="values-title" className={H2}>In cosa crediamo</h2>
+          <dl className="mt-6 grid gap-6 sm:grid-cols-3">
+            {VALUES.map((v) => (
+              <div key={v.title}>
+                <dt className="font-bold">{v.title}</dt>
+                <dd className="mt-2 text-[15px] leading-[1.6] text-muted">{v.text}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        <section className="mt-12" aria-labelledby="team-title">
+          <h2 id="team-title" className={H2}>Le persone</h2>
+          <ul className="mt-6 grid gap-x-8 gap-y-8 sm:grid-cols-2">
+            {TEAM.map((m) => <Member key={m.name} m={m} />)}
+          </ul>
+          <h3 className="mt-10 text-[15px] font-semibold uppercase tracking-[0.06em] text-muted">Advisor</h3>
+          <ul className="mt-4 grid gap-x-8 gap-y-8 sm:grid-cols-2">
+            {ADVISORS.map((m) => <Member key={m.name} m={m} />)}
+          </ul>
+        </section>
 
         {ABOUT.sections.map((s) => (
           <section key={s.title} className="mt-12">
@@ -67,5 +113,31 @@ export default function ChiSiamoPage() {
         </div>
       </div>
     </SitePage>
+  );
+}
+
+function initials(name: string) {
+  return name.split(" ").map((w) => w[0]).slice(0, 2).join("");
+}
+
+function Member({ m }: { m: TeamMember }) {
+  return (
+    <li className="flex gap-4">
+      {m.photo ? (
+        <Image src={m.photo} alt={m.name} width={72} height={72} className="h-[72px] w-[72px] shrink-0 rounded-full object-cover" />
+      ) : (
+        <span
+          aria-hidden
+          className="grid h-[72px] w-[72px] shrink-0 place-items-center rounded-full bg-accent-soft text-[22px] font-extrabold tracking-[-0.02em] text-accent-text"
+        >
+          {initials(m.name)}
+        </span>
+      )}
+      <div className="min-w-0">
+        <p className="font-bold leading-snug">{m.name}</p>
+        <p className="text-[15px] font-medium text-accent-text">{m.role}</p>
+        <p className="mt-2 text-[15px] leading-[1.6] text-muted">{m.bio}</p>
+      </div>
+    </li>
   );
 }
