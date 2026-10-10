@@ -7,7 +7,7 @@ import { useCallback, useEffect, useId, useRef, useState, type FocusEvent } from
 import { SparkCanvas, type SparkHandle } from "./SparkCanvas";
 import { useReducedMotionSafe } from "./useReducedMotionSafe";
 import { onIdle } from "./idle";
-import { PluggersLoader } from "./PluggersLoader";
+import { LOADER_CYCLE_MS, PluggersLoader } from "./PluggersLoader";
 
 type Pro = { name: string; rating: string; reviews: number; jobs: number; distance: string };
 
@@ -66,7 +66,8 @@ const NEXT: Record<Exclude<Phase, "out">, [Phase, number]> = {
   typing: ["photo", 350],
   photo: ["sending", 700],
   sending: ["searching", 300],
-  searching: ["results", 1800],
+  // One full loop of the loader: run, plug in, wind back.
+  searching: ["results", LOADER_CYCLE_MS],
   results: ["current", 1600],
   current: ["lit", 1000],
   lit: ["out", 3200],
@@ -479,10 +480,7 @@ export function HeroDemo() {
         >
           <div aria-live={manual ? "polite" : "off"} className="flex min-h-14 items-center gap-3 border-b border-hair px-4 py-2">
             {searching ? (
-              <>
-                <PluggersLoader size={40} />
-                <p className="text-[15px] font-semibold">Cerco i professionisti vicino a te…</p>
-              </>
+              <p className="sr-only">Cerco i professionisti vicino a te…</p>
             ) : showResults ? (
               <p>
                 <span className="block text-[17px] font-bold leading-tight">{scenario.pros.length} professionisti</span>
@@ -547,10 +545,7 @@ export function HeroDemo() {
                       </span>
                     </button>
                   ) : (
-                    <span
-                      aria-hidden
-                      className={`flex h-full items-center gap-3 px-4 ${searching && !reduce ? "animate-pulse" : ""}`}
-                    >
+                    <span aria-hidden className="flex h-full items-center gap-3 px-4">
                       <span className="h-12 w-12 shrink-0 rounded-full bg-ink/6" />
                       <span className="grid flex-1 gap-2">
                         <span className="h-3.5 w-2/5 rounded-full bg-ink/8" />
@@ -563,6 +558,13 @@ export function HeroDemo() {
               );
             })}
           </ul>
+          {/* The search, as in the app's page waits: the loader at page size over the whole list */}
+          {searching && (
+            <div aria-hidden className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-surface">
+              <PluggersLoader />
+              <p className="text-[15px] font-semibold">Cerco i professionisti vicino a te…</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

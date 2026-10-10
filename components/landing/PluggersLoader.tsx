@@ -13,7 +13,8 @@ import { useReducedMotionSafe } from "./useReducedMotionSafe";
 
 type Pt = [number, number];
 
-const CYCLE_MS = 3200;
+/** One full loop: run, plug in, wind back. */
+export const LOADER_CYCLE_MS = 3200;
 const END_RUN = 0.52;
 const END_SPARKS_OUT = 0.62;
 const START_REWIND = 0.72;
@@ -263,7 +264,7 @@ export function PluggersLoader({ size = 96, t }: { size?: number; t?: number }) 
     let start: number | undefined;
     let id = requestAnimationFrame(function frame(ms) {
       start ??= ms;
-      setNow(((ms - start) % CYCLE_MS) / CYCLE_MS);
+      setNow(((ms - start) % LOADER_CYCLE_MS) / LOADER_CYCLE_MS);
       id = requestAnimationFrame(frame);
     });
     return () => cancelAnimationFrame(id);
