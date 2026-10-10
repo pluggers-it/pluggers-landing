@@ -24,6 +24,12 @@
   --success: #2bb673;
   --danger: #d6334c;
   --phone: #141216;
+  /* The app's loader, "la spina col cavo" (TavolozzaSpina in the app) */
+  --spina-corpo: var(--accent);
+  --spina-collare: var(--accent-deep);
+  --spina-accesa: var(--accent-bright);
+  --spina-astine: #cfcbd9;
+  --spina-bordo-astine: #7a7487;
   --shadow-card: 0 1px 2px rgba(23, 21, 26, 0.04),
     0 24px 48px -32px rgba(23, 21, 26, 0.28);
   --shadow-lit: 0 0 0 2px var(--accent),
@@ -51,6 +57,9 @@ html.dark {
   --accent-soft: rgba(167, 139, 250, 0.14);
   --danger: #ff7a8a;
   --phone: #2e2740;
+  --spina-corpo: var(--accent-bright);
+  --spina-collare: var(--accent);
+  --spina-accesa: #b794ff;
   --shadow-card: 0 0 0 1px rgba(244, 241, 251, 0.06),
     0 24px 48px -32px rgba(0, 0, 0, 0.6);
   --shadow-lit: 0 0 0 2px var(--accent-text),
@@ -147,17 +156,7 @@ html.dark {
   animation: caret 1s steps(1) infinite;
 }
 
-/* Hero demo search: the logo plug runs round its cable, then the results come in one by one */
-@keyframes orbit {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.orbit {
-  animation: orbit 1.1s linear infinite;
-}
-
+/* Hero demo results come in one by one */
 @keyframes row-in {
   from {
     opacity: 0;
@@ -193,7 +192,6 @@ html.dark {
   }
   .caret,
   .hero-float,
-  .orbit,
   .row-in {
     animation: none;
   }

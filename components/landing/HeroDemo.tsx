@@ -7,6 +7,7 @@ import { useCallback, useEffect, useId, useRef, useState, type FocusEvent } from
 import { SparkCanvas, type SparkHandle } from "./SparkCanvas";
 import { useReducedMotionSafe } from "./useReducedMotionSafe";
 import { onIdle } from "./idle";
+import { PluggersLoader } from "./PluggersLoader";
 
 type Pro = { name: string; rating: string; reviews: number; jobs: number; distance: string };
 
@@ -84,24 +85,6 @@ const ROW_STAGGER_MS = 160;
 const TAP = "cursor-pointer touch-manipulation [-webkit-tap-highlight-color:transparent]";
 
 type Path = { d: string; end: [number, number] };
-
-/** The logo plug running round the circle of its own cable, like the app's loader. */
-function SearchPlug() {
-  return (
-    <span aria-hidden className="relative block h-10 w-10 shrink-0 motion-reduce:hidden">
-      <svg viewBox="0 0 40 40" className="absolute inset-0 h-full w-full">
-        <circle cx="20" cy="20" r="14" fill="none" stroke="var(--accent-soft)" strokeWidth="2.5" />
-      </svg>
-      <span className="orbit absolute inset-0">
-        <svg viewBox="0 0 40 40" className="absolute inset-0 h-full w-full">
-          {/* The cable trailing 150 degrees behind the plug, which sits at 12 o'clock */}
-          <path d="M 13 32.12 A 14 14 0 0 1 20 6" fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
-        </svg>
-        <span className="absolute left-1/2 top-[6px] h-[18px] w-[18px] -translate-x-1/2 -translate-y-1/2 rotate-45 bg-accent-text [mask:url(/brand/brand-mark.png)_center/contain_no-repeat]" />
-      </span>
-    </span>
-  );
-}
 
 export function HeroDemo() {
   const reduce = useReducedMotionSafe();
@@ -497,7 +480,7 @@ export function HeroDemo() {
           <div aria-live={manual ? "polite" : "off"} className="flex min-h-14 items-center gap-3 border-b border-hair px-4 py-2">
             {searching ? (
               <>
-                <SearchPlug />
+                <PluggersLoader size={40} />
                 <p className="text-[15px] font-semibold">Cerco i professionisti vicino a te…</p>
               </>
             ) : showResults ? (
