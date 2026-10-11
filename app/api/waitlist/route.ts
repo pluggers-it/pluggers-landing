@@ -99,7 +99,7 @@ export async function POST(req: Request) {
   }
 
   if (!profession || profession.length > MAX.profession) {
-    return NextResponse.json({ error: "Seleziona una professione o il tipo utente." }, { status: 400 });
+    return NextResponse.json({ error: "Seleziona una professione." }, { status: 400 });
   }
 
   // ── Insert ──────────────────────────────────────────────────────────────────

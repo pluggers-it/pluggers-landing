@@ -42,8 +42,6 @@ const PROFESSIONS: [string, string][] = [
   ["ascensorista", "Ascensorista"], ["altro", "Altro"],
 ];
 
-type UserType = "professionista" | "utente";
-
 interface Props {
   badge?: string;
   title?: string;
@@ -61,7 +59,6 @@ export function WaitlistForm({
 }: Props) {
   const uid = useId();
   const fid = (name: string) => `${uid}-${name}`;
-  const [userType, setUserType]             = useState<UserType>("professionista");
   const [firstName, setFirstName]           = useState("");
   const [lastName, setLastName]             = useState("");
   const [phone, setPhone]                   = useState("");
@@ -75,18 +72,7 @@ export function WaitlistForm({
   const [submitted, setSubmitted]           = useState(false);
   const [error, setError]                   = useState<string | null>(null);
 
-  function handleUserTypeChange(type: UserType) {
-    setUserType(type);
-    setProfession("");
-    setOtherProfession("");
-  }
-
-  const resolvedProfession =
-    userType === "utente"
-      ? "utente"
-      : profession === "altro"
-      ? otherProfession
-      : profession;
+  const resolvedProfession = profession === "altro" ? otherProfession : profession;
 
   const canSubmit = privacyChecked && termsChecked && !submitting;
 
@@ -145,25 +131,6 @@ export function WaitlistForm({
             }
           }}
         >
-          {/* ── User type toggle ─────────────────────────────────────────── */}
-          <div
-            role="group"
-            aria-label="Ti iscrivi come"
-            className="grid grid-cols-2 gap-1 rounded-2xl bg-page p-1 dark:bg-surface-rest"
-          >
-            {(["professionista", "utente"] as UserType[]).map((type) => (
-              <button
-                key={type}
-                type="button"
-                aria-pressed={userType === type}
-                onClick={() => handleUserTypeChange(type)}
-                className="h-12 rounded-xl text-sm font-semibold text-muted transition hover:text-ink aria-pressed:bg-surface aria-pressed:text-ink aria-pressed:shadow-sm"
-              >
-                {type === "professionista" ? "Professionista" : "Cliente"}
-              </button>
-            ))}
-          </div>
-
           {/* ── Common fields: Nome | Cognome | Città | Telefono ──────────── */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field id={fid("first-name")} label="Nome">
@@ -203,42 +170,38 @@ export function WaitlistForm({
             </Field>
           </div>
 
-          {/* ── Email + Profession (profession only for professionals) ────── */}
+          {/* ── Email + Profession ─────────────────────────────────────────── */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className={userType === "utente" ? "sm:col-span-2" : ""}>
-              <Field id={fid("email")} label="Email">
-                <input
-                  id={fid("email")} name="email"
-                  type="email" required value={email} autoComplete="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="nome@email.com"
-                  className={INPUT_CLASS}
-                />
-              </Field>
-            </div>
+            <Field id={fid("email")} label="Email">
+              <input
+                id={fid("email")} name="email"
+                type="email" required value={email} autoComplete="email"
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="nome@email.com"
+                className={INPUT_CLASS}
+              />
+            </Field>
 
-            {userType === "professionista" && (
-              <Field id={fid("profession")} label="Professione">
-                <select
-                  id={fid("profession")} name="profession"
-                  required value={profession}
-                  onChange={(e) => {
-                    setProfession(e.target.value);
-                    if (e.target.value !== "altro") setOtherProfession("");
-                  }}
-                  className={`${SELECT_CLASS} ${profession ? "" : "text-muted"}`} style={SELECT_STYLE}
-                >
-                  <option value="" disabled>Scegli</option>
-                  {PROFESSIONS.map(([value, label]) => (
-                    <option key={value} value={value}>{label}</option>
-                  ))}
-                </select>
-              </Field>
-            )}
+            <Field id={fid("profession")} label="Professione">
+              <select
+                id={fid("profession")} name="profession"
+                required value={profession}
+                onChange={(e) => {
+                  setProfession(e.target.value);
+                  if (e.target.value !== "altro") setOtherProfession("");
+                }}
+                className={`${SELECT_CLASS} ${profession ? "" : "text-muted"}`} style={SELECT_STYLE}
+              >
+                <option value="" disabled>Scegli</option>
+                {PROFESSIONS.map(([value, label]) => (
+                  <option key={value} value={value}>{label}</option>
+                ))}
+              </select>
+            </Field>
           </div>
 
           {/* "Altro" profession free-text */}
-          {userType === "professionista" && profession === "altro" && (
+          {profession === "altro" && (
             <Field id={fid("other-profession")} label="La tua professione">
               <input
                 id={fid("other-profession")} name="otherProfession"
