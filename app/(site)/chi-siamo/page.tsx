@@ -133,7 +133,7 @@ function initials(name: string) {
 
 function Member({ m }: { m: TeamMember }) {
   return (
-    <li className="flex gap-4">
+    <li className="flex items-center gap-4">
       {m.photo ? (
         <Image src={m.photo} alt={m.name} width={72} height={72} className="h-[72px] w-[72px] shrink-0 rounded-full object-cover" />
       ) : (
@@ -147,7 +147,6 @@ function Member({ m }: { m: TeamMember }) {
       <div className="min-w-0">
         <p className="font-bold leading-snug">{m.name}</p>
         <p className="text-[15px] font-medium text-accent-text">{m.role}</p>
-        <p className="mt-2 text-[15px] leading-[1.6] text-muted">{m.bio}</p>
       </div>
     </li>
   );
