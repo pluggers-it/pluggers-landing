@@ -79,7 +79,7 @@ const STEPS: GuideStep[] = [
   },
   {
     id: "intervento", short: "L'intervento", src: `${G}/08.webp`,
-    alt: "Schermata «Dettaglio intervento»: il professionista, quando e dove, il problema, la stima, lo stato e il bottone «Scansiona QR».",
+    alt: "Schermata «Dettaglio intervento»: il professionista, lo stato con l'invito a inquadrare il QR, quando e dove, il problema, la stima e il bottone «Scansiona QR».",
     title: "Il giorno dell'intervento",
     text: "Nella scheda dell'appuntamento trovi data, indirizzo, problema e prezzo concordato. Quando il professionista arriva, registrate l'inizio insieme.",
     points: ["Tocca «Scansiona QR» e inquadra il codice sul telefono del professionista", "A lavoro finito fate lo stesso", "Poi puoi lasciare una recensione"],
