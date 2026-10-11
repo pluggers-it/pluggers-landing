@@ -38,7 +38,7 @@ const STEPS: GuideStep[] = [
     alt: "Schermata «Capiamo il problema»: la domanda «Da dove esce l'acqua?» con tre risposte da toccare, «Altro» e «Non lo so».",
     title: "Rispondi a due o tre domande",
     text: "L'assistente chiede quello che gli serve per capire il guasto. Le risposte sono già scritte, basta toccare quella giusta.",
-    points: ["Tocca la risposta che corrisponde a quello che vedi", "Se non sei sicuro, scegli «Non lo so»", "Se c'è pericolo, l'app ti dice di chiamare il 112"],
+    points: ["Tocca la risposta che corrisponde a quello che vedi", "Se non sei sicuro, scegli «Non lo so»"],
   },
   {
     id: "diagnosi", short: "Il riepilogo", src: `${G}/03.webp`,
@@ -58,15 +58,15 @@ const STEPS: GuideStep[] = [
     id: "giorno", short: "Il giorno", src: `${G}/05.webp`,
     alt: "Schermata «Prenota»: il calendario di ottobre con i giorni disponibili cerchiati in viola e il bottone «Richiedi stima».",
     title: "Scegli il giorno",
-    text: "I giorni cerchiati in viola sono quelli disponibili. L'orario te lo propone il professionista in chat, prima che tu accetti.",
+    text: "Seleziona uno dei giorni cerchiati in viola: sono quelli disponibili. Il professionista ti proporrà un orario in chat, che potrai valutare prima di confermare l'appuntamento.",
     points: ["Tocca il giorno che preferisci", "Tocca «Richiedi stima»"],
   },
   {
     id: "stima", short: "La stima", src: `${G}/06.webp`,
     alt: "Chat con il professionista: la foto del rubinetto, un messaggio e la scheda «Stima» con il lavoro previsto, i materiali e i bottoni «Accetta» e «Rifiuta».",
     title: "Ricevi la stima in chat",
-    text: "Il professionista guarda descrizione e foto. Poi ti scrive quanto può costare il lavoro. Se chiede un Costo Chiamata, cioè la cifra per venire a vedere il guasto, lo trovi lì.",
-    points: ["La stima è indicativa: il prezzo esatto è nel preventivo, dopo la visita", "Tocca «Accetta» e l'appuntamento è confermato: le richieste agli altri professionisti si chiudono", "Tocca «Rifiuta» e non devi niente"],
+    text: "Il professionista guarda descrizione e foto. Poi ti scrive quanto può costare il lavoro. Se chiede un Costo Chiamata, cioè la cifra per il sopralluogo, lo trovi all'interno della stima.",
+    points: ["La stima è indicativa: il prezzo esatto è nel preventivo, dopo il sopralluogo", "Tocca «Accetta» e l'appuntamento è confermato: le richieste agli altri professionisti si chiudono", "Tocca «Rifiuta» e non devi fare niente"],
     tip: "Hai un dubbio? Chiedilo in chat prima di accettare, anche con una foto.",
   },
   {
@@ -158,7 +158,10 @@ export default function ClientiPage() {
       </section>
 
       <section className={`${CONTAINER} pb-16`}>
-        <WaitlistForm />
+        <WaitlistForm
+          title="Sei un professionista e non siamo ancora nella tua città?"
+          description="Lasciaci i tuoi contatti e ti scriviamo quando Pluggers arriva nella tua città."
+        />
       </section>
     </SitePage>
   );

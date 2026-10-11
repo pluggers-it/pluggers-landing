@@ -14,7 +14,7 @@ const PRIVACY_UPDATED = "2026-10-06";
 const TERMS_UPDATED = "2026-10-06";
 const ACCOUNT_DELETION_UPDATED = "2026-10-07";
 const SUPPORT_UPDATED = "2026-10-07";
-const PROS_UPDATED = "2026-10-09";
+const PROS_UPDATED = "2026-10-11";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Falls back to no posts if the database is unreachable (e.g. a build without env vars).
