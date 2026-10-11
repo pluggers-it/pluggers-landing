@@ -1,6 +1,6 @@
 import { ORG, ORG_ADDRESS_LINE, SOCIAL_LINKS } from "@/lib/site";
 
-export const ABOUT_UPDATED = "2026-10-11";
+export const ABOUT_UPDATED = "2026-10-12";
 
 const FOUNDED = "6 ottobre 2026";
 
@@ -38,26 +38,18 @@ export const WHERE =
   "Oggi a Torino, con idraulici, elettricisti, fabbri e gli altri artigiani della casa. " +
   "Se vivi altrove, lascia la tua città nella lista d'attesa: ci aiuta a decidere dove aprire.";
 
-export type TeamMember = { name: string; role: string; bio: string; photo?: string };
+export type TeamMember = { name: string; role: string; photo?: string };
 
-/** Bios from the Team page on Notion (March 2026). Photos: public/team/, 288px square, face framed like Gianmarco's. */
+/** Only photo, name and role: the bios were removed (site review S-41). Photos: public/team/, 288px square, face framed like Gianmarco's. */
 export const TEAM: TeamMember[] = [
-  { name: "Gianmarco Piras", role: "Chief Executive Officer", photo: "/team/gianmarco-piras.webp",
-    bio: "Laureato in Psicologia del lavoro, viene da consulenza e startup ed è HR Business Partner." },
-  { name: "Simone Marras", role: "Chief Strategy Officer", photo: "/team/simone-marras.webp",
-    bio: "Viene dalla comunicazione e ha lavorato in startup in Italia e all'estero." },
-  { name: "Andrea Iezzi", role: "Chief Marketing Officer", photo: "/team/andrea-iezzi.webp",
-    bio: "Master in Digital Marketing, ha lavorato da freelance per aziende ed enti pubblici." },
-  { name: "Luca Piras", role: "Chief of Staff", photo: "/team/luca-piras.webp",
-    bio: "Viene da risorse umane e informatica, con una specializzazione in cyberpsicologia. È diplomato al Conservatorio." },
-  { name: "Mattia Pavone", role: "Chief Technology Officer", photo: "/team/mattia-pavone.webp",
-    bio: "È stato IT Specialist in Fater S.p.A. e analista programmatore in Ready2Use." },
-  { name: "Alberto Migliorato", role: "Tech Lead & Software Architect", photo: "/team/alberto-migliorato.webp",
-    bio: "Ha studiato AI e Data Analytics al Politecnico di Torino. Programma in Java da più di otto anni. È stato socio e tech lead di Novaverse e ha lavorato in KPMG." },
-  { name: "Andrea Di Felice", role: "AI Engineer & Data Scientist",
-    bio: "Ingegnere informatico specializzato in data science, è stato assegnista di ricerca sulla realtà virtuale." },
-  { name: "Gabriele Merlino", role: "AI Engineer & Cloud Data Specialist", photo: "/team/gabriele-merlino.webp",
-    bio: "Data engineer in Reply S.p.A., fa ricerca sull'intelligenza artificiale generativa all'INRIM. Tesi all'ETH di Zurigo." },
+  { name: "Gianmarco Piras", role: "Chief Executive Officer", photo: "/team/gianmarco-piras.webp" },
+  { name: "Simone Marras", role: "Chief Strategy Officer", photo: "/team/simone-marras.webp" },
+  { name: "Andrea Iezzi", role: "Chief Marketing Officer", photo: "/team/andrea-iezzi.webp" },
+  { name: "Luca Piras", role: "Chief of Staff", photo: "/team/luca-piras.webp" },
+  { name: "Mattia Pavone", role: "Chief Technology Officer", photo: "/team/mattia-pavone.webp" },
+  { name: "Alberto Migliorato", role: "Tech Lead & Software Architect", photo: "/team/alberto-migliorato.webp" },
+  { name: "Andrea Di Felice", role: "AI Engineer & Data Scientist" },
+  { name: "Gabriele Merlino", role: "AI Engineer & Cloud Data Specialist", photo: "/team/gabriele-merlino.webp" },
 ];
 
 // Advisors appear only after they have agreed to be named on the public site.
