@@ -22,7 +22,8 @@ export function TradesMarquee() {
         </Link>
       </div>
 
-      <div className="marquee mt-8 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
+      {/* relative: without the animation's transform, the sr-only labels would anchor to the page and widen it. */}
+      <div className="marquee relative mt-8 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
         <div className="marquee-track flex w-max">
           {[0, 1].map((copy) => (
             <ul key={copy} className="flex gap-4 pr-4" aria-hidden={copy === 1}>
