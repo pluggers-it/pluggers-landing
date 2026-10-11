@@ -1,6 +1,8 @@
 /**
  * Newsletter sign-ups go straight into the beehiiv publication the newsletter is sent from, so a
  * new subscriber gets the next issue without anyone exporting anything (Gianmarco, 9/10/2026).
+ * Always with double opt-in: anyone can type any address in the form, so beehiiv first sends a
+ * confirmation email and the address is subscribed only once its owner confirms.
  * Off until BEEHIIV_API_KEY and BEEHIIV_PUBLICATION_ID are set on Vercel.
  */
 export async function addToNewsletterList(email: string): Promise<"ok" | "off" | "error"> {
@@ -13,7 +15,10 @@ export async function addToNewsletterList(email: string): Promise<"ok" | "off" |
       headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
       body: JSON.stringify({
         email,
-        reactivate_existing: true, // they just asked for it again on the site
+        double_opt_override: "on",
+        // Only for someone knowingly coming back (beehiiv docs): from a form anyone can fill, an address
+        // that unsubscribed stays unsubscribed.
+        reactivate_existing: false,
         send_welcome_email: true,
         utm_source: "plggrs.it",
       }),
