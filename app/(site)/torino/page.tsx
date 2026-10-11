@@ -5,6 +5,7 @@ import { MapPin } from "lucide-react";
 import { JsonLd } from "@/components/JsonLd";
 import { FaqList } from "@/components/landing/FaqList";
 import { SitePage } from "@/components/landing/SitePage";
+import { TorinoZones } from "@/components/landing/TorinoZones";
 import { WEB_APP_URL } from "@/components/landing/links";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
 import { breadcrumbSchema, faqSchema, graph, pageMetadata, pageSchema, serviceSchema } from "@/lib/seo";
@@ -96,6 +97,8 @@ export default function TorinoPage() {
           </section>
         );
       })}
+
+      <TorinoZones who="un professionista" />
 
       <section className="mx-auto w-full max-w-[760px] px-5 py-12 sm:px-8 lg:py-16" aria-labelledby="faq-title">
         <h2 id="faq-title" className={H2}>
