@@ -12,7 +12,7 @@ const FACTS =
   `${ORG.name} è gestita da ${ORG.legalName}, sede legale in ${ORG_ADDRESS_LINE}, P.IVA ${ORG.vatNumber}. ` +
   "Per chi cerca un professionista è gratis: se il professionista chiede un Costo Chiamata lo indica " +
   "nell'app prima della visita, e il compenso si paga direttamente a lui, non nell'app. " +
-  `È un'app per iPhone e Android, in arrivo su App Store e Google Play, e si usa anche dal browser su ${WEB_APP_URL}. ` +
+  `È un'app per iPhone e Android, si scarica da App Store e Google Play, e da computer si usa anche dal browser su ${WEB_APP_URL}. ` +
   `Contatti: ${ORG.email}.`;
 
 const faqMd = (items: readonly { q: string; a: string }[]) =>

@@ -2,9 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu } from "lucide-react";
 import logo from "@/assets/logo.png";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { HomeLink } from "./HomeLink";
-import { WEB_APP_URL } from "./links";
+import { AppLink } from "./AppLink";
 import { BTN_OUTLINE, CONTAINER } from "./styles";
 
 const NAV = [
@@ -35,7 +34,7 @@ export function LandingHeader() {
             className="h-9 w-9 rounded-[10px]"
             priority
           />
-          <span className="hidden text-lg font-bold tracking-[-0.02em] sm:inline">
+          <span className="text-lg font-bold tracking-[-0.02em]">
             Pluggers
           </span>
         </HomeLink>
@@ -53,10 +52,9 @@ export function LandingHeader() {
               </li>
             ))}
           </ul>
-          <ThemeToggle />
-          <a href={WEB_APP_URL} className={BTN_OUTLINE}>
+          <AppLink className={BTN_OUTLINE}>
             Apri Pluggers
-          </a>
+          </AppLink>
           {/* phones and tablets: the same links behind a menu, no script needed */}
           <details className="group relative lg:hidden">
             <summary

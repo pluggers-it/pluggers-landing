@@ -3,7 +3,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { PageShell } from "@/components/landing/PageShell";
-import { WEB_APP_URL } from "@/components/landing/links";
+import { AppLink } from "@/components/landing/AppLink";
 import { BTN_PRIMARY, CONTAINER } from "@/components/landing/styles";
 import { ArticleToc } from "@/components/ArticleToc";
 import { JsonLd } from "@/components/JsonLd";
@@ -162,9 +162,9 @@ export default async function BlogPostPage(
                 <p className="mt-2 text-[15px] leading-[1.55] text-muted">
                   Richieste già descritte e classificate, dai clienti dentro il raggio che scegli tu.
                 </p>
-                <a href={WEB_APP_URL} className={`${BTN_PRIMARY} mt-5 w-full`}>
+                <AppLink className={`${BTN_PRIMARY} mt-5 w-full`}>
                   Apri Pluggers
-                </a>
+                </AppLink>
                 <Link href="/professionisti" className="mt-2 inline-flex min-h-12 items-center text-[15px] font-semibold underline underline-offset-4">
                   Come funziona per i professionisti
                 </Link>

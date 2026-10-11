@@ -5,6 +5,7 @@ import Link from "next/link";
 import logo from "@/assets/logo.png";
 import { GuidePhone } from "@/components/landing/GuideSteps";
 import { StoreBadges } from "@/components/landing/StoreBadges";
+import { AppLink } from "@/components/landing/AppLink";
 import { WEB_APP_URL } from "@/components/landing/links";
 import { BTN_PRIMARY, CONTAINER } from "@/components/landing/styles";
 import { inviteCode, readInvite } from "@/lib/invite";
@@ -57,9 +58,9 @@ export default async function InvitePage({ params }: Props) {
             </h1>
             <p className="mt-5 max-w-[52ch] text-[17px] leading-[1.6] text-muted sm:text-lg">{ORG.summary}</p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a href={appUrl} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+              <AppLink href={appUrl} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
                 Apri Pluggers
-              </a>
+              </AppLink>
               <StoreBadges />
             </div>
             {code && <CopyCode code={code} />}

@@ -7,7 +7,7 @@ import { GuidePhone, GuideSteps, type GuideStep } from "@/components/landing/Gui
 import { SitePage } from "@/components/landing/SitePage";
 import { TrustRows } from "@/components/landing/TrustRows";
 import { StoreBadges } from "@/components/landing/StoreBadges";
-import { WEB_APP_URL } from "@/components/landing/links";
+import { AppLink } from "@/components/landing/AppLink";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
 import { FAQ } from "@/lib/home";
 import { breadcrumbSchema, graph, pageMetadata, pageSchema } from "@/lib/seo";
@@ -113,9 +113,9 @@ export default function ClientiPage() {
             Otto passi, con i nomi dei pulsanti che trovi nell&apos;app. Non serve sapere che professionista ti serve: lo capisce l&apos;assistente dalla tua descrizione. Per te Pluggers è gratis.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a href={WEB_APP_URL} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+            <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
               Racconta il tuo problema
-            </a>
+            </AppLink>
             <StoreBadges />
           </div>
         </div>
