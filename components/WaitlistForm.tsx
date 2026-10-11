@@ -71,6 +71,7 @@ export function WaitlistForm({
   const [otherProfession, setOtherProfession] = useState("");
   const [privacyChecked, setPrivacyChecked] = useState(false);
   const [termsChecked, setTermsChecked]     = useState(false);
+  const [marketingChecked, setMarketingChecked] = useState(false);
   const [submitting, setSubmitting]         = useState(false);
   const [submitted, setSubmitted]           = useState(false);
   const [error, setError]                   = useState<string | null>(null);
@@ -128,6 +129,7 @@ export function WaitlistForm({
                   profession: resolvedProfession,
                   source: submissionSource,
                   privacyAccepted: true,
+                  marketingConsent: marketingChecked,
                 }),
               });
               if (res.ok) {
@@ -286,6 +288,17 @@ export function WaitlistForm({
               </Link>
               {" "}di utilizzo del servizio.
             </LegalCheckbox>
+
+            {/* Optional and separate from privacy and terms. The newsletter page is itself the sign-up to the newsletter. */}
+            {submissionSource === "waitlist" && (
+              <LegalCheckbox
+                id={fid("marketing")}
+                checked={marketingChecked}
+                onChange={setMarketingChecked}
+              >
+                Accetto che i miei contatti vengano utilizzati anche per finalità di marketing (aggiornamenti, novità e offerte di Pluggers)
+              </LegalCheckbox>
+            )}
           </div>
 
           <button
