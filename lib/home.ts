@@ -139,6 +139,6 @@ export const FAQ = [
   },
   {
     q: "Serve scaricare un'app?",
-    a: "Sì: Pluggers è un'app per iPhone e Android, la scarichi da App Store o Google Play. Da computer la usi anche dal browser, su app.plggrs.it.",
+    a: "Sì: Pluggers è un'app per iPhone e Android. Da computer la usi anche dal browser, su app.plggrs.it.",
   },
 ] as const;
