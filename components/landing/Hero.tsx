@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { MapPin, MapPinPlus } from "lucide-react";
 import { FieldCanvas } from "./FieldCanvas";
 import { HeroDemo } from "./HeroDemo";
 import { HeroIcon } from "./HeroIcon";
@@ -23,10 +23,16 @@ export function Hero() {
           <p className="mt-5 max-w-[44ch] text-[17px] leading-[1.55] text-muted sm:text-lg">
             {HERO.lede}
           </p>
-          <p className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-muted">
-            <MapPin className="h-4 w-4 text-accent-text" strokeWidth={2} aria-hidden />
-            Oggi attivo a Torino
-          </p>
+          <ul className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm font-medium text-muted">
+            <li className="inline-flex items-center gap-1.5">
+              <MapPin className="h-4 w-4 text-accent-text" strokeWidth={2} aria-hidden />
+              Oggi attivo a Torino
+            </li>
+            <li className="inline-flex items-center gap-1.5">
+              <MapPinPlus className="h-4 w-4 text-accent-text" strokeWidth={2} aria-hidden />
+              Prossimamente in arrivo in tutta Italia
+            </li>
+          </ul>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
               Racconta il problema

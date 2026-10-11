@@ -30,14 +30,14 @@ export const COMING = {
 export const HOW = {
   title: "Come funziona",
   lede:
-    "Pluggers è una piattaforma per chi ha un problema in casa a Torino. Descrivi il guasto con parole e foto: " +
+    "Descrivi il guasto con parole e foto: " +
     "un assistente di intelligenza artificiale capisce quale professionista serve e quanto è urgente, " +
     "e ti mostra chi lavora nella tua zona. Per te usarla è gratis: se il professionista chiede un " +
     "Costo Chiamata te lo indica prima della visita, e lo paghi a lui.",
   steps: [
     {
       title: "Racconta il problema",
-      text: "Scrivi due righe e aggiungi una foto. Se serve, l'assistente ti fa qualche domanda senza termini tecnici.",
+      text: "Scrivi due righe e aggiungi una foto. Se serve, l'intelligenza artificiale ti fa qualche domanda senza termini tecnici.",
       src: "/screens/step-describe.png",
       alt: "Schermata iniziale dell'app: campo «Di cosa hai bisogno?» con la descrizione di un rubinetto che perde, una foto allegata e il bottone «Trova professionisti».",
     },

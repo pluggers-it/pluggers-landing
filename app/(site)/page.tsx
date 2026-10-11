@@ -5,7 +5,6 @@ import { appSchema, faqSchema, graph, pageMetadata, pageSchema, serviceSchema } 
 import { SITE_URL } from "@/lib/site";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ComingSoon } from "@/components/landing/ComingSoon";
-import { TeamStrip } from "@/components/landing/TeamStrip";
 import { LandingHeader } from "@/components/landing/LandingHeader";
 import { Hero } from "@/components/landing/Hero";
 import { HowItWorks } from "@/components/landing/HowItWorks";
@@ -46,7 +45,6 @@ export default function Home() {
         <ForPros />
         <TrustRows />
         <ComingSoon />
-        <TeamStrip />
         <Faq />
       </main>
       <div className={CONTAINER}>

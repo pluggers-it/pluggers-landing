@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { TRADES_SECTION } from "@/lib/home";
 import { TRADES } from "@/lib/trades";
 import { CONTAINER, H2, LEDE_ANSWER } from "./styles";
+import { TradesScroller } from "./TradesScroller";
 
 export function TradesMarquee() {
   return (
@@ -22,8 +23,9 @@ export function TradesMarquee() {
         </Link>
       </div>
 
-      <div className="marquee mt-8 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
-        <div className="marquee-track flex w-max">
+      {/* relative: the sr-only labels stay inside the row instead of widening the page. */}
+      <TradesScroller className="relative mt-8 select-none overflow-x-auto overscroll-x-contain [scrollbar-width:none] [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)] [&::-webkit-scrollbar]:hidden">
+        <div className="flex w-max">
           {[0, 1].map((copy) => (
             <ul key={copy} className="flex gap-4 pr-4" aria-hidden={copy === 1}>
               {TRADES.map((trade) => (
@@ -50,7 +52,7 @@ export function TradesMarquee() {
             </ul>
           ))}
         </div>
-      </div>
+      </TradesScroller>
     </section>
   );
 }

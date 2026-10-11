@@ -51,11 +51,11 @@ const STEPS: GuideStep[] = [
   },
   {
     id: "richieste", short: "Richieste", src: `${G}/04.webp`,
-    alt: "Sezione «Richieste»: tre richieste da decidere con giorno e orario, mestiere, il problema, la stima indicativa, la distanza e «Rifiuta».",
+    alt: "Sezione «Richieste»: le schede «Da decidere» e «Da preventivare», i filtri per ordinare e per giorno e tre richieste con il problema, giorno e orario, la distanza e la cifra indicativa.",
     title: "Ricevi le richieste",
     text: "Le richieste arrivano dai clienti della tua zona che ti hanno scelto. Ognuna ha giorno, mestiere, problema, distanza da te e una cifra di riferimento calcolata dall'app.",
-    points: ["Apri quelle che ti interessano", "Rifiuta le altre con un tocco"],
-    tip: "Guarda le foto prima di uscire: spesso bastano per capire che pezzo portare.",
+    points: ["Apri quelle che ti interessano", "Rifiuta le altre"],
+    tip: "Guarda il referto e le foto prima di uscire: spesso bastano per capire che pezzo portare.",
   },
   {
     id: "preventivo", short: "Stima e preventivo", src: `${G}/05.webp`,
@@ -69,8 +69,8 @@ const STEPS: GuideStep[] = [
     id: "agenda", short: "Agenda", src: `${G}/06.webp`,
     alt: "Agenda del professionista: il calendario di ottobre, i prossimi interventi con lo stato e il bottone «Appuntamento cliente esterno».",
     title: "Gli appuntamenti in agenda",
-    text: "Gli interventi confermati entrano in agenda da soli. Puoi segnare anche gli appuntamenti dei tuoi clienti di sempre.",
-    points: ["Il mese a colpo d'occhio e i prossimi interventi", "Lo stato di ogni appuntamento", "Mostri il QR al cliente all'arrivo e a lavoro finito"],
+    text: "Gli interventi confermati entrano in agenda da soli. Puoi segnare anche gli appuntamenti dei tuoi clienti di sempre, anche se non ti hanno contattato da Pluggers: così hai tutto in un'unica app.",
+    points: ["Il mese a colpo d'occhio e i prossimi interventi", "Lo stato di ogni appuntamento"],
     tip: "I clienti che non usano Pluggers li aggiungi con «Appuntamento cliente esterno».",
   },
 ];
