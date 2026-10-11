@@ -117,7 +117,7 @@ export default function ChiSiamoPage() {
           </dl>
         </section>
 
-        <div className="mt-12">
+        <div className="mt-12 flex justify-center">
           <a href={WEB_APP_URL} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
             Apri Pluggers
           </a>
