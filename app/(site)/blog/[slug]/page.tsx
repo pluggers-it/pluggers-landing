@@ -5,6 +5,7 @@ import { ChevronRight } from "lucide-react";
 import { PageShell } from "@/components/landing/PageShell";
 import { WEB_APP_URL } from "@/components/landing/links";
 import { BTN_PRIMARY, CONTAINER } from "@/components/landing/styles";
+import { ArticleToc } from "@/components/ArticleToc";
 import { JsonLd } from "@/components/JsonLd";
 import { ORG_ID, breadcrumbSchema, graph, pageMetadata } from "@/lib/seo";
 import { ORG, SITE_URL } from "@/lib/site";
@@ -147,22 +148,7 @@ export default async function BlogPostPage(
             </p>
           </header>
 
-          {toc.length > 1 && (
-            <nav aria-label="In questo articolo" className="hidden lg:col-start-1 lg:row-start-2 lg:mt-10 lg:block">
-              <div className="sticky top-8 border-t border-hair pt-8">
-                <p className="text-[13px] font-bold uppercase tracking-[0.08em] text-muted">In questo articolo</p>
-                <ol className="mt-3 grid gap-1">
-                  {toc.map((t) => (
-                    <li key={t.id}>
-                      <a href={`#${t.id}`} className="block py-1.5 text-[15px] leading-snug text-muted transition hover:text-ink">
-                        {t.text}
-                      </a>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </nav>
-          )}
+          {toc.length > 1 && <ArticleToc items={toc} />}
 
           <article
             className={`blog-body mt-10 border-t border-hair pt-8 lg:col-start-2 lg:row-start-2 ${toc.length > 1 ? "blog-body--toc" : ""}`}
