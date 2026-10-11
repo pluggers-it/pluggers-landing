@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Menu } from "lucide-react";
 import logo from "@/assets/logo.png";
@@ -7,16 +10,20 @@ import { AppLink } from "./AppLink";
 import { BTN_OUTLINE, CONTAINER } from "./styles";
 
 const NAV = [
-  { href: "/clienti", label: "Per i clienti" },
-  { href: "/professionisti", label: "Per i professionisti" },
+  { href: "/", label: "Home" },
   { href: "/chi-siamo", label: "Chi siamo" },
+  { href: "/professionisti", label: "Per i professionisti" },
+  { href: "/clienti", label: "Per i clienti" },
   { href: "/blog", label: "Blog" },
 ];
 
 const NAV_LINK =
-  "inline-flex h-12 items-center rounded-full px-4 text-[15px] font-semibold transition hover:bg-surface";
+  "inline-flex h-12 items-center rounded-full px-4 text-[15px] font-semibold transition hover:bg-surface aria-[current=page]:text-accent-text";
 
 export function LandingHeader() {
+  const pathname = usePathname();
+  const current = (href: string) =>
+    pathname === href || (href !== "/" && pathname.startsWith(`${href}/`)) ? "page" : undefined;
   return (
     <div className="sticky top-0 z-40 border-b border-hair bg-page/90 backdrop-blur lg:static lg:border-0 lg:bg-transparent lg:backdrop-blur-none">
       <header
@@ -46,7 +53,7 @@ export function LandingHeader() {
           <ul className="hidden items-center lg:flex">
             {NAV.map(({ href, label }) => (
               <li key={href}>
-                <Link href={href} className={NAV_LINK}>
+                <Link href={href} className={NAV_LINK} aria-current={current(href)}>
                   {label}
                 </Link>
               </li>
@@ -68,7 +75,8 @@ export function LandingHeader() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="flex min-h-12 items-center rounded-xl px-4 text-[16px] font-semibold hover:bg-page"
+                    aria-current={current(href)}
+                    className="flex min-h-12 items-center rounded-xl px-4 text-[16px] font-semibold hover:bg-page aria-[current=page]:text-accent-text"
                   >
                     {label}
                   </Link>
