@@ -1,6 +1,6 @@
 import { Inbox, Radar, Receipt } from "lucide-react";
 import { WaitlistForm } from "@/components/WaitlistForm";
-import { WEB_APP_URL } from "./links";
+import { AppLink } from "./AppLink";
 import { PROS } from "@/lib/home";
 import { BTN_PRIMARY, CONTAINER, H2, LEDE_ANSWER } from "./styles";
 
@@ -37,9 +37,9 @@ export function ForPros() {
             })}
           </ul>
 
-          <a href={WEB_APP_URL} className={`${BTN_PRIMARY} mt-8`}>
+          <AppLink className={`${BTN_PRIMARY} mt-8`}>
             {PROS.cta}
-          </a>
+          </AppLink>
         </div>
 
         <div className="lg:pt-2">

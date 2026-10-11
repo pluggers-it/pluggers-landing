@@ -103,6 +103,7 @@ export const websiteSchema = {
 };
 
 const storeUrls = [APP_STORE_URL, PLAY_STORE_URL].filter(Boolean);
+const platforms = [APP_STORE_URL && "iOS", PLAY_STORE_URL && "Android", "Web"].filter(Boolean).join(", ");
 
 // Until the store links exist, declare only the platform people can open today: the web version.
 export const appSchema = {
@@ -111,7 +112,7 @@ export const appSchema = {
   name: ORG.name,
   description: ORG.summary,
   url: WEB_APP_URL,
-  operatingSystem: storeUrls.length > 0 ? "iOS, Android, Web" : "Web",
+  operatingSystem: platforms,
   applicationCategory: "LifestyleApplication",
   inLanguage: "it",
   offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },

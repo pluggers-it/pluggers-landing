@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { ConsentProvider } from "@/lib/consent";
 import { ConsentGate } from "@/components/ConsentGate";
 import { BackToTop } from "@/components/BackToTop";
+import { ThemeSwitch } from "@/components/ThemeSwitch";
 import { JsonLd } from "@/components/JsonLd";
 import { HOME } from "@/lib/home";
 import { graph, organizationSchema, pageMetadata, websiteSchema } from "@/lib/seo";
@@ -42,7 +43,10 @@ export default function RootLayout({
       <body className={`${jakarta.variable} font-sans antialiased`}>
         <JsonLd data={graph(organizationSchema, websiteSchema)} />
         <ConsentProvider>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            {children}
+            <ThemeSwitch />
+          </ThemeProvider>
           <ConsentGate />
           <Analytics />
           <BackToTop />
