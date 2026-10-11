@@ -1,6 +1,6 @@
 import { ORG, ORG_ADDRESS_LINE, SOCIAL_LINKS } from "@/lib/site";
 
-export const ABOUT_UPDATED = "2026-10-09";
+export const ABOUT_UPDATED = "2026-10-11";
 
 const FOUNDED = "6 ottobre 2026";
 
@@ -8,8 +8,8 @@ export const ABOUT = {
   title: "Chi siamo",
   description: "Le persone dietro Pluggers, la piattaforma nata a Torino per gli interventi in casa.",
   intro:
-    "Pluggers è una piattaforma per gli interventi in casa, nata a Torino. Oggi mette in contatto privati e artigiani. " +
-    "Imprese e amministratori di condominio sono in arrivo.",
+    "Pluggers è una piattaforma per gli interventi in casa. Oggi mette in contatto privati e artigiani. " +
+    "I profili ottimizzati per imprese e amministratori di condominio sono in arrivo.",
 };
 
 export const STORY =
