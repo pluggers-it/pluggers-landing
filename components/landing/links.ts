@@ -21,3 +21,10 @@ export function storeUrlFor(userAgent: string, platform = "", touchPoints = 0): 
   return null;
 }
 
+/** The web app with the parameters it reads: `ref`, the invite code, and `p`, the token of an estimate link. */
+export function webAppUrl(params: { ref?: string | null; p?: string | null }): string {
+  const query = new URLSearchParams();
+  if (params.ref) query.set("ref", params.ref);
+  if (params.p) query.set("p", params.p);
+  return query.size ? `${WEB_APP_URL}/?${query}` : WEB_APP_URL;
+}

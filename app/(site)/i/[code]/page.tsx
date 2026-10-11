@@ -4,16 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/logo.png";
 import { GuidePhone } from "@/components/landing/GuideSteps";
-import { StoreBadges } from "@/components/landing/StoreBadges";
-import { AppLink } from "@/components/landing/AppLink";
-import { WEB_APP_URL } from "@/components/landing/links";
+import { webAppUrl } from "@/components/landing/links";
 import { BTN_PRIMARY, CONTAINER } from "@/components/landing/styles";
 import { inviteCode, readInvite } from "@/lib/invite";
 import { OG_IMAGE } from "@/lib/seo";
 import { ORG } from "@/lib/site";
 import { CopyCode } from "./CopyCode";
 
-type Props = { params: Promise<{ code: string }> };
+type Props = { params: Promise<{ code: string }>; searchParams: Promise<{ p?: string | string[] }> };
 
 // One lookup per request for both the metadata and the page (a fetch with a timeout signal isn't deduplicated by Next).
 const lookup = cache(async (raw: string) => {
@@ -36,10 +34,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+/** The estimate link token the web app reads, as it checks it: hex, 16 to 64 characters. */
+const QUOTE_TOKEN = /^[0-9a-f]{16,64}$/i;
+
 // Opened from a friend's or colleague's message: who invited you, what Pluggers is, one way in.
-export default async function InvitePage({ params }: Props) {
+// Always the web app, on phones too: a store link can't carry the invite code to the app.
+export default async function InvitePage({ params, searchParams }: Props) {
   const { code, title } = await lookup((await params).code);
-  const appUrl = code ? `${WEB_APP_URL}/?ref=${code}` : WEB_APP_URL;
+  const { p } = await searchParams;
+  const appUrl = webAppUrl({ ref: code, p: typeof p === "string" && QUOTE_TOKEN.test(p) ? p : null });
 
   return (
     <main className="min-h-[100dvh] bg-page text-ink">
@@ -58,10 +61,10 @@ export default async function InvitePage({ params }: Props) {
             </h1>
             <p className="mt-5 max-w-[52ch] text-[17px] leading-[1.6] text-muted sm:text-lg">{ORG.summary}</p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <AppLink href={appUrl} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+              <a href={appUrl} target="_blank" rel="noopener noreferrer" className={`${BTN_PRIMARY} w-full sm:w-auto`}>
                 Apri Pluggers
-              </AppLink>
-              <StoreBadges />
+                <span className="sr-only"> (si apre in una nuova scheda)</span>
+              </a>
             </div>
             {code && <CopyCode code={code} />}
             <p className="mt-4 text-[15px] text-muted">
