@@ -19,7 +19,7 @@ export function AppLink({ href = WEB_APP_URL, children, ...props }: ComponentPro
   const url = useSyncExternalStore(subscribe, () => deviceStoreUrl() ?? href, () => href);
   const web = url === href;
   return (
-    <a {...props} href={url} target={web ? "_blank" : undefined} rel={web ? "noopener" : undefined}>
+    <a {...props} href={url} target={web ? "_blank" : undefined} rel={web ? "noopener noreferrer" : undefined}>
       {children}
       {web && <span className="sr-only"> (si apre in una nuova scheda)</span>}
     </a>
