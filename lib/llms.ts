@@ -6,7 +6,7 @@ import { WEB_APP_URL } from "@/components/landing/links";
 import { ABOUT, COMPANY_FACTS, NEXT, PRINCIPLES, STORY, WHAT, WHERE } from "@/lib/about";
 import { FAQ, HERO, HOW, PROS, TRADES_SECTION, TRUST } from "@/lib/home";
 import { ORG, ORG_ADDRESS_LINE, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
-import { TORINO, TRADE_GROUPS, TRADES, type Trade } from "@/lib/trades";
+import { TORINO, TORINO_ZONES, TRADE_GROUPS, TRADES, zonesText, type Trade } from "@/lib/trades";
 
 const FACTS =
   `${ORG.name} è gestita da ${ORG.legalName}, sede legale in ${ORG_ADDRESS_LINE}, P.IVA ${ORG.vatNumber}. ` +
@@ -79,6 +79,10 @@ ${t.problems.map((p) => `- «${p}»`).join("\n")}
 
 ${t.steps.map((s, i) => `${i + 1}. **${s.title}.** ${s.text}`).join("\n")}
 
+### Quanto costa ${t.who} a Torino
+
+${t.cost}
+
 ### Quando chiamare il 112
 
 ${t.emergency}
@@ -147,6 +151,14 @@ ${faqMd(FAQ)}
 URL: ${SITE_URL}/torino
 
 ${TORINO.intro}
+
+## Quartieri di Torino e comuni vicini
+
+${zonesText("un professionista").lede}
+
+${TORINO_ZONES.map(([name, areas]) => `- ${name}: ${areas}`).join("\n")}
+
+${zonesText("un professionista").nearby}
 
 ## Domande frequenti
 

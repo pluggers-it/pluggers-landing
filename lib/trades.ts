@@ -17,7 +17,7 @@
  * reviews only after a completed job; no payment in the app.
  */
 
-export const TRADES_UPDATED = "2026-10-07";
+export const TRADES_UPDATED = "2026-10-11";
 
 export type TradeGroup = "impianti" | "aperture" | "edilizia" | "arredo" | "esterni";
 
@@ -32,6 +32,8 @@ export const TRADE_GROUPS: { id: TradeGroup; label: string }[] = [
 export type Trade = {
   slug: string;
   label: string;
+  /** The <title> before " | Pluggers": keyword first, then the jobs people search, within 49 characters. */
+  title: string;
   group: TradeGroup;
   /** In-sentence form: "Quando serve un idraulico". */
   who: string;
@@ -48,6 +50,8 @@ export type Trade = {
   problems: string[];
   steps: { title: string; text: string }[];
   emergency: string;
+  /** Answer under "Quanto costa <who> a Torino". */
+  cost: string;
   faq: { q: string; a: string }[];
 };
 
@@ -55,6 +59,7 @@ export const TRADES: Trade[] = [
   {
     slug: "idraulico",
     label: "Idraulico",
+    title: "Idraulico a Torino: perdite, scarichi e WC",
     group: "impianti",
     who: "un idraulico",
     photo: "/mestieri/plumber.jpg",
@@ -93,14 +98,11 @@ export const TRADES: Trade[] = [
     ],
     emergency:
       "Se l'acqua esce forte e non si ferma, chiudi il rubinetto generale. Se arriva a prese, ciabatte o al quadro elettrico, non toccare niente di bagnato: stacca l'interruttore generale solo se puoi farlo restando all'asciutto. Se l'acqua raggiunge parti elettriche e non riesci a metterti in sicurezza, o il soffitto si gonfia e rischia di cedere, chiama il 112.",
+    cost: "Il Costo Chiamata, se c'è, lo decide l'idraulico e lo vedi nell'app prima della visita: puoi accettarlo o rifiutarlo, e lo paghi a lui. Il lavoro è a parte: prima ricevi una stima, poi il preventivo, che vale solo se lo accetti.",
     faq: [
       {
-        q: "Come trovo un idraulico a Torino in fretta?",
+        q: "Come trovo un idraulico urgente a Torino?",
         a: "Apri Pluggers, descrivi la perdita o lo scarico con una foto e l'assistente ti indica l'urgenza e gli idraulici che lavorano nella tua zona. Mandi la richiesta fino a tre e l'intervento va al primo che conferma. L'orario lo propone l'idraulico in base alla sua disponibilità.",
-      },
-      {
-        q: "Quanto costa la chiamata di un idraulico con Pluggers?",
-        a: "Il Costo Chiamata, se c'è, lo decide l'idraulico e lo vedi nell'app prima della visita: puoi accettarlo o rifiutarlo, e lo paghi a lui. Il lavoro è a parte: prima ricevi una stima, poi il preventivo, che vale solo se lo accetti.",
       },
       {
         q: "Cosa faccio mentre aspetto l'idraulico?",
@@ -115,6 +117,7 @@ export const TRADES: Trade[] = [
   {
     slug: "elettricista",
     label: "Elettricista",
+    title: "Elettricista a Torino: salvavita, prese, quadro",
     group: "impianti",
     who: "un elettricista",
     photo: "/mestieri/electrician.jpg",
@@ -153,14 +156,11 @@ export const TRADES: Trade[] = [
     ],
     emergency:
       "Chiama il 112 se c'è fumo o fiamme da una presa, dal quadro o da un apparecchio, o se qualcuno ha preso la scossa: non toccarlo finché la corrente non è staccata. Su un principio d'incendio elettrico non usare acqua. Per odore di bruciato o scintille senza fiamme, stacca l'interruttore generale se puoi farlo in sicurezza e aspetta l'elettricista senza riattaccare.",
+    cost: "Pluggers non fissa prezzi: la stima te la manda l'elettricista in chat e il Costo Chiamata, se lo chiede, lo vedi prima della visita. Si paga direttamente a lui, non nell'app. Se fai il lavoro, il Costo Chiamata si scala dal totale.",
     faq: [
       {
         q: "Mi salta il salvavita di continuo: chi chiamo a Torino?",
         a: "Ti serve un elettricista. Su Pluggers descrivi quando scatta e cosa era acceso: l'assistente lo riconosce e ti mostra gli elettricisti della tua zona. Intanto puoi staccare le spine degli elettrodomestici e riattaccarle una alla volta: spesso così si trova il colpevole.",
-      },
-      {
-        q: "Quanto costa far venire un elettricista con Pluggers?",
-        a: "Pluggers non fissa prezzi: la stima te la manda l'elettricista in chat e il Costo Chiamata, se lo chiede, lo vedi prima della visita. Si paga direttamente a lui, non nell'app. Se fai il lavoro, il Costo Chiamata si scala dal totale.",
       },
       {
         q: "Un elettricista su Pluggers installa anche lampadari e punti luce?",
@@ -175,6 +175,7 @@ export const TRADES: Trade[] = [
   {
     slug: "fabbro",
     label: "Fabbro",
+    title: "Fabbro a Torino: apertura porte e serrature",
     group: "aperture",
     who: "un fabbro",
     photo: "/mestieri/locksmith.jpg",
@@ -213,14 +214,11 @@ export const TRADES: Trade[] = [
     ],
     emergency:
       "Chiama il 112 se dentro casa è rimasto un bambino piccolo o una persona che non può aprire, se hai lasciato un fornello acceso o se senti odore di gas: in questi casi intervengono i soccorsi. Se trovi la serratura forzata o segni di effrazione, non entrare e non toccare niente: chiama il 112 prima del fabbro.",
+    cost: "Dipende dalla porta e dalla serratura, quindi la cifra te la dà il fabbro: prima con una stima in chat, poi con il preventivo, che vale solo se lo accetti. Se chiede un Costo Chiamata, lo vedi prima della visita e lo paghi a lui.",
     faq: [
       {
         q: "Sono rimasto chiuso fuori casa a Torino: come trovo un fabbro?",
         a: "Apri Pluggers dal telefono, scrivi che sei chiuso fuori e fotografa la porta. L'assistente segna la richiesta come urgente e ti mostra i fabbri che lavorano vicino a te; l'orario di arrivo lo concordi con chi conferma.",
-      },
-      {
-        q: "Quanto costa aprire una porta con un fabbro di Pluggers?",
-        a: "Dipende dalla porta e dalla serratura, quindi la cifra te la dà il fabbro: prima con una stima in chat, poi con il preventivo, che vale solo se lo accetti. Se chiede un Costo Chiamata, lo vedi prima della visita e lo paghi a lui.",
       },
       {
         q: "Ho perso le chiavi: devo cambiare tutta la serratura?",
@@ -235,6 +233,7 @@ export const TRADES: Trade[] = [
   {
     slug: "tecnico-elettrodomestici",
     label: "Tecnico elettrodomestici",
+    title: "Riparazione elettrodomestici a Torino",
     group: "impianti",
     who: "un tecnico degli elettrodomestici",
     photo: "/mestieri/appliance-technician.jpg",
@@ -273,6 +272,7 @@ export const TRADES: Trade[] = [
     ],
     emergency:
       "Se un elettrodomestico fa fumo, scintille o fiamme, stacca la spina o l'interruttore generale solo se puoi farlo senza rischi e chiama il 112. Se senti odore di gas vicino al piano cottura, chiudi il rubinetto del gas, apri le finestre, non accendere luci né elettrodomestici, esci e chiama da fuori il pronto intervento gas (a Torino 800 900 999) o il 112.",
+    cost: "L'importo lo decide il tecnico: la stima arriva in chat e il Costo Chiamata, se lo chiede, lo vedi prima della visita. Si paga a lui, non nell'app, e se fai la riparazione il Costo Chiamata si scala dal totale.",
     faq: [
       {
         q: "La lavatrice non scarica l'acqua: chi chiamo a Torino?",
@@ -283,10 +283,6 @@ export const TRADES: Trade[] = [
         a: "Dipende dal guasto e dal costo del ricambio. Con Pluggers ricevi una stima in chat prima della visita e poi il preventivo dopo il controllo: con quei numeri puoi decidere se riparare o cambiare.",
       },
       {
-        q: "Quanto costa far venire un tecnico per la lavatrice o il frigo?",
-        a: "L'importo lo decide il tecnico: la stima arriva in chat e il Costo Chiamata, se lo chiede, lo vedi prima della visita. Si paga a lui, non nell'app, e se fai la riparazione il Costo Chiamata si scala dal totale.",
-      },
-      {
         q: "Il tecnico ripara anche il piano cottura a gas?",
         a: "Sì, il piano cottura è tra gli apparecchi del tecnico degli elettrodomestici. Se il problema è nel tubo o nell'allaccio del gas, invece, serve un termoidraulico: l'assistente te lo indica.",
       },
@@ -295,6 +291,7 @@ export const TRADES: Trade[] = [
   {
     slug: "imbianchino",
     label: "Imbianchino",
+    title: "Imbianchino a Torino: tinteggiature e muffa",
     group: "edilizia",
     who: "un imbianchino",
     photo: "/mestieri/painter.jpg",
@@ -333,14 +330,11 @@ export const TRADES: Trade[] = [
     ],
     emergency:
       "Imbiancare non è mai un'emergenza, ma quello che si vede sulle pareti a volte sì. Se una macchia d'acqua sul soffitto si allarga in fretta, l'intonaco si gonfia o gocciola, o una crepa si apre a vista d'occhio, esci dalla stanza e chiama il 112: prima della pittura va messa in sicurezza la casa e trovata la causa.",
+    cost: "Dipende da metri, stato delle pareti e pittura, quindi Pluggers non dà prezzi: l'imbianchino ti manda una stima in chat e, dopo il sopralluogo, il preventivo. Paghi direttamente lui, non nell'app.",
     faq: [
       {
         q: "Come trovo un imbianchino a Torino per una stanza sola?",
         a: "Su Pluggers descrivi la stanza, aggiungi una foto e, se le hai, le misure. Ti vengono mostrati gli imbianchini che lavorano nella tua zona e puoi chiedere la stima a tre di loro. Anche i lavori piccoli, come un ritocco, si chiedono così.",
-      },
-      {
-        q: "Quanto costa imbiancare una stanza con Pluggers?",
-        a: "Dipende da metri, stato delle pareti e pittura, quindi Pluggers non dà prezzi: l'imbianchino ti manda una stima in chat e, dopo il sopralluogo, il preventivo. Paghi direttamente lui, non nell'app.",
       },
       {
         q: "Ho la muffa sul soffitto: basta ridipingere?",
@@ -355,6 +349,7 @@ export const TRADES: Trade[] = [
   {
     slug: "falegname",
     label: "Falegname",
+    title: "Falegname a Torino: mobili su misura, riparazioni",
     group: "arredo",
     who: "un falegname",
     photo: "/mestieri/carpenter.jpg",
@@ -393,6 +388,7 @@ export const TRADES: Trade[] = [
     ],
     emergency:
       "Un lavoro da falegname raramente è urgente. Se però una struttura in legno che regge peso, come un soppalco, una scala o una mensola carica, scricchiola, si piega o si crepa, svuotala e non salirci. Se è caduta su qualcuno o rischia di crollare su un passaggio, chiama il 112.",
+    cost: "Il prezzo lo fa il falegname in base a legno, misure e tempo: ricevi una stima in chat e, dopo il sopralluogo, il preventivo. Il Costo Chiamata, se lo chiede, lo vedi prima e lo paghi a lui.",
     faq: [
       {
         q: "Come trovo un falegname a Torino per una riparazione piccola?",
@@ -403,10 +399,6 @@ export const TRADES: Trade[] = [
         a: "Sì, il falegname si occupa di mobili e strutture in legno da costruire o riparare. Per un mobile su misura scrivi le misure dello spazio e cosa deve contenere: il falegname ti risponde con una stima e poi con il preventivo.",
       },
       {
-        q: "Quanto costa un falegname con Pluggers?",
-        a: "Il prezzo lo fa il falegname in base a legno, misure e tempo: ricevi una stima in chat e, dopo il sopralluogo, il preventivo. Il Costo Chiamata, se lo chiede, lo vedi prima e lo paghi a lui.",
-      },
-      {
         q: "Per montare un mobile comprato in negozio serve un falegname?",
         a: "Per montare mobili già pronti su Pluggers c'è il montatore di mobili. Il falegname serve quando il legno va lavorato, riparato o costruito.",
       },
@@ -415,6 +407,7 @@ export const TRADES: Trade[] = [
   {
     slug: "tecnico-climatizzazione",
     label: "Tecnico climatizzazione",
+    title: "Condizionatori a Torino: tecnico climatizzazione",
     group: "impianti",
     who: "un tecnico della climatizzazione",
     photo: "/mestieri/hvac-technician.jpg",
@@ -453,14 +446,11 @@ export const TRADES: Trade[] = [
     ],
     emergency:
       "Se dal condizionatore escono fumo, scintille o odore di bruciato, spegnilo dall'interruttore e non riaccenderlo; se c'è fumo o fiamme chiama il 112. Durante un'ondata di calore, se qualcuno in casa ha capogiri, confusione o sta male, non aspettare il tecnico: chiama il 112.",
+    cost: "Il prezzo lo indica il tecnico: ricevi la stima in chat e, se chiede un Costo Chiamata, lo vedi prima della visita. Paghi direttamente lui, non nell'app.",
     faq: [
       {
         q: "Il condizionatore non raffredda: chi chiamo a Torino?",
         a: "Un tecnico della climatizzazione. Su Pluggers descrivi cosa fa l'impianto e aggiungi la foto dello split: l'assistente lo riconosce e ti mostra i tecnici vicini. Prima controlla che i filtri dell'unità interna siano puliti, sono la causa più semplice.",
-      },
-      {
-        q: "Quanto costa la manutenzione del condizionatore con Pluggers?",
-        a: "Il prezzo lo indica il tecnico: ricevi la stima in chat e, se chiede un Costo Chiamata, lo vedi prima della visita. Paghi direttamente lui, non nell'app.",
       },
       {
         q: "Posso far installare un condizionatore nuovo?",
@@ -475,6 +465,7 @@ export const TRADES: Trade[] = [
   {
     slug: "termoidraulico",
     label: "Termoidraulico",
+    title: "Termoidraulico e caldaista a Torino",
     group: "impianti",
     who: "un termoidraulico",
     photo: "/mestieri/heating-technician.jpg",
@@ -513,14 +504,15 @@ export const TRADES: Trade[] = [
     ],
     emergency:
       "Se senti odore di gas apri porte e finestre, chiudi il rubinetto del gas al contatore, non accendere né spegnere luci, esci e chiama da fuori il pronto intervento gas (a Torino 800 900 999) o il 112. Se più persone in casa hanno mal di testa, nausea o sonnolenza mentre la caldaia è accesa, può essere monossido: fai entrare aria, esci e chiama il 112.",
+    cost: "L'importo lo decide il termoidraulico: la stima arriva in chat, il Costo Chiamata se lo chiede lo vedi prima della visita. Paghi direttamente lui, e se fai il lavoro il Costo Chiamata si scala dal totale.",
     faq: [
       {
         q: "La caldaia è in blocco: come trovo un tecnico a Torino?",
         a: "Su Pluggers scrivi il codice che vedi sul display e fotografalo: l'assistente indica un termoidraulico e ti mostra quelli che lavorano nella tua zona. Puoi provare una volta il tasto di sblocco; se la caldaia torna in blocco, lascia stare.",
       },
       {
-        q: "Quanto costa far venire un termoidraulico con Pluggers?",
-        a: "L'importo lo decide il termoidraulico: la stima arriva in chat, il Costo Chiamata se lo chiede lo vedi prima della visita. Paghi direttamente lui, e se fai il lavoro il Costo Chiamata si scala dal totale.",
+        q: "Cerco un caldaista a Torino: su Pluggers chi trovo?",
+        a: "Il termoidraulico: su Pluggers è il mestiere che si occupa di caldaie, scaldabagni e riscaldamento, quello che molti chiamano caldaista. Descrivi il problema della caldaia e l'assistente ti mostra i termoidraulici che lavorano nella tua zona.",
       },
       {
         q: "Che differenza c'è tra idraulico e termoidraulico su Pluggers?",
@@ -535,6 +527,7 @@ export const TRADES: Trade[] = [
   {
     slug: "serramentista",
     label: "Serramentista",
+    title: "Serramentista a Torino: finestre e tapparelle",
     group: "aperture",
     who: "un serramentista",
     photo: "/mestieri/window-fitter.jpg",
@@ -573,14 +566,11 @@ export const TRADES: Trade[] = [
     ],
     emergency:
       "Chiama il 112 se un'anta, una persiana o il cassonetto di una tapparella si stacca e può cadere in strada, su un balcone o su un cortile dove passa gente: allontana le persone e non sporgerti per trattenerlo. Una tapparella bloccata o una finestra che non chiude non sono emergenze.",
+    cost: "Il prezzo lo fa il serramentista: ricevi una stima in chat e, se chiede un Costo Chiamata, lo vedi prima della visita. Paghi direttamente lui, non nell'app.",
     faq: [
       {
         q: "Come trovo qualcuno per riparare una tapparella a Torino?",
         a: "Su Pluggers descrivi il problema, come la cinghia rotta o la tapparella bloccata, e aggiungi una foto. L'assistente indica il serramentista e ti mostra quelli che lavorano nella tua zona.",
-      },
-      {
-        q: "Quanto costa cambiare la cinghia della tapparella con Pluggers?",
-        a: "Il prezzo lo fa il serramentista: ricevi una stima in chat e, se chiede un Costo Chiamata, lo vedi prima della visita. Paghi direttamente lui, non nell'app.",
       },
       {
         q: "Il serramentista ripara anche le serrande dei negozi e dei garage?",
@@ -595,6 +585,7 @@ export const TRADES: Trade[] = [
   {
     slug: "muratore",
     label: "Muratore",
+    title: "Muratore a Torino: crepe, intonaci, infiltrazioni",
     group: "edilizia",
     who: "un muratore",
     photo: "/mestieri/mason.jpg",
@@ -633,14 +624,11 @@ export const TRADES: Trade[] = [
     ],
     emergency:
       "Esci e chiama il 112 se una crepa si allarga a vista d'occhio, se cadono pezzi di intonaco, di cornicione o di balcone, se senti scricchiolii nei muri o le porte all'improvviso non si chiudono più: possono essere segni di un problema strutturale, e la verifica la fanno i vigili del fuoco.",
+    cost: "Pluggers non fissa prezzi: il muratore ti manda una stima in chat e, dopo il sopralluogo, il preventivo, che vale solo se lo accetti. Il Costo Chiamata, se lo chiede, lo vedi prima della visita e lo paghi a lui.",
     faq: [
       {
         q: "Come trovo un muratore a Torino per un lavoro piccolo?",
         a: "Su Pluggers descrivi il lavoro, anche se è piccolo come chiudere una traccia o sistemare un pezzo di intonaco, e allega una foto. Vedi i muratori che lavorano nella tua zona e scegli a chi scrivere.",
-      },
-      {
-        q: "Quanto costa un muratore con Pluggers?",
-        a: "Pluggers non fissa prezzi: il muratore ti manda una stima in chat e, dopo il sopralluogo, il preventivo, che vale solo se lo accetti. Il Costo Chiamata, se lo chiede, lo vedi prima della visita e lo paghi a lui.",
       },
       {
         q: "Ho umidità sul muro: chiamo un muratore o un idraulico?",
@@ -655,6 +643,7 @@ export const TRADES: Trade[] = [
   {
     slug: "piastrellista",
     label: "Piastrellista",
+    title: "Piastrellista a Torino: fughe e silicone",
     group: "edilizia",
     who: "un piastrellista",
     photo: "/mestieri/tiler.jpg",
@@ -693,14 +682,11 @@ export const TRADES: Trade[] = [
     ],
     emergency:
       "Il lavoro del piastrellista non è da emergenza: una piastrella sollevata si isola e si evita di camminarci sopra. Chiama il 112 solo se il pavimento si solleva insieme a crepe nei muri o nel soffitto, o se da sotto le piastrelle esce acqua vicino a prese e quadro elettrico.",
+    cost: "L'importo lo decide il piastrellista e lo ricevi come stima in chat; il Costo Chiamata, se c'è, lo vedi prima della visita. Si paga direttamente a lui, non nell'app.",
     faq: [
       {
         q: "Come trovo un piastrellista a Torino per una piastrella sola?",
         a: "Su Pluggers descrivi il lavoro e aggiungi una foto: anche una piastrella sola si chiede così. Vedi i piastrellisti della tua zona e scegli a chi scrivere; se hai una piastrella di scorta, dillo subito.",
-      },
-      {
-        q: "Quanto costa rifare il silicone della doccia con Pluggers?",
-        a: "L'importo lo decide il piastrellista e lo ricevi come stima in chat; il Costo Chiamata, se c'è, lo vedi prima della visita. Si paga direttamente a lui, non nell'app.",
       },
       {
         q: "Perché le piastrelle del pavimento si sono sollevate?",
@@ -715,6 +701,7 @@ export const TRADES: Trade[] = [
   {
     slug: "giardiniere",
     label: "Giardiniere",
+    title: "Giardiniere a Torino: potature, prato e piante",
     group: "esterni",
     who: "un giardiniere",
     photo: "/mestieri/gardener.jpg",
@@ -753,14 +740,11 @@ export const TRADES: Trade[] = [
     ],
     emergency:
       "Se un albero o un grosso ramo è caduto o sta per cadere su una strada, un'auto, un tetto o sui cavi elettrici, non avvicinarti, tieni lontane le persone e chiama il 112. Non toccare mai rami appoggiati a cavi elettrici, nemmeno con un attrezzo.",
+    cost: "Dipende da superficie, tipo di lavoro e smaltimento del verde, quindi la cifra te la dà il giardiniere con una stima in chat. Il Costo Chiamata, se c'è, lo vedi prima e lo paghi a lui.",
     faq: [
       {
         q: "Come trovo un giardiniere a Torino per potare una siepe?",
         a: "Su Pluggers descrivi la siepe, quanto è lunga e alta, e aggiungi una foto. Vedi i giardinieri che lavorano nella tua zona e ricevi la stima in chat da chi scegli.",
-      },
-      {
-        q: "Quanto costa un giardiniere con Pluggers?",
-        a: "Dipende da superficie, tipo di lavoro e smaltimento del verde, quindi la cifra te la dà il giardiniere con una stima in chat. Il Costo Chiamata, se c'è, lo vedi prima e lo paghi a lui.",
       },
       {
         q: "Il giardiniere ripara anche l'impianto di irrigazione?",
@@ -775,6 +759,7 @@ export const TRADES: Trade[] = [
   {
     slug: "vetraio",
     label: "Vetraio",
+    title: "Vetraio a Torino: vetri rotti e box doccia",
     group: "aperture",
     who: "un vetraio",
     photo: "/mestieri/glazier.jpg",
@@ -813,14 +798,11 @@ export const TRADES: Trade[] = [
     ],
     emergency:
       "Se un vetro rotto di una finestra ai piani alti può cadere in strada o in cortile, allontana le persone e chiama il 112. Per una ferita profonda da vetro, premi sulla ferita con un panno pulito e chiama il 112. Intanto copri il vetro rotto con nastro adesivo largo e non provare a toglierlo a mani nude.",
+    cost: "Dipende da tipo, spessore e misure del vetro: il vetraio ti manda una stima in chat e, dopo aver misurato, il preventivo. Il Costo Chiamata, se lo chiede, lo vedi prima e lo paghi a lui.",
     faq: [
       {
         q: "Come trovo un vetraio a Torino per un vetro rotto?",
         a: "Su Pluggers descrivi dove si è rotto il vetro e aggiungi una foto e le misure. L'assistente indica il vetraio e l'urgenza e ti mostra quelli che lavorano nella tua zona.",
-      },
-      {
-        q: "Quanto costa sostituire un vetro con Pluggers?",
-        a: "Dipende da tipo, spessore e misure del vetro: il vetraio ti manda una stima in chat e, dopo aver misurato, il preventivo. Il Costo Chiamata, se lo chiede, lo vedi prima e lo paghi a lui.",
       },
       {
         q: "Il doppio vetro è appannato dentro: si può riparare?",
@@ -835,6 +817,7 @@ export const TRADES: Trade[] = [
   {
     slug: "montatore-mobili",
     label: "Montatore mobili",
+    title: "Montatore mobili a Torino: montaggio e smontaggio",
     group: "arredo",
     who: "un montatore di mobili",
     photo: "/mestieri/furniture-assembler.jpg",
@@ -873,14 +856,11 @@ export const TRADES: Trade[] = [
     ],
     emergency:
       "Se un mobile alto o un pensile si è ribaltato su qualcuno, chiama il 112. Se forando una parete esce odore di gas, apri le finestre, non toccare interruttori, esci e chiama da fuori il pronto intervento gas (a Torino 800 900 999) o il 112; se escono scintille, stacca l'interruttore generale.",
+    cost: "Il prezzo lo fa il montatore in base a mobile, pezzi e tempo: ricevi una stima in chat prima della visita. Il Costo Chiamata, se c'è, lo vedi prima e lo paghi direttamente a lui.",
     faq: [
       {
         q: "Come trovo qualcuno che monti un mobile a Torino?",
         a: "Su Pluggers descrivi cosa va montato, indica marca e modello se è in scatola e aggiungi una foto. Vedi i montatori di mobili della tua zona e ricevi la stima in chat da chi scegli.",
-      },
-      {
-        q: "Quanto costa montare un armadio con Pluggers?",
-        a: "Il prezzo lo fa il montatore in base a mobile, pezzi e tempo: ricevi una stima in chat prima della visita. Il Costo Chiamata, se c'è, lo vedi prima e lo paghi direttamente a lui.",
       },
       {
         q: "Il montatore può appendere la TV su una parete in cartongesso?",
@@ -897,6 +877,25 @@ export const TRADES: Trade[] = [
 export function getTrade(slug: string): Trade | undefined {
   return TRADES.find((t) => t.slug === slug);
 }
+
+/** The eight circoscrizioni of Turin and their quartieri (Comune di Torino, as listed on it.wikipedia.org/wiki/Circoscrizioni_di_Torino). */
+export const TORINO_ZONES: [string, string][] = [
+  ["Circoscrizione 1", "Centro, Crocetta, San Secondo"],
+  ["Circoscrizione 2", "Santa Rita, Mirafiori Nord, Mirafiori Sud"],
+  ["Circoscrizione 3", "Borgo San Paolo, Cenisia, Pozzo Strada, Cit Turin, Borgata Lesna"],
+  ["Circoscrizione 4", "San Donato, Campidoglio, Parella"],
+  ["Circoscrizione 5", "Borgo Vittoria, Madonna di Campagna, Lucento, Vallette"],
+  ["Circoscrizione 6", "Barriera di Milano, Regio Parco, Barca, Bertolla, Falchera, Rebaudengo, Villaretto"],
+  ["Circoscrizione 7", "Aurora, Vanchiglia, Vanchiglietta, Sassi, Madonna del Pilone"],
+  ["Circoscrizione 8", "San Salvario, Cavoretto, Borgo Po, Nizza Millefonti, Lingotto, Filadelfia"],
+];
+
+/** Same facts as the /torino FAQ: the search starts from the address and each professional picks a radius. */
+export const zonesText = (who: string) => ({
+  lede: `Per trovare ${who} Pluggers parte dal tuo indirizzo: ti mostra chi ha casa tua nel suo raggio d'azione, dal più vicino. Ognuno sceglie fino a che distanza lavorare, da 1 a 100 km, quindi chi trovi dipende dalla zona e dal mestiere. Puoi cercare da qualsiasi quartiere della città.`,
+  nearby:
+    "Fuori Torino funziona allo stesso modo, per esempio a Moncalieri, Nichelino, Collegno, Grugliasco, Rivoli, Settimo Torinese, Venaria Reale e San Mauro Torinese: se il tuo indirizzo rientra nel raggio di qualcuno lo vedi, e se per quel mestiere non c'è ancora nessuno l'app te lo dice.",
+});
 
 export const TORINO = {
   title: "Professionisti per la casa a Torino",

@@ -53,7 +53,11 @@ export function pageMetadata({ title, description, path, absolute, publishedTime
 
 export const ORG_ID = `${SITE_URL}/#organization`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
-const TORINO = { "@type": "City", name: "Torino" };
+const TORINO = {
+  "@type": "City",
+  name: "Torino",
+  sameAs: ["https://www.wikidata.org/wiki/Q495", "https://it.wikipedia.org/wiki/Torino"],
+};
 
 export function graph(...nodes: object[]) {
   return { "@context": "https://schema.org", "@graph": nodes };

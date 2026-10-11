@@ -7,6 +7,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { SITE_URL } from "@/lib/site";
 import { FaqList } from "@/components/landing/FaqList";
 import { SitePage } from "@/components/landing/SitePage";
+import { TorinoZones } from "@/components/landing/TorinoZones";
 import { WEB_APP_URL } from "@/components/landing/links";
 import { BTN_OUTLINE, BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
 import { breadcrumbSchema, faqSchema, graph, pageMetadata, pageSchema, serviceSchema } from "@/lib/seo";
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const trade = getTrade((await params).mestiere);
   if (!trade) return {};
   return pageMetadata({
-    title: `${trade.label} a Torino`,
+    title: trade.title,
     description: trade.description,
     path: `/torino/${trade.slug}`,
   });
@@ -122,6 +123,13 @@ export default async function TradePage({ params }: Props) {
         </div>
       </section>
 
+      <section className={`${CONTAINER} pt-12 lg:pt-16`} aria-labelledby="cost-title">
+        <h2 id="cost-title" className={H2}>
+          Quanto costa {trade.who} a Torino
+        </h2>
+        <p className="mt-3 max-w-[64ch] text-[17px] leading-[1.6] text-muted">{trade.cost}</p>
+      </section>
+
       <section className={`${CONTAINER} py-12 lg:py-16`} aria-labelledby="emergency-title">
         <div className="rounded-card bg-[color-mix(in_srgb,var(--danger)_7%,var(--surface))] p-6 ring-1 ring-[color-mix(in_srgb,var(--danger)_30%,transparent)] sm:p-8">
           <h2 id="emergency-title" className="flex items-center gap-2.5 text-[22px] font-bold tracking-[-0.02em]">
@@ -146,6 +154,8 @@ export default async function TradePage({ params }: Props) {
           </Link>
         </div>
       </section>
+
+      <TorinoZones who={trade.who} />
 
       <section className={`${CONTAINER} pb-4`} aria-labelledby="pro-title">
         <div className="rounded-card bg-surface p-6 shadow-card sm:p-8">
