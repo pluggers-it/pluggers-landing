@@ -111,25 +111,6 @@ html.dark {
   }
 }
 
-/* Trades strip */
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.marquee-track {
-  animation: marquee 70s linear infinite;
-}
-
-.marquee:hover .marquee-track,
-.marquee:focus-within .marquee-track {
-  animation-play-state: paused;
-}
-
 /* The app icon drifting beside the demo */
 @keyframes hero-float {
   0%,
@@ -183,12 +164,6 @@ html.dark {
 @media (prefers-reduced-motion: reduce) {
   .consent-in {
     animation: none;
-  }
-  .marquee-track {
-    animation: none;
-  }
-  .marquee {
-    overflow-x: auto;
   }
   .caret,
   .hero-float,
