@@ -54,7 +54,7 @@ const STEPS: GuideStep[] = [
     alt: "Sezione «Richieste»: le schede «Da decidere» e «Da preventivare», i filtri per ordinare e per giorno e tre richieste con il problema, giorno e orario, la distanza e la cifra indicativa.",
     title: "Ricevi le richieste",
     text: "Le richieste arrivano dai clienti della tua zona che ti hanno scelto. Ognuna ha giorno, mestiere, problema, distanza da te e una cifra di riferimento calcolata dall'app.",
-    points: ["Apri quelle che ti interessano", "Rifiuta le altre scorrendo la riga verso sinistra"],
+    points: ["Apri quelle che ti interessano", "Rifiuta le altre"],
     tip: "Guarda il referto e le foto prima di uscire: spesso bastano per capire che pezzo portare.",
   },
   {
