@@ -8,6 +8,7 @@ import { SparkCanvas, type SparkHandle } from "./SparkCanvas";
 import { useReducedMotionSafe } from "./useReducedMotionSafe";
 import { onIdle } from "./idle";
 import { LOADER_CYCLE_MS, PluggersLoader } from "./PluggersLoader";
+import { AppLink } from "./AppLink";
 
 type Pro = { name: string; rating: string; reviews: number; jobs: number; distance: string };
 
@@ -101,7 +102,7 @@ export function HeroDemo() {
   const [path, setPath] = useState<Path | null>(null);
 
   const rootRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonRef = useRef<HTMLAnchorElement>(null);
   const cameraRef = useRef<HTMLButtonElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const sparks = useRef<SparkHandle>(null);
@@ -240,7 +241,6 @@ export function HeroDemo() {
   const scenario = SCENARIOS[index];
   const atLeast = (p: Phase) => ORDER.indexOf(phase) >= ORDER.indexOf(p);
   const autoTyping = phase === "typing" && !manual && !edited && !reduce && text.length < scenario.text.length;
-  const canSend = text.trim().length > 0 || photo;
   const pressed = phase === "sending";
   const searching = phase === "searching";
   const showTriage = atLeast("searching");
@@ -251,18 +251,6 @@ export function HeroDemo() {
   const search = () => {
     setPicked([]);
     setPhase("searching");
-  };
-
-  // From the composer it sends; once the search has run, it runs it again.
-  const send = () => {
-    touch();
-    if (showTriage) {
-      search();
-      return;
-    }
-    // A half-typed example is finished before it goes; text written by hand goes as it is.
-    if (!edited && text) setText(scenario.text);
-    setPhase("sending");
   };
 
   const addPhoto = () => {
@@ -313,7 +301,7 @@ export function HeroDemo() {
       onBlur={onBlur}
     >
       <p className="sr-only">
-        Simulazione dell&apos;app: puoi scrivere, aggiungere una foto e premere i pulsanti. Non viene inviato nulla.
+        Simulazione dell&apos;app: puoi scrivere, aggiungere una foto e scegliere i professionisti. Non viene inviato nulla. «Trova professionisti» apre Pluggers.
       </p>
 
       <div
@@ -427,18 +415,17 @@ export function HeroDemo() {
                 </button>
               </div>
             </div>
-            <button
+            {/* The real thing: the button opens Pluggers, the demo around it stays a simulation. */}
+            <AppLink
               ref={buttonRef}
-              type="button"
-              onClick={send}
-              disabled={!canSend}
-              className={`${TAP} mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition-all duration-200 enabled:hover:bg-accent-deep enabled:active:bg-accent-deep motion-safe:enabled:active:scale-[0.97] disabled:cursor-default disabled:bg-ink/8 disabled:text-ink/45 dark:enabled:hover:bg-accent-bright ${
+              onClick={touch}
+              className={`${TAP} mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition-all duration-200 hover:bg-accent-deep active:bg-accent-deep motion-safe:active:scale-[0.97] dark:hover:bg-accent-bright ${
                 pressed ? "bg-accent-deep motion-safe:scale-[0.97]" : "bg-accent"
               }`}
             >
-              <Sparkles className="h-4 w-4" />
+              <Sparkles className="h-4 w-4" aria-hidden />
               Trova professionisti
-            </button>
+            </AppLink>
           </div>
         </div>
 

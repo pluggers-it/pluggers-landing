@@ -13,8 +13,15 @@ function deviceStoreUrl() {
 /**
  * A link into Pluggers: the store on phones and tablets, the web app on a computer.
  * The server renders the web address and the store one replaces it after hydration.
+ * The web app opens in a new tab, so the site stays open behind it.
  */
-export function AppLink({ href = WEB_APP_URL, ...props }: ComponentProps<"a">) {
+export function AppLink({ href = WEB_APP_URL, children, ...props }: ComponentProps<"a">) {
   const url = useSyncExternalStore(subscribe, () => deviceStoreUrl() ?? href, () => href);
-  return <a {...props} href={url} />;
+  const web = url === href;
+  return (
+    <a {...props} href={url} target={web ? "_blank" : undefined} rel={web ? "noopener" : undefined}>
+      {children}
+      {web && <span className="sr-only"> (si apre in una nuova scheda)</span>}
+    </a>
+  );
 }
