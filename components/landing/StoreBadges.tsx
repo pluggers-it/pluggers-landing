@@ -37,9 +37,11 @@ export function StoreBadges() {
       <Badge href={APP_STORE_URL} lead="Scarica su" store="App Store">
         <AppleGlyph />
       </Badge>
-      <Badge href={PLAY_STORE_URL} lead="Disponibile su" store="Google Play">
-        <PlayGlyph />
-      </Badge>
+      {PLAY_STORE_URL && (
+        <Badge href={PLAY_STORE_URL} lead="Disponibile su" store="Google Play">
+          <PlayGlyph />
+        </Badge>
+      )}
     </>
   );
 }

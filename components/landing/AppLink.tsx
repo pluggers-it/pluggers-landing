@@ -11,7 +11,7 @@ function deviceStoreUrl() {
 }
 
 /**
- * A link into Pluggers: the store on phones and tablets, the web app on a computer.
+ * A link into Pluggers: the store on phones and tablets that have one (see links.ts), the web app otherwise.
  * The server renders the web address and the store one replaces it after hydration.
  * The web app opens in a new tab, so the site stays open behind it.
  */
