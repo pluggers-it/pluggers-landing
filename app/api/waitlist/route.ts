@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { addToNewsletterList } from "@/lib/beehiiv";
+import { MARKETING_CONSENT_VERSION } from "@/lib/marketingConsent";
 import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
@@ -128,7 +129,7 @@ export async function POST(req: Request) {
     source,
     privacy_accepted_at: now,
     // Only when given, so a sign-up without it never depends on the column.
-    ...(marketing && { marketing_consent_at: now }),
+    ...(marketing && { marketing_consent_at: now, marketing_consent_version: MARKETING_CONSENT_VERSION }),
   };
 
   const { error } = await supabase.from("waitlist").insert(row);
@@ -138,7 +139,7 @@ export async function POST(req: Request) {
   if (marketing && error?.code === "23505") {
     const { error: updateError } = await supabase
       .from("waitlist")
-      .update({ marketing_consent_at: now })
+      .update({ marketing_consent_at: now, marketing_consent_version: MARKETING_CONSENT_VERSION })
       .eq("email", email)
       .is("marketing_consent_at", null);
     if (updateError) console.error("[waitlist] marketing consent not saved:", updateError.code, updateError.message);
