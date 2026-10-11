@@ -1,7 +1,7 @@
 import { APP_STORE_URL, PLAY_STORE_URL } from "./links";
 
 const BADGE =
-  "inline-flex h-12 items-center gap-2.5 rounded-full border border-line bg-surface pl-3.5 pr-4 text-left leading-none";
+  "inline-flex h-12 items-center gap-2.5 rounded-full border border-line bg-surface pl-3.5 pr-4 text-left leading-none transition hover:border-ink";
 
 function AppleGlyph() {
   return (
@@ -19,47 +19,29 @@ function PlayGlyph() {
   );
 }
 
-function Badge({
-  href,
-  store,
-  children,
-}: {
-  href: string;
-  store: string;
-  children: React.ReactNode;
-}) {
-  const body = (
-    <>
+function Badge({ href, lead, store, children }: { href: string; lead: string; store: string; children: React.ReactNode }) {
+  return (
+    <a href={href} className={BADGE}>
       <span className="text-ink">{children}</span>
       <span>
-        <span className="block text-[11px] font-medium text-muted">
-          {href ? "Scarica su" : "In arrivo su"}
-        </span>
+        <span className="block text-[11px] font-medium text-muted">{lead}</span>
         <span className="mt-1 block text-sm font-semibold text-ink">{store}</span>
       </span>
-    </>
-  );
-
-  return href ? (
-    <a href={href} className={`${BADGE} transition hover:border-ink`}>
-      {body}
     </a>
-  ) : (
-    <span className={BADGE} aria-label={`${store}: in arrivo`}>
-      {body}
-    </span>
   );
 }
 
 export function StoreBadges() {
   return (
     <>
-      <Badge href={APP_STORE_URL} store="App Store">
+      <Badge href={APP_STORE_URL} lead="Scarica su" store="App Store">
         <AppleGlyph />
       </Badge>
-      <Badge href={PLAY_STORE_URL} store="Google Play">
-        <PlayGlyph />
-      </Badge>
+      {PLAY_STORE_URL && (
+        <Badge href={PLAY_STORE_URL} lead="Disponibile su" store="Google Play">
+          <PlayGlyph />
+        </Badge>
+      )}
     </>
   );
 }

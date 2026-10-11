@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/logo.png";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -28,7 +27,7 @@ export default function NewsletterPage() {
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:44px_44px] opacity-[0.18]" />
         </div>
 
-        {/* Minimal header — logo + theme toggle only, no nav links */}
+        {/* Minimal header: logo only, no nav links */}
         <header className="relative flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
             <Image src={logo} alt="Pluggers" width={34} height={34} className="rounded-lg" />
@@ -36,7 +35,6 @@ export default function NewsletterPage() {
               PLUGGERS
             </span>
           </Link>
-          <ThemeToggle />
         </header>
 
         {/* Page heading */}

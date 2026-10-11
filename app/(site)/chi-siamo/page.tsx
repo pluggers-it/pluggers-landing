@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
 import { SitePage } from "@/components/landing/SitePage";
-import { WEB_APP_URL } from "@/components/landing/links";
+import { AppLink } from "@/components/landing/AppLink";
 import { GuidePhone } from "@/components/landing/GuideSteps";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
 import Image from "next/image";
@@ -118,9 +118,9 @@ export default function ChiSiamoPage() {
         </section>
 
         <div className="mt-12 flex justify-center">
-          <a href={WEB_APP_URL} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+          <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
             Apri Pluggers
-          </a>
+          </AppLink>
         </div>
       </div>
     </SitePage>

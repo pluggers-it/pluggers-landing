@@ -1,8 +1,8 @@
-import { Building2, CreditCard, Smartphone } from "lucide-react";
+import { Building2, CreditCard } from "lucide-react";
 import { COMING } from "@/lib/home";
 import { CONTAINER, H2 } from "./styles";
 
-const ICONS = [Smartphone, CreditCard, Building2];
+const ICONS = [CreditCard, Building2];
 
 export function ComingSoon() {
   return (
@@ -10,7 +10,7 @@ export function ComingSoon() {
       <h2 id="coming-title" className={H2}>
         {COMING.title}
       </h2>
-      <ul className="mt-10 grid gap-4 md:grid-cols-3">
+      <ul className="mt-10 grid gap-4 md:grid-cols-2">
         {COMING.items.map(({ title, text }, i) => {
           const Icon = ICONS[i];
           return (

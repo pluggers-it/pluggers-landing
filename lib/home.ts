@@ -4,9 +4,7 @@
  * Every product claim is checked against the app and backend code.
  */
 
-import { APP_STORE_URL, PLAY_STORE_URL } from "@/components/landing/links";
-
-export const HOME_UPDATED = "2026-10-07";
+export const HOME_UPDATED = "2026-10-11";
 
 export const HOME = {
   title: "Pluggers | Il professionista giusto, al momento giusto.",
@@ -24,7 +22,6 @@ export const HERO = {
 export const COMING = {
   title: "In arrivo su Pluggers",
   items: [
-    { title: "App per iPhone e Android", text: "Pluggers arriva su App Store e Google Play. Intanto si usa dal browser, su app.plggrs.it." },
     { title: "Pagamenti nell'app", text: "Costo Chiamata e preventivo si potranno pagare direttamente dall'app." },
     { title: "Imprese e amministratori di condominio", text: "Anche chi gestisce condomini e più immobili potrà chiedere interventi su Pluggers." },
   ],
@@ -142,8 +139,6 @@ export const FAQ = [
   },
   {
     q: "Serve scaricare un'app?",
-    a: APP_STORE_URL || PLAY_STORE_URL
-      ? "Sì: Pluggers è un'app per iPhone e Android, la scarichi da App Store o Google Play. Da computer la usi anche dal browser, su app.plggrs.it."
-      : "Sì: Pluggers è un'app per iPhone e Android, in arrivo su App Store e Google Play. La stessa app si usa anche dal browser, su app.plggrs.it.",
+    a: "Sì: Pluggers è un'app per iPhone e Android. Da computer la usi anche dal browser, su app.plggrs.it.",
   },
 ] as const;

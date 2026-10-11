@@ -7,7 +7,7 @@ import { FaqList } from "@/components/landing/FaqList";
 import { GuidePhone, GuideSteps, type GuideStep } from "@/components/landing/GuideSteps";
 import { SitePage } from "@/components/landing/SitePage";
 import { StoreBadges } from "@/components/landing/StoreBadges";
-import { WEB_APP_URL } from "@/components/landing/links";
+import { AppLink } from "@/components/landing/AppLink";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
 import { PROS } from "@/lib/home";
 import { breadcrumbSchema, faqSchema, graph, pageMetadata, pageSchema } from "@/lib/seo";
@@ -122,9 +122,9 @@ export default function ProfessionistiPage() {
           </h1>
           <p className="mt-5 max-w-[58ch] text-[17px] leading-[1.6] text-muted sm:text-lg">{LEDE}</p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a href={WEB_APP_URL} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+            <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
               {PROS.cta}
-            </a>
+            </AppLink>
             <StoreBadges />
           </div>
         </div>

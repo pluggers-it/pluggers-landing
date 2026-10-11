@@ -5,7 +5,7 @@ import { HeroDemo } from "./HeroDemo";
 import { HeroIcon } from "./HeroIcon";
 import { StoreBadges } from "./StoreBadges";
 import { HERO } from "@/lib/home";
-import { WEB_APP_URL } from "./links";
+import { AppLink } from "./AppLink";
 import { BTN_PRIMARY, CONTAINER } from "./styles";
 
 export function Hero() {
@@ -34,9 +34,9 @@ export function Hero() {
             </li>
           </ul>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a href={WEB_APP_URL} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+            <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
               Racconta il problema
-            </a>
+            </AppLink>
             <StoreBadges />
           </div>
           <Link href="/professionisti" className="mt-4 inline-flex min-h-12 items-center gap-1.5 text-[15px] font-semibold underline underline-offset-4">
