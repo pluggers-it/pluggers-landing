@@ -4,7 +4,7 @@
  * Every product claim is checked against the app and backend code.
  */
 
-export const HOME_UPDATED = "2026-10-11";
+export const HOME_UPDATED = "2026-10-12";
 
 export const HOME = {
   title: "Pluggers | Il professionista giusto, al momento giusto.",
@@ -14,9 +14,9 @@ export const HOME = {
 };
 
 export const HERO = {
-  eyebrow: "La piattaforma per gli interventi in casa",
+  eyebrow: "La piattaforma per ogni intervento, in qualsiasi luogo",
   title: "Il professionista giusto, al momento giusto.",
-  lede: "Racconti il guasto con una foto: Pluggers capisce che mestiere serve e ti mette in contatto con i professionisti della zona. Stima, preventivo e appuntamento si gestiscono nell'app.",
+  lede: "Racconti il problema, se le parole non bastano fai una foto, Pluggers capisce quale mestiere ti serve e ti mette in contatto con i professionisti della tua zona. Stima, preventivo, appuntamento e intervento si gestiscono in app.",
 };
 
 export const COMING = {
