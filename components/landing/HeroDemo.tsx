@@ -419,7 +419,7 @@ export function HeroDemo() {
             <AppLink
               ref={buttonRef}
               onClick={touch}
-              className={`${TAP} mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition-all duration-200 hover:bg-accent-deep active:bg-accent-deep motion-safe:active:scale-[0.97] dark:hover:bg-accent-bright ${
+              className={`${TAP} mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition-all duration-200 hover:bg-accent-deep active:bg-accent-deep motion-safe:active:scale-[0.97] ${
                 pressed ? "bg-accent-deep motion-safe:scale-[0.97]" : "bg-accent"
               }`}
             >
@@ -442,7 +442,7 @@ export function HeroDemo() {
               onClick={() => pickChip(0)}
               className={chipClass(
                 0,
-                "bg-[color-mix(in_srgb,var(--accent)_10%,var(--page))] text-accent-deep ring-transparent hover:ring-accent dark:bg-[color-mix(in_srgb,var(--accent-text)_16%,var(--page))] dark:text-accent-text"
+                "bg-[color-mix(in_srgb,var(--accent)_10%,var(--page))] text-accent-deep ring-transparent hover:ring-accent"
               )}
             >
               <Sparkles className="h-4 w-4" />

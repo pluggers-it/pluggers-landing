@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { SITE_URL } from "@/lib/site";
 import { FaqList } from "@/components/landing/FaqList";
 import { SitePage } from "@/components/landing/SitePage";
-import { WEB_APP_URL } from "@/components/landing/links";
+import { AppLink } from "@/components/landing/AppLink";
 import { BTN_OUTLINE, BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
 import { breadcrumbSchema, faqSchema, graph, pageMetadata, pageSchema, serviceSchema } from "@/lib/seo";
 import { TRADES, getTrade } from "@/lib/trades";
@@ -70,9 +70,9 @@ export default async function TradePage({ params }: Props) {
             Oggi attivo a Torino
           </p>
           <div className="mt-8">
-            <a href={WEB_APP_URL} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+            <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
               Apri Pluggers
-            </a>
+            </AppLink>
           </div>
         </div>
         <Image
@@ -138,9 +138,9 @@ export default async function TradePage({ params }: Props) {
         </h2>
         <FaqList items={trade.faq} />
         <div className="mt-10 flex flex-wrap gap-3">
-          <a href={WEB_APP_URL} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+          <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
             Apri Pluggers
-          </a>
+          </AppLink>
           <Link href="/#come-funziona" className={`${BTN_OUTLINE} w-full sm:w-auto`}>
             Come funziona Pluggers
           </Link>

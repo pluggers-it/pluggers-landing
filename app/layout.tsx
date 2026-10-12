@@ -2,11 +2,9 @@ import { Analytics } from "@/components/Analytics";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
 import { ConsentProvider } from "@/lib/consent";
 import { ConsentGate } from "@/components/ConsentGate";
 import { BackToTop } from "@/components/BackToTop";
-import { ThemeSwitch } from "@/components/ThemeSwitch";
 import { JsonLd } from "@/components/JsonLd";
 import { HOME } from "@/lib/home";
 import { graph, organizationSchema, pageMetadata, websiteSchema } from "@/lib/seo";
@@ -39,14 +37,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="it" suppressHydrationWarning>
+    <html lang="it">
       <body className={`${jakarta.variable} font-sans antialiased`}>
         <JsonLd data={graph(organizationSchema, websiteSchema)} />
         <ConsentProvider>
-          <ThemeProvider>
-            {children}
-            <ThemeSwitch />
-          </ThemeProvider>
+          {children}
           <ConsentGate />
           <Analytics />
           <BackToTop />

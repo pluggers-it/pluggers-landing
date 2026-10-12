@@ -5,7 +5,7 @@ import { AppLink } from "@/components/landing/AppLink";
 import { GuidePhone } from "@/components/landing/GuideSteps";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
 import Image from "next/image";
-import { ABOUT, ADVISORS, COMPANY_FACTS, NEXT, PRINCIPLES, STORY, TEAM, WHAT, WHERE, type TeamMember } from "@/lib/about";
+import { ABOUT, ADVISORS, NEXT, PRINCIPLES, STORY, TEAM, WHAT, type TeamMember } from "@/lib/about";
 import { ORG_ID, breadcrumbSchema, graph, pageMetadata, pageSchema } from "@/lib/seo";
 import { SITE_URL } from "@/lib/site";
 
@@ -88,33 +88,6 @@ export default function ChiSiamoPage() {
               </ul>
             </>
           )}
-        </section>
-
-        <section className="mt-12" aria-labelledby="where-title">
-          <h2 id="where-title" className={H2}>Dove siamo</h2>
-          <p className="mt-4 text-[16px] leading-[1.65]">{WHERE}</p>
-        </section>
-
-        <section className="mt-12" aria-labelledby="company-title">
-          <h2 id="company-title" className={H2}>
-            Dati della società
-          </h2>
-          <dl className="mt-6 divide-y divide-hair border-y border-hair">
-            {COMPANY_FACTS.map(({ label, value, href }) => (
-              <div key={label} className="grid gap-1 py-4 sm:grid-cols-[200px_minmax(0,1fr)] sm:gap-6">
-                <dt className="text-[15px] text-muted">{label}</dt>
-                <dd className="text-[16px] font-medium">
-                  {href ? (
-                    <a href={href} className="text-accent-text underline underline-offset-4">
-                      {value}
-                    </a>
-                  ) : (
-                    value
-                  )}
-                </dd>
-              </div>
-            ))}
-          </dl>
         </section>
 
         <div className="mt-12 flex justify-center">

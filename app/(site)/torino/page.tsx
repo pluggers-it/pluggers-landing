@@ -5,7 +5,7 @@ import { MapPin } from "lucide-react";
 import { JsonLd } from "@/components/JsonLd";
 import { FaqList } from "@/components/landing/FaqList";
 import { SitePage } from "@/components/landing/SitePage";
-import { WEB_APP_URL } from "@/components/landing/links";
+import { AppLink } from "@/components/landing/AppLink";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
 import { breadcrumbSchema, faqSchema, graph, pageMetadata, pageSchema, serviceSchema } from "@/lib/seo";
 import { SITE_URL } from "@/lib/site";
@@ -55,9 +55,9 @@ export default function TorinoPage() {
           Oggi attivo a Torino
         </p>
         <div className="mt-8">
-          <a href={WEB_APP_URL} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+          <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
             Apri Pluggers
-          </a>
+          </AppLink>
         </div>
       </section>
 
@@ -103,9 +103,9 @@ export default function TorinoPage() {
         </h2>
         <FaqList items={TORINO.faq} />
         <div className="mt-10">
-          <a href={WEB_APP_URL} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+          <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
             Apri Pluggers
-          </a>
+          </AppLink>
         </div>
       </section>
     </SitePage>

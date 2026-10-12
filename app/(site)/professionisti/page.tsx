@@ -8,6 +8,7 @@ import { GuidePhone, GuideSteps, type GuideStep } from "@/components/landing/Gui
 import { SitePage } from "@/components/landing/SitePage";
 import { StoreBadges } from "@/components/landing/StoreBadges";
 import { AppLink } from "@/components/landing/AppLink";
+import { PRO_SIGNUP_URL } from "@/components/landing/links";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
 import { PROS } from "@/lib/home";
 import { breadcrumbSchema, faqSchema, graph, pageMetadata, pageSchema } from "@/lib/seo";
@@ -122,7 +123,7 @@ export default function ProfessionistiPage() {
           </h1>
           <p className="mt-5 max-w-[58ch] text-[17px] leading-[1.6] text-muted sm:text-lg">{LEDE}</p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+            <AppLink href={PRO_SIGNUP_URL} store={false} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
               {PROS.cta}
             </AppLink>
             <StoreBadges />
@@ -134,10 +135,6 @@ export default function ProfessionistiPage() {
         </div>
       </section>
 
-      <section id="lista-attesa" className={`${CONTAINER} scroll-mt-6 pb-12 lg:pb-16`}>
-        <WaitlistForm title={PROS.waitlistTitle} description={PROS.waitlistText} />
-      </section>
-
       <section className={`${CONTAINER} pb-12 lg:pb-16`} aria-labelledby="benefits-title">
         <h2 id="benefits-title" className={H2}>Cosa trovi nell&apos;app</h2>
         <ul className="mt-8 grid gap-8 md:grid-cols-3">
@@ -145,7 +142,7 @@ export default function ProfessionistiPage() {
             const Icon = ICONS[i];
             return (
             <li key={b.title}>
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent-deep dark:text-accent-text">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent-deep">
                 <Icon className="h-5 w-5" strokeWidth={1.8} aria-hidden />
               </span>
               <h3 className="mt-4 text-[17px] font-bold leading-snug">{b.title}</h3>
@@ -203,6 +200,9 @@ export default function ProfessionistiPage() {
         <FaqList items={FAQ} />
       </section>
 
+      <section id="lista-attesa" className={`${CONTAINER} scroll-mt-6 pb-12 lg:pb-16`}>
+        <WaitlistForm title={PROS.waitlistTitle} description={PROS.waitlistText} />
+      </section>
     </SitePage>
   );
 }
