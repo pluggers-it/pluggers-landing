@@ -15,8 +15,11 @@ export function Hero() {
       <div
         className={`${CONTAINER} relative z-10 grid items-center gap-12 pb-16 pt-6 sm:pt-10 lg:grid-cols-[minmax(0,10fr)_minmax(0,11fr)] lg:gap-16 lg:pb-28 lg:pt-16`}
       >
-        <div>
-          <p className="mb-4 text-[15px] font-bold uppercase tracking-[0.08em] text-accent-text">{HERO.eyebrow}</p>
+        {/* Container: the eyebrow scales with this column so it stays on one line from 640px up. */}
+        <div className="@container">
+          <p className="mb-4 text-[clamp(12px,2.9cqi,15px)] font-bold uppercase tracking-[0.04em] text-accent-text sm:whitespace-nowrap">
+            {HERO.eyebrow}
+          </p>
           <h1 className="text-balance text-[clamp(2.5rem,4.6vw,3.9rem)] font-extrabold leading-[1.02] tracking-[-0.035em]">
             {HERO.title}
           </h1>
