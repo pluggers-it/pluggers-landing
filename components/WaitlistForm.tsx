@@ -86,7 +86,7 @@ export function WaitlistForm({
       {submitted ? (
         <p
           role="status"
-          className="mt-6 rounded-2xl bg-accent-soft px-4 py-3 text-[15px] font-medium text-accent-deep dark:text-accent-text"
+          className="mt-6 rounded-2xl bg-accent-soft px-4 py-3 text-[15px] font-medium text-accent-deep"
         >
           {successMessage}
         </p>
@@ -255,7 +255,7 @@ export function WaitlistForm({
             type="submit"
             disabled={!canSubmit}
             aria-busy={submitting}
-            className="mt-1 h-12 w-full rounded-full bg-accent text-[15px] font-semibold text-white transition hover:bg-accent-deep active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-accent dark:hover:bg-accent-bright"
+            className="mt-1 h-12 w-full rounded-full bg-accent text-[15px] font-semibold text-white transition hover:bg-accent-deep active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-accent"
           >
             {submitting ? "Invio…" : "Iscriviti"}
           </button>

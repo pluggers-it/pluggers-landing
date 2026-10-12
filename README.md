@@ -27,7 +27,7 @@
 | Styling | Tailwind CSS 4 |
 | Animations | Framer Motion |
 | Icons | Lucide React |
-| Theming | next-themes (dark / light) |
+| Theming | Light theme only |
 
 ## Getting Started
 

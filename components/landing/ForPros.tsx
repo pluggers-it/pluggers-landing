@@ -1,6 +1,7 @@
 import { Inbox, Radar, Receipt } from "lucide-react";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { AppLink } from "./AppLink";
+import { PRO_SIGNUP_URL } from "./links";
 import { PROS } from "@/lib/home";
 import { BTN_PRIMARY, CONTAINER, H2, LEDE_ANSWER } from "./styles";
 
@@ -25,7 +26,7 @@ export function ForPros() {
               const Icon = ICONS[i];
               return (
               <li key={title} className="flex gap-4 py-5 first:pt-0">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent-deep dark:text-accent-text">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent-deep">
                   <Icon className="h-5 w-5" strokeWidth={1.8} aria-hidden />
                 </span>
                 <div>
@@ -37,7 +38,7 @@ export function ForPros() {
             })}
           </ul>
 
-          <AppLink className={`${BTN_PRIMARY} mt-8`}>
+          <AppLink href={PRO_SIGNUP_URL} store={false} className={`${BTN_PRIMARY} mt-8`}>
             {PROS.cta}
           </AppLink>
         </div>

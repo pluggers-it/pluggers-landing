@@ -3,6 +3,8 @@
  * on a computer, and on Android until Google Play opens, Pluggers opens in the browser.
  */
 export const WEB_APP_URL = "https://app.plggrs.it";
+/** The web app straight on the professional sign-up: the app reads `registrati`. */
+export const PRO_SIGNUP_URL = `${WEB_APP_URL}/?registrati=professionista`;
 export const APP_STORE_URL = "https://testflight.apple.com/join/p9mmTZrK";
 
 /**

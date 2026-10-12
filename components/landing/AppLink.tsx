@@ -14,9 +14,10 @@ function deviceStoreUrl() {
  * A link into Pluggers: the store on phones and tablets that have one (see links.ts), the web app otherwise.
  * The server renders the web address and the store one replaces it after hydration.
  * The web app opens in a new tab, so the site stays open behind it.
+ * With `store={false}` it always stays on `href`: on iPhone and iPad the universal link opens the app if it is installed.
  */
-export function AppLink({ href = WEB_APP_URL, children, ...props }: ComponentProps<"a">) {
-  const url = useSyncExternalStore(subscribe, () => deviceStoreUrl() ?? href, () => href);
+export function AppLink({ href = WEB_APP_URL, store = true, children, ...props }: ComponentProps<"a"> & { store?: boolean }) {
+  const url = useSyncExternalStore(subscribe, () => (store ? deviceStoreUrl() : null) ?? href, () => href);
   const web = url === href;
   return (
     <a {...props} href={url} target={web ? "_blank" : undefined} rel={web ? "noopener noreferrer" : undefined}>
