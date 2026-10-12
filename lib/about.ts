@@ -48,7 +48,7 @@ export const TEAM: TeamMember[] = [
   { name: "Luca Piras", role: "Chief of Staff", photo: "/team/luca-piras.webp" },
   { name: "Mattia Pavone", role: "Chief Technology Officer", photo: "/team/mattia-pavone.webp" },
   { name: "Alberto Migliorato", role: "Tech Lead & Software Architect", photo: "/team/alberto-migliorato.webp" },
-  { name: "Andrea Di Felice", role: "AI Engineer & Data Scientist" },
+  { name: "Andrea Di Felice", role: "AI Engineer & Data Scientist", photo: "/team/andrea-di-felice.webp" },
   { name: "Gabriele Merlino", role: "AI Engineer & Cloud Data Specialist", photo: "/team/gabriele-merlino.webp" },
 ];
 
