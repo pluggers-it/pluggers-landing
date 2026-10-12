@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useReducedMotionSafe } from "./useReducedMotionSafe";
 
 /** Autoscroll speed, about one card every five seconds. */
@@ -9,15 +10,18 @@ const PX_PER_S = 48;
 const RESUME_MS = 2500;
 /** A mouse that moves less than this is a click, not a drag. */
 const DRAG_PX = 5;
+/** One arrow press moves the row by this many cards. */
+const STEP_CARDS = 3;
 
 /**
- * The trades row: it scrolls by itself and by hand (swipe, trackpad, mouse drag, keyboard), both ways.
+ * The trades row: it scrolls by itself and by hand (swipe, trackpad, mouse drag, keyboard, the two arrows), both ways.
  * Its children are two identical copies side by side, so jumping by one copy is invisible: the row
  * starts on the second copy and jumps back or forward by a copy before reaching either end.
  * With reduced motion it only scrolls by hand.
  */
 export function TradesScroller({ className, children }: { className: string; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
+  const step = useRef<(dir: -1 | 1) => void>(() => {});
   const reduce = useReducedMotionSafe();
 
   useEffect(() => {
@@ -121,6 +125,23 @@ export function TradesScroller({ className, children }: { className: string; chi
     };
     const noNativeDrag = (e: DragEvent) => e.preventDefault();
 
+    // The arrows: a few cards at a time. If the move would cross an end, jump by a copy first
+    // (invisible), so the wrap in onScroll never cuts the smooth scroll halfway.
+    step.current = (dir) => {
+      pause();
+      const cards = el.querySelectorAll("li");
+      const card = cards.length > 1 ? cards[1].getBoundingClientRect().left - cards[0].getBoundingClientRect().left : 236;
+      const copy = el.scrollWidth / 2;
+      const max = el.scrollWidth - el.clientWidth;
+      let target = el.scrollLeft + dir * STEP_CARDS * card;
+      if (target < 1 || target > max - 1) {
+        const shift = target < 1 ? copy : -copy;
+        el.scrollLeft += shift;
+        target += shift;
+      }
+      el.scrollTo({ left: target, behavior: reduce ? "auto" : "smooth" });
+    };
+
     el.addEventListener("scroll", onScroll, { passive: true });
     el.addEventListener("pointerenter", onEnter);
     el.addEventListener("pointerleave", onLeave);
@@ -165,8 +186,32 @@ export function TradesScroller({ className, children }: { className: string; chi
   }, [reduce]);
 
   return (
-    <div ref={ref} className={className}>
-      {children}
+    <div className="relative">
+      <div ref={ref} className={className}>
+        {children}
+      </div>
+      <ArrowButton side="left" label="Mestieri precedenti" onClick={() => step.current(-1)} />
+      <ArrowButton side="right" label="Mestieri successivi" onClick={() => step.current(1)} />
     </div>
+  );
+}
+
+/**
+ * From 640px up: on phones the row is swiped and the arrows would cover the photos.
+ * top-[69px] is the middle of the photos (220px wide cards, 16:10).
+ */
+function ArrowButton({ side, label, onClick }: { side: "left" | "right"; label: string; onClick: () => void }) {
+  const Icon = side === "left" ? ChevronLeft : ChevronRight;
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      className={`absolute top-[69px] z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--line)] bg-[var(--surface)] text-[var(--ink)] shadow-[var(--shadow-card)] transition hover:bg-[var(--surface-rest)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] active:scale-95 motion-reduce:transition-none sm:flex ${
+        side === "left" ? "left-4 lg:left-8" : "right-4 lg:right-8"
+      }`}
+    >
+      <Icon className="h-5 w-5" strokeWidth={2.25} aria-hidden />
+    </button>
   );
 }
