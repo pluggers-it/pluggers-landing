@@ -47,7 +47,7 @@ export default async function InvitePage({ params, searchParams }: Props) {
     <main className="min-h-[100dvh] bg-page text-ink">
       <div className={CONTAINER}>
         <header className="flex h-16 items-center sm:h-20">
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- plain links without referrer: leaving an invite page reloads, so its address never reaches a page running analytics */}
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- plain links: leaving an invite page reloads, so its address never stays in a tab's history where Google Analytics reads it on Back */}
           <a href="/" rel="noreferrer" className="flex items-center gap-2.5 rounded-full py-2 pr-2" aria-label="Pluggers, pagina iniziale">
             <Image src={logo} alt="" width={36} height={36} className="h-9 w-9 rounded-[10px]" priority />
             <span className="text-lg font-bold tracking-[-0.02em]">Pluggers</span>

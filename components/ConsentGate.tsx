@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Cookie } from "lucide-react";
 import { useConsent } from "@/lib/consent";
-import { isInvitePath } from "@/lib/invite";
 
 /**
  * Non-blocking cookie consent banner.
@@ -27,8 +25,8 @@ export function ConsentGate() {
   }, []);
 
   // Don't render during SSR or once a choice has been made
-  // the QR page is held up to someone else's camera; invite pages use only technical cookies
-  if (!mounted || analyticsConsent !== null || pathname === "/qr" || isInvitePath(pathname)) return null;
+  // the QR page is held up to someone else's camera
+  if (!mounted || analyticsConsent !== null || pathname === "/qr") return null;
 
   // CSS entrance instead of framer-motion: keeps the animation library off every page but the home.
   return (
@@ -61,12 +59,14 @@ export function ConsentGate() {
             <p className="mt-0.5 text-xs leading-relaxed text-[var(--color-muted)]">
               Usiamo cookie tecnici necessari al sito e, se accetti, cookie di statistica di Google
               Analytics per capire come viene usato.{" "}
-              <Link
+              {/* A full page load, not <Link>: leaving an invite page (/i/…) without reloading would keep its
+                  address in this tab's history, where Google Analytics, once accepted, would read it on Back. */}
+              <a
                 href="/privacy"
                 className="underline underline-offset-2 transition hover:text-[var(--color-foreground)]"
               >
                 Privacy Policy
-              </Link>
+              </a>
             </p>
           </div>
 

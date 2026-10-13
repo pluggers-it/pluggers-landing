@@ -2,9 +2,24 @@
 
 const API = "https://api.plggrs.it/api/v1/referrals/code";
 
-/** An invite page: its address carries the inviter's code and often an estimate token, so no analytics there. */
+/** An invite page: its address carries the inviter's code and often an estimate token. */
 export function isInvitePath(pathname: string): boolean {
   return pathname.startsWith("/i/");
+}
+
+/**
+ * What Google Analytics gets in place of the page's own address and referrer, so nothing of an invite reaches it:
+ * an invite page without its code and token, another site reduced to its origin (what browsers send anyway).
+ * The address only on invite pages: gtag keeps it for every later event, and other pages move client-side.
+ */
+export function analyticsPage(href: string, referrer: string): { page_location?: string; page_referrer: string } {
+  const page = new URL(href);
+  const clean = (url: URL) => (isInvitePath(url.pathname) ? `${url.origin}/i/[codice]` : url.href);
+  const from = referrer ? new URL(referrer) : null;
+  return {
+    ...(isInvitePath(page.pathname) && { page_location: clean(page) }),
+    page_referrer: !from ? "" : from.origin === page.origin ? clean(from) : `${from.protocol}//${from.host}/`,
+  };
 }
 
 /** 6 characters, uppercase letters and digits without the look-alikes 0, O, 1, I, L. */

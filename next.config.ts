@@ -34,6 +34,15 @@ const csp = [
   "form-action 'self'",
 ].join("; ");
 
+/**
+ * Invite pages (/i/CODE?p=TOKEN) reach Google only to load gtag.js and send Analytics hits, whose address and
+ * referrer the site cleans: gtag's own diagnostics to www.googletagmanager.com read the address, code included.
+ */
+const inviteCsp = csp
+  .split("; ")
+  .map((directive) => (directive.startsWith("script-src") ? directive : directive.replace(" https://www.googletagmanager.com", "")))
+  .join("; ");
+
 const securityHeaders = [
   // Content Security Policy — restricts script/style/connect origins
   { key: "Content-Security-Policy",   value: csp },
@@ -72,6 +81,14 @@ const nextConfig: NextConfig = {
         // Apply to all routes
         source: "/(.*)",
         headers: securityHeaders,
+      },
+      {
+        // Invite pages: no referrer at all, so the next page never gets their address
+        source: "/i/:path*",
+        headers: [
+          { key: "Content-Security-Policy", value: inviteCsp },
+          { key: "Referrer-Policy",         value: "no-referrer" },
+        ],
       },
       {
         // API routes: also prevent caching of sensitive responses
