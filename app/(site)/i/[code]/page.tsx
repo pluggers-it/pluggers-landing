@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { cache } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import logo from "@/assets/logo.png";
 import { GuidePhone } from "@/components/landing/GuideSteps";
 import { webAppUrl } from "@/components/landing/links";
@@ -48,10 +47,11 @@ export default async function InvitePage({ params, searchParams }: Props) {
     <main className="min-h-[100dvh] bg-page text-ink">
       <div className={CONTAINER}>
         <header className="flex h-16 items-center sm:h-20">
-          <Link href="/" className="flex items-center gap-2.5 rounded-full py-2 pr-2" aria-label="Pluggers, pagina iniziale">
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- plain links without referrer: leaving an invite page reloads, so its address never reaches a page running analytics */}
+          <a href="/" rel="noreferrer" className="flex items-center gap-2.5 rounded-full py-2 pr-2" aria-label="Pluggers, pagina iniziale">
             <Image src={logo} alt="" width={36} height={36} className="h-9 w-9 rounded-[10px]" priority />
             <span className="text-lg font-bold tracking-[-0.02em]">Pluggers</span>
-          </Link>
+          </a>
         </header>
 
         <section className="grid items-center gap-12 pb-20 pt-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16 lg:pt-12">
@@ -69,9 +69,9 @@ export default async function InvitePage({ params, searchParams }: Props) {
             {code && <CopyCode code={code} />}
             <p className="mt-4 text-[15px] text-muted">
               Sei un professionista?{" "}
-              <Link href="/professionisti" className="inline-flex min-h-12 items-center font-semibold text-accent-text underline-offset-4 hover:underline">
+              <a href="/professionisti" rel="noreferrer" className="inline-flex min-h-12 items-center font-semibold text-accent-text underline-offset-4 hover:underline">
                 Leggi la guida
-              </Link>
+              </a>
             </p>
           </div>
           <div className="flex justify-center">

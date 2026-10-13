@@ -1,13 +1,16 @@
 "use client";
 
 import Script from "next/script";
+import { usePathname } from "next/navigation";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 import { useConsent } from "@/lib/consent";
+import { isInvitePath } from "@/lib/invite";
 
-/** Google Analytics 4, loaded only after «Accetta» on the cookie banner. */
+/** Google Analytics 4, loaded only after «Accetta» on the cookie banner, and never on invite pages. */
 export function Analytics() {
   const { analyticsConsent } = useConsent();
-  if (!GA_MEASUREMENT_ID || analyticsConsent !== "granted") return null;
+  const pathname = usePathname();
+  if (!GA_MEASUREMENT_ID || analyticsConsent !== "granted" || isInvitePath(pathname)) return null;
   return (
     <>
       <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} strategy="afterInteractive" />

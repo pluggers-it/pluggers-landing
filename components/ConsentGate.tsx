@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Cookie } from "lucide-react";
 import { useConsent } from "@/lib/consent";
+import { isInvitePath } from "@/lib/invite";
 
 /**
  * Non-blocking cookie consent banner.
@@ -26,8 +27,8 @@ export function ConsentGate() {
   }, []);
 
   // Don't render during SSR or once a choice has been made
-  // the QR page is held up to someone else's camera
-  if (!mounted || analyticsConsent !== null || pathname === "/qr") return null;
+  // the QR page is held up to someone else's camera; invite pages use only technical cookies
+  if (!mounted || analyticsConsent !== null || pathname === "/qr" || isInvitePath(pathname)) return null;
 
   // CSS entrance instead of framer-motion: keeps the animation library off every page but the home.
   return (

@@ -2,6 +2,11 @@
 
 const API = "https://api.plggrs.it/api/v1/referrals/code";
 
+/** An invite page: its address carries the inviter's code and often an estimate token, so no analytics there. */
+export function isInvitePath(pathname: string): boolean {
+  return pathname.startsWith("/i/");
+}
+
 /** 6 characters, uppercase letters and digits without the look-alikes 0, O, 1, I, L. */
 const CODE = /^[A-HJKMNP-Z2-9]{6}$/;
 
