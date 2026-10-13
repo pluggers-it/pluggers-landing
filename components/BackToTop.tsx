@@ -13,7 +13,7 @@ import { useReducedMotionSafe } from "@/components/landing/useReducedMotionSafe"
  */
 export function BackToTop() {
   const [visible, setVisible] = useState(false);
-  const { analyticsConsent } = useConsent();
+  const { choice } = useConsent();
   const reduced = useReducedMotionSafe();
   const pathname = usePathname();
 
@@ -27,7 +27,7 @@ export function BackToTop() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [pathname]);
 
-  if (analyticsConsent === null) return null;
+  if (choice === null) return null;
 
   return (
     <button

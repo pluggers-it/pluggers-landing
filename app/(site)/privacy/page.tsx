@@ -138,24 +138,61 @@ const SECTIONS: LegalSection[] = [
           Il modulo è riservato ai maggiorenni. Se ci accorgiamo di aver raccolto dati di un
           minore senza il consenso di chi ne ha la responsabilità genitoriale, li cancelliamo.
         </p>
-        <h3>Cookie e statistiche</h3>
+        <h3>Cookie, statistiche e marketing</h3>
         <p>
           Il sito usa cookie tecnici, necessari al suo funzionamento: nel tuo browser salva il
           tema chiaro o scuro e la scelta fatta sul banner dei cookie; a chi gestisce il blog,
           anche l&apos;accesso all&apos;area riservata. Per questi non serve il consenso.
         </p>
         <p>
-          Solo se tocchi «Accetta» sul banner usiamo anche Google Analytics 4, fornito da Google
-          Ireland Limited, per misurare in forma aggregata come viene usato il sito: pagine
-          visitate, provenienza della visita, tipo di dispositivo e durata. Google Analytics usa
-          cookie e un identificativo del browser; non lo usiamo per pubblicità né per profilarti,
-          e i segnali pubblicitari sono disattivati. Base giuridica: consenso (art. 6(1)(a)).
-          Google conserva questi dati per il periodo impostato nel servizio, da 2 a 14 mesi, e
-          può trasferirli negli Stati Uniti nell&apos;ambito del Data Privacy Framework UE-USA.
+          Gli altri cookie li usiamo solo se acconsenti dal banner che compare alla prima visita:
+          «Accetta» attiva sia le statistiche sia il marketing, «Scegli» ti fa decidere
+          separatamente per ciascuno, «Solo tecnici» li rifiuta entrambi.
         </p>
         <p>
-          Se scegli «Solo tecnici», Google Analytics non viene caricato. Puoi cambiare la tua
-          scelta in qualsiasi momento: <CookiePreferencesButton />
+          <strong>Statistiche.</strong>{" "}Con il consenso alle statistiche usiamo Google Analytics
+          4, fornito da Google Ireland Limited, per misurare in forma aggregata come viene usato il
+          sito: pagine visitate, provenienza della visita, tipo di dispositivo e durata. Google
+          Analytics usa cookie e un identificativo del browser; non lo usiamo per pubblicità né per
+          profilarti, e i segnali pubblicitari sono disattivati. Base giuridica: consenso (art.
+          6(1)(a)). Google conserva questi dati per il periodo impostato nel servizio, da 2 a 14
+          mesi, e può trasferirli negli Stati Uniti nell&apos;ambito del Data Privacy Framework
+          UE-USA.
+        </p>
+        <p>
+          <strong>Marketing.</strong>{" "}Con il consenso al marketing usiamo il pixel di Meta, uno
+          strumento di Meta Platforms Ireland Limited, la società che gestisce Facebook e
+          Instagram in Europa. Serve a misurare le nostre pubblicità su Facebook e Instagram (per
+          esempio quante persone arrivano sul sito da una pubblicità e si iscrivono alla lista
+          d&apos;attesa) e a mostrarle a chi ha già visitato il sito. Il pixel invia a Meta le
+          pagine che visiti, l&apos;iscrizione alla lista d&apos;attesa o alla newsletter, i tocchi
+          sui pulsanti che aprono o scaricano l&apos;app, l&apos;indirizzo IP, informazioni sul
+          browser e sul dispositivo e un identificativo salvato in un cookie, che dura 90 giorni;
+          se arrivi da una pubblicità, anche l&apos;identificativo di quel clic. Non inviamo a Meta
+          nome, cognome, email, telefono né quello che scrivi nei moduli. Meta può collegare
+          questi dati al tuo account Facebook o Instagram, se ne hai uno.
+        </p>
+        <p>
+          Per la raccolta di questi dati e il loro invio a Meta siamo contitolari del trattamento
+          insieme a Meta Platforms Ireland Limited; per l&apos;uso che Meta ne fa dopo, per
+          esempio per scegliere le pubblicità da mostrarti, il titolare è Meta Platforms Ireland
+          Limited, secondo la sua{" "}
+          <a
+            href="https://www.facebook.com/privacy/policy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-accent-text underline underline-offset-4"
+          >
+            informativa sulla privacy
+          </a>
+          , a cui puoi rivolgerti anche per esercitare i tuoi diritti. Base giuridica: consenso
+          (art. 6(1)(a)). Meta può trasferire questi dati negli Stati Uniti a Meta Platforms, Inc.
+          nell&apos;ambito del Data Privacy Framework UE-USA.
+        </p>
+        <p>
+          Senza il consenso, Google Analytics e il pixel di Meta non vengono caricati e il tuo
+          browser non contatta i loro server. Puoi cambiare la tua scelta in qualsiasi momento, e la revoca
+          vale da subito: <CookiePreferencesButton />
         </p>
         <h3>Reclamo</h3>
         <p>
@@ -180,7 +217,7 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       title="Informativa sulla privacy"
-      updated="9 ottobre 2026"
+      updated="13 ottobre 2026"
       version="2026-10-06"
       intro={
         <p>
