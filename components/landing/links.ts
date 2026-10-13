@@ -16,12 +16,18 @@ export const STORE_BADGES_ID = "scarica";
  */
 export const WEB_APP_OPEN: boolean = false;
 
+/** What kind of device this is, from the browser's user agent, platform and touch points. */
+export function deviceKind(userAgent: string, platform = "", touchPoints = 0): "ios" | "android" | "computer" {
+  if (/android/i.test(platform) || /android/i.test(userAgent)) return "android";
+  // iPadOS asks for the desktop site and says "Macintosh": only the touch screen gives it away.
+  if (/iphone|ipad|ipod/i.test(userAgent) || (/macintosh/i.test(userAgent) && touchPoints > 1)) return "ios";
+  return "computer";
+}
+
 /** The store for this device, or null when it opens in the browser. */
 export function storeUrlFor(userAgent: string, platform = "", touchPoints = 0): string | null {
-  if (/android/i.test(platform) || /android/i.test(userAgent)) return PLAY_STORE_URL;
-  // iPadOS asks for the desktop site and says "Macintosh": only the touch screen gives it away.
-  if (/iphone|ipad|ipod/i.test(userAgent) || (/macintosh/i.test(userAgent) && touchPoints > 1)) return APP_STORE_URL;
-  return null;
+  const device = deviceKind(userAgent, platform, touchPoints);
+  return device === "android" ? PLAY_STORE_URL : device === "ios" ? APP_STORE_URL : null;
 }
 
 /**
@@ -46,5 +52,6 @@ export function webAppUrl(params: { ref?: string | null; p?: string | null }): s
   const query = new URLSearchParams();
   if (params.ref) query.set("ref", params.ref);
   if (params.p) query.set("p", params.p);
-  return query.size ? `${WEB_APP_URL}/?${query}` : WEB_APP_URL;
+  // /invito opens the installed app (universal link, App Link); without it a phone goes to its store.
+  return `${WEB_APP_URL}/invito${query.size ? `?${query}` : ""}`;
 }
