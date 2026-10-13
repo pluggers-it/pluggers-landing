@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { metaEvent } from "@/lib/analytics";
 import Link from "next/link";
 import { Check } from "lucide-react";
 
@@ -118,6 +119,7 @@ export function WaitlistForm({
               });
               if (res.ok) {
                 setSubmitted(true);
+                metaEvent("track", "Lead", { content_name: submissionSource });
               } else {
                 const data = (await res.json().catch(() => null)) as {
                   error?: string;

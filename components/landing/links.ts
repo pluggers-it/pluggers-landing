@@ -23,6 +23,14 @@ export function storeUrlFor(userAgent: string, platform = "", touchPoints = 0): 
   return null;
 }
 
+/** Where a link into Pluggers leads, for the click event of the Meta pixel; null for any other link. */
+export function appDestination(href: string): "ios" | "android" | "web" | null {
+  if (href.startsWith(APP_STORE_URL)) return "ios";
+  if (PLAY_STORE_URL && href.startsWith(PLAY_STORE_URL)) return "android";
+  if (href.startsWith(`${WEB_APP_URL}/`) || href === WEB_APP_URL) return "web";
+  return null;
+}
+
 /** The web app with the parameters it reads: `ref`, the invite code, and `p`, the token of an estimate link. */
 export function webAppUrl(params: { ref?: string | null; p?: string | null }): string {
   const query = new URLSearchParams();

@@ -1,4 +1,5 @@
 import { Analytics } from "@/components/Analytics";
+import { MetaPixel } from "@/components/MetaPixel";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
@@ -44,6 +45,7 @@ export default function RootLayout({
           {children}
           <ConsentGate />
           <Analytics />
+          <MetaPixel />
           <BackToTop />
         </ConsentProvider>
       </body>

@@ -4,69 +4,79 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
-  useState,
+  useMemo,
+  useSyncExternalStore,
 } from "react";
 
-export type AnalyticsConsent = "granted" | "denied" | null;
+/** What the cookie banner allows on top of the technical cookies. */
+export interface CookieChoice {
+  /** Google Analytics */
+  analytics: boolean;
+  /** Meta pixel */
+  marketing: boolean;
+}
 
-const ANALYTICS_KEY = "pluggers_analytics_v1";
+export const ACCEPT_ALL: CookieChoice = { analytics: true, marketing: true };
+export const TECHNICAL_ONLY: CookieChoice = { analytics: false, marketing: false };
+
+// v1 only covered statistics: with Meta added everyone is asked again.
+const CHOICE_KEY = "pluggers_cookies_v2";
+
+function parseChoice(stored: string | null): CookieChoice | null {
+  try {
+    const value = JSON.parse(stored ?? "null");
+    if (typeof value?.analytics === "boolean" && typeof value?.marketing === "boolean") {
+      return { analytics: value.analytics, marketing: value.marketing };
+    }
+  } catch {}
+  return null;
+}
+
+const listeners = new Set<() => void>();
+const subscribe = (onChange: () => void) => {
+  listeners.add(onChange);
+  return () => void listeners.delete(onChange);
+};
+const notify = () => listeners.forEach((onChange) => onChange());
 
 // ── Context ───────────────────────────────────────────────────────────────────
 interface ConsentContextValue {
-  /**
-   * Cookie choice.
-   * null    = not yet decided (banner is visible)
-   * granted = user opted in
-   * denied  = user opted out
-   */
-  analyticsConsent: AnalyticsConsent;
+  /** null = not decided yet (the banner is visible) */
+  choice: CookieChoice | null;
 
-  /** Accept cookies */
-  acceptAll: () => void;
-
-  /** Decline optional cookies */
-  acceptNecessary: () => void;
+  /** Save a choice from the banner */
+  choose: (choice: CookieChoice) => void;
 
   /** Forget the choice: the banner shows again */
   resetChoice: () => void;
 }
 
 const ConsentContext = createContext<ConsentContextValue>({
-  analyticsConsent: null,
-  acceptAll:        () => {},
-  acceptNecessary:  () => {},
-  resetChoice:      () => {},
+  choice:      null,
+  choose:      () => {},
+  resetChoice: () => {},
 });
 
 // ── Provider ──────────────────────────────────────────────────────────────────
 export function ConsentProvider({ children }: { children: React.ReactNode }) {
-  const [analyticsConsent, setAnalyticsConsent] = useState<AnalyticsConsent>(null);
+  // The server renders "no choice"; the stored one takes over after hydration.
+  const stored = useSyncExternalStore(subscribe, () => localStorage.getItem(CHOICE_KEY), () => null);
+  const choice = useMemo(() => parseChoice(stored), [stored]);
 
-  useEffect(() => {
-    const stored = localStorage.getItem(ANALYTICS_KEY) as AnalyticsConsent | null;
-    if (stored === "granted" || stored === "denied") setAnalyticsConsent(stored);
-  }, []);
-
-  const acceptAll = useCallback(() => {
-    localStorage.setItem(ANALYTICS_KEY, "granted");
-    setAnalyticsConsent("granted");
-  }, []);
-
-  const acceptNecessary = useCallback(() => {
-    localStorage.setItem(ANALYTICS_KEY, "denied");
-    setAnalyticsConsent("denied");
+  const choose = useCallback((next: CookieChoice) => {
+    localStorage.setItem(CHOICE_KEY, JSON.stringify(next));
+    notify();
   }, []);
 
   const resetChoice = useCallback(() => {
-    localStorage.removeItem(ANALYTICS_KEY);
-    // GA keeps running until the page reloads: a reload is the clean way to stop it
-    if (analyticsConsent === "granted") window.location.reload();
-    else setAnalyticsConsent(null);
-  }, [analyticsConsent]);
+    localStorage.removeItem(CHOICE_KEY);
+    // Google Analytics and the Meta pixel keep running until the page reloads: a reload is the clean way to stop them
+    if (choice?.analytics || choice?.marketing) window.location.reload();
+    else notify();
+  }, [choice]);
 
   return (
-    <ConsentContext.Provider value={{ analyticsConsent, acceptAll, acceptNecessary, resetChoice }}>
+    <ConsentContext.Provider value={{ choice, choose, resetChoice }}>
       {children}
     </ConsentContext.Provider>
   );

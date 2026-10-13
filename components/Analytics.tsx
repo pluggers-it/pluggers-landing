@@ -7,13 +7,13 @@ import { useConsent } from "@/lib/consent";
 import { analyticsPage } from "@/lib/invite";
 
 /**
- * Google Analytics 4, loaded only after «Accetta» on the cookie banner. gtag takes the address and referrer from
- * analyticsPage(), so on an invite page Google never gets the code or the estimate token; there next.config.ts
- * also blocks gtag's diagnostics, which read the address on their own.
+ * Google Analytics 4, loaded only with the statistics consent of the cookie banner. gtag takes the address and
+ * referrer from analyticsPage(), so on an invite page Google never gets the code or the estimate token; there
+ * next.config.ts also blocks gtag's diagnostics, which read the address on their own.
  */
 export function Analytics() {
-  const { analyticsConsent } = useConsent();
-  const on = Boolean(GA_MEASUREMENT_ID) && analyticsConsent === "granted";
+  const { choice } = useConsent();
+  const on = Boolean(GA_MEASUREMENT_ID) && choice?.analytics === true;
 
   useEffect(() => {
     if (!on) return;
