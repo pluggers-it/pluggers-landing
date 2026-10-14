@@ -20,18 +20,22 @@ type WhenClosed = "soon" | "stores" | "demo";
  * A link into Pluggers: the store on phones and tablets that have one (see links.ts), the web app otherwise.
  * The server renders the computer's version and the store replaces it after hydration.
  * The web app opens in a new tab, so the site stays open behind it.
- * With `store={false}` it always stays on `href`: on iPhone and iPad the universal link opens the app if it is installed.
+ * With `store={false}` a phone gets its store only once anyone can install from it (see `appLinkUrl`), and stays on `href` otherwise.
  * While the web app is closed phones get their store, and computers what `whenClosed` says.
+ * With `computerOnly` it shows on computers only: phones and tablets with a store render nothing.
  */
 export function AppLink({
   href = WEB_APP_URL,
   store = true,
   whenClosed = "soon",
+  computerOnly = false,
   children,
   className = "",
   ...props
-}: ComponentProps<"a"> & { store?: boolean; whenClosed?: WhenClosed }) {
-  const url = useSyncExternalStore(subscribe, () => appLinkUrl(href, deviceStoreUrl(), store), () => appLinkUrl(href, null, store));
+}: ComponentProps<"a"> & { store?: boolean; whenClosed?: WhenClosed; computerOnly?: boolean }) {
+  const storeUrl = useSyncExternalStore(subscribe, deviceStoreUrl, () => null);
+  if (computerOnly && storeUrl) return null;
+  const url = appLinkUrl(href, storeUrl, store);
   if (!url && whenClosed === "stores") {
     return (
       <a {...props} className={className} href={`#${STORE_BADGES_ID}`}>
