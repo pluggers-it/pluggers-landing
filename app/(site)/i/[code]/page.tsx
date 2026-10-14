@@ -39,7 +39,7 @@ const QUOTE_TOKEN = /^[0-9a-f]{16,64}$/i;
 
 // Opened from a friend's or colleague's message: who invited you, what Pluggers is, one way in.
 // The way in is app.plggrs.it/invito with the code: the app where it's installed, the store on a phone without it,
-// the web app's sign-up on a computer (see InviteButton).
+// the web app's sign-up on a computer, or the store badges while the web app is closed (see InviteButton).
 export default async function InvitePage({ params, searchParams }: Props) {
   const { code, title } = await lookup((await params).code);
   const { p } = await searchParams;
