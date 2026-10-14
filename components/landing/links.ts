@@ -11,10 +11,11 @@ export const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=it.
 export const STORE_BADGES_ID = "scarica";
 
 /**
- * The web app is not ready yet: while this is false, links that would open it don't, on a computer
- * (see `whenClosed` in AppLink), and phones get their store even from a `store={false}` link. Set it to true when it is.
+ * Whether links open the web app from a computer. While it is false they don't (see `whenClosed` in AppLink),
+ * and phones get their store even from a `store={false}` link. Open again since 14/10/2026, with the new
+ * client, professional and firm screens.
  */
-export const WEB_APP_OPEN: boolean = false;
+export const WEB_APP_OPEN: boolean = true;
 
 /** The store for this device, or null when it opens in the browser. */
 export function storeUrlFor(userAgent: string, platform = "", touchPoints = 0): string | null {
