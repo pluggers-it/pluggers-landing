@@ -1,19 +1,18 @@
 /**
- * Where the product lives. iPhone and iPad install from the public TestFlight beta;
- * on a computer, and on Android until Google Play opens, Pluggers opens in the browser.
+ * Where the product lives. iPhone and iPad install from the public TestFlight beta, Android from
+ * Google Play; on a computer Pluggers opens in the browser.
  */
 export const WEB_APP_URL = "https://app.plggrs.it";
 /** The web app straight on the professional sign-up: the app reads `registrati`. */
 export const PRO_SIGNUP_URL = `${WEB_APP_URL}/?registrati=professionista`;
 export const APP_STORE_URL = "https://testflight.apple.com/join/p9mmTZrK";
+export const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=it.pluggers.app";
 
 /**
- * Google Play is a closed test without a public group: only the testers can install from it.
- * While this is false Android goes to the web app and no Google Play link is shown; set it to
- * true once anyone can install.
+ * The web app is not ready yet: while this is false, links that would open it are shown greyed out
+ * with «In arrivo», and phones get their store even from a `store={false}` link. Set it to true when it is.
  */
-export const ANDROID_STORE_OPEN: boolean = false;
-export const PLAY_STORE_URL: string | null = ANDROID_STORE_OPEN ? "https://play.google.com/apps/testing/it.pluggers.app" : null;
+export const WEB_APP_OPEN: boolean = false;
 
 /** The store for this device, or null when it opens in the browser. */
 export function storeUrlFor(userAgent: string, platform = "", touchPoints = 0): string | null {
@@ -23,10 +22,19 @@ export function storeUrlFor(userAgent: string, platform = "", touchPoints = 0): 
   return null;
 }
 
+/**
+ * Where a link into Pluggers leads: the device's store, or `href` on the web app; null when that would be
+ * the web app while it is closed. With `preferStore` false phones stay on `href`, as long as the web app is open.
+ */
+export function appLinkUrl(href: string, storeUrl: string | null, preferStore = true, webAppOpen = WEB_APP_OPEN): string | null {
+  if (storeUrl && (preferStore || !webAppOpen)) return storeUrl;
+  return webAppOpen ? href : null;
+}
+
 /** Where a link into Pluggers leads, for the click event of the Meta pixel; null for any other link. */
 export function appDestination(href: string): "ios" | "android" | "web" | null {
   if (href.startsWith(APP_STORE_URL)) return "ios";
-  if (PLAY_STORE_URL && href.startsWith(PLAY_STORE_URL)) return "android";
+  if (href.startsWith(PLAY_STORE_URL)) return "android";
   if (href.startsWith(`${WEB_APP_URL}/`) || href === WEB_APP_URL) return "web";
   return null;
 }

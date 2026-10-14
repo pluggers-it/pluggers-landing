@@ -31,17 +31,16 @@ function Badge({ href, lead, store, children }: { href: string; lead: string; st
   );
 }
 
+/** On phones a row of their own under the full-width button, centred; from sm up, beside the button. */
 export function StoreBadges() {
   return (
-    <>
+    <div className="flex w-full flex-wrap justify-center gap-3 sm:w-auto sm:justify-start">
       <Badge href={APP_STORE_URL} lead="Scarica su" store="App Store">
         <AppleGlyph />
       </Badge>
-      {PLAY_STORE_URL && (
-        <Badge href={PLAY_STORE_URL} lead="Disponibile su" store="Google Play">
-          <PlayGlyph />
-        </Badge>
-      )}
-    </>
+      <Badge href={PLAY_STORE_URL} lead="Disponibile su" store="Google Play">
+        <PlayGlyph />
+      </Badge>
+    </div>
   );
 }
