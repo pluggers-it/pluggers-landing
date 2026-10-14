@@ -123,7 +123,7 @@ export default function ProfessionistiPage() {
           </h1>
           <p className="mt-5 max-w-[58ch] text-[17px] leading-[1.6] text-muted sm:text-lg">{LEDE}</p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <AppLink href={PRO_SIGNUP_URL} store={false} className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+            <AppLink href={PRO_SIGNUP_URL} store={false} whenClosed="stores" className={`${BTN_PRIMARY} w-full sm:w-auto`}>
               {PROS.cta}
             </AppLink>
             <StoreBadges />

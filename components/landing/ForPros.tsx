@@ -38,7 +38,7 @@ export function ForPros() {
             })}
           </ul>
 
-          <AppLink href={PRO_SIGNUP_URL} store={false} className={`${BTN_PRIMARY} mt-8`}>
+          <AppLink href={PRO_SIGNUP_URL} store={false} whenClosed="stores" className={`${BTN_PRIMARY} mt-8`}>
             {PROS.cta}
           </AppLink>
         </div>

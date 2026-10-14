@@ -5,8 +5,7 @@ import { HeroDemo } from "./HeroDemo";
 import { HeroIcon } from "./HeroIcon";
 import { StoreBadges } from "./StoreBadges";
 import { HERO } from "@/lib/home";
-import { AppLink } from "./AppLink";
-import { BTN_PRIMARY, CONTAINER } from "./styles";
+import { CONTAINER } from "./styles";
 
 export function Hero() {
   return (
@@ -36,10 +35,7 @@ export function Hero() {
               Prossimamente in arrivo in tutta Italia
             </li>
           </ul>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
-              Racconta il problema
-            </AppLink>
+          <div className="mt-8">
             <StoreBadges />
           </div>
           <Link href="/professionisti" className="mt-4 inline-flex min-h-12 items-center gap-1.5 text-[15px] font-semibold underline underline-offset-4">

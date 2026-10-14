@@ -3,8 +3,9 @@
  * read it, so what crawlers and assistants see is what people see.
  * Every product claim is checked against the app and backend code.
  */
+import { WEB_APP_OPEN } from "@/components/landing/links";
 
-export const HOME_UPDATED = "2026-10-12";
+export const HOME_UPDATED = "2026-10-14";
 
 export const HOME = {
   title: "Pluggers | Il professionista giusto, al momento giusto.",
@@ -115,7 +116,7 @@ export const FAQ = [
   },
   {
     q: "Come trovo un idraulico o un elettricista a Torino in fretta?",
-    a: "Apri Pluggers su app.plggrs.it e descrivi il problema: l'assistente capisce quale mestiere serve e quanto è urgente, e ti mostra i professionisti che lavorano nella tua zona. Scegli a chi mandare la richiesta e ricevi le risposte in chat. Quando può venire lo concordi con il professionista.",
+    a: `${WEB_APP_OPEN ? "Apri Pluggers su app.plggrs.it" : "Scarica Pluggers su iPhone o Android"} e descrivi il problema: l'assistente capisce quale mestiere serve e quanto è urgente, e ti mostra i professionisti che lavorano nella tua zona. Scegli a chi mandare la richiesta e ricevi le risposte in chat. Quando può venire lo concordi con il professionista.`,
   },
   {
     q: "Cos'è il Costo Chiamata?",
@@ -139,6 +140,8 @@ export const FAQ = [
   },
   {
     q: "Serve scaricare un'app?",
-    a: "Sì: Pluggers è un'app per iPhone e Android. Da computer la usi anche dal browser, su app.plggrs.it.",
+    a: WEB_APP_OPEN
+      ? "Sì: Pluggers è un'app per iPhone e Android. Da computer la usi anche dal browser, su app.plggrs.it."
+      : "Sì: Pluggers è un'app per iPhone e Android. La versione da usare dal computer è in arrivo.",
   },
 ] as const;

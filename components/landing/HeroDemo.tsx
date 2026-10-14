@@ -415,9 +415,11 @@ export function HeroDemo() {
                 </button>
               </div>
             </div>
-            {/* The real thing: the button opens Pluggers, the demo around it stays a simulation. */}
+            {/* The real thing: the button opens Pluggers, the demo around it stays a simulation.
+                While the web app is closed, on a computer it only plays the demo. */}
             <AppLink
               ref={buttonRef}
+              whenClosed="demo"
               onClick={touch}
               className={`${TAP} mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition-all duration-200 hover:bg-accent-deep active:bg-accent-deep motion-safe:active:scale-[0.97] ${
                 pressed ? "bg-accent-deep motion-safe:scale-[0.97]" : "bg-accent"
