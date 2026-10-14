@@ -37,7 +37,7 @@ export function Hero() {
             </li>
           </ul>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+            <AppLink whenClosed="stores" className={`${BTN_PRIMARY} w-full sm:w-auto`}>
               Racconta il problema
             </AppLink>
             <StoreBadges />

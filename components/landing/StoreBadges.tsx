@@ -1,4 +1,4 @@
-import { APP_STORE_URL, PLAY_STORE_URL } from "./links";
+import { APP_STORE_URL, PLAY_STORE_URL, STORE_BADGES_ID } from "./links";
 
 const BADGE =
   "inline-flex h-12 items-center gap-2.5 rounded-full border border-line bg-surface pl-3.5 pr-4 text-left leading-none transition hover:border-ink";
@@ -31,10 +31,16 @@ function Badge({ href, lead, store, children }: { href: string; lead: string; st
   );
 }
 
-/** On phones a row of their own under the full-width button, centred; from sm up, beside the button. */
+/**
+ * On phones a row of their own under the full-width button, centred; from sm up, beside the button.
+ * One per page: buttons into the web app lead here from a computer while it is closed, and the badges light up.
+ */
 export function StoreBadges() {
   return (
-    <div className="flex w-full flex-wrap justify-center gap-3 sm:w-auto sm:justify-start">
+    <div
+      id={STORE_BADGES_ID}
+      className="flex w-full scroll-mt-[35vh] flex-wrap justify-center gap-3 sm:w-auto sm:justify-start [&:target>a]:border-accent [&:target>a]:ring-4 [&:target>a]:ring-accent/20"
+    >
       <Badge href={APP_STORE_URL} lead="Scarica su" store="App Store">
         <AppleGlyph />
       </Badge>

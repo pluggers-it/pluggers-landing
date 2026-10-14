@@ -113,7 +113,7 @@ export default function ClientiPage() {
             Otto passi, con i nomi dei pulsanti che trovi nell&apos;app. Non serve sapere che professionista ti serve: lo capisce l&apos;assistente dalla tua descrizione. Per te Pluggers è gratis.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+            <AppLink whenClosed="stores" className={`${BTN_PRIMARY} w-full sm:w-auto`}>
               Racconta il tuo problema
             </AppLink>
             <StoreBadges />

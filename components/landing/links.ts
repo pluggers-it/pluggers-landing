@@ -7,10 +7,12 @@ export const WEB_APP_URL = "https://app.plggrs.it";
 export const PRO_SIGNUP_URL = `${WEB_APP_URL}/?registrati=professionista`;
 export const APP_STORE_URL = "https://testflight.apple.com/join/p9mmTZrK";
 export const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=it.pluggers.app";
+/** The anchor of a page's store badges, where links into the web app lead from a computer while it is closed. */
+export const STORE_BADGES_ID = "scarica";
 
 /**
- * The web app is not ready yet: while this is false, links that would open it are shown greyed out
- * with «In arrivo», and phones get their store even from a `store={false}` link. Set it to true when it is.
+ * The web app is not ready yet: while this is false, links that would open it don't, on a computer
+ * (see `whenClosed` in AppLink), and phones get their store even from a `store={false}` link. Set it to true when it is.
  */
 export const WEB_APP_OPEN: boolean = false;
 
