@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { APP_STORE_URL, PLAY_STORE_URL, WEB_APP_URL } from "@/components/landing/links";
+import { APP_STORE_URL, PLAY_STORE_URL, WEB_APP_OPEN, WEB_APP_URL } from "@/components/landing/links";
 import { ORG, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 
 // ── Page metadata ────────────────────────────────────────────────────────────
@@ -103,7 +103,7 @@ export const websiteSchema = {
 };
 
 const storeUrls = [APP_STORE_URL, PLAY_STORE_URL].filter(Boolean);
-const platforms = [APP_STORE_URL && "iOS", PLAY_STORE_URL && "Android", "Web"].filter(Boolean).join(", ");
+const platforms = [APP_STORE_URL && "iOS", PLAY_STORE_URL && "Android", WEB_APP_OPEN && "Web"].filter(Boolean).join(", ");
 
 // Until the store links exist, declare only the platform people can open today: the web version.
 export const appSchema = {
@@ -111,7 +111,7 @@ export const appSchema = {
   "@id": `${SITE_URL}/#app`,
   name: ORG.name,
   description: ORG.summary,
-  url: WEB_APP_URL,
+  url: WEB_APP_OPEN ? WEB_APP_URL : SITE_URL,
   operatingSystem: platforms,
   applicationCategory: "LifestyleApplication",
   inLanguage: "it",

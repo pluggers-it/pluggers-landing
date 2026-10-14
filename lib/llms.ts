@@ -2,7 +2,7 @@
  * /llms.txt (index, per llmstxt.org) and /llms-full.txt (the pages' text),
  * built from the same copy the pages render.
  */
-import { WEB_APP_URL } from "@/components/landing/links";
+import { APP_STORE_URL, PLAY_STORE_URL, WEB_APP_OPEN, WEB_APP_URL } from "@/components/landing/links";
 import { ABOUT, COMPANY_FACTS, NEXT, PRINCIPLES, STORY, WHAT, WHERE } from "@/lib/about";
 import { FAQ, HERO, HOW, PROS, TRADES_SECTION, TRUST } from "@/lib/home";
 import { ORG, ORG_ADDRESS_LINE, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
@@ -12,7 +12,9 @@ const FACTS =
   `${ORG.name} è gestita da ${ORG.legalName}, sede legale in ${ORG_ADDRESS_LINE}, P.IVA ${ORG.vatNumber}. ` +
   "Per chi cerca un professionista è gratis: se il professionista chiede un Costo Chiamata lo indica " +
   "nell'app prima della visita, e il compenso si paga direttamente a lui, non nell'app. " +
-  `È un'app per iPhone e Android, e da computer si usa anche dal browser su ${WEB_APP_URL}. ` +
+  (WEB_APP_OPEN
+    ? `È un'app per iPhone e Android, e da computer si usa anche dal browser su ${WEB_APP_URL}. `
+    : "È un'app per iPhone e Android; la versione da usare dal computer è in arrivo. ") +
   `Contatti: ${ORG.email}.`;
 
 const faqMd = (items: readonly { q: string; a: string }[]) =>
@@ -39,7 +41,11 @@ ${FACTS}
 - [Chi siamo](${SITE_URL}/chi-siamo): la società, la sede e i contatti
 - [Per i clienti](${SITE_URL}/clienti): come si trova un idraulico, un elettricista o un altro artigiano a Torino con Pluggers
 - [Per i professionisti](${SITE_URL}/professionisti): l'app per artigiani di Torino, come si ricevono le richieste dei clienti vicini e chi decide il prezzo
-- [Apri Pluggers](${WEB_APP_URL}): la versione web dell'app, per descrivere il problema dal browser
+${
+  WEB_APP_OPEN
+    ? `- [Apri Pluggers](${WEB_APP_URL}): la versione web dell'app, per descrivere il problema dal browser`
+    : `- [Pluggers per iPhone](${APP_STORE_URL}): scarica l'app per iPhone e iPad\n- [Pluggers per Android](${PLAY_STORE_URL}): scarica l'app da Google Play`
+}
 
 ## Mestieri a Torino
 
