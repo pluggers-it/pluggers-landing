@@ -5,7 +5,8 @@ import { HeroDemo } from "./HeroDemo";
 import { HeroIcon } from "./HeroIcon";
 import { StoreBadges } from "./StoreBadges";
 import { HERO } from "@/lib/home";
-import { CONTAINER } from "./styles";
+import { AppLink } from "./AppLink";
+import { BTN_PRIMARY, CONTAINER } from "./styles";
 
 export function Hero() {
   return (
@@ -35,7 +36,11 @@ export function Hero() {
               Prossimamente in arrivo in tutta Italia
             </li>
           </ul>
-          <div className="mt-8">
+          {/* From a computer the web app, where the request starts; phones get the store badges only. */}
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <AppLink computerOnly whenClosed="stores" className={`${BTN_PRIMARY} max-sm:hidden`}>
+              Racconta il problema
+            </AppLink>
             <StoreBadges />
           </div>
           <Link href="/professionisti" className="mt-4 inline-flex min-h-12 items-center gap-1.5 text-[15px] font-semibold underline underline-offset-4">

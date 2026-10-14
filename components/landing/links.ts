@@ -26,11 +26,24 @@ export function storeUrlFor(userAgent: string, platform = "", touchPoints = 0): 
 }
 
 /**
- * Where a link into Pluggers leads: the device's store, or `href` on the web app; null when that would be
- * the web app while it is closed. With `preferStore` false phones stay on `href`, as long as the web app is open.
+ * Whether anyone can install from Google Play. Until then it is a closed test and the public listing gives 404 to
+ * whoever isn't a tester: `preferStore` false links (the professional sign-up) keep Android on the web app.
  */
-export function appLinkUrl(href: string, storeUrl: string | null, preferStore = true, webAppOpen = WEB_APP_OPEN): string | null {
-  if (storeUrl && (preferStore || !webAppOpen)) return storeUrl;
+export const PLAY_STORE_PUBLIC: boolean = false;
+
+/**
+ * Where a link into Pluggers leads: the device's store, or `href` on the web app; null when that would be
+ * the web app while it is closed. With `preferStore` false a phone gets its store only once anyone can install
+ * from it (the App Store, Google Play with PLAY_STORE_PUBLIC), and stays on `href` otherwise, as long as the web app is open.
+ */
+export function appLinkUrl(
+  href: string,
+  storeUrl: string | null,
+  preferStore = true,
+  webAppOpen = WEB_APP_OPEN,
+  playPublic = PLAY_STORE_PUBLIC,
+): string | null {
+  if (storeUrl && (preferStore || !webAppOpen || storeUrl !== PLAY_STORE_URL || playPublic)) return storeUrl;
   return webAppOpen ? href : null;
 }
 
