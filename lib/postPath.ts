@@ -10,8 +10,10 @@ export function slugify(title: string, max = 70): string {
   return cut.slice(0, cut.lastIndexOf("-") > 20 ? cut.lastIndexOf("-") : max);
 }
 
-/** The canonical address of a post: id first (that's what we look up), then the title's words. */
-export function postPath(post: { id: string; title: string }): string {
+/** The canonical address of a post: id first (that's what we look up), then the title's words.
+ *  BabyLoveGrowth articles keep their own slug. */
+export function postPath(post: { id: string; title: string; slug?: string }): string {
+  if (post.slug) return `/blog/${post.slug}`;
   const words = slugify(post.title);
   return `/blog/${post.id}${words ? `-${words}` : ""}`;
 }
@@ -19,4 +21,12 @@ export function postPath(post: { id: string; title: string }): string {
 /** The id at the start of a /blog/<id>-<words> segment, or null if it isn't one. */
 export function idFromSegment(segment: string): string | null {
   return /^([1-9]\d*)(?:-[a-z0-9-]*)?$/.exec(segment)?.[1] ?? null;
+}
+
+/** Our posts and the BabyLoveGrowth articles, newest first. An article whose address would open one of
+ *  our posts (/blog/12-… opens post 12) is left out: ours wins. */
+export function mergePosts<T extends { id: string; slug?: string; createdAt: string }>(ours: T[], theirs: T[]): T[] {
+  const ids = new Set(ours.map((p) => p.id));
+  return [...ours, ...theirs.filter((p) => !ids.has(idFromSegment(p.slug ?? "") ?? ""))]
+    .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
