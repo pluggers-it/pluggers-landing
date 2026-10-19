@@ -37,7 +37,7 @@ export function TradesMarquee() {
                   >
                     <Image
                       src={trade.photo}
-                      alt=""
+                      alt={trade.photoAlt}
                       width={800}
                       height={450}
                       sizes="220px"
