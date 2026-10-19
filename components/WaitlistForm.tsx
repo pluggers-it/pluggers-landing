@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import { metaEvent } from "@/lib/analytics";
 import Link from "next/link";
 import { Check } from "lucide-react";
+import { MARKETING_CONSENT_TEXT } from "@/lib/marketingConsent";
 
 const SELECT_ARROW = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236f6a76'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`;
 
@@ -69,6 +70,7 @@ export function WaitlistForm({
   const [otherProfession, setOtherProfession] = useState("");
   const [privacyChecked, setPrivacyChecked] = useState(false);
   const [termsChecked, setTermsChecked]     = useState(false);
+  const [marketingChecked, setMarketingChecked] = useState(false);
   const [submitting, setSubmitting]         = useState(false);
   const [submitted, setSubmitted]           = useState(false);
   const [error, setError]                   = useState<string | null>(null);
@@ -115,6 +117,7 @@ export function WaitlistForm({
                   profession: resolvedProfession,
                   source: submissionSource,
                   privacyAccepted: true,
+                  marketingConsent: marketingChecked,
                 }),
               });
               if (res.ok) {
@@ -251,6 +254,17 @@ export function WaitlistForm({
               </Link>
               {" "}di utilizzo del servizio.
             </LegalCheckbox>
+
+            {/* Optional and separate from privacy and terms. The newsletter page is itself the sign-up to the newsletter. */}
+            {submissionSource === "waitlist" && (
+              <LegalCheckbox
+                id={fid("marketing")}
+                checked={marketingChecked}
+                onChange={setMarketingChecked}
+              >
+                {MARKETING_CONSENT_TEXT}
+              </LegalCheckbox>
+            )}
           </div>
 
           <button

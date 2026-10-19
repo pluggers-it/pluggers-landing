@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { addToNewsletterList } from "@/lib/beehiiv";
+import { MARKETING_CONSENT_VERSION } from "@/lib/marketingConsent";
 import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
@@ -58,6 +59,7 @@ export async function POST(req: Request) {
     region?: string;
     source?: string;
     privacyAccepted?: boolean;
+    marketingConsent?: boolean;
   } | null;
 
   const email      = (body?.email      ?? "").trim().toLowerCase();
@@ -69,6 +71,8 @@ export async function POST(req: Request) {
   const region     = (body?.region     ?? "").trim();
   const rawSource  = (body?.source ?? "waitlist").trim().toLowerCase();
   const source     = ALLOWED_SOURCES.has(rawSource) ? rawSource : "waitlist";
+  // Optional, never preselected, never required: its absence does not block the sign-up.
+  const marketing  = body?.marketingConsent === true;
 
   // ── Validation ──────────────────────────────────────────────────────────────
   if (body?.privacyAccepted !== true) {
@@ -113,6 +117,7 @@ export async function POST(req: Request) {
     );
   }
 
+  const now = new Date().toISOString();
   const row: Record<string, string> = {
     email,
     first_name: firstName,
@@ -122,13 +127,28 @@ export async function POST(req: Request) {
     city,
     region,
     source,
-    privacy_accepted_at: new Date().toISOString(),
+    privacy_accepted_at: now,
+    // Only when given, so a sign-up without it never depends on the column.
+    ...(marketing && { marketing_consent_at: now, marketing_consent_version: MARKETING_CONSENT_VERSION }),
   };
 
   const { error } = await supabase.from("waitlist").insert(row);
 
-  // newsletter sign-ups also go to beehiiv; a beehiiv failure never fails the sign-up
-  if (source === "newsletter" && (!error || error.code === "23505")) {
+  // Already signed up and consenting now: record when, without overwriting an earlier consent.
+  let consentSaved = marketing && !error;
+  if (marketing && error?.code === "23505") {
+    const { error: updateError } = await supabase
+      .from("waitlist")
+      .update({ marketing_consent_at: now, marketing_consent_version: MARKETING_CONSENT_VERSION })
+      .eq("email", email)
+      .is("marketing_consent_at", null);
+    if (updateError) console.error("[waitlist] marketing consent not saved:", updateError.code, updateError.message);
+    consentSaved = !updateError;
+  }
+
+  // Newsletter sign-ups and marketing consents go to beehiiv; a beehiiv failure never fails the sign-up.
+  // Without a recorded consent nobody from the contact form is added.
+  if ((source === "newsletter" && (!error || error.code === "23505")) || consentSaved) {
     await addToNewsletterList(email);
   }
 
