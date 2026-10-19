@@ -61,7 +61,7 @@ export function BrandQr({ className = "" }: { className?: string }) {
         ))}
       </svg>
       <div className="absolute left-1/2 top-1/2 w-[22%] -translate-x-1/2 -translate-y-1/2 rounded-[22%] bg-white p-[2.2%]">
-        <Image src="/brand/app-icon-512.png" alt="" width={128} height={128} className="block h-auto w-full rounded-[22%]" priority />
+        <Image src="/brand/app-icon-512.png" alt="Icona dell'app Pluggers" width={128} height={128} className="block h-auto w-full rounded-[22%]" priority />
       </div>
     </div>
   );

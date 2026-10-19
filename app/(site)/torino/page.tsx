@@ -77,7 +77,7 @@ export default function TorinoPage() {
                   >
                     <Image
                       src={t.photo}
-                      alt=""
+                      alt={t.photoAlt}
                       width={800}
                       height={450}
                       sizes="(min-width: 1024px) 373px, (min-width: 640px) calc(50vw - 42px), 112px"

@@ -35,7 +35,7 @@ export function LandingHeader() {
         >
           <Image
             src={logo}
-            alt=""
+            alt="Logo di Pluggers"
             width={36}
             height={36}
             className="h-9 w-9 rounded-[10px]"

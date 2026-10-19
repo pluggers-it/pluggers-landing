@@ -46,7 +46,7 @@ export function HeroIcon({ className = "" }: { className?: string }) {
         <div ref={tiltRef} className="transition-transform duration-300 ease-out will-change-transform">
           <Image
             src="/brand/app-icon-512.png"
-            alt=""
+            alt="Icona dell'app Pluggers"
             width={512}
             height={512}
             sizes="(min-width: 640px) 128px, 56px"
