@@ -9,7 +9,8 @@ import { TrustRows } from "@/components/landing/TrustRows";
 import { StoreBadges } from "@/components/landing/StoreBadges";
 import { AppLink } from "@/components/landing/AppLink";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
-import { FAQ } from "@/lib/home";
+import { faq } from "@/lib/home";
+import { appInStores } from "@/lib/prelaunch";
 import { breadcrumbSchema, graph, pageMetadata, pageSchema } from "@/lib/seo";
 import { TRADES } from "@/lib/trades";
 
@@ -97,7 +98,8 @@ const CLIENT_FAQ = [
   },
 ];
 
-export default function ClientiPage() {
+export default async function ClientiPage() {
+  const faqItems = faq(await appInStores());
   const trail = [{ name: "Per i clienti", path: PATH }];
   return (
     <SitePage trail={trail}>
@@ -154,7 +156,7 @@ export default function ClientiPage() {
 
       <section className="mx-auto w-full max-w-[760px] px-5 py-12 sm:px-8 lg:py-16" aria-labelledby="faq-title">
         <h2 id="faq-title" className={H2}>Domande frequenti</h2>
-        <FaqList items={[...FAQ, ...CLIENT_FAQ]} />
+        <FaqList items={[...faqItems, ...CLIENT_FAQ]} />
       </section>
 
       <section className={`${CONTAINER} pb-16`}>

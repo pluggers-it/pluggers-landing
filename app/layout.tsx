@@ -7,7 +7,9 @@ import { ConsentProvider } from "@/lib/consent";
 import { ConsentGate } from "@/components/ConsentGate";
 import { BackToTop } from "@/components/BackToTop";
 import { JsonLd } from "@/components/JsonLd";
+import { InStoresProvider } from "@/components/landing/InStores";
 import { HOME } from "@/lib/home";
+import { appInStores } from "@/lib/prelaunch";
 import { graph, organizationSchema, pageMetadata, websiteSchema } from "@/lib/seo";
 import { ORG, SITE_URL } from "@/lib/site";
 
@@ -32,17 +34,18 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const inStores = await appInStores();
   return (
     <html lang="it">
       <body className={`${jakarta.variable} font-sans antialiased`}>
         <JsonLd data={graph(organizationSchema, websiteSchema)} />
         <ConsentProvider>
-          {children}
+          <InStoresProvider value={inStores}>{children}</InStoresProvider>
           <ConsentGate />
           <Analytics />
           <MetaPixel />

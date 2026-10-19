@@ -1,7 +1,9 @@
 "use client";
 
 import { useId, useState } from "react";
+import { usePathname } from "next/navigation";
 import { metaEvent } from "@/lib/analytics";
+import type { Role } from "@/lib/prelaunch";
 import Link from "next/link";
 import { Check } from "lucide-react";
 
@@ -43,6 +45,18 @@ const PROFESSIONS: [string, string][] = [
   ["ascensorista", "Ascensorista"], ["altro", "Altro"],
 ];
 
+const ROLES: [Role, string][] = [
+  ["cliente", "Cerco un professionista"],
+  ["pro", "Sono un professionista"],
+];
+
+/** A trade label from the site's pages as the select's value, or «Altro» with the label written in. */
+function professionFor(trade: string | null): [string, string] {
+  if (!trade) return ["", ""];
+  const known = PROFESSIONS.find(([, label]) => label.toLowerCase() === trade.toLowerCase());
+  return known ? [known[0], ""] : ["altro", trade];
+}
+
 interface Props {
   badge?: string;
   title?: string;
@@ -50,6 +64,10 @@ interface Props {
   successMessage?: string;
   formName?: string;
   submissionSource?: "waitlist" | "newsletter";
+  /** The pre-registration: asks who is signing up, and a client's problem. `page` is the page the visitor came from. */
+  prelaunch?: { role: Role | null; trade: string | null; page: string };
+  /** Under the thanks, once sent. */
+  afterSubmit?: React.ReactNode;
 }
 
 export function WaitlistForm({
@@ -57,7 +75,10 @@ export function WaitlistForm({
   description = "Ti scriviamo quando Pluggers arriva nella tua città.",
   successMessage = "Dati ricevuti. Ti scriviamo noi.",
   submissionSource = "waitlist",
+  prelaunch,
+  afterSubmit,
 }: Props) {
+  const pathname = usePathname();
   const uid = useId();
   const fid = (name: string) => `${uid}-${name}`;
   const [firstName, setFirstName]           = useState("");
@@ -65,8 +86,11 @@ export function WaitlistForm({
   const [phone, setPhone]                   = useState("");
   const [city, setCity]                     = useState("");
   const [email, setEmail]                   = useState("");
-  const [profession, setProfession]         = useState("");
-  const [otherProfession, setOtherProfession] = useState("");
+  const [role, setRole]                     = useState<Role | null>(prelaunch?.role ?? null);
+  const [prefilled, prefilledOther]         = professionFor(prelaunch?.trade ?? null);
+  const [profession, setProfession]         = useState(prefilled);
+  const [otherProfession, setOtherProfession] = useState(prefilledOther);
+  const [problem, setProblem]               = useState("");
   const [privacyChecked, setPrivacyChecked] = useState(false);
   const [termsChecked, setTermsChecked]     = useState(false);
   const [submitting, setSubmitting]         = useState(false);
@@ -74,6 +98,9 @@ export function WaitlistForm({
   const [error, setError]                   = useState<string | null>(null);
 
   const resolvedProfession = profession === "altro" ? otherProfession : profession;
+  // Before launch clients sign up too: their profession column says «cliente».
+  const isClient = Boolean(prelaunch) && role === "cliente";
+  const askProfession = !prelaunch || role === "pro";
 
   const canSubmit = privacyChecked && termsChecked && !submitting;
 
@@ -82,15 +109,18 @@ export function WaitlistForm({
       <h3 className="text-balance text-[22px] font-bold leading-tight tracking-[-0.02em]">
         {title}
       </h3>
-      <p className="mt-2 text-[15px] text-muted">{description}</p>
+      <p className="mt-2 text-pretty text-[15px] text-muted">{description}</p>
 
       {submitted ? (
-        <p
-          role="status"
-          className="mt-6 rounded-2xl bg-accent-soft px-4 py-3 text-[15px] font-medium text-accent-deep"
-        >
-          {successMessage}
-        </p>
+        <>
+          <p
+            role="status"
+            className="mt-6 rounded-2xl bg-accent-soft px-4 py-3 text-[15px] font-medium text-accent-deep"
+          >
+            {successMessage}
+          </p>
+          {afterSubmit}
+        </>
       ) : (
         <form
           className="mt-6 flex flex-col gap-3"
@@ -112,14 +142,16 @@ export function WaitlistForm({
                   lastName,
                   phone,
                   city,
-                  profession: resolvedProfession,
+                  profession: isClient ? "cliente" : resolvedProfession,
+                  problem: isClient ? problem : "",
+                  page: prelaunch?.page ?? pathname,
                   source: submissionSource,
                   privacyAccepted: true,
                 }),
               });
               if (res.ok) {
                 setSubmitted(true);
-                metaEvent("track", "Lead", { content_name: submissionSource });
+                metaEvent("track", "Lead", { content_name: prelaunch ? "preiscrizione" : submissionSource });
               } else {
                 const data = (await res.json().catch(() => null)) as {
                   error?: string;
@@ -133,6 +165,28 @@ export function WaitlistForm({
             }
           }}
         >
+          {prelaunch && (
+            <fieldset>
+              <legend className={LABEL_CLASS}>Chi sei?</legend>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {ROLES.map(([value, label]) => (
+                  <label
+                    key={value}
+                    className="flex min-h-12 cursor-pointer items-center gap-3 rounded-2xl border border-line bg-surface px-4 text-[15px] font-semibold text-ink transition hover:border-ink has-checked:border-accent has-checked:bg-accent-soft"
+                  >
+                    <input
+                      type="radio" name="role" value={value} required
+                      checked={role === value}
+                      onChange={() => setRole(value)}
+                      className="h-5 w-5 shrink-0 cursor-pointer appearance-none rounded-full border border-line bg-surface transition checked:border-[6px] checked:border-accent focus-visible:ring-2 focus-visible:ring-accent/25"
+                    />
+                    {label}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          )}
+
           {/* ── Common fields: Nome | Cognome | Città | Telefono ──────────── */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field id={fid("first-name")} label="Nome">
@@ -151,7 +205,7 @@ export function WaitlistForm({
                 className={INPUT_CLASS}
               />
             </Field>
-            <Field id={fid("city")} label="Città">
+            <Field id={fid("city")} label={prelaunch ? "Città o CAP" : "Città"}>
               <input
                 id={fid("city")} name="city"
                 type="text" required value={city} maxLength={60}
@@ -184,26 +238,40 @@ export function WaitlistForm({
               />
             </Field>
 
-            <Field id={fid("profession")} label="Professione">
-              <select
-                id={fid("profession")} name="profession"
-                required value={profession}
-                onChange={(e) => {
-                  setProfession(e.target.value);
-                  if (e.target.value !== "altro") setOtherProfession("");
-                }}
-                className={`${SELECT_CLASS} ${profession ? "" : "text-muted"}`} style={SELECT_STYLE}
-              >
-                <option value="" disabled>Scegli</option>
-                {PROFESSIONS.map(([value, label]) => (
-                  <option key={value} value={value}>{label}</option>
-                ))}
-              </select>
-            </Field>
+            {askProfession && (
+              <Field id={fid("profession")} label="Professione">
+                <select
+                  id={fid("profession")} name="profession"
+                  required value={profession}
+                  onChange={(e) => {
+                    setProfession(e.target.value);
+                    if (e.target.value !== "altro") setOtherProfession("");
+                  }}
+                  className={`${SELECT_CLASS} ${profession ? "" : "text-muted"}`} style={SELECT_STYLE}
+                >
+                  <option value="" disabled>Scegli</option>
+                  {PROFESSIONS.map(([value, label]) => (
+                    <option key={value} value={value}>{label}</option>
+                  ))}
+                </select>
+              </Field>
+            )}
+
+            {isClient && (
+              <Field id={fid("problem")} label="Che problema hai? (facoltativo)">
+                <input
+                  id={fid("problem")} name="problem"
+                  type="text" value={problem} maxLength={200}
+                  onChange={(e) => setProblem(e.target.value)}
+                  placeholder="Il rubinetto della cucina perde"
+                  className={INPUT_CLASS}
+                />
+              </Field>
+            )}
           </div>
 
           {/* "Altro" profession free-text */}
-          {profession === "altro" && (
+          {askProfession && profession === "altro" && (
             <Field id={fid("other-profession")} label="La tua professione">
               <input
                 id={fid("other-profession")} name="otherProfession"
@@ -259,7 +327,7 @@ export function WaitlistForm({
             aria-busy={submitting}
             className="mt-1 h-12 w-full rounded-full bg-accent text-[15px] font-semibold text-white transition hover:bg-accent-deep active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-accent"
           >
-            {submitting ? "Invio…" : "Iscriviti"}
+            {submitting ? "Invio…" : prelaunch ? "Pre-iscriviti" : "Iscriviti"}
           </button>
 
           {error && (

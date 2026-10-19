@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { addToNewsletterList } from "@/lib/beehiiv";
 import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { originPage } from "@/lib/prelaunch";
 
 const PHONE_REGEX = /^\+?[\d\s\-()\u00B7]{7,20}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -9,7 +10,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const ALLOWED_SOURCES = new Set(["waitlist", "newsletter"]);
 
 // Max field lengths (prevent oversized payloads)
-const MAX = { name: 80, phone: 20, profession: 60, city: 60, region: 60, email: 254 };
+const MAX = { name: 80, phone: 20, profession: 60, city: 60, region: 60, email: 254, problem: 200 };
 
 function genericDbError(): NextResponse {
   return NextResponse.json(
@@ -20,8 +21,10 @@ function genericDbError(): NextResponse {
 
 /**
  * Collects waitlist signups.
- * POST { email, firstName, lastName, phone, profession, city, region?, source? }
+ * POST { email, firstName, lastName, phone, profession, city, region?, source?, page?, problem? }
  *   `region` is the pre-city column: still accepted, never required.
+ *   `page` is the path the form was sent from; `problem` a client's line from the pre-registration,
+ *   where clients sign up with profession «cliente».
  *   → 201 { ok: true }
  *   → 200 { ok: true, already: true }   (duplicate email)
  *   → 400 { error: string }             (validation failure)
@@ -57,6 +60,8 @@ export async function POST(req: Request) {
     city?: string;
     region?: string;
     source?: string;
+    page?: string;
+    problem?: string;
     privacyAccepted?: boolean;
   } | null;
 
@@ -69,6 +74,8 @@ export async function POST(req: Request) {
   const region     = (body?.region     ?? "").trim();
   const rawSource  = (body?.source ?? "waitlist").trim().toLowerCase();
   const source     = ALLOWED_SOURCES.has(rawSource) ? rawSource : "waitlist";
+  const page       = originPage(body?.page);
+  const problem    = (body?.problem ?? "").trim();
 
   // ── Validation ──────────────────────────────────────────────────────────────
   if (body?.privacyAccepted !== true) {
@@ -102,6 +109,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Seleziona una professione." }, { status: 400 });
   }
 
+  if (problem.length > MAX.problem) {
+    return NextResponse.json({ error: "Descrivi il problema in poche parole (max 200 caratteri)." }, { status: 400 });
+  }
+
   // ── Insert ──────────────────────────────────────────────────────────────────
   let supabase;
   try {
@@ -125,7 +136,12 @@ export async function POST(req: Request) {
     privacy_accepted_at: new Date().toISOString(),
   };
 
-  const { error } = await supabase.from("waitlist").insert(row);
+  let { error } = await supabase.from("waitlist").insert({ ...row, page, problem });
+  // Until supabase/migrations/20261019000000_waitlist_preiscrizione.sql is applied the two columns are missing:
+  // the sign-up still goes in, without them.
+  if (error && (error.code === "PGRST204" || error.code === "42703")) {
+    ({ error } = await supabase.from("waitlist").insert(row));
+  }
 
   // newsletter sign-ups also go to beehiiv; a beehiiv failure never fails the sign-up
   if (source === "newsletter" && (!error || error.code === "23505")) {

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { APP_STORE_URL, PLAY_STORE_URL, WEB_APP_OPEN, WEB_APP_URL } from "@/components/landing/links";
+import { APP_STORE_URL, PLAY_STORE_URL, PRELAUNCH_PATH, WEB_APP_OPEN, WEB_APP_URL } from "@/components/landing/links";
 import { ORG, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 
 // ── Page metadata ────────────────────────────────────────────────────────────
@@ -104,23 +104,34 @@ export const websiteSchema = {
   publisher: { "@id": ORG_ID },
 };
 
-const storeUrls = [APP_STORE_URL, PLAY_STORE_URL].filter(Boolean);
-const platforms = [APP_STORE_URL && "iOS", PLAY_STORE_URL && "Android", WEB_APP_OPEN && "Web"].filter(Boolean).join(", ");
-
-// Until the store links exist, declare only the platform people can open today: the web version.
-export const appSchema = {
-  "@type": storeUrls.length > 0 ? "MobileApplication" : "WebApplication",
-  "@id": `${SITE_URL}/#app`,
-  name: ORG.name,
-  description: ORG.summary,
-  url: WEB_APP_OPEN ? WEB_APP_URL : SITE_URL,
-  operatingSystem: platforms,
-  applicationCategory: "LifestyleApplication",
-  inLanguage: "it",
-  offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
-  publisher: { "@id": ORG_ID },
-  ...(storeUrls.length > 0 && { downloadUrl: storeUrls }),
-};
+/**
+ * Until the store links exist, declare only the platform people can open today: the web version.
+ * Before launch (lib/prelaunch.ts) the app is announced for iPhone and Android, with no download and an offer to pre-register.
+ */
+export function appSchema(inStores: boolean) {
+  const storeUrls = inStores ? [APP_STORE_URL, PLAY_STORE_URL].filter(Boolean) : [];
+  const platforms = inStores
+    ? [APP_STORE_URL && "iOS", PLAY_STORE_URL && "Android", WEB_APP_OPEN && "Web"].filter(Boolean).join(", ")
+    : "iOS, Android";
+  return {
+    "@type": storeUrls.length > 0 || !inStores ? "MobileApplication" : "WebApplication",
+    "@id": `${SITE_URL}/#app`,
+    name: ORG.name,
+    description: ORG.summary,
+    url: inStores && WEB_APP_OPEN ? WEB_APP_URL : SITE_URL,
+    operatingSystem: platforms,
+    applicationCategory: "LifestyleApplication",
+    inLanguage: "it",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "EUR",
+      ...(!inStores && { availability: "https://schema.org/PreOrder", url: `${SITE_URL}${PRELAUNCH_PATH}` }),
+    },
+    publisher: { "@id": ORG_ID },
+    ...(storeUrls.length > 0 && { downloadUrl: storeUrls }),
+  };
+}
 
 export function serviceSchema({ name, serviceType, description, path }: {
   name: string;

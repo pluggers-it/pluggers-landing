@@ -91,7 +91,7 @@ export default function ChiSiamoPage() {
         </section>
 
         <div className="mt-12 flex justify-center">
-          <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+          <AppLink beforeLaunch="Pre-iscriviti" className={`${BTN_PRIMARY} w-full sm:w-auto`}>
             Apri Pluggers
           </AppLink>
         </div>

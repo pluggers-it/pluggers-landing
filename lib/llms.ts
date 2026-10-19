@@ -2,17 +2,22 @@
  * /llms.txt (index, per llmstxt.org) and /llms-full.txt (the pages' text),
  * built from the same copy the pages render.
  */
-import { APP_STORE_URL, PLAY_STORE_URL, WEB_APP_OPEN, WEB_APP_URL } from "@/components/landing/links";
+import { APP_STORE_URL, PLAY_STORE_URL, PRELAUNCH_PATH, WEB_APP_OPEN, WEB_APP_URL } from "@/components/landing/links";
 import { ABOUT, COMPANY_FACTS, NEXT, PRINCIPLES, STORY, WHAT, WHERE } from "@/lib/about";
-import { FAQ, HERO, HOW, PROS, TRADES_SECTION, TRUST } from "@/lib/home";
+import { faq, HERO, HOW, PROS, TRADES_SECTION, TRUST } from "@/lib/home";
 import { ORG, ORG_ADDRESS_LINE, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 import { TORINO, TRADE_GROUPS, TRADES, type Trade } from "@/lib/trades";
 
-const FACTS =
+const PRELAUNCH_URL = `${SITE_URL}${PRELAUNCH_PATH}`;
+
+// Before launch (lib/prelaunch.ts) the app is announced, not downloadable.
+const facts = (inStores: boolean) =>
   `${ORG.name} è gestita da ${ORG.legalName}, sede legale in ${ORG_ADDRESS_LINE}, P.IVA ${ORG.vatNumber}. ` +
   "Per chi cerca un professionista è gratis: se il professionista chiede un Costo Chiamata lo indica " +
   "nell'app prima della visita, e il compenso si paga direttamente a lui, non nell'app. " +
-  (WEB_APP_OPEN
+  (!inStores
+    ? `È un'app per iPhone e Android in arrivo a breve sugli store: chi vuole usarla lascia i contatti nella pre-iscrizione (${PRELAUNCH_URL}) e riceve un avviso quando è disponibile. `
+    : WEB_APP_OPEN
     ? `È un'app per iPhone e Android, e da computer si usa anche dal browser su ${WEB_APP_URL}. `
     : "È un'app per iPhone e Android; la versione da usare dal computer è in arrivo. ") +
   `Contatti: ${ORG.email}.`;
@@ -20,7 +25,7 @@ const FACTS =
 const faqMd = (items: readonly { q: string; a: string }[]) =>
   items.map(({ q, a }) => `### ${q}\n\n${a}`).join("\n\n");
 
-export function llmsIndex(): string {
+export function llmsIndex(inStores: boolean): string {
   const tradeLinks = TRADES.map(
     (t) => `- [${t.label} a Torino](${SITE_URL}/torino/${t.slug}): ${t.summary}`
   ).join("\n");
@@ -29,7 +34,7 @@ export function llmsIndex(): string {
 
 > ${ORG.summary}
 
-${FACTS}
+${facts(inStores)}
 
 ## Pagine principali
 
@@ -42,7 +47,9 @@ ${FACTS}
 - [Per i clienti](${SITE_URL}/clienti): come si trova un idraulico, un elettricista o un altro artigiano a Torino con Pluggers
 - [Per i professionisti](${SITE_URL}/professionisti): l'app per artigiani di Torino, come si ricevono le richieste dei clienti vicini e chi decide il prezzo
 ${
-  WEB_APP_OPEN
+  !inStores
+    ? `- [Pre-iscrizione](${PRELAUNCH_URL}): lascia i contatti e ti avvisiamo appena Pluggers è disponibile su iPhone e Android`
+    : WEB_APP_OPEN
     ? `- [Apri Pluggers](${WEB_APP_URL}): la versione web dell'app, per descrivere il problema dal browser`
     : `- [Pluggers per iPhone](${APP_STORE_URL}): scarica l'app per iPhone e iPad\n- [Pluggers per Android](${PLAY_STORE_URL}): scarica l'app da Google Play`
 }
@@ -94,7 +101,7 @@ ${t.emergency}
 ${faqMd(t.faq).replaceAll("### ", "#### ")}`;
 }
 
-export function llmsFull(): string {
+export function llmsFull(inStores: boolean): string {
   const groups = TRADE_GROUPS.map(
     (g) =>
       `- ${g.label}: ${TRADES.filter((t) => t.group === g.id)
@@ -106,7 +113,7 @@ export function llmsFull(): string {
 
 > ${ORG.summary}
 
-${FACTS}
+${facts(inStores)}
 
 ---
 
@@ -144,7 +151,7 @@ ${TRUST.rows.map((r) => `- ${r}`).join("\n")}
 
 ## Domande frequenti
 
-${faqMd(FAQ)}
+${faqMd(faq(inStores))}
 
 ---
 
