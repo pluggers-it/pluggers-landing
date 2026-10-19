@@ -21,9 +21,11 @@ type PageMeta = {
   path: string;
   absolute?: boolean;
   publishedTime?: string;
+  /** Absolute URL of the social preview; defaults to OG_IMAGE. */
+  image?: string;
 };
 
-export function pageMetadata({ title, description, path, absolute, publishedTime }: PageMeta): Metadata {
+export function pageMetadata({ title, description, path, absolute, publishedTime, image }: PageMeta): Metadata {
   const fullTitle = absolute ? title : `${title} | ${ORG.name}`;
   const shared = {
     locale: "it_IT",
@@ -31,7 +33,7 @@ export function pageMetadata({ title, description, path, absolute, publishedTime
     url: path,
     title: fullTitle,
     description,
-    images: [OG_IMAGE],
+    images: [image ? { url: image } : OG_IMAGE],
   };
   return {
     title: absolute ? { absolute: title } : title,
@@ -44,7 +46,7 @@ export function pageMetadata({ title, description, path, absolute, publishedTime
       card: "summary_large_image",
       title: fullTitle,
       description,
-      images: [OG_IMAGE.url],
+      images: [image ?? OG_IMAGE.url],
     },
   };
 }

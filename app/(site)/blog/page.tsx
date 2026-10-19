@@ -9,7 +9,7 @@ import { ArrowRight, PenLine } from "lucide-react";
 export const revalidate = 300;
 import { PageShell } from "@/components/landing/PageShell";
 import { CONTAINER, LEDE } from "@/components/landing/styles";
-import { excerpt, formatPostDate, postPath, readPosts, readingMinutes, type Post } from "@/lib/posts";
+import { excerpt, formatPostDate, postPath, readAllPosts, readingMinutes, type Post } from "@/lib/posts";
 
 export const metadata: Metadata = pageMetadata({
   title: "Blog",
@@ -28,7 +28,8 @@ function PostMeta({ post }: { post: Post }) {
       <time dateTime={post.createdAt} className={SEP}>
         {formatPostDate(post.createdAt)}
       </time>
-      <span className={SEP}>{readingMinutes(post.content)} min di lettura</span>
+      {/* BabyLoveGrowth articles come without their body in the list */}
+      {post.content && <span className={SEP}>{readingMinutes(post.content)} min di lettura</span>}
     </p>
   );
 }
@@ -36,7 +37,7 @@ function PostMeta({ post }: { post: Post }) {
 export default async function BlogPage() {
   let posts: Post[] = [];
   try {
-    posts = await readPosts();
+    posts = await readAllPosts();
   } catch {
     // DB not yet set up or unreachable — show empty state
   }
@@ -92,7 +93,7 @@ export default async function BlogPage() {
                 {latest.title}
               </h2>
               <p className="mt-4 line-clamp-3 max-w-[62ch] text-[16px] leading-[1.6] text-muted sm:text-[17px]">
-                {excerpt(latest.content)}
+                {latest.description ?? excerpt(latest.content)}
               </p>
               <span className="mt-6 inline-flex min-h-12 items-center gap-2 text-[15px] font-semibold text-accent-text">
                 Leggi l&apos;articolo
@@ -122,12 +123,16 @@ export default async function BlogPage() {
                           {post.title}
                         </h2>
                         <p className="mt-2 line-clamp-2 max-w-[68ch] text-[15px] leading-[1.6] text-muted sm:text-[16px]">
-                          {excerpt(post.content)}
+                          {post.description ?? excerpt(post.content)}
                         </p>
                         <p className="mt-3 hidden text-[14px] text-muted sm:block">
                           <span className="font-semibold text-accent-text">{post.category}</span>
-                          <span aria-hidden> · </span>
-                          {readingMinutes(post.content)} min di lettura
+                          {post.content && (
+                            <>
+                              <span aria-hidden> · </span>
+                              {readingMinutes(post.content)} min di lettura
+                            </>
+                          )}
                         </p>
                       </div>
                     </Link>

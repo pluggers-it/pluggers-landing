@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 // ── Supabase project URL (used in connect-src) ────────────────────────────────
 const SUPABASE_HOST = "zfmcltiraiyxryjfahgw.supabase.co";
 
+// BabyLoveGrowth's image CDN: hero images through the image optimizer, images inside their articles straight from it
+const BABYLOVEGROWTH_IMAGES = "media.babylovegrowth.ai";
+
 /**
  * Content Security Policy
  *
@@ -11,6 +14,7 @@ const SUPABASE_HOST = "zfmcltiraiyxryjfahgw.supabase.co";
  * style-src 'unsafe-inline':  required by Tailwind CSS v4 and framer-motion.
  * font-src data:              Next.js inlines small fonts as data URIs at build time.
  * img-src blob:               Next.js <Image> uses blob: for local previews.
+ * img-src media.babylovegrowth.ai: images inside the BabyLoveGrowth blog articles.
  * connect-src *.supabase.co:  Supabase REST, Auth, Realtime (https + wss).
  * connect.facebook.net, www.facebook.com: Meta pixel (script, then events), loaded only with the marketing consent.
  * frame-src 'none':           No iframes — blocks clickjacking vectors.
@@ -23,7 +27,7 @@ const csp = [
   "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://connect.facebook.net",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
-  "img-src 'self' data: blob: https://www.google-analytics.com https://www.googletagmanager.com https://www.facebook.com",
+  `img-src 'self' data: blob: https://www.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://${BABYLOVEGROWTH_IMAGES}`,
   [
     "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://www.facebook.com",
     `https://${SUPABASE_HOST}`,
@@ -65,6 +69,11 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   devIndicators: false,
+
+  // the one remote host: never "*", or the optimizer becomes an open proxy
+  images: {
+    remotePatterns: [{ protocol: "https", hostname: BABYLOVEGROWTH_IMAGES }],
+  },
 
   // The apex must move permanently to www (308). Vercel's own domain redirect, if set to 307, runs first and wins.
   async redirects() {

@@ -15,6 +15,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.99.2",
     "@types/bcryptjs": "^2.4.6",
+    "babylovegrowth-next-js-blog": "0.2.4",
     "bcryptjs": "^3.0.3",
     "framer-motion": "^12.37.0",
     "gray-matter": "^4.0.3",

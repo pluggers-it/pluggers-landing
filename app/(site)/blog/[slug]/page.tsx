@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import { PageShell } from "@/components/landing/PageShell";
 import { AppLink } from "@/components/landing/AppLink";
@@ -13,12 +14,11 @@ import { tradesForPost } from "@/lib/tradeLinks";
 import {
   excerpt,
   formatPostDate,
-  getPostById,
-  idFromSegment,
+  getPostBySegment,
   markdownToHtml,
   metaDescription,
   postPath,
-  readPosts,
+  readAllPosts,
   readingMinutes,
   type Post,
   withHeadingIds,
@@ -36,24 +36,24 @@ export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params;
-  const id = idFromSegment(slug);
-  const post = id ? await getPostById(id) : null;
+  const post = await getPostBySegment(slug);
   if (!post) return { title: "Articolo non trovato", robots: { index: false } };
   // Long headlines go out as they are rather than with the brand suffix: Google cuts them anyway.
   const withBrand = `${post.title} | Pluggers`;
   return pageMetadata({
     title: post.title,
     absolute: withBrand.length > 60,
-    description: metaDescription(post.content),
+    description: post.description ?? metaDescription(post.content),
     path: postPath(post),
     publishedTime: new Date(post.createdAt).toISOString(),
+    image: post.image,
   });
 }
 
 /** Up to three other posts: same category first, then the most recent. */
 async function relatedPosts(post: Post): Promise<Post[]> {
   try {
-    const others = (await readPosts()).filter((p) => p.id !== post.id);
+    const others = (await readAllPosts()).filter((p) => p.id !== post.id);
     const same = others.filter((p) => p.category === post.category);
     const rest = others.filter((p) => p.category !== post.category);
     return [...same, ...rest].slice(0, 3);
@@ -66,14 +66,13 @@ export default async function BlogPostPage(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const id = idFromSegment(slug);
-  const post = id ? await getPostById(id) : null;
+  const post = await getPostBySegment(slug);
   if (!post) notFound();
   // /blog/16 and any old or mistyped words lead to the one canonical address
   if (`/blog/${slug}` !== postPath(post)) permanentRedirect(postPath(post));
 
   const [rawHtml, related] = await Promise.all([
-    markdownToHtml(post.content),
+    markdownToHtml(post.content, Boolean(post.slug)),
     relatedPosts(post),
   ]);
   const { html: contentHtml, toc } = withHeadingIds(rawHtml);
@@ -81,6 +80,7 @@ export default async function BlogPostPage(
   const path = postPath(post);
   const trades = tradesForPost(`${post.title} ${excerpt(post.content)}`);
   const published = new Date(post.createdAt).toISOString();
+  const description = post.description ?? metaDescription(post.content);
 
   return (
     <PageShell>
@@ -90,13 +90,13 @@ export default async function BlogPostPage(
             "@type": "BlogPosting",
             "@id": `${SITE_URL}${path}#article`,
             headline: post.title,
-            description: metaDescription(post.content),
+            description,
             datePublished: published,
             inLanguage: "it-IT",
             articleSection: post.category,
             url: `${SITE_URL}${path}`,
             mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}${path}` },
-            image: `${SITE_URL}/opengraph-image`,
+            image: post.image ?? `${SITE_URL}/opengraph-image`,
             // inline, not only by @id: the Organization node lives in another <script> (layout)
             author: { "@type": "Organization", "@id": ORG_ID, name: ORG.name, url: SITE_URL },
             publisher: {
@@ -112,6 +112,8 @@ export default async function BlogPostPage(
           ])
         )}
       />
+      {/* BabyLoveGrowth's own schema (article, FAQ) */}
+      {post.jsonLd?.map((data, i) => <JsonLd key={i} data={data} />)}
       <div className={CONTAINER}>
         <div className="pt-4 sm:pt-10 lg:grid lg:grid-cols-[12rem_minmax(0,40rem)_17rem] lg:justify-between lg:gap-x-12">
           <header className="lg:col-span-2 lg:col-start-2">
@@ -146,6 +148,19 @@ export default async function BlogPostPage(
                 {readingMinutes(post.content)} min di lettura
               </span>
             </p>
+            {post.image && (
+              <Image
+                src={post.image}
+                alt=""
+                width={1200}
+                height={630}
+                sizes="(min-width: 1024px) 40rem, 100vw"
+                preload
+                // optimized only from the host allowed in next.config
+                unoptimized={!post.image.startsWith("https://media.babylovegrowth.ai/")}
+                className="mt-8 aspect-[1200/630] w-full max-w-[40rem] rounded-card object-cover"
+              />
+            )}
           </header>
 
           {toc.length > 1 && <ArticleToc items={toc} />}
@@ -209,7 +224,7 @@ export default async function BlogPostPage(
                       {p.title}
                     </h3>
                     <p className="mt-2 line-clamp-2 text-[15px] leading-[1.55] text-muted">
-                      {excerpt(p.content)}
+                      {p.description ?? excerpt(p.content)}
                     </p>
                   </Link>
                 </li>

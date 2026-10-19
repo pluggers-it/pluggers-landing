@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { readPosts, postPath } from "@/lib/posts";
+import { readAllPosts, postPath } from "@/lib/posts";
 import { SITE_URL } from "@/lib/site";
 import { HOME_UPDATED } from "@/lib/home";
 import { TRADES, TRADES_UPDATED } from "@/lib/trades";
@@ -18,9 +18,10 @@ const PROS_UPDATED = "2026-10-12";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Falls back to no posts if the database is unreachable (e.g. a build without env vars).
-  let posts: Awaited<ReturnType<typeof readPosts>> = [];
+  // BabyLoveGrowth articles come along when their key is set.
+  let posts: Awaited<ReturnType<typeof readAllPosts>> = [];
   try {
-    posts = await readPosts();
+    posts = await readAllPosts();
   } catch {
     // keep the static part of the sitemap
   }

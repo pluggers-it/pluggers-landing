@@ -6,7 +6,8 @@ import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import remarkHtml from "remark-html";
 import { formatPost, postText } from "@/lib/postFormat";
-import { slugify } from "./postPath";
+import { idFromSegment, mergePosts, slugify } from "./postPath";
+import { getArticle, readArticles } from "./babylovegrowth";
 
 export type PostCategory = "Idraulico" | "Elettricista" | "Muratore" | "Altro";
 
@@ -16,6 +17,11 @@ export type Post = {
   category: PostCategory | string;
   content: string;
   createdAt: string;
+  /** BabyLoveGrowth articles only (lib/babylovegrowth.ts): served at /blog/<slug>. */
+  slug?: string;
+  description?: string;
+  image?: string;
+  jsonLd?: object[];
 };
 
 /** Row shape returned by Supabase */
@@ -40,8 +46,12 @@ function rowToPost(row: PostRow): Post {
 /** Convert markdown content to HTML, after formatPost has given the newsletter lines their structure.
  *  sanitize: false allows inline HTML (colors, underline, etc.) written by staff.
  *  Only authenticated staff can publish posts, so XSS risk is acceptable.
+ *  BabyLoveGrowth articles (`external`) are written elsewhere: sanitized, no newsletter formatting.
  */
-export async function markdownToHtml(markdown: string): Promise<string> {
+export async function markdownToHtml(markdown: string, external = false): Promise<string> {
+  if (external) {
+    return String(await remark().use(remarkGfm).use(remarkHtml, { sanitize: true }).process(markdown));
+  }
   const result = await remark()
     .use(remarkGfm)
     .use(remarkBreaks)
@@ -125,6 +135,12 @@ export async function readPosts(): Promise<Post[]> {
   return (data as PostRow[]).map(rowToPost);
 }
 
+/** Our posts and the BabyLoveGrowth articles, newest first. */
+export async function readAllPosts(): Promise<Post[]> {
+  const [ours, theirs] = await Promise.all([readPosts(), readArticles()]);
+  return mergePosts(ours, theirs);
+}
+
 // cached: metadata and page ask for the same post in one request
 export const getPostById = cache(async (id: string): Promise<Post | null> => {
   if (!/^[1-9]\d*$/.test(id)) return null;
@@ -136,6 +152,12 @@ export const getPostById = cache(async (id: string): Promise<Post | null> => {
 
   if (error || !data) return null;
   return rowToPost(data as PostRow);
+});
+
+/** What /blog/<segment> opens: our post by id first, then a BabyLoveGrowth article by slug. */
+export const getPostBySegment = cache(async (segment: string): Promise<Post | null> => {
+  const id = idFromSegment(segment);
+  return (id ? await getPostById(id) : null) ?? (await getArticle(segment));
 });
 
 export async function createPost(input: {
