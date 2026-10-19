@@ -3,14 +3,9 @@ import { addToNewsletterList } from "@/lib/beehiiv";
 import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { originPage } from "@/lib/prelaunch";
-
-const PHONE_REGEX = /^\+?[\d\s\-()\u00B7]{7,20}$/;
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+import { validateWaitlist } from "@/lib/waitlist";
 
 const ALLOWED_SOURCES = new Set(["waitlist", "newsletter"]);
-
-// Max field lengths (prevent oversized payloads)
-const MAX = { name: 80, phone: 20, profession: 60, city: 60, region: 60, email: 254, problem: 200 };
 
 function genericDbError(): NextResponse {
   return NextResponse.json(
@@ -22,9 +17,11 @@ function genericDbError(): NextResponse {
 /**
  * Collects waitlist signups.
  * POST { email, firstName, lastName, phone, profession, city, region?, source?, page?, problem? }
+ *   Rules in `validateWaitlist` (lib/waitlist.ts): a client (profession «cliente») needs an email or an Italian
+ *   phone number, anyone else a phone number; surname and, for professionals, email are optional.
  *   `region` is the pre-city column: still accepted, never required.
- *   `page` is the path the form was sent from; `problem` a client's line from the pre-registration,
- *   where clients sign up with profession «cliente».
+ *   `page` is the path the form was sent from; `problem` a client's line from the pre-registration.
+ *   A sign-up without email is stored with `email` "".
  *   → 201 { ok: true }
  *   → 200 { ok: true, already: true }   (duplicate email)
  *   → 400 { error: string }             (validation failure)
@@ -78,40 +75,11 @@ export async function POST(req: Request) {
   const problem    = (body?.problem ?? "").trim();
 
   // ── Validation ──────────────────────────────────────────────────────────────
-  if (body?.privacyAccepted !== true) {
-    return NextResponse.json(
-      { error: "È necessario accettare l'informativa privacy." },
-      { status: 400 },
-    );
-  }
-
-  if (!email || !EMAIL_REGEX.test(email) || email.length > MAX.email) {
-    return NextResponse.json({ error: "Email non valida." }, { status: 400 });
-  }
-
-  if (!phone || !PHONE_REGEX.test(phone) || phone.length > MAX.phone) {
-    return NextResponse.json({ error: "Numero di telefono non valido." }, { status: 400 });
-  }
-
-  if (!firstName || !lastName || firstName.length > MAX.name || lastName.length > MAX.name) {
-    return NextResponse.json({ error: "Nome e cognome obbligatori (max 80 caratteri)." }, { status: 400 });
-  }
-
-  if (!city || city.length > MAX.city) {
-    return NextResponse.json({ error: "Scrivi la tua città (max 60 caratteri)." }, { status: 400 });
-  }
-
-  if (region.length > MAX.region) {
-    return NextResponse.json({ error: "Regione non valida." }, { status: 400 });
-  }
-
-  if (!profession || profession.length > MAX.profession) {
-    return NextResponse.json({ error: "Seleziona una professione." }, { status: 400 });
-  }
-
-  if (problem.length > MAX.problem) {
-    return NextResponse.json({ error: "Descrivi il problema in poche parole (max 200 caratteri)." }, { status: 400 });
-  }
+  const invalid = validateWaitlist({
+    email, firstName, lastName, phone, profession, city, region, problem, source,
+    privacyAccepted: body?.privacyAccepted,
+  });
+  if (invalid) return NextResponse.json({ error: invalid }, { status: 400 });
 
   // ── Insert ──────────────────────────────────────────────────────────────────
   let supabase;
@@ -149,7 +117,9 @@ export async function POST(req: Request) {
   }
 
   if (error) {
-    if (error.code === "23505") {
+    // A repeated email is a duplicate. With no email the clash is on the empty one, which means
+    // supabase/migrations/20261019000001_waitlist_contatto_facoltativo.sql isn't applied yet: not a duplicate.
+    if (error.code === "23505" && email) {
       return NextResponse.json({ ok: true, already: true });
     }
     // Log details server-side only (never exposed to client)

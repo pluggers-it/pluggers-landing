@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import { usePathname } from "next/navigation";
 import { metaEvent } from "@/lib/analytics";
 import type { Role } from "@/lib/prelaunch";
+import { MAX, splitContact, splitName } from "@/lib/waitlist";
 import Link from "next/link";
 import { Check } from "lucide-react";
 
@@ -24,11 +25,14 @@ const SELECT_CLASS = `${INPUT_CLASS} appearance-none pr-11`;
 const LABEL_CLASS = "mb-1.5 block text-sm font-medium text-ink";
 
 /** A visible label tied to its control, so people, screen readers and agents read the same name. */
-function Field({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
+function Field({
+  id, label, optional, wide, children,
+}: { id: string; label: string; optional?: string; wide?: boolean; children: React.ReactNode }) {
   return (
-    <div>
+    <div className={wide ? "sm:col-span-2" : undefined}>
       <label htmlFor={id} className={LABEL_CLASS}>
         {label}
+        {optional && <span className="font-normal text-muted"> ({optional})</span>}
       </label>
       {children}
     </div>
@@ -50,6 +54,12 @@ const ROLES: [Role, string][] = [
   ["pro", "Sono un professionista"],
 ];
 
+/** What the pre-registration says under its title once the visitor has said who they are. */
+const PRELAUNCH_LEDE: Record<Role, string> = {
+  cliente: "Lasciaci un contatto: ti avvisiamo appena è disponibile su iPhone e Android.",
+  pro: "Lasciaci i contatti: ti chiamiamo per farti iniziare tra i primi.",
+};
+
 /** A trade label from the site's pages as the select's value, or «Altro» with the label written in. */
 function professionFor(trade: string | null): [string, string] {
   if (!trade) return ["", ""];
@@ -64,7 +74,11 @@ interface Props {
   successMessage?: string;
   formName?: string;
   submissionSource?: "waitlist" | "newsletter";
-  /** The pre-registration: asks who is signing up, and a client's problem. `page` is the page the visitor came from. */
+  /**
+   * The pre-registration: asks who is signing up, then the few things each needs (a client an email or phone and
+   * the problem, a professional name, phone and trade), with only the privacy notice to accept.
+   * `page` is the page the visitor came from.
+   */
   prelaunch?: { role: Role | null; trade: string | null; page: string };
   /** Under the thanks, once sent. */
   afterSubmit?: React.ReactNode;
@@ -83,6 +97,8 @@ export function WaitlistForm({
   const fid = (name: string) => `${uid}-${name}`;
   const [firstName, setFirstName]           = useState("");
   const [lastName, setLastName]             = useState("");
+  const [fullName, setFullName]             = useState("");
+  const [contact, setContact]               = useState("");
   const [phone, setPhone]                   = useState("");
   const [city, setCity]                     = useState("");
   const [email, setEmail]                   = useState("");
@@ -100,16 +116,17 @@ export function WaitlistForm({
   const resolvedProfession = profession === "altro" ? otherProfession : profession;
   // Before launch clients sign up too: their profession column says «cliente».
   const isClient = Boolean(prelaunch) && role === "cliente";
-  const askProfession = !prelaunch || role === "pro";
 
-  const canSubmit = privacyChecked && termsChecked && !submitting;
+  // The pre-registration takes the privacy notice only: a waitlist sign-up is not a service contract.
+  const canSubmit = privacyChecked && (Boolean(prelaunch) || termsChecked) && !submitting;
+  const lede = prelaunch && role ? PRELAUNCH_LEDE[role] : description;
 
   return (
     <div className="rounded-card bg-surface p-6 shadow-card ring-1 ring-hair sm:p-8">
       <h3 className="text-balance text-[22px] font-bold leading-tight tracking-[-0.02em]">
         {title}
       </h3>
-      <p className="mt-2 text-pretty text-[15px] text-muted">{description}</p>
+      <p className="mt-2 text-pretty text-[15px] text-muted">{lede}</p>
 
       {submitted ? (
         <>
@@ -126,21 +143,32 @@ export function WaitlistForm({
           className="mt-6 flex flex-col gap-3"
           onSubmit={async (e) => {
             e.preventDefault();
-            if (!privacyChecked || !termsChecked) {
-              setError("Devi accettare la Privacy Policy e i Termini e Condizioni.");
+            if (!privacyChecked || (!prelaunch && !termsChecked)) {
+              setError(
+                prelaunch
+                  ? "Devi leggere l'Informativa privacy."
+                  : "Devi accettare la Privacy Policy e i Termini e Condizioni.",
+              );
+              return;
+            }
+            const clientContact = isClient ? splitContact(contact) : null;
+            if (isClient && !clientContact) {
+              setError("Scrivi un'email valida o un numero di telefono italiano.");
               return;
             }
             setError(null);
             setSubmitting(true);
             try {
+              const who = !prelaunch
+                ? { email, firstName, lastName, phone }
+                : clientContact
+                  ? { ...clientContact, firstName: fullName.trim(), lastName: "" }
+                  : { ...splitName(fullName), email, phone };
               const res = await fetch("/api/waitlist", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                  email,
-                  firstName,
-                  lastName,
-                  phone,
+                  ...who,
                   city,
                   profession: isClient ? "cliente" : resolvedProfession,
                   problem: isClient ? problem : "",
@@ -187,148 +215,244 @@ export function WaitlistForm({
             </fieldset>
           )}
 
-          {/* ── Common fields: Nome | Cognome | Città | Telefono ──────────── */}
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <Field id={fid("first-name")} label="Nome">
-              <input
-                id={fid("first-name")} name="firstName"
-                type="text" required value={firstName} autoComplete="given-name"
-                onChange={(e) => setFirstName(e.target.value)}
-                className={INPUT_CLASS}
-              />
-            </Field>
-            <Field id={fid("last-name")} label="Cognome">
-              <input
-                id={fid("last-name")} name="lastName"
-                type="text" required value={lastName} autoComplete="family-name"
-                onChange={(e) => setLastName(e.target.value)}
-                className={INPUT_CLASS}
-              />
-            </Field>
-            <Field id={fid("city")} label={prelaunch ? "Città o CAP" : "Città"}>
-              <input
-                id={fid("city")} name="city"
-                type="text" required value={city} maxLength={60}
-                autoCapitalize="words" autoComplete="address-level2"
-                onChange={(e) => setCity(e.target.value)}
-                className={INPUT_CLASS}
-              />
-            </Field>
-            <Field id={fid("phone")} label="Telefono">
-              <input
-                id={fid("phone")} name="phone"
-                type="tel" required value={phone} autoComplete="tel"
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+39 333 123 4567"
-                pattern="^\+?[\d\s\-\(\)]{7,20}$"
-                className={INPUT_CLASS}
-              />
-            </Field>
-          </div>
+          {prelaunch ? (
+            role && (
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <Field key="name" id={fid("name")} label={isClient ? "Nome" : "Nome e cognome"}>
+                  <input
+                    id={fid("name")} name="name"
+                    type="text" required value={fullName} autoComplete={isClient ? "given-name" : "name"}
+                    maxLength={isClient ? MAX.name : MAX.name * 2 + 1}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className={INPUT_CLASS}
+                  />
+                </Field>
 
-          {/* ── Email + Profession ─────────────────────────────────────────── */}
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <Field id={fid("email")} label="Email">
-              <input
-                id={fid("email")} name="email"
-                type="email" required value={email} autoComplete="email"
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="nome@email.com"
-                className={INPUT_CLASS}
-              />
-            </Field>
+                {isClient ? (
+                  <Field key="contact" id={fid("contact")} label="Email o telefono">
+                    <input
+                      id={fid("contact")} name="contact"
+                      type="text" required value={contact} autoComplete="email" maxLength={MAX.email}
+                      autoCapitalize="none" autoCorrect="off" spellCheck={false}
+                      onChange={(e) => setContact(e.target.value)}
+                      placeholder="nome@email.com o 333 123 4567"
+                      className={INPUT_CLASS}
+                    />
+                  </Field>
+                ) : (
+                  <Field key="phone" id={fid("phone")} label="Telefono">
+                    <input
+                      id={fid("phone")} name="phone"
+                      type="tel" required value={phone} autoComplete="tel"
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+39 333 123 4567"
+                      pattern="^\+?[\d\s\-\(\)]{7,20}$"
+                      className={INPUT_CLASS}
+                    />
+                  </Field>
+                )}
 
-            {askProfession && (
-              <Field id={fid("profession")} label="Professione">
-                <select
-                  id={fid("profession")} name="profession"
-                  required value={profession}
-                  onChange={(e) => {
-                    setProfession(e.target.value);
-                    if (e.target.value !== "altro") setOtherProfession("");
-                  }}
-                  className={`${SELECT_CLASS} ${profession ? "" : "text-muted"}`} style={SELECT_STYLE}
-                >
-                  <option value="" disabled>Scegli</option>
-                  {PROFESSIONS.map(([value, label]) => (
-                    <option key={value} value={value}>{label}</option>
-                  ))}
-                </select>
-              </Field>
-            )}
+                {!isClient && (
+                  <Field key="profession" id={fid("profession")} label="Mestiere">
+                    <select
+                      id={fid("profession")} name="profession"
+                      required value={profession}
+                      onChange={(e) => {
+                        setProfession(e.target.value);
+                        if (e.target.value !== "altro") setOtherProfession("");
+                      }}
+                      className={`${SELECT_CLASS} ${profession ? "" : "text-muted"}`} style={SELECT_STYLE}
+                    >
+                      <option value="" disabled>Scegli</option>
+                      {PROFESSIONS.map(([value, label]) => (
+                        <option key={value} value={value}>{label}</option>
+                      ))}
+                    </select>
+                  </Field>
+                )}
 
-            {isClient && (
-              <Field id={fid("problem")} label="Che problema hai? (facoltativo)">
-                <input
-                  id={fid("problem")} name="problem"
-                  type="text" value={problem} maxLength={200}
-                  onChange={(e) => setProblem(e.target.value)}
-                  placeholder="Il rubinetto della cucina perde"
-                  className={INPUT_CLASS}
-                />
-              </Field>
-            )}
-          </div>
+                <Field key="city" id={fid("city")} label="Città o CAP">
+                  <input
+                    id={fid("city")} name="city"
+                    type="text" required value={city} maxLength={MAX.city}
+                    autoCapitalize="words" autoComplete="address-level2"
+                    onChange={(e) => setCity(e.target.value)}
+                    className={INPUT_CLASS}
+                  />
+                </Field>
 
-          {/* "Altro" profession free-text */}
-          {askProfession && profession === "altro" && (
-            <Field id={fid("other-profession")} label="La tua professione">
-              <input
-                id={fid("other-profession")} name="otherProfession"
-                type="text" required value={otherProfession}
-                onChange={(e) => setOtherProfession(e.target.value)}
-                className={INPUT_CLASS}
-              />
-            </Field>
+                {!isClient && profession === "altro" && (
+                  <Field key="other-profession" id={fid("other-profession")} label="Il tuo mestiere" wide>
+                    <input
+                      id={fid("other-profession")} name="otherProfession"
+                      type="text" required value={otherProfession}
+                      onChange={(e) => setOtherProfession(e.target.value)}
+                      className={INPUT_CLASS}
+                    />
+                  </Field>
+                )}
+
+                {isClient ? (
+                  <Field key="problem" id={fid("problem")} label="Che problema hai?" optional="facoltativo" wide>
+                    <input
+                      id={fid("problem")} name="problem"
+                      type="text" value={problem} maxLength={MAX.problem}
+                      onChange={(e) => setProblem(e.target.value)}
+                      placeholder="Il rubinetto della cucina perde"
+                      className={INPUT_CLASS}
+                    />
+                  </Field>
+                ) : (
+                  <Field key="email" id={fid("email")} label="Email" optional="facoltativa" wide>
+                    <input
+                      id={fid("email")} name="email"
+                      type="email" value={email} autoComplete="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="nome@email.com"
+                      className={INPUT_CLASS}
+                    />
+                  </Field>
+                )}
+              </div>
+            )
+          ) : (
+            <>
+              {/* ── Common fields: Nome | Cognome | Città | Telefono ──────────── */}
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <Field id={fid("first-name")} label="Nome">
+                  <input
+                    id={fid("first-name")} name="firstName"
+                    type="text" required value={firstName} autoComplete="given-name"
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className={INPUT_CLASS}
+                  />
+                </Field>
+                <Field id={fid("last-name")} label="Cognome">
+                  <input
+                    id={fid("last-name")} name="lastName"
+                    type="text" required value={lastName} autoComplete="family-name"
+                    onChange={(e) => setLastName(e.target.value)}
+                    className={INPUT_CLASS}
+                  />
+                </Field>
+                <Field id={fid("city")} label="Città">
+                  <input
+                    id={fid("city")} name="city"
+                    type="text" required value={city} maxLength={60}
+                    autoCapitalize="words" autoComplete="address-level2"
+                    onChange={(e) => setCity(e.target.value)}
+                    className={INPUT_CLASS}
+                  />
+                </Field>
+                <Field id={fid("phone")} label="Telefono">
+                  <input
+                    id={fid("phone")} name="phone"
+                    type="tel" required value={phone} autoComplete="tel"
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+39 333 123 4567"
+                    pattern="^\+?[\d\s\-\(\)]{7,20}$"
+                    className={INPUT_CLASS}
+                  />
+                </Field>
+              </div>
+
+              {/* ── Email + Profession ─────────────────────────────────────────── */}
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <Field id={fid("email")} label="Email">
+                  <input
+                    id={fid("email")} name="email"
+                    type="email" required value={email} autoComplete="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="nome@email.com"
+                    className={INPUT_CLASS}
+                  />
+                </Field>
+
+                <Field id={fid("profession")} label="Professione">
+                  <select
+                    id={fid("profession")} name="profession"
+                    required value={profession}
+                    onChange={(e) => {
+                      setProfession(e.target.value);
+                      if (e.target.value !== "altro") setOtherProfession("");
+                    }}
+                    className={`${SELECT_CLASS} ${profession ? "" : "text-muted"}`} style={SELECT_STYLE}
+                  >
+                    <option value="" disabled>Scegli</option>
+                    {PROFESSIONS.map(([value, label]) => (
+                      <option key={value} value={value}>{label}</option>
+                    ))}
+                  </select>
+                </Field>
+              </div>
+
+              {/* "Altro" profession free-text */}
+              {profession === "altro" && (
+                <Field id={fid("other-profession")} label="La tua professione">
+                  <input
+                    id={fid("other-profession")} name="otherProfession"
+                    type="text" required value={otherProfession}
+                    onChange={(e) => setOtherProfession(e.target.value)}
+                    className={INPUT_CLASS}
+                  />
+                </Field>
+              )}
+            </>
           )}
 
-          {/* ── Legal checkboxes ─────────────────────────────────────────── */}
-          <div className="flex flex-col gap-1">
-            <LegalCheckbox
-              id="privacy-check"
-              checked={privacyChecked}
-              onChange={setPrivacyChecked}
-            >
-              Ho letto e accetto la{" "}
-              <Link
-                href="/privacy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-accent-text underline underline-offset-2"
-                onClick={(e) => e.stopPropagation()}
-              >
-                Privacy Policy
-              </Link>
-              {" "}e acconsento al trattamento dei dati.
-            </LegalCheckbox>
+          {(!prelaunch || role) && (
+            <>
+              {/* ── Legal checkboxes ─────────────────────────────────────────── */}
+              <div className="flex flex-col gap-1">
+                <LegalCheckbox
+                  id="privacy-check"
+                  checked={privacyChecked}
+                  onChange={setPrivacyChecked}
+                >
+                  {prelaunch ? "Ho letto l'" : <>Ho letto e accetto la{" "}</>}
+                  <Link
+                    href="/privacy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-accent-text underline underline-offset-2"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {prelaunch ? "Informativa privacy" : "Privacy Policy"}
+                  </Link>
+                  {!prelaunch && " e acconsento al trattamento dei dati."}
+                </LegalCheckbox>
 
-            <LegalCheckbox
-              id="terms-check"
-              checked={termsChecked}
-              onChange={setTermsChecked}
-            >
-              Ho letto e accetto i{" "}
-              <Link
-                href="/termini"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-accent-text underline underline-offset-2"
-                onClick={(e) => e.stopPropagation()}
-              >
-                Termini e Condizioni
-              </Link>
-              {" "}di utilizzo del servizio.
-            </LegalCheckbox>
-          </div>
+                {!prelaunch && (
+                  <LegalCheckbox
+                    id="terms-check"
+                    checked={termsChecked}
+                    onChange={setTermsChecked}
+                  >
+                    Ho letto e accetto i{" "}
+                    <Link
+                      href="/termini"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-medium text-accent-text underline underline-offset-2"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Termini e Condizioni
+                    </Link>
+                    {" "}di utilizzo del servizio.
+                  </LegalCheckbox>
+                )}
+              </div>
 
-          <button
-            type="submit"
-            disabled={!canSubmit}
-            aria-busy={submitting}
-            className="mt-1 h-12 w-full rounded-full bg-accent text-[15px] font-semibold text-white transition hover:bg-accent-deep active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-accent"
-          >
-            {submitting ? "Invio…" : prelaunch ? "Pre-iscriviti" : "Iscriviti"}
-          </button>
+              <button
+                type="submit"
+                disabled={!canSubmit}
+                aria-busy={submitting}
+                className="mt-1 h-12 w-full rounded-full bg-accent text-[15px] font-semibold text-white transition hover:bg-accent-deep active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-accent"
+              >
+                {submitting ? "Invio…" : prelaunch ? "Avvisami" : "Iscriviti"}
+              </button>
+            </>
+          )}
 
           {error && (
             <p role="alert" className="text-sm font-medium text-danger">{error}</p>

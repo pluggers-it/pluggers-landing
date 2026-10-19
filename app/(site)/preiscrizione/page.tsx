@@ -28,9 +28,6 @@ export default async function PreiscrizionePage({ searchParams }: Props) {
         <h1 className="text-balance text-[clamp(2.2rem,4.4vw,3.4rem)] font-extrabold leading-[1.05] tracking-[-0.035em]">
           Pluggers arriva a breve su iPhone e Android
         </h1>
-        <p className="mt-5 max-w-[52ch] text-[17px] leading-[1.6] text-muted sm:text-lg">
-          Lasciaci i contatti: ti avvisiamo appena è disponibile.
-        </p>
         <div className="mt-8">
           <WaitlistForm
             title="Pre-iscrizione"
