@@ -63,7 +63,7 @@ export const TRADES: Trade[] = [
       "Perdite, scarichi intasati, WC che non smette di scaricare: descrivi il problema su Pluggers e scegli tra gli idraulici che lavorano nella tua zona di Torino.",
     summary: "Perdite, scarichi intasati, rubinetti, WC e sanitari.",
     intro:
-      "Su Pluggers trovi un idraulico a Torino partendo dal problema: scrivi cosa succede, aggiungi una foto e l'assistente capisce se serve davvero un idraulico, quanto è urgente e quali sono le cause più probabili. Poi scegli a chi mandare la richiesta tra gli idraulici che lavorano nella tua zona. Usare Pluggers è gratis; l'idraulico lo paghi direttamente.",
+      "Su Pluggers trovi un idraulico a Torino partendo dal problema: scrivi cosa succede, aggiungi una foto e l'assistente capisce se serve davvero un idraulico, quanto è urgente e quali sono le cause più probabili. Poi scegli a chi mandare la richiesta tra gli idraulici che lavorano nella tua zona. Non c'è nessun abbonamento e non paghi per sbloccare i professionisti che trovi. L'idraulico lo paghi direttamente.",
     problemsLede: "Sono i problemi che arrivano più spesso a un idraulico, detti come li direbbe chiunque.",
     problems: [
       "Il rubinetto della cucina perde dalla base quando lo apro",
@@ -903,7 +903,7 @@ export const TORINO = {
   description:
     "Idraulici, elettricisti, fabbri e gli altri professionisti per la casa a Torino: descrivi il problema su Pluggers e scegli tra chi lavora nella tua zona.",
   intro:
-    "Su Pluggers trovi a Torino idraulici, elettricisti, fabbri, tecnici degli elettrodomestici e gli altri professionisti per la casa. Non serve sapere quale ti serve: descrivi il problema con una foto e l'assistente indica il mestiere e l'urgenza. Poi scegli a chi scrivere tra i professionisti che lavorano nella tua zona. Usare Pluggers è gratis; il professionista lo paghi direttamente.",
+    "Su Pluggers trovi a Torino idraulici, elettricisti, fabbri, serramentisti e gli altri professionisti per la casa. Non serve sapere quale ti serve: descrivi il problema con una foto e l'assistente indica il mestiere e l'urgenza. Poi scegli a chi scrivere tra i professionisti che lavorano nella tua zona. Non c'è nessun abbonamento e non paghi per sbloccare i professionisti che trovi. Il professionista lo paghi direttamente.",
   faq: [
     {
       q: "Pluggers funziona in tutta Torino?",

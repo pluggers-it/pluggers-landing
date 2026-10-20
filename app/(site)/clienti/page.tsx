@@ -9,7 +9,7 @@ import { TrustRows } from "@/components/landing/TrustRows";
 import { StoreBadges } from "@/components/landing/StoreBadges";
 import { AppLink } from "@/components/landing/AppLink";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
-import { faq } from "@/lib/home";
+import { COSTS_LINE, faq } from "@/lib/home";
 import { appInStores } from "@/lib/prelaunch";
 import { breadcrumbSchema, graph, pageMetadata, pageSchema } from "@/lib/seo";
 import { TRADES } from "@/lib/trades";
@@ -82,8 +82,8 @@ const STEPS: GuideStep[] = [
     id: "intervento", short: "L'intervento", src: `${G}/08.webp`,
     alt: "Schermata «Dettaglio intervento»: il professionista, lo stato con l'invito a inquadrare il QR, quando e dove, il problema, la stima e il bottone «Scansiona QR».",
     title: "Il giorno dell'intervento",
-    text: "Nella scheda dell'appuntamento trovi data, indirizzo, problema e prezzo concordato. Quando il professionista arriva, registrate l'inizio insieme.",
-    points: ["Tocca «Scansiona QR» e inquadra il codice sul telefono del professionista", "A lavoro finito fate lo stesso", "Poi puoi lasciare una recensione"],
+    text: "Nella scheda dell'appuntamento trovi data, indirizzo, problema e prezzo concordato. Il QR si usa due volte: quando il lavoro inizia e quando finisce.",
+    points: ["All'inizio tocca «Scansiona QR» e inquadra il codice sul telefono del professionista", "A lavoro finito inquadra il QR di fine lavoro", "Poi puoi lasciare una recensione"],
   },
 ];
 
@@ -107,12 +107,11 @@ export default async function ClientiPage() {
 
       <section className={`${CONTAINER} grid items-center gap-12 pb-16 pt-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16 lg:pt-8`}>
         <div>
-          <p className="text-[15px] font-bold uppercase tracking-[0.08em] text-accent-text">Guida per chi cerca un professionista</p>
-          <h1 className="mt-3 max-w-[18ch] text-balance text-[clamp(2.4rem,4.4vw,3.6rem)] font-extrabold leading-[1.04] tracking-[-0.035em]">
+          <h1 className="max-w-[18ch] text-balance text-[clamp(2.4rem,4.4vw,3.6rem)] font-extrabold leading-[1.04] tracking-[-0.035em]">
             Scrivi il guasto, scegli chi lo ripara
           </h1>
           <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-muted sm:text-lg">
-            Otto passi, con i nomi dei pulsanti che trovi nell&apos;app. Non serve sapere che professionista ti serve: lo capisce l&apos;assistente dalla tua descrizione. Per te Pluggers è gratis.
+            Otto passi, con i nomi dei pulsanti che trovi nell&apos;app. Non serve sapere che professionista ti serve: lo capisce l&apos;assistente dalla tua descrizione. {COSTS_LINE}
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <AppLink computerOnly whenClosed="stores" className={`${BTN_PRIMARY} max-sm:hidden`}>

@@ -4,8 +4,13 @@
  * Every product claim is checked against the app and backend code.
  */
 import { WEB_APP_OPEN } from "@/components/landing/links";
+import { WAITLIST_TEXT } from "@/lib/waitlist";
 
-export const HOME_UPDATED = "2026-10-14";
+export const HOME_UPDATED = "2026-10-20";
+
+/** What using Pluggers does not cost the person who looks for a professional. One sentence, said the same everywhere. */
+export const COSTS_LINE = "Non c'è nessun abbonamento e non paghi per sbloccare i professionisti che trovi.";
+
 
 export const HOME = {
   title: "Pluggers | Il professionista giusto, al momento giusto.",
@@ -24,7 +29,7 @@ export const COMING = {
   title: "In arrivo su Pluggers",
   items: [
     { title: "Pagamenti nell'app", text: "Costo Chiamata e preventivo si potranno pagare direttamente dall'app." },
-    { title: "Imprese e amministratori di condominio", text: "Anche chi gestisce condomini e più immobili potrà chiedere interventi su Pluggers." },
+    { title: "Imprese e amministratori di condominio", text: "I profili per imprese e amministratori di condominio sono in arrivo." },
   ],
 };
 
@@ -33,8 +38,7 @@ export const HOW = {
   lede:
     "Descrivi il guasto con parole e foto: " +
     "un assistente di intelligenza artificiale capisce quale professionista serve e quanto è urgente, " +
-    "e ti mostra chi lavora nella tua zona. Per te usarla è gratis: se il professionista chiede un " +
-    "Costo Chiamata te lo indica prima del sopralluogo, e lo paghi a lui.",
+    `e ti mostra chi lavora nella tua zona. ${COSTS_LINE}`,
   steps: [
     {
       title: "Racconta il problema",
@@ -44,13 +48,13 @@ export const HOW = {
     },
     {
       title: "Pluggers capisce di che si tratta",
-      text: "Riconosce il mestiere e l'urgenza e mostra i professionisti che lavorano nella tua zona. Scegli tu chi contattare, fino a tre.",
+      text: "Riconosce il mestiere, l'urgenza e le cause più probabili, poi mostra i professionisti della tua zona. Scegli chi contattare, fino a tre, e il giorno tra quelli disponibili: l'orario lo propone il professionista.",
       src: "/screens/step-triage.png",
       alt: "Schermata «Cosa abbiamo capito»: chi serve (Idraulico), urgenza 2 su 5, cause probabili e bottone «Cerca un professionista».",
     },
     {
-      title: "Prima stima, poi preventivo, per concludere il QR Code",
-      text: "Il professionista ti manda in chat una stima e, se lo chiede, il Costo Chiamata. All'arrivo registrate inizio e fine intervento con un QR, poi lasci la recensione.",
+      title: "Prima stima, poi preventivo, e il QR a inizio e fine lavoro",
+      text: "Il professionista ti manda in chat una stima e, se lo chiede, il Costo Chiamata. Dopo il sopralluogo arriva il preventivo. Il QR si scansiona all'inizio e alla fine del lavoro, poi lasci la recensione.",
       src: "/screens/step-estimate.png",
       alt: "Chat con il professionista: la foto del guasto, un messaggio e una stima di 85 euro con i bottoni Accetta e Rifiuta.",
     },
@@ -60,10 +64,16 @@ export const HOW = {
 export const TRADES_SECTION = {
   title: "I mestieri su Pluggers",
   lede:
-    "Su Pluggers trovi idraulici, elettricisti, fabbri, tecnici degli elettrodomestici e gli altri " +
+    "Su Pluggers trovi idraulici, elettricisti, fabbri, serramentisti e gli altri " +
     "mestieri della casa: impianti, aperture, edilizia e finiture, arredo ed esterni. Non serve sapere " +
     "quale ti serve, perché lo capisce l'assistente dalla tua descrizione. Per Torino ogni mestiere ha " +
     "una pagina con i problemi tipici, cosa succede con Pluggers e le domande frequenti.",
+};
+
+/** The «Gestionale» card of the professional's features: the monthly history is in the app, sending it to the accountant is not yet. */
+export const GESTIONALE = {
+  title: "Gestionale",
+  text: "Lo storico mensile dei tuoi lavori è già nell'app. L'invio al commercialista arriva a breve. È gratuito.",
 };
 
 export const PROS = {
@@ -85,10 +95,11 @@ export const PROS = {
       title: "Costo Chiamata e preventivo li decidi tu",
       text: "Indichi il costo del sopralluogo prima dell'appuntamento e mandi la stima in chat. Agenda e check-in con QR sono già dentro.",
     },
+    GESTIONALE,
   ],
   cta: "Iscriviti come professionista",
   waitlistTitle: "Lasciaci i tuoi contatti",
-  waitlistText: "Ti ricontattiamo noi per iniziare su Pluggers.",
+  waitlistText: WAITLIST_TEXT,
 };
 
 export const TRUST = {
@@ -113,11 +124,11 @@ export const faq = (inStores: boolean) => [
   },
   {
     q: "Quanto costa usare Pluggers?",
-    a: "Per chi cerca un professionista Pluggers è gratis: descrivere il problema, ricevere le stime e prenotare non costa niente. Paghi solo il professionista, per il sopralluogo e per il lavoro che accetti, direttamente a lui.",
+    a: COSTS_LINE,
   },
   {
     q: "Come trovo un idraulico o un elettricista a Torino in fretta?",
-    a: `${!inStores ? "Pluggers arriva a breve su iPhone e Android: lascia i contatti nella pre-iscrizione e ti avvisiamo appena è disponibile. Con l'app descrivi" : WEB_APP_OPEN ? "Apri Pluggers su app.plggrs.it e descrivi" : "Scarica Pluggers su iPhone o Android e descrivi"} il problema: l'assistente capisce quale mestiere serve e quanto è urgente, e ti mostra i professionisti che lavorano nella tua zona. Scegli a chi mandare la richiesta e ricevi le risposte in chat. Quando può venire lo concordi con il professionista.`,
+    a: `${!inStores ? "Pluggers arriva a breve su iPhone e Android: lascia i contatti nella pre-iscrizione e ti avvisiamo appena è disponibile. Con l'app descrivi" : WEB_APP_OPEN ? "Apri Pluggers su app.plggrs.it e descrivi" : "Scarica Pluggers su iPhone o Android e descrivi"} il problema: l'assistente capisce quale mestiere serve e quanto è urgente, e ti mostra i professionisti che lavorano nella tua zona. Scegli a chi mandare la richiesta e il giorno tra quelli disponibili: l'orario lo propone il professionista. Le risposte arrivano in chat.`,
   },
   {
     q: "Cos'è il Costo Chiamata?",
@@ -137,7 +148,7 @@ export const faq = (inStores: boolean) => [
   },
   {
     q: "Cosa succede dopo la richiesta?",
-    a: "La richiesta arriva ai professionisti che hai scelto, fino a tre tra quelli vicini, e l'intervento va al primo che conferma. Ti scrive in chat con una stima e, se lo chiede, il Costo Chiamata; tu scegli il giorno e lui propone l'orario. All'arrivo registrate inizio e fine intervento con un QR, poi puoi lasciare la recensione.",
+    a: "La richiesta arriva ai professionisti che hai scelto, fino a tre tra quelli vicini, e l'intervento va al primo che conferma. Ti scrive in chat con una stima e, se lo chiede, il Costo Chiamata; tu scegli il giorno e lui propone l'orario. Il QR si scansiona all'inizio e alla fine del lavoro, poi puoi lasciare la recensione.",
   },
   {
     q: "Serve scaricare un'app?",

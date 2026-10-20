@@ -1,11 +1,11 @@
-import { Inbox, Radar, Receipt } from "lucide-react";
+import { Inbox, NotebookText, Radar, Receipt } from "lucide-react";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { AppLink } from "./AppLink";
 import { PRO_SIGNUP_URL } from "./links";
 import { PROS } from "@/lib/home";
 import { BTN_PRIMARY, CONTAINER, H2, LEDE_ANSWER } from "./styles";
 
-const ICONS = [Inbox, Radar, Receipt];
+const ICONS = [Inbox, Radar, Receipt, NotebookText];
 
 export function ForPros() {
   return (

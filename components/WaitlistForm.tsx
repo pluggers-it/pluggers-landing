@@ -4,7 +4,7 @@ import { useId, useState } from "react";
 import { usePathname } from "next/navigation";
 import { metaEvent } from "@/lib/analytics";
 import type { Role } from "@/lib/prelaunch";
-import { MAX, splitContact, splitName } from "@/lib/waitlist";
+import { MAX, splitContact, splitName, WAITLIST_TEXT } from "@/lib/waitlist";
 import Link from "next/link";
 import { Check } from "lucide-react";
 
@@ -54,12 +54,6 @@ const ROLES: [Role, string][] = [
   ["pro", "Sono un professionista"],
 ];
 
-/** What the pre-registration says under its title once the visitor has said who they are. */
-const PRELAUNCH_LEDE: Record<Role, string> = {
-  cliente: "Lasciaci un contatto: ti avvisiamo appena è disponibile su iPhone e Android.",
-  pro: "Lasciaci i contatti: ti chiamiamo per farti iniziare tra i primi.",
-};
-
 /** A trade label from the site's pages as the select's value, or «Altro» with the label written in. */
 function professionFor(trade: string | null): [string, string] {
   if (!trade) return ["", ""];
@@ -86,7 +80,7 @@ interface Props {
 
 export function WaitlistForm({
   title = "Lasciaci i tuoi contatti",
-  description = "Ti scriviamo quando Pluggers arriva nella tua città.",
+  description = WAITLIST_TEXT,
   successMessage = "Dati ricevuti. Ti scriviamo noi.",
   submissionSource = "waitlist",
   prelaunch,
@@ -119,14 +113,13 @@ export function WaitlistForm({
 
   // The pre-registration takes the privacy notice only: a waitlist sign-up is not a service contract.
   const canSubmit = privacyChecked && (Boolean(prelaunch) || termsChecked) && !submitting;
-  const lede = prelaunch && role ? PRELAUNCH_LEDE[role] : description;
 
   return (
     <div className="rounded-card bg-surface p-6 shadow-card ring-1 ring-hair sm:p-8">
       <h3 className="text-balance text-[22px] font-bold leading-tight tracking-[-0.02em]">
         {title}
       </h3>
-      <p className="mt-2 text-pretty text-[15px] text-muted">{lede}</p>
+      <p className="mt-2 text-pretty text-[15px] text-muted">{description}</p>
 
       {submitted ? (
         <>
