@@ -34,7 +34,7 @@ export const HOW = {
     "Descrivi il guasto con parole e foto: " +
     "un assistente di intelligenza artificiale capisce quale professionista serve e quanto è urgente, " +
     "e ti mostra chi lavora nella tua zona. Per te usarla è gratis: se il professionista chiede un " +
-    "Costo Chiamata te lo indica prima della visita, e lo paghi a lui.",
+    "Costo Chiamata te lo indica prima del sopralluogo, e lo paghi a lui.",
   steps: [
     {
       title: "Racconta il problema",
@@ -83,7 +83,7 @@ export const PROS = {
     },
     {
       title: "Costo Chiamata e preventivo li decidi tu",
-      text: "Indichi il costo della visita prima dell'appuntamento e mandi la stima in chat. Agenda e check-in con QR sono già dentro.",
+      text: "Indichi il costo del sopralluogo prima dell'appuntamento e mandi la stima in chat. Agenda e check-in con QR sono già dentro.",
     },
   ],
   cta: "Iscriviti come professionista",
@@ -92,7 +92,7 @@ export const PROS = {
 };
 
 export const TRUST = {
-  title: "Cosa sai prima della visita",
+  title: "Cosa sai prima del sopralluogo",
   lede:
     "Prima che il professionista arrivi sai chi è, quanto costa farlo venire e quanto può costare il " +
     "lavoro: il profilo mostra le recensioni lasciate dopo interventi completati, la stima arriva in chat " +
@@ -100,7 +100,7 @@ export const TRUST = {
   rows: [
     "Il profilo del professionista mostra le recensioni, che si possono lasciare solo dopo un intervento completato.",
     "La chat è nell'app: stima, preventivo e quello che vi dite restano insieme all'intervento.",
-    "La stima e l'eventuale Costo Chiamata li vedi prima della visita. Il compenso lo concordi con il professionista.",
+    "La stima e l'eventuale Costo Chiamata li vedi prima del sopralluogo. Il compenso lo concordi con il professionista.",
     "I dati sono conservati su server nell'Unione Europea.",
   ],
 };
@@ -113,7 +113,7 @@ export const faq = (inStores: boolean) => [
   },
   {
     q: "Quanto costa usare Pluggers?",
-    a: "Per chi cerca un professionista Pluggers è gratis: descrivere il problema, ricevere le stime e prenotare non costa niente. Paghi solo il professionista, per la visita e per il lavoro che accetti, direttamente a lui.",
+    a: "Per chi cerca un professionista Pluggers è gratis: descrivere il problema, ricevere le stime e prenotare non costa niente. Paghi solo il professionista, per il sopralluogo e per il lavoro che accetti, direttamente a lui.",
   },
   {
     q: "Come trovo un idraulico o un elettricista a Torino in fretta?",
@@ -121,7 +121,7 @@ export const faq = (inStores: boolean) => [
   },
   {
     q: "Cos'è il Costo Chiamata?",
-    a: "Il Costo Chiamata è l'importo che il professionista può chiedere per venire a vedere il lavoro, dovuto anche se poi l'intervento non si può fare. Te lo indica nell'app prima della visita, lo accetti o lo rifiuti, e lo paghi a lui: non si paga in app. Se fai il lavoro, si scala dal totale.",
+    a: "Il Costo Chiamata è l'importo che il professionista può chiedere per fare il sopralluogo, dovuto anche se poi l'intervento non si può fare. Te lo indica nell'app prima del sopralluogo, lo accetti o lo rifiuti, e lo paghi a lui: non si paga in app. Se fai il lavoro, si scala dal totale.",
   },
   {
     q: "Dove funziona Pluggers?",

@@ -73,7 +73,7 @@ const STEPS: GuideStep[] = [
   {
     id: "preventivo", short: "Il preventivo", src: `${G}/07.webp`,
     alt: "Schermata «Preventivo»: tre voci con il loro prezzo, imponibile, IVA 22% e totale, e i bottoni «Apri» e «Scarica» per il PDF.",
-    title: "Dopo la visita, il preventivo",
+    title: "Dopo il sopralluogo, il preventivo",
     text: "Il professionista ti manda il preventivo in chat. Ogni voce ha il suo prezzo, poi trovi imponibile, IVA e totale.",
     points: ["Toccalo per vedere il dettaglio e aprire o scaricare il PDF", "Tocca «Accetta» o «Rifiuta» sulla scheda in chat", "Se durante il lavoro il prezzo cambia, ricevi un preventivo aggiornato con motivo e foto. Decidi tu se accettarlo"],
     tip: "Se il preventivo non ti convince, rifiutalo. Paghi solo il Costo Chiamata, se era nella stima che hai accettato.",
@@ -90,7 +90,7 @@ const STEPS: GuideStep[] = [
 const CLIENT_FAQ = [
   {
     q: "Che differenza c'è tra stima e preventivo?",
-    a: "La stima arriva prima della visita: è indicativa e, se la accetti, confermi l'appuntamento. Il preventivo arriva dopo la visita, voce per voce. Vale solo se lo accetti.",
+    a: "La stima arriva prima del sopralluogo: è indicativa e, se la accetti, confermi l'appuntamento. Il preventivo arriva dopo il sopralluogo, voce per voce. Vale solo se lo accetti.",
   },
   {
     q: "Se scelgo tre professionisti, pago tre chiamate?",

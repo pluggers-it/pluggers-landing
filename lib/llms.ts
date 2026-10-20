@@ -14,7 +14,7 @@ const PRELAUNCH_URL = `${SITE_URL}${PRELAUNCH_PATH}`;
 const facts = (inStores: boolean) =>
   `${ORG.name} è gestita da ${ORG.legalName}, sede legale in ${ORG_ADDRESS_LINE}, P.IVA ${ORG.vatNumber}. ` +
   "Per chi cerca un professionista è gratis: se il professionista chiede un Costo Chiamata lo indica " +
-  "nell'app prima della visita, e il compenso si paga direttamente a lui, non nell'app. " +
+  "nell'app prima del sopralluogo, e il compenso si paga direttamente a lui, non nell'app. " +
   (!inStores
     ? `È un'app per iPhone e Android in arrivo a breve sugli store: chi vuole usarla lascia i contatti nella pre-iscrizione (${PRELAUNCH_URL}) e riceve un avviso quando è disponibile. `
     : WEB_APP_OPEN
@@ -39,7 +39,7 @@ ${facts(inStores)}
 ## Pagine principali
 
 - [Home](${SITE_URL}/): cos'è Pluggers, come funziona, mestieri, professionisti e domande frequenti
-- [Come funziona](${SITE_URL}/#come-funziona): dalla descrizione del problema alla visita
+- [Come funziona](${SITE_URL}/#come-funziona): dalla descrizione del problema al sopralluogo
 - [Professionisti per la casa a Torino](${SITE_URL}/torino): tutti i mestieri disponibili a Torino
 - [Per i professionisti](${SITE_URL}/#professionisti): cosa offre Pluggers a chi lavora nella casa
 - [Domande frequenti](${SITE_URL}/#domande-frequenti): costi, zone, assistente, professionisti
