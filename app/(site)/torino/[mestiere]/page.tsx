@@ -70,7 +70,7 @@ export default async function TradePage({ params }: Props) {
             Oggi attivo a Torino
           </p>
           <div className="mt-8">
-            <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+            <AppLink beforeLaunch="Pre-iscriviti" className={`${BTN_PRIMARY} w-full sm:w-auto`}>
               Apri Pluggers
             </AppLink>
           </div>
@@ -138,7 +138,7 @@ export default async function TradePage({ params }: Props) {
         </h2>
         <FaqList items={trade.faq} />
         <div className="mt-10 flex flex-wrap gap-3">
-          <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+          <AppLink beforeLaunch="Pre-iscriviti" className={`${BTN_PRIMARY} w-full sm:w-auto`}>
             Apri Pluggers
           </AppLink>
           <Link href="/#come-funziona" className={`${BTN_OUTLINE} w-full sm:w-auto`}>

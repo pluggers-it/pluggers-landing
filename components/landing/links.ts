@@ -5,7 +5,8 @@
 export const WEB_APP_URL = "https://app.plggrs.it";
 /** The web app straight on the professional sign-up: the app reads `registrati`. */
 export const PRO_SIGNUP_URL = `${WEB_APP_URL}/?registrati=professionista`;
-export const APP_STORE_URL = "https://testflight.apple.com/join/p9mmTZrK";
+export const TESTFLIGHT_URL = "https://testflight.apple.com/join/p9mmTZrK";
+export const APP_STORE_URL = TESTFLIGHT_URL;
 export const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=it.pluggers.app";
 /** The anchor of a page's store badges, where links into the web app lead from a computer while it is closed. */
 export const STORE_BADGES_ID = "scarica";
@@ -53,6 +54,22 @@ export function appDestination(href: string): "ios" | "android" | "web" | null {
   if (href.startsWith(PLAY_STORE_URL)) return "android";
   if (href.startsWith(`${WEB_APP_URL}/`) || href === WEB_APP_URL) return "web";
   return null;
+}
+
+/** The pre-registration form, where links into Pluggers lead until the app is in the stores (`appInStores` in lib/prelaunch.ts). */
+export const PRELAUNCH_PATH = "/preiscrizione";
+
+/**
+ * Whether the pre-registration's thank-you also offers the beta: TestFlight on iPhone, the closed test on Android.
+ * Off until the owner decides.
+ */
+export const BETA_BEFORE_LAUNCH: boolean = false;
+
+/** Where a link into Pluggers leads before launch: the pre-registration, told the page it came from. The professional sign-up preselects the role. */
+export function prelaunchUrl(from: string, href: string = WEB_APP_URL): string {
+  const query = new URLSearchParams({ da: from });
+  if (href === PRO_SIGNUP_URL) query.set("ruolo", "pro");
+  return `${PRELAUNCH_PATH}?${query}`;
 }
 
 /** The web app with the parameters it reads: `ref`, the invite code, and `p`, the token of an estimate link. */

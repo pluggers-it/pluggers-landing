@@ -105,7 +105,8 @@ export const TRUST = {
   ],
 };
 
-export const FAQ = [
+/** The answers on getting the app follow the admin switch (lib/prelaunch.ts): before launch they point to the pre-registration. */
+export const faq = (inStores: boolean) => [
   {
     q: "Che cos'è Pluggers?",
     a: "Pluggers è un'app che ti mette in contatto con i professionisti per la casa della tua zona partendo dalla descrizione del problema. La gestisce Pluggers S.r.l., con sede legale a Torino, ed è attiva a Torino.",
@@ -116,7 +117,7 @@ export const FAQ = [
   },
   {
     q: "Come trovo un idraulico o un elettricista a Torino in fretta?",
-    a: `${WEB_APP_OPEN ? "Apri Pluggers su app.plggrs.it" : "Scarica Pluggers su iPhone o Android"} e descrivi il problema: l'assistente capisce quale mestiere serve e quanto è urgente, e ti mostra i professionisti che lavorano nella tua zona. Scegli a chi mandare la richiesta e ricevi le risposte in chat. Quando può venire lo concordi con il professionista.`,
+    a: `${!inStores ? "Pluggers arriva a breve su iPhone e Android: lascia i contatti nella pre-iscrizione e ti avvisiamo appena è disponibile. Con l'app descrivi" : WEB_APP_OPEN ? "Apri Pluggers su app.plggrs.it e descrivi" : "Scarica Pluggers su iPhone o Android e descrivi"} il problema: l'assistente capisce quale mestiere serve e quanto è urgente, e ti mostra i professionisti che lavorano nella tua zona. Scegli a chi mandare la richiesta e ricevi le risposte in chat. Quando può venire lo concordi con il professionista.`,
   },
   {
     q: "Cos'è il Costo Chiamata?",
@@ -140,7 +141,9 @@ export const FAQ = [
   },
   {
     q: "Serve scaricare un'app?",
-    a: WEB_APP_OPEN
+    a: !inStores
+      ? "Sì: Pluggers è un'app per iPhone e Android e arriva a breve sugli store. Lascia i contatti nella pre-iscrizione: ti avvisiamo appena è disponibile."
+      : WEB_APP_OPEN
       ? "Sì: Pluggers è un'app per iPhone e Android. Da computer la usi anche dal browser, su app.plggrs.it."
       : "Sì: Pluggers è un'app per iPhone e Android. La versione da usare dal computer è in arrivo.",
   },

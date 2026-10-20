@@ -177,7 +177,7 @@ export default async function BlogPostPage(
                 <p className="mt-2 text-[15px] leading-[1.55] text-muted">
                   Richieste già descritte e classificate, dai clienti dentro il raggio che scegli tu.
                 </p>
-                <AppLink className={`${BTN_PRIMARY} mt-5 w-full`}>
+                <AppLink beforeLaunch="Pre-iscriviti" className={`${BTN_PRIMARY} mt-5 w-full`}>
                   Apri Pluggers
                 </AppLink>
                 <Link href="/professionisti" className="mt-2 inline-flex min-h-12 items-center text-[15px] font-semibold underline underline-offset-4">

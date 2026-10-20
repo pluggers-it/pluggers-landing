@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/JsonLd";
-import { FAQ, HOME, HOW } from "@/lib/home";
+import { faq, HOME, HOW } from "@/lib/home";
+import { appInStores } from "@/lib/prelaunch";
 import { appSchema, faqSchema, graph, pageMetadata, pageSchema, serviceSchema } from "@/lib/seo";
 import { SITE_URL } from "@/lib/site";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -21,20 +22,22 @@ export const metadata: Metadata = pageMetadata({
   absolute: true,
 });
 
-export default function Home() {
+export default async function Home() {
+  const inStores = await appInStores();
+  const faqItems = faq(inStores);
   return (
     <div className="min-h-screen bg-page text-ink">
       <JsonLd
         data={graph(
           pageSchema({ path: "/", name: "Pluggers", mainEntity: `${SITE_URL}/#app` }),
-          appSchema,
+          appSchema(inStores),
           serviceSchema({
             name: "Pluggers",
             serviceType: "Ricerca di professionisti per interventi in casa",
             description: HOW.lede,
             path: "/",
           }),
-          faqSchema(FAQ)
+          faqSchema(faqItems)
         )}
       />
       <LandingHeader />
@@ -45,7 +48,7 @@ export default function Home() {
         <ForPros />
         <TrustRows />
         <ComingSoon />
-        <Faq />
+        <Faq items={faqItems} />
       </main>
       <div className={CONTAINER}>
         {/* The mark alone, in the quiet text colour, so it reads in both themes. */}

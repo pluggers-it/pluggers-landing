@@ -59,7 +59,7 @@ export function LandingHeader() {
               </li>
             ))}
           </ul>
-          <AppLink className={BTN_OUTLINE}>
+          <AppLink beforeLaunch="Pre-iscriviti" className={BTN_OUTLINE}>
             Apri Pluggers
           </AppLink>
           {/* phones and tablets: the same links behind a menu, no script needed */}

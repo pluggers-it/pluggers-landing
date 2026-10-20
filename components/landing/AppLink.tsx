@@ -1,7 +1,9 @@
 "use client";
 
-import { useSyncExternalStore, type ComponentProps } from "react";
-import { appLinkUrl, STORE_BADGES_ID, storeUrlFor, WEB_APP_URL } from "./links";
+import { useSyncExternalStore, type ComponentProps, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
+import { useInStores } from "./InStores";
+import { appLinkUrl, prelaunchUrl, STORE_BADGES_ID, storeUrlFor, WEB_APP_URL } from "./links";
 
 const subscribe = () => () => {};
 
@@ -23,17 +25,28 @@ type WhenClosed = "soon" | "stores" | "demo";
  * With `store={false}` a phone gets its store only once anyone can install from it (see `appLinkUrl`), and stays on `href` otherwise.
  * While the web app is closed phones get their store, and computers what `whenClosed` says.
  * With `computerOnly` it shows on computers only: phones and tablets with a store render nothing.
+ * Until the app is in the stores every device gets the pre-registration, with the `beforeLaunch` label if given.
  */
 export function AppLink({
   href = WEB_APP_URL,
   store = true,
   whenClosed = "soon",
   computerOnly = false,
+  beforeLaunch,
   children,
   className = "",
   ...props
-}: ComponentProps<"a"> & { store?: boolean; whenClosed?: WhenClosed; computerOnly?: boolean }) {
+}: ComponentProps<"a"> & { store?: boolean; whenClosed?: WhenClosed; computerOnly?: boolean; beforeLaunch?: ReactNode }) {
   const storeUrl = useSyncExternalStore(subscribe, deviceStoreUrl, () => null);
+  const inStores = useInStores();
+  const pathname = usePathname();
+  if (!inStores) {
+    return (
+      <a {...props} className={className} href={prelaunchUrl(pathname, href)}>
+        {beforeLaunch ?? children}
+      </a>
+    );
+  }
   if (computerOnly && storeUrl) return null;
   const url = appLinkUrl(href, storeUrl, store);
   if (!url && whenClosed === "stores") {

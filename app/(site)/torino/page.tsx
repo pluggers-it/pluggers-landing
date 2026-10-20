@@ -55,7 +55,7 @@ export default function TorinoPage() {
           Oggi attivo a Torino
         </p>
         <div className="mt-8">
-          <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+          <AppLink beforeLaunch="Pre-iscriviti" className={`${BTN_PRIMARY} w-full sm:w-auto`}>
             Apri Pluggers
           </AppLink>
         </div>
@@ -103,7 +103,7 @@ export default function TorinoPage() {
         </h2>
         <FaqList items={TORINO.faq} />
         <div className="mt-10">
-          <AppLink className={`${BTN_PRIMARY} w-full sm:w-auto`}>
+          <AppLink beforeLaunch="Pre-iscriviti" className={`${BTN_PRIMARY} w-full sm:w-auto`}>
             Apri Pluggers
           </AppLink>
         </div>
