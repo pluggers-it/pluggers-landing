@@ -20,7 +20,7 @@ export const HOME = {
 };
 
 export const HERO = {
-  eyebrow: "La piattaforma per ogni intervento, in qualsiasi luogo",
+  eyebrow: "Scrivi e fotografa il problema, al resto pensiamo noi",
   title: "Il professionista giusto, al momento giusto.",
   lede: "Racconti il problema, se le parole non bastano fai una foto, Pluggers capisce quale mestiere ti serve e ti mette in contatto con i professionisti della tua zona. Stima, preventivo, appuntamento e intervento si gestiscono in app.",
 };
