@@ -6,6 +6,7 @@ import { postPath } from "@/lib/postPath";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { ArrowLeft, Plus, Trash2, LogOut, Loader2, User, Lock, UserPlus, ShieldCheck } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { MarkdownEditor } from "@/components/MarkdownEditor";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -291,6 +292,7 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
               <ArrowLeft className="h-3.5 w-3.5" />
               Blog
             </Link>
+            <ThemeToggle />
             <button
               onClick={handleLogout}
               className="flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-[var(--color-panel)] px-4 py-2 font-mono text-xs text-[var(--color-muted)] transition hover:border-red-500/50 hover:text-red-400"

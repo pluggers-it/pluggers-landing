@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /*
  * Design tokens shared with the Pluggers app ("base 2").
- * Light theme only (site review S-03).
+ * Light is the default; next-themes puts `.dark` on <html>.
  */
 :root {
   color-scheme: light;
@@ -40,6 +42,29 @@
   --panel: var(--surface);
   --panel-2: var(--page);
   --border: var(--hair);
+}
+
+html.dark {
+  color-scheme: dark;
+  --page: #0f1115;
+  --surface: #1a1622;
+  --surface-rest: #241e30;
+  --ink: #f4f1fb;
+  --muted: rgba(244, 241, 251, 0.7);
+  --hair: rgba(244, 241, 251, 0.08);
+  --line: rgba(244, 241, 251, 0.38);
+  --accent-text: #a78bfa;
+  --accent-soft: rgba(167, 139, 250, 0.14);
+  --danger: #ff7a8a;
+  --phone: #2e2740;
+  --spina-corpo: var(--accent-bright);
+  --spina-collare: var(--accent);
+  --spina-accesa: #b794ff;
+  --shadow-card: 0 0 0 1px rgba(244, 241, 251, 0.06),
+    0 24px 48px -32px rgba(0, 0, 0, 0.6);
+  --shadow-lit: 0 0 0 2px var(--accent-text),
+    0 24px 56px -24px rgba(134, 59, 255, 0.6);
+  --panel-2: #241e30;
 }
 
 @theme inline {

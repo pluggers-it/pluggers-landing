@@ -142,7 +142,7 @@ export default function ProfessionistiPage() {
             const Icon = ICONS[i];
             return (
             <li key={b.title}>
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent-deep">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent-deep dark:text-accent-text">
                 <Icon className="h-5 w-5" strokeWidth={1.8} aria-hidden />
               </span>
               <h3 className="mt-4 text-[17px] font-bold leading-snug">{b.title}</h3>

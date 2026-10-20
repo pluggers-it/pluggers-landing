@@ -26,7 +26,7 @@ export function ForPros() {
               const Icon = ICONS[i];
               return (
               <li key={title} className="flex gap-4 py-5 first:pt-0">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent-deep">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent-deep dark:text-accent-text">
                   <Icon className="h-5 w-5" strokeWidth={1.8} aria-hidden />
                 </span>
                 <div>
