@@ -84,7 +84,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Sai quanto costa prima che arrivi",
-        text: "In chat ricevi una stima. Se l'idraulico chiede un Costo Chiamata per venire, lo vedi prima della visita e decidi se accettarlo; lo paghi a lui, e se fai il lavoro si scala dal totale.",
+        text: "In chat ricevi una stima. Se l'idraulico chiede un Costo Chiamata per venire, lo vedi prima del sopralluogo e decidi se accettarlo; lo paghi a lui, e se fai il lavoro si scala dal totale.",
       },
       {
         title: "Inizio e fine con un QR",
@@ -100,7 +100,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Quanto costa la chiamata di un idraulico con Pluggers?",
-        a: "Il Costo Chiamata, se c'è, lo decide l'idraulico e lo vedi nell'app prima della visita: puoi accettarlo o rifiutarlo, e lo paghi a lui. Il lavoro è a parte: prima ricevi una stima, poi il preventivo, che vale solo se lo accetti.",
+        a: "Il Costo Chiamata, se c'è, lo decide l'idraulico e lo vedi nell'app prima del sopralluogo: puoi accettarlo o rifiutarlo, e lo paghi a lui. Il lavoro è a parte: prima ricevi una stima, poi il preventivo, che vale solo se lo accetti.",
       },
       {
         q: "Cosa faccio mentre aspetto l'idraulico?",
@@ -144,7 +144,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Scegli e confronta la stima",
-        text: "Scegli fino a tre elettricisti tra quelli che lavorano vicino a te. La stima arriva in chat; l'eventuale Costo Chiamata lo vedi prima della visita e lo paghi a lui.",
+        text: "Scegli fino a tre elettricisti tra quelli che lavorano vicino a te. La stima arriva in chat; l'eventuale Costo Chiamata lo vedi prima del sopralluogo e lo paghi a lui.",
       },
       {
         title: "Preventivo dopo il controllo",
@@ -160,7 +160,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Quanto costa far venire un elettricista con Pluggers?",
-        a: "Pluggers non fissa prezzi: la stima te la manda l'elettricista in chat e il Costo Chiamata, se lo chiede, lo vedi prima della visita. Si paga direttamente a lui, non nell'app. Se fai il lavoro, il Costo Chiamata si scala dal totale.",
+        a: "Pluggers non fissa prezzi: la stima te la manda l'elettricista in chat e il Costo Chiamata, se lo chiede, lo vedi prima del sopralluogo. Si paga direttamente a lui, non nell'app. Se fai il lavoro, il Costo Chiamata si scala dal totale.",
       },
       {
         q: "Un elettricista su Pluggers installa anche lampadari e punti luce?",
@@ -204,7 +204,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Apertura e serratura nuova sono cose diverse",
-        text: "Nella stima il fabbro ti dice cosa propone: aprire la porta, sostituire il cilindro o la serratura. L'eventuale Costo Chiamata lo vedi prima della visita e lo paghi a lui.",
+        text: "Nella stima il fabbro ti dice cosa propone: aprire la porta, sostituire il cilindro o la serratura. L'eventuale Costo Chiamata lo vedi prima del sopralluogo e lo paghi a lui.",
       },
       {
         title: "Arrivo registrato con un QR",
@@ -220,7 +220,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Quanto costa aprire una porta con un fabbro di Pluggers?",
-        a: "Dipende dalla porta e dalla serratura, quindi la cifra te la dà il fabbro: prima con una stima in chat, poi con il preventivo, che vale solo se lo accetti. Se chiede un Costo Chiamata, lo vedi prima della visita e lo paghi a lui.",
+        a: "Dipende dalla porta e dalla serratura, quindi la cifra te la dà il fabbro: prima con una stima in chat, poi con il preventivo, che vale solo se lo accetti. Se chiede un Costo Chiamata, lo vedi prima del sopralluogo e lo paghi a lui.",
       },
       {
         q: "Ho perso le chiavi: devo cambiare tutta la serratura?",
@@ -264,10 +264,10 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Riparare o cambiare?",
-        text: "La stima arriva in chat prima della visita, così hai un'idea della spesa. Il preventivo vero il tecnico lo fa dopo aver visto il guasto, e vale solo se lo accetti.",
+        text: "La stima arriva in chat prima del sopralluogo, così hai un'idea della spesa. Il preventivo vero il tecnico lo fa dopo aver visto il guasto, e vale solo se lo accetti.",
       },
       {
-        title: "Visita, QR e recensione",
+        title: "Sopralluogo, QR e recensione",
         text: "Scegli il giorno e il tecnico propone l'orario. L'eventuale Costo Chiamata lo conosci prima e lo paghi a lui; inizio e fine si registrano con il QR che ti mostra.",
       },
     ],
@@ -280,11 +280,11 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Conviene riparare un elettrodomestico o comprarne uno nuovo?",
-        a: "Dipende dal guasto e dal costo del ricambio. Con Pluggers ricevi una stima in chat prima della visita e poi il preventivo dopo il controllo: con quei numeri puoi decidere se riparare o cambiare.",
+        a: "Dipende dal guasto e dal costo del ricambio. Con Pluggers ricevi una stima in chat prima del sopralluogo e poi il preventivo dopo il controllo: con quei numeri puoi decidere se riparare o cambiare.",
       },
       {
         q: "Quanto costa far venire un tecnico per la lavatrice o il frigo?",
-        a: "L'importo lo decide il tecnico: la stima arriva in chat e il Costo Chiamata, se lo chiede, lo vedi prima della visita. Si paga a lui, non nell'app, e se fai la riparazione il Costo Chiamata si scala dal totale.",
+        a: "L'importo lo decide il tecnico: la stima arriva in chat e il Costo Chiamata, se lo chiede, lo vedi prima del sopralluogo. Si paga a lui, non nell'app, e se fai la riparazione il Costo Chiamata si scala dal totale.",
       },
       {
         q: "Il tecnico ripara anche il piano cottura a gas?",
@@ -387,8 +387,8 @@ export const TRADES: Trade[] = [
         text: "La stima in chat ti dà un ordine di grandezza; per legno, ferramenta e finiture il falegname ti fa il preventivo dopo aver visto il lavoro, e vale solo se lo accetti.",
       },
       {
-        title: "Visita con check-in",
-        text: "L'eventuale Costo Chiamata lo vedi prima della visita e lo paghi a lui. All'arrivo e alla fine registrate l'intervento con un QR.",
+        title: "Sopralluogo con check-in",
+        text: "L'eventuale Costo Chiamata lo vedi prima del sopralluogo e lo paghi a lui. All'arrivo e alla fine registrate l'intervento con un QR.",
       },
     ],
     emergency:
@@ -447,7 +447,7 @@ export const TRADES: Trade[] = [
         text: "Ricariche e installazioni toccano il gas refrigerante, che può maneggiare solo personale certificato. Se devi ricaricare o installare, chiedi in chat che il tecnico abbia la certificazione per i gas fluorurati.",
       },
       {
-        title: "Visita e QR",
+        title: "Sopralluogo e QR",
         text: "Scegli il giorno e il tecnico propone l'orario. L'eventuale Costo Chiamata lo vedi prima e lo paghi a lui; l'intervento si apre e si chiude con un QR.",
       },
     ],
@@ -460,7 +460,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Quanto costa la manutenzione del condizionatore con Pluggers?",
-        a: "Il prezzo lo indica il tecnico: ricevi la stima in chat e, se chiede un Costo Chiamata, lo vedi prima della visita. Paghi direttamente lui, non nell'app.",
+        a: "Il prezzo lo indica il tecnico: ricevi la stima in chat e, se chiede un Costo Chiamata, lo vedi prima del sopralluogo. Paghi direttamente lui, non nell'app.",
       },
       {
         q: "Posso far installare un condizionatore nuovo?",
@@ -504,7 +504,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Scegli il termoidraulico",
-        text: "Vedi i termoidraulici che lavorano nella tua zona, dal più vicino, e mandi la richiesta fino a tre. La stima arriva in chat e l'eventuale Costo Chiamata lo vedi prima della visita.",
+        text: "Vedi i termoidraulici che lavorano nella tua zona, dal più vicino, e mandi la richiesta fino a tre. La stima arriva in chat e l'eventuale Costo Chiamata lo vedi prima del sopralluogo.",
       },
       {
         title: "Intervento registrato",
@@ -520,7 +520,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Quanto costa far venire un termoidraulico con Pluggers?",
-        a: "L'importo lo decide il termoidraulico: la stima arriva in chat, il Costo Chiamata se lo chiede lo vedi prima della visita. Paghi direttamente lui, e se fai il lavoro il Costo Chiamata si scala dal totale.",
+        a: "L'importo lo decide il termoidraulico: la stima arriva in chat, il Costo Chiamata se lo chiede lo vedi prima del sopralluogo. Paghi direttamente lui, e se fai il lavoro il Costo Chiamata si scala dal totale.",
       },
       {
         q: "Che differenza c'è tra idraulico e termoidraulico su Pluggers?",
@@ -580,7 +580,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Quanto costa cambiare la cinghia della tapparella con Pluggers?",
-        a: "Il prezzo lo fa il serramentista: ricevi una stima in chat e, se chiede un Costo Chiamata, lo vedi prima della visita. Paghi direttamente lui, non nell'app.",
+        a: "Il prezzo lo fa il serramentista: ricevi una stima in chat e, se chiede un Costo Chiamata, lo vedi prima del sopralluogo. Paghi direttamente lui, non nell'app.",
       },
       {
         q: "Il serramentista ripara anche le serrande dei negozi e dei garage?",
@@ -588,7 +588,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Si possono far misurare le finestre per le zanzariere?",
-        a: "Sì. Scrivi quante finestre e di che tipo sono; se non hai le misure, il serramentista le prende durante la visita e poi ti manda il preventivo.",
+        a: "Sì. Scrivi quante finestre e di che tipo sono; se non hai le misure, il serramentista le prende durante il sopralluogo e poi ti manda il preventivo.",
       },
     ],
   },
@@ -640,7 +640,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Quanto costa un muratore con Pluggers?",
-        a: "Pluggers non fissa prezzi: il muratore ti manda una stima in chat e, dopo il sopralluogo, il preventivo, che vale solo se lo accetti. Il Costo Chiamata, se lo chiede, lo vedi prima della visita e lo paghi a lui.",
+        a: "Pluggers non fissa prezzi: il muratore ti manda una stima in chat e, dopo il sopralluogo, il preventivo, che vale solo se lo accetti. Il Costo Chiamata, se lo chiede, lo vedi prima del sopralluogo e lo paghi a lui.",
       },
       {
         q: "Ho umidità sul muro: chiamo un muratore o un idraulico?",
@@ -700,7 +700,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Quanto costa rifare il silicone della doccia con Pluggers?",
-        a: "L'importo lo decide il piastrellista e lo ricevi come stima in chat; il Costo Chiamata, se c'è, lo vedi prima della visita. Si paga direttamente a lui, non nell'app.",
+        a: "L'importo lo decide il piastrellista e lo ricevi come stima in chat; il Costo Chiamata, se c'è, lo vedi prima del sopralluogo. Si paga direttamente a lui, non nell'app.",
       },
       {
         q: "Perché le piastrelle del pavimento si sono sollevate?",
@@ -744,7 +744,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Stima e smaltimento",
-        text: "Nella stima chiedi se è compreso lo smaltimento del verde tagliato. L'eventuale Costo Chiamata lo vedi prima della visita e lo paghi a lui.",
+        text: "Nella stima chiedi se è compreso lo smaltimento del verde tagliato. L'eventuale Costo Chiamata lo vedi prima del sopralluogo e lo paghi a lui.",
       },
       {
         title: "Lavoro con check-in",
@@ -843,7 +843,7 @@ export const TRADES: Trade[] = [
       "Mobili da montare, mensole e quadri da appendere, staffa per la TV: descrivi il lavoro su Pluggers e scegli tra i montatori della tua zona di Torino.",
     summary: "Montaggio e smontaggio di mobili, mensole, quadri e staffe TV.",
     intro:
-      "Su Pluggers trovi un montatore di mobili a Torino per montare o smontare mobili, appendere mensole e quadri, fissare una staffa per la TV. Descrivi il lavoro, scrivi quali mobili sono e di che materiale è la parete, e scegli fino a tre montatori che lavorano nella tua zona. La stima arriva in chat prima della visita.",
+      "Su Pluggers trovi un montatore di mobili a Torino per montare o smontare mobili, appendere mensole e quadri, fissare una staffa per la TV. Descrivi il lavoro, scrivi quali mobili sono e di che materiale è la parete, e scegli fino a tre montatori che lavorano nella tua zona. La stima arriva in chat prima del sopralluogo.",
     problemsLede: "Le richieste per un montatore partono quasi sempre da una consegna o da un trasloco.",
     problems: [
       "Mi hanno consegnato un armadio in scatola e non so montarlo",
@@ -864,7 +864,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Stima in base ai pezzi",
-        text: "Più il lavoro è descritto, più la stima in chat è vicina al prezzo finale. L'eventuale Costo Chiamata lo vedi prima della visita e lo paghi a lui.",
+        text: "Più il lavoro è descritto, più la stima in chat è vicina al prezzo finale. L'eventuale Costo Chiamata lo vedi prima del sopralluogo e lo paghi a lui.",
       },
       {
         title: "Montaggio registrato",
@@ -880,7 +880,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Quanto costa montare un armadio con Pluggers?",
-        a: "Il prezzo lo fa il montatore in base a mobile, pezzi e tempo: ricevi una stima in chat prima della visita. Il Costo Chiamata, se c'è, lo vedi prima e lo paghi direttamente a lui.",
+        a: "Il prezzo lo fa il montatore in base a mobile, pezzi e tempo: ricevi una stima in chat prima del sopralluogo. Il Costo Chiamata, se c'è, lo vedi prima e lo paghi direttamente a lui.",
       },
       {
         q: "Il montatore può appendere la TV su una parete in cartongesso?",

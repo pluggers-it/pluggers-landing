@@ -56,15 +56,15 @@ const STEPS: GuideStep[] = [
     title: "Ricevi le richieste",
     text: "Le richieste arrivano dai clienti della tua zona che ti hanno scelto. Ognuna ha giorno, mestiere, problema, distanza da te e una cifra di riferimento calcolata dall'app.",
     points: ["Apri quelle che ti interessano", "Rifiuta le altre"],
-    tip: "Guarda il referto e le foto prima di uscire: spesso bastano per capire che pezzo portare.",
+    tip: "Guarda la scheda del problema e le foto prima di uscire: spesso bastano per capire che pezzo portare.",
   },
   {
     id: "preventivo", short: "Stima e preventivo", src: `${G}/05.webp`,
     alt: "Schermata «Nuovo preventivo»: la stima automatica con la fascia tipica, le voci del preventivo e il bottone «Invia preventivo».",
-    title: "Prima la stima, dopo la visita il preventivo",
-    text: "Prima della visita mandi una stima: quanto può costare il lavoro e l'eventuale Costo Chiamata. Se il cliente la accetta, l'appuntamento è confermato. Dopo la visita mandi il preventivo, voce per voce.",
+    title: "Prima la stima, dopo il sopralluogo il preventivo",
+    text: "Prima del sopralluogo mandi una stima: quanto può costare il lavoro e l'eventuale Costo Chiamata. Se il cliente la accetta, l'appuntamento è confermato. Dopo il sopralluogo mandi il preventivo, voce per voce.",
     points: ["L'app ti suggerisce una cifra, puoi cambiarla", "Imponibile, IVA e totale li calcola l'app, il cliente riceve anche il PDF", "Se in corso d'opera il prezzo cambia, mandi un preventivo aggiornato con motivo e foto"],
-    tip: "Il Costo Chiamata è quello che chiedi per venire a vedere. Se il cliente l'ha accettato con la stima, ti spetta anche se poi rifiuta il preventivo.",
+    tip: "Il Costo Chiamata è quello che chiedi per effettuare il sopralluogo. Se il cliente l'ha accettato con la stima, ti spetta anche se poi rifiuta il preventivo.",
   },
   {
     id: "agenda", short: "Agenda", src: `${G}/06.webp`,
@@ -97,7 +97,7 @@ const FAQ = [
   },
   {
     q: "Che differenza c'è tra stima e preventivo?",
-    a: "La stima la mandi prima della visita: è indicativa, e quando il cliente la accetta l'appuntamento è confermato. Il preventivo lo mandi dopo la visita, voce per voce. Vale solo se il cliente lo accetta.",
+    a: "La stima la mandi prima del sopralluogo: è indicativa, e quando il cliente la accetta l'appuntamento è confermato. Il preventivo lo mandi dopo il sopralluogo, voce per voce. Vale solo se il cliente lo accetta.",
   },
   {
     q: "Chi decide il prezzo?",
@@ -142,7 +142,7 @@ export default function ProfessionistiPage() {
             const Icon = ICONS[i];
             return (
             <li key={b.title}>
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent-deep">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent-deep dark:text-accent-text">
                 <Icon className="h-5 w-5" strokeWidth={1.8} aria-hidden />
               </span>
               <h3 className="mt-4 text-[17px] font-bold leading-snug">{b.title}</h3>

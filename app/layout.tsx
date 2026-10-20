@@ -6,6 +6,8 @@ import "./globals.css";
 import { ConsentProvider } from "@/lib/consent";
 import { ConsentGate } from "@/components/ConsentGate";
 import { BackToTop } from "@/components/BackToTop";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeSwitch } from "@/components/ThemeSwitch";
 import { JsonLd } from "@/components/JsonLd";
 import { InStoresProvider } from "@/components/landing/InStores";
 import { HOME } from "@/lib/home";
@@ -41,11 +43,14 @@ export default async function RootLayout({
 }>) {
   const inStores = await appInStores();
   return (
-    <html lang="it">
+    <html lang="it" suppressHydrationWarning>
       <body className={`${jakarta.variable} font-sans antialiased`}>
         <JsonLd data={graph(organizationSchema, websiteSchema)} />
         <ConsentProvider>
-          <InStoresProvider value={inStores}>{children}</InStoresProvider>
+          <ThemeProvider>
+            <InStoresProvider value={inStores}>{children}</InStoresProvider>
+            <ThemeSwitch />
+          </ThemeProvider>
           <ConsentGate />
           <Analytics />
           <MetaPixel />
