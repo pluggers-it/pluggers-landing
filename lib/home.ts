@@ -49,7 +49,7 @@ export const HOW = {
       alt: "Schermata «Cosa abbiamo capito»: chi serve (Idraulico), urgenza 2 su 5, cause probabili e bottone «Cerca un professionista».",
     },
     {
-      title: "Stima prima, QR dopo",
+      title: "Prima stima, poi preventivo, per concludere il QR Code",
       text: "Il professionista ti manda in chat una stima e, se lo chiede, il Costo Chiamata. All'arrivo registrate inizio e fine intervento con un QR, poi lasci la recensione.",
       src: "/screens/step-estimate.png",
       alt: "Chat con il professionista: la foto del guasto, un messaggio e una stima di 85 euro con i bottoni Accetta e Rifiuta.",
