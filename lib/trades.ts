@@ -224,7 +224,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Ho perso le chiavi: devo cambiare tutta la serratura?",
-        a: "Non sempre. Su molte porte basta sostituire il cilindro, che è la parte dove entra la chiave. Scrivilo nella richiesta e allega una foto della serratura: il fabbro ti dice nella stima cosa serve.",
+        a: "Non sempre. Su molte porte basta sostituire il cilindro, che è la parte dove entra la chiave. Scrivilo nella richiesta e allega una foto della serratura: l'assistente ne tiene conto e il fabbro ti dice nella stima cosa serve.",
       },
       {
         q: "Il fabbro ripara anche cancelli e inferriate?",

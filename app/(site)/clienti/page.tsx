@@ -66,7 +66,7 @@ const STEPS: GuideStep[] = [
     id: "stima", short: "La stima", src: `${G}/06.webp`,
     alt: "Chat con il professionista: la foto del rubinetto, un messaggio e la scheda «Stima» con il lavoro previsto, i materiali e i bottoni «Accetta» e «Rifiuta».",
     title: "Ricevi la stima in chat",
-    text: "Il professionista guarda descrizione e foto. Poi ti scrive quanto può costare il lavoro. Se chiede un Costo Chiamata, cioè la cifra per il sopralluogo, lo trovi all'interno della stima.",
+    text: "Il professionista legge la scheda del problema preparata dall'intelligenza artificiale. Poi ti scrive quanto può costare il lavoro. Se chiede un Costo Chiamata, cioè la cifra per il sopralluogo, lo trovi all'interno della stima.",
     points: ["La stima è indicativa: il prezzo esatto è nel preventivo, dopo il sopralluogo", "Tocca «Accetta» e l'appuntamento è confermato: le richieste agli altri professionisti si chiudono", "Tocca «Rifiuta» e non devi fare niente"],
     tip: "Hai un dubbio? Chiedilo in chat prima di accettare, anche con una foto.",
   },

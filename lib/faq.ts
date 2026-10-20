@@ -113,10 +113,6 @@ const PRO: FaqItem[] = [
     a: "Scegli tutti i mestieri che fai: i clienti ti trovano così. Per ogni mestiere i lavori più comuni sono già selezionati e togli quelli che non fai. Poi indichi l'indirizzo da cui parti e fin dove ti sposti, da 1 a 100 km, e le città in cui accetti interventi. Ricevi solo richieste dentro quella distanza.",
   },
   {
-    q: "Posso verificare la mia identità?",
-    a: "Sì, è facoltativa e la trovi nel profilo. Fotografi il documento e fai un selfie: ci vogliono circa due minuti e l'esito compare nell'app. Se la verifica riesce, sulla tua scheda compare il badge «Identità verificata». Il controllo lo fa un servizio esterno: noi teniamo solo l'esito e la scadenza del documento, non le foto né il numero.",
-  },
-  {
     q: "Come ricevo le richieste?",
     a: "Le richieste dei clienti che ti hanno scelto arrivano nella sezione «Richieste», divise in «Da decidere» e «Da preventivare». Ognuna mostra il giorno chiesto, il problema, la distanza da te e una cifra di riferimento calcolata dall'app, e puoi leggere le parole del cliente e la scheda del problema. La stessa richiesta può arrivare fino a tre professionisti: il lavoro va a chi arriva per primo alla conferma.",
   },
