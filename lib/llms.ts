@@ -4,7 +4,8 @@
  */
 import { APP_STORE_URL, PLAY_STORE_URL, PRELAUNCH_PATH, WEB_APP_OPEN, WEB_APP_URL } from "@/components/landing/links";
 import { ABOUT, COMPANY_FACTS, NEXT, PRINCIPLES, STORY, WHAT, WHERE } from "@/lib/about";
-import { faq, HERO, HOW, PROS, TRADES_SECTION, TRUST } from "@/lib/home";
+import { COSTS_LINE, faq, HERO, HOW, PROS, TRADES_SECTION, TRUST } from "@/lib/home";
+import { faqGroups } from "@/lib/faq";
 import { ORG, ORG_ADDRESS_LINE, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 import { TORINO, TRADE_GROUPS, TRADES, type Trade } from "@/lib/trades";
 
@@ -13,8 +14,8 @@ const PRELAUNCH_URL = `${SITE_URL}${PRELAUNCH_PATH}`;
 // Before launch (lib/prelaunch.ts) the app is announced, not downloadable.
 const facts = (inStores: boolean) =>
   `${ORG.name} è gestita da ${ORG.legalName}, sede legale in ${ORG_ADDRESS_LINE}, P.IVA ${ORG.vatNumber}. ` +
-  "Per chi cerca un professionista è gratis: se il professionista chiede un Costo Chiamata lo indica " +
-  "nell'app prima del sopralluogo, e il compenso si paga direttamente a lui, non nell'app. " +
+  `${COSTS_LINE} Se il professionista chiede un ` +
+  "Costo Chiamata lo indica nell'app prima del sopralluogo, e il compenso si paga direttamente a lui, non nell'app. " +
   (!inStores
     ? `È un'app per iPhone e Android in arrivo a breve sugli store: chi vuole usarla lascia i contatti nella pre-iscrizione (${PRELAUNCH_URL}) e riceve un avviso quando è disponibile. `
     : WEB_APP_OPEN
@@ -42,7 +43,7 @@ ${facts(inStores)}
 - [Come funziona](${SITE_URL}/#come-funziona): dalla descrizione del problema al sopralluogo
 - [Professionisti per la casa a Torino](${SITE_URL}/torino): tutti i mestieri disponibili a Torino
 - [Per i professionisti](${SITE_URL}/#professionisti): cosa offre Pluggers a chi lavora nella casa
-- [Domande frequenti](${SITE_URL}/#domande-frequenti): costi, zone, assistente, professionisti
+- [Domande frequenti](${SITE_URL}/faq): tutte le domande, per chi cerca un professionista e per chi lo è
 - [Chi siamo](${SITE_URL}/chi-siamo): la società, la sede e i contatti
 - [Per i clienti](${SITE_URL}/clienti): come si trova un idraulico, un elettricista o un altro artigiano a Torino con Pluggers
 - [Per i professionisti](${SITE_URL}/professionisti): l'app per artigiani di Torino, come si ricevono le richieste dei clienti vicini e chi decide il prezzo
@@ -152,6 +153,17 @@ ${TRUST.rows.map((r) => `- ${r}`).join("\n")}
 ## Domande frequenti
 
 ${faqMd(faq(inStores))}
+
+---
+
+# Domande frequenti su Pluggers
+
+URL: ${SITE_URL}/faq
+
+${faqGroups(inStores)
+  .filter((g) => g.id !== "per-cominciare")
+  .map((g) => `## ${g.title}\n\n${faqMd(g.items)}`)
+  .join("\n\n")}
 
 ---
 

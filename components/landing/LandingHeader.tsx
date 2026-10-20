@@ -11,10 +11,11 @@ import { BTN_OUTLINE, CONTAINER } from "./styles";
 
 const NAV = [
   { href: "/", label: "Home" },
-  { href: "/chi-siamo", label: "Chi siamo" },
   { href: "/professionisti", label: "Per i professionisti" },
   { href: "/clienti", label: "Per i clienti" },
+  { href: "/faq", label: "FAQ" },
   { href: "/blog", label: "Blog" },
+  { href: "/chi-siamo", label: "Chi siamo" },
 ];
 
 const NAV_LINK =

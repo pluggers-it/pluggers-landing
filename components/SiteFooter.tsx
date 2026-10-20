@@ -4,10 +4,11 @@ import { ORG, ORG_ADDRESS_LINE, SOCIAL_LINKS } from "@/lib/site";
 type FooterLink = { label: string; href: string };
 
 const SITE_LINKS: FooterLink[] = [
-  { label: "Chi siamo", href: "/chi-siamo" },
   { label: "Per i professionisti", href: "/professionisti" },
   { label: "Per i clienti", href: "/clienti" },
+  { label: "FAQ", href: "/faq" },
   { label: "Blog", href: "/blog" },
+  { label: "Chi siamo", href: "/chi-siamo" },
   { label: "Supporto", href: "/supporto" },
 ];
 
@@ -36,6 +37,7 @@ export function SiteFooter() {
             <ul>
               <li className={ITEM_CLASS}>{ORG_ADDRESS_LINE}</li>
               <li className={ITEM_CLASS}>P.IVA e C.F. {ORG.vatNumber}</li>
+              <li className={ITEM_CLASS}>Capitale sociale {ORG.shareCapital}</li>
               <li>
                 <a href={`mailto:${ORG.email}`} className={LINK_CLASS}>
                   {ORG.email}

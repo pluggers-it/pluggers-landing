@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FaqList } from "./FaqList";
 import { H2 } from "./styles";
 
@@ -8,6 +9,9 @@ export function Faq({ items }: { items: readonly { q: string; a: string }[] }) {
         Domande frequenti
       </h2>
       <FaqList items={items} />
+      <Link href="/faq" className="mt-6 inline-flex min-h-12 items-center font-semibold text-accent-text underline underline-offset-4">
+        Vedi tutte le domande
+      </Link>
     </section>
   );
 }
