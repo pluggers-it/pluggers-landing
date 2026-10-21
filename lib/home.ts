@@ -48,7 +48,7 @@ export const HOW = {
     },
     {
       title: "Pluggers capisce di che si tratta",
-      text: "Riconosce il mestiere, l'urgenza e le cause più probabili, poi mostra i professionisti della tua zona. Scegli chi contattare, fino a tre, e il giorno tra quelli disponibili: l'orario lo propone il professionista.",
+      text: "Riconosce il mestiere, l'urgenza e le cause più probabili, poi mostra i professionisti della tua zona. Scegli chi contattare, fino a cinque, e il giorno tra quelli disponibili: l'orario lo propone il professionista.",
       src: "/screens/step-triage.png",
       alt: "Schermata «Cosa abbiamo capito»: chi serve (Idraulico), urgenza 2 su 5, cause probabili e bottone «Cerca un professionista».",
     },
@@ -148,7 +148,7 @@ export const faq = (inStores: boolean) => [
   },
   {
     q: "Cosa succede dopo la richiesta?",
-    a: "La richiesta arriva ai professionisti che hai scelto, fino a tre tra quelli vicini, e l'intervento va al primo che conferma. Ti scrive in chat con una stima e, se lo chiede, il Costo Chiamata; tu scegli il giorno e lui propone l'orario. Il QR si scansiona all'inizio e alla fine del lavoro, poi puoi lasciare la recensione.",
+    a: "La richiesta arriva ai professionisti che hai scelto, fino a cinque tra quelli vicini, e l'intervento va al primo che conferma. Ti scrive in chat con una stima e, se lo chiede, il Costo Chiamata; tu scegli il giorno e lui propone l'orario. Il QR si scansiona all'inizio e alla fine del lavoro, poi puoi lasciare la recensione.",
   },
   {
     q: "Serve scaricare un'app?",

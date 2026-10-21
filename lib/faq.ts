@@ -59,7 +59,7 @@ const CLIENT: FaqItem[] = [
   },
   {
     q: "Come scelgo i professionisti?",
-    a: "Dopo il riepilogo vedi i professionisti che fanno quel mestiere nella tua zona, dal più vicino. Per ognuno trovi nome, valutazione, numero di recensioni e zona, e puoi guardarli anche sulla mappa. Ne scegli fino a tre: la richiesta arriva a tutti.",
+    a: "Dopo il riepilogo vedi i professionisti che fanno quel mestiere nella tua zona, dal più vicino. Per ognuno trovi nome, valutazione, numero di recensioni e zona, e puoi guardarli anche sulla mappa. Ne scegli fino a cinque: la richiesta arriva a tutti.",
   },
   {
     q: "Cosa succede se nella mia zona non c'è nessuno?",
@@ -114,7 +114,7 @@ const PRO: FaqItem[] = [
   },
   {
     q: "Come ricevo le richieste?",
-    a: "Le richieste dei clienti che ti hanno scelto arrivano nella sezione «Richieste», divise in «Da decidere» e «Da preventivare». Ognuna mostra il giorno chiesto, il problema, la distanza da te e una cifra di riferimento calcolata dall'app, e puoi leggere le parole del cliente e la scheda del problema. La stessa richiesta può arrivare fino a tre professionisti: il lavoro va a chi arriva per primo alla conferma.",
+    a: "Le richieste dei clienti che ti hanno scelto arrivano nella sezione «Richieste», divise in «Da decidere» e «Da preventivare». Ognuna mostra il giorno chiesto, il problema, la distanza da te e una cifra di riferimento calcolata dall'app, e puoi leggere le parole del cliente e la scheda del problema. La stessa richiesta può arrivare fino a cinque professionisti: il lavoro va a chi arriva per primo alla conferma.",
   },
   {
     q: "Come rispondo e come si sceglie l'orario?",

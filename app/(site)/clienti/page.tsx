@@ -51,7 +51,7 @@ const STEPS: GuideStep[] = [
   {
     id: "scegli", short: "I professionisti", src: `${G}/04.webp`,
     alt: "Schermata «Risultati»: tre idraulici con valutazione, numero di recensioni e zona, due selezionati, e il bottone «Continua con 2 professionisti».",
-    title: "Scegli fino a tre professionisti",
+    title: "Scegli fino a cinque professionisti",
     text: "Vedi chi fa quel mestiere vicino a te, con le recensioni dei clienti per cui ha già lavorato. La richiesta arriva a tutti quelli che scegli.",
     points: ["Nome, valutazione e numero di recensioni", "La zona in cui lavora", "Puoi guardarli anche sulla mappa"],
   },
@@ -93,7 +93,7 @@ const CLIENT_FAQ = [
     a: "La stima arriva prima del sopralluogo: è indicativa e, se la accetti, confermi l'appuntamento. Il preventivo arriva dopo il sopralluogo, voce per voce. Vale solo se lo accetti.",
   },
   {
-    q: "Se scelgo tre professionisti, pago tre chiamate?",
+    q: "Se scelgo più professionisti, pago più chiamate?",
     a: "No. Ognuno può risponderti con una stima, ma ne accetti una sola. Quando accetti, le richieste agli altri si chiudono.",
   },
 ];
