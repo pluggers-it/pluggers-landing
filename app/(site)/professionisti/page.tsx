@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Inbox, Radar, Receipt } from "lucide-react";
+import { Inbox, NotebookText, Radar, Receipt } from "lucide-react";
 import { JsonLd } from "@/components/JsonLd";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { FaqList } from "@/components/landing/FaqList";
@@ -10,17 +10,17 @@ import { StoreBadges } from "@/components/landing/StoreBadges";
 import { AppLink } from "@/components/landing/AppLink";
 import { PRO_SIGNUP_URL } from "@/components/landing/links";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
-import { PROS } from "@/lib/home";
+import { GESTIONALE, PROS } from "@/lib/home";
 import { breadcrumbSchema, faqSchema, graph, pageMetadata, pageSchema } from "@/lib/seo";
 import { TRADES } from "@/lib/trades";
 
 const PATH = "/professionisti";
-const ICONS = [Inbox, Radar, Receipt];
+const ICONS = [Inbox, Radar, Receipt, NotebookText];
 
 export const metadata: Metadata = pageMetadata({
   title: "App per idraulici, elettricisti e artigiani a Torino",
   description:
-    "I clienti di Torino ti trovano su Pluggers e ti scrivono con le foto del guasto. Scegli il raggio, manda stima e preventivo dall'app.",
+    "I clienti di Torino ti trovano su Pluggers e ti arrivano con la scheda del problema. Scegli il raggio, manda stima e preventivo dall'app.",
   path: PATH,
 });
 
@@ -56,7 +56,7 @@ const STEPS: GuideStep[] = [
     title: "Ricevi le richieste",
     text: "Le richieste arrivano dai clienti della tua zona che ti hanno scelto. Ognuna ha giorno, mestiere, problema, distanza da te e una cifra di riferimento calcolata dall'app.",
     points: ["Apri quelle che ti interessano", "Rifiuta le altre"],
-    tip: "Guarda la scheda del problema e le foto prima di uscire: spesso bastano per capire che pezzo portare.",
+    tip: "Guarda la scheda del problema prima di uscire: spesso bastano per capire che pezzo portare.",
   },
   {
     id: "preventivo", short: "Stima e preventivo", src: `${G}/05.webp`,
@@ -77,13 +77,14 @@ const STEPS: GuideStep[] = [
 ];
 
 const LEDE =
-  "Il cliente descrive il guasto e manda le foto. L'app capisce che mestiere serve e quanto è urgente. " +
+  "Il cliente descrive il guasto, anche con una foto. L'app capisce che mestiere serve e quanto è urgente. " +
   "Se lavori nella sua zona, sei tra i professionisti che può scegliere. Se sceglie te, la richiesta arriva a te.";
 
 const BENEFITS = [
-  { title: "Foto e distanza", text: "Ogni richiesta ha mestiere, problema, foto e km da te. Se è urgente, lo vedi subito." },
+  { title: "Problema e distanza", text: "Ogni richiesta ha mestiere, scheda del problema e km da te. Se è urgente, lo vedi subito." },
   { title: "Raggio da 1 a 100 km", text: "Lo imposti dal tuo indirizzo. I clienti fuori dal raggio non ti vedono." },
   { title: "Prezzi tuoi", text: "Costo Chiamata, stima e preventivo li scrivi tu. L'app ti suggerisce una cifra, puoi cambiarla." },
+  GESTIONALE,
 ];
 
 const FAQ = [
@@ -137,7 +138,7 @@ export default function ProfessionistiPage() {
 
       <section className={`${CONTAINER} pb-12 lg:pb-16`} aria-labelledby="benefits-title">
         <h2 id="benefits-title" className={H2}>Cosa trovi nell&apos;app</h2>
-        <ul className="mt-8 grid gap-8 md:grid-cols-3">
+        <ul className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {BENEFITS.map((b, i) => {
             const Icon = ICONS[i];
             return (

@@ -6,6 +6,9 @@
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_REGEX = /^\+?[\d\s\-()·]{7,20}$/;
 
+/** What the sign-up forms say under their title: one text, the one for cities Pluggers has not reached yet. */
+export const WAITLIST_TEXT = "Ti scriviamo quando Pluggers arriva nella tua città.";
+
 /** `profession` of a sign-up from someone who looks for a professional (the pre-registration). */
 export const CLIENT = "cliente";
 

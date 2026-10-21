@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { SitePage } from "@/components/landing/SitePage";
 import { BETA_BEFORE_LAUNCH, PRELAUNCH_PATH, TESTFLIGHT_URL } from "@/components/landing/links";
+import Link from "next/link";
+import { WAITLIST_TEXT } from "@/lib/waitlist";
 import { appInStores, prelaunchPrefill } from "@/lib/prelaunch";
 import { ORG } from "@/lib/site";
 import { getTrade } from "@/lib/trades";
@@ -31,11 +33,18 @@ export default async function PreiscrizionePage({ searchParams }: Props) {
         <div className="mt-8">
           <WaitlistForm
             title="Pre-iscrizione"
-            description="Per chi cerca un professionista e per chi lo è."
+            description={WAITLIST_TEXT}
             successMessage="Grazie, sei nella lista. Ti avvisiamo appena Pluggers è disponibile su iPhone e Android."
             prelaunch={{ role, trade, page }}
             afterSubmit={BETA_BEFORE_LAUNCH && <BetaInvite />}
           />
+          <p className="mt-4 text-sm text-muted">
+            Leggi i{" "}
+            <Link href="/termini" className="font-medium text-accent-text underline underline-offset-2">
+              Termini e condizioni
+            </Link>{" "}
+            di Pluggers.
+          </p>
         </div>
       </section>
     </SitePage>

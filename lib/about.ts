@@ -1,6 +1,7 @@
+import { COSTS_LINE } from "@/lib/home";
 import { ORG, ORG_ADDRESS_LINE, SOCIAL_LINKS } from "@/lib/site";
 
-export const ABOUT_UPDATED = "2026-10-12";
+export const ABOUT_UPDATED = "2026-10-20";
 
 const FOUNDED = "6 ottobre 2026";
 
@@ -9,7 +10,7 @@ export const ABOUT = {
   description: "Le persone dietro Pluggers, la piattaforma nata a Torino per gli interventi in casa.",
   intro:
     "Pluggers è una piattaforma per gli interventi in casa. Oggi mette in contatto privati e artigiani. " +
-    "I profili ottimizzati per imprese e amministratori di condominio sono in arrivo.",
+    "I profili per imprese e amministratori di condominio sono in arrivo.",
 };
 
 export const STORY =
@@ -20,7 +21,7 @@ export const STORY =
 
 export const WHAT =
   "Scrivi cosa si è rotto e aggiungi una foto. L'assistente indica mestiere, urgenza e cause più probabili. " +
-  "Poi ti mostra i professionisti della tua zona. Stima, Costo Chiamata e preventivo arrivano in chat. Per chi cerca è gratis.";
+  "Poi ti mostra i professionisti della tua zona. Stima, Costo Chiamata e preventivo arrivano in chat. " + COSTS_LINE;
 
 export const PRINCIPLES = [
   { title: "Tutto per iscritto", text: "Stima, preventivo e accordi restano in chat. Inizio e fine si registrano con un QR." },
@@ -30,7 +31,7 @@ export const PRINCIPLES = [
 ];
 
 export const NEXT =
-  "Stiamo preparando l'accesso per imprese e amministratori di condominio e il pagamento nell'app. " +
+  "I profili per imprese e amministratori di condominio sono in arrivo, come il pagamento nell'app. " +
   "Poi altre città, partendo da quelle che ci chiedete nella lista d'attesa. " +
   "Gli artigiani sono sempre meno: vogliamo che più ragazzi scelgano di fare l'idraulico o l'elettricista.";
 
@@ -59,6 +60,7 @@ export const COMPANY_FACTS: { label: string; value: string; href?: string }[] = 
   { label: "Ragione sociale", value: ORG.legalName },
   { label: "Sede legale", value: ORG_ADDRESS_LINE },
   { label: "Partita IVA e codice fiscale", value: ORG.vatNumber },
+  { label: "Capitale sociale", value: ORG.shareCapital },
   { label: "Costituita il", value: FOUNDED },
   { label: "Email", value: ORG.email, href: `mailto:${ORG.email}` },
   ...SOCIAL_LINKS.map((s) => ({ label: s.label, value: s.href.replace("https://www.", ""), href: s.href })),

@@ -63,7 +63,7 @@ export const TRADES: Trade[] = [
       "Perdite, scarichi intasati, WC che non smette di scaricare: descrivi il problema su Pluggers e scegli tra gli idraulici che lavorano nella tua zona di Torino.",
     summary: "Perdite, scarichi intasati, rubinetti, WC e sanitari.",
     intro:
-      "Su Pluggers trovi un idraulico a Torino partendo dal problema: scrivi cosa succede, aggiungi una foto e l'assistente capisce se serve davvero un idraulico, quanto è urgente e quali sono le cause più probabili. Poi scegli a chi mandare la richiesta tra gli idraulici che lavorano nella tua zona. Usare Pluggers è gratis; l'idraulico lo paghi direttamente.",
+      "Su Pluggers trovi un idraulico a Torino partendo dal problema: scrivi cosa succede, aggiungi una foto e l'assistente capisce se serve davvero un idraulico, quanto è urgente e quali sono le cause più probabili. Poi scegli a chi mandare la richiesta tra gli idraulici che lavorano nella tua zona. Non c'è nessun abbonamento e non paghi per sbloccare i professionisti che trovi. L'idraulico lo paghi direttamente.",
     problemsLede: "Sono i problemi che arrivano più spesso a un idraulico, detti come li direbbe chiunque.",
     problems: [
       "Il rubinetto della cucina perde dalla base quando lo apro",
@@ -80,7 +80,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Scegli tra gli idraulici vicini",
-        text: "Vedi gli idraulici il cui raggio d'azione comprende il tuo indirizzo, dal più vicino. Puoi mandare la richiesta fino a tre: l'intervento va al primo che conferma.",
+        text: "Vedi gli idraulici il cui raggio d'azione comprende il tuo indirizzo, dal più vicino. Puoi mandare la richiesta fino a cinque: l'intervento va al primo che conferma.",
       },
       {
         title: "Sai quanto costa prima che arrivi",
@@ -96,7 +96,7 @@ export const TRADES: Trade[] = [
     faq: [
       {
         q: "Come trovo un idraulico a Torino in fretta?",
-        a: "Apri Pluggers, descrivi la perdita o lo scarico con una foto e l'assistente ti indica l'urgenza e gli idraulici che lavorano nella tua zona. Mandi la richiesta fino a tre e l'intervento va al primo che conferma. L'orario lo propone l'idraulico in base alla sua disponibilità.",
+        a: "Apri Pluggers, descrivi la perdita o lo scarico con una foto e l'assistente ti indica l'urgenza e gli idraulici che lavorano nella tua zona. Mandi la richiesta fino a cinque e l'intervento va al primo che conferma. L'orario lo propone l'idraulico in base alla sua disponibilità.",
       },
       {
         q: "Quanto costa la chiamata di un idraulico con Pluggers?",
@@ -144,7 +144,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Scegli e confronta la stima",
-        text: "Scegli fino a tre elettricisti tra quelli che lavorano vicino a te. La stima arriva in chat; l'eventuale Costo Chiamata lo vedi prima del sopralluogo e lo paghi a lui.",
+        text: "Scegli fino a cinque elettricisti tra quelli che lavorano vicino a te. La stima arriva in chat; l'eventuale Costo Chiamata lo vedi prima del sopralluogo e lo paghi a lui.",
       },
       {
         title: "Preventivo dopo il controllo",
@@ -183,7 +183,7 @@ export const TRADES: Trade[] = [
       "Chiuso fuori, serratura bloccata, chiavi perse o cancello da sistemare: descrivi il problema su Pluggers e scegli tra i fabbri della tua zona di Torino.",
     summary: "Porte chiuse, serrature, cilindri, chiavi, cancelli e inferriate.",
     intro:
-      "Su Pluggers trovi un fabbro a Torino scrivendo cosa è successo alla porta, alla serratura o al cancello. L'assistente riconosce che serve un fabbro e quanto è urgente: restare chiusi fuori casa ha un'urgenza diversa da una maniglia da cambiare. Scegli fino a tre fabbri tra quelli che lavorano nella tua zona e l'intervento va al primo che conferma.",
+      "Su Pluggers trovi un fabbro a Torino scrivendo cosa è successo alla porta, alla serratura o al cancello. L'assistente riconosce che serve un fabbro e quanto è urgente: restare chiusi fuori casa ha un'urgenza diversa da una maniglia da cambiare. Scegli fino a cinque fabbri tra quelli che lavorano nella tua zona e l'intervento va al primo che conferma.",
     problemsLede: "Ecco come arrivano di solito le richieste per un fabbro.",
     problems: [
       "Sono chiuso fuori e le chiavi sono rimaste dentro",
@@ -200,7 +200,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "L'urgenza la vede anche il fabbro",
-        text: "Se la richiesta è urgente, i fabbri la ricevono con l'indicazione «Urgente». Tu scegli fino a tre fabbri vicini e lavora chi conferma per primo.",
+        text: "Se la richiesta è urgente, i fabbri la ricevono con l'indicazione «Urgente». Tu scegli fino a cinque fabbri vicini e lavora chi conferma per primo.",
       },
       {
         title: "Apertura e serratura nuova sono cose diverse",
@@ -224,7 +224,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Ho perso le chiavi: devo cambiare tutta la serratura?",
-        a: "Non sempre. Su molte porte basta sostituire il cilindro, che è la parte dove entra la chiave. Scrivilo nella richiesta e allega una foto della serratura: il fabbro ti dice nella stima cosa serve.",
+        a: "Non sempre. Su molte porte basta sostituire il cilindro, che è la parte dove entra la chiave. Scrivilo nella richiesta e allega una foto della serratura: l'assistente ne tiene conto e il fabbro ti dice nella stima cosa serve.",
       },
       {
         q: "Il fabbro ripara anche cancelli e inferriate?",
@@ -260,7 +260,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Tecnici della tua zona",
-        text: "L'assistente indica il mestiere e l'urgenza, poi vedi i tecnici il cui raggio d'azione arriva a casa tua. Puoi scriverne fino a tre.",
+        text: "L'assistente indica il mestiere e l'urgenza, poi vedi i tecnici il cui raggio d'azione arriva a casa tua. Puoi scriverne fino a cinque.",
       },
       {
         title: "Riparare o cambiare?",
@@ -303,7 +303,7 @@ export const TRADES: Trade[] = [
       "Una stanza da ridipingere, muffa sul soffitto, pareti da ritoccare: descrivi il lavoro su Pluggers e chiedi una stima agli imbianchini della tua zona di Torino.",
     summary: "Tinteggiature, ritocchi, pareti da preparare, trattamenti antimuffa.",
     intro:
-      "Su Pluggers trovi un imbianchino a Torino descrivendo cosa vuoi dipingere: una stanza, un soffitto con la muffa, le pareti da sistemare dopo un trasloco. Indica le stanze, le misure se le hai e una foto delle pareti; chiedi la stima fino a tre imbianchini della tua zona. Il preventivo arriva dopo il sopralluogo e vale solo se lo accetti.",
+      "Su Pluggers trovi un imbianchino a Torino descrivendo cosa vuoi dipingere: una stanza, un soffitto con la muffa, le pareti da sistemare dopo un trasloco. Indica le stanze, le misure se le hai e una foto delle pareti; chiedi la stima fino a cinque imbianchini della tua zona. Il preventivo arriva dopo il sopralluogo e vale solo se lo accetti.",
     problemsLede: "Le richieste per un imbianchino partono quasi sempre da una stanza e da come sono le pareti.",
     problems: [
       "Vorrei ridipingere il soggiorno prima di Natale",
@@ -319,8 +319,8 @@ export const TRADES: Trade[] = [
         text: "Scrivi quali stanze, quanti metri se li sai, e fotografa le pareti con la luce del giorno. L'assistente conferma che è un lavoro da imbianchino e non, per esempio, un'infiltrazione da risolvere prima.",
       },
       {
-        title: "Fino a tre imbianchini vicini",
-        text: "Vedi gli imbianchini che lavorano nella tua zona e mandi la richiesta a chi vuoi, fino a tre. Lavora chi conferma per primo.",
+        title: "Fino a cinque imbianchini vicini",
+        text: "Vedi gli imbianchini che lavorano nella tua zona e mandi la richiesta a chi vuoi, fino a cinque. Lavora chi conferma per primo.",
       },
       {
         title: "Stima, sopralluogo, preventivo",
@@ -363,7 +363,7 @@ export const TRADES: Trade[] = [
       "Un mobile da riparare, un'anta che non chiude, una libreria su misura: descrivi il lavoro su Pluggers e scegli tra i falegnami della tua zona di Torino.",
     summary: "Mobili e strutture in legno da costruire o riparare.",
     intro:
-      "Su Pluggers trovi un falegname a Torino per riparare o costruire mobili e strutture in legno: un'anta che non chiude, un cassetto rotto, una libreria su misura. Descrivi il lavoro con una foto e le misure, e scegli fino a tre falegnami che lavorano nella tua zona. Il falegname ti manda la stima in chat; il preventivo arriva dopo che ha visto il lavoro.",
+      "Su Pluggers trovi un falegname a Torino per riparare o costruire mobili e strutture in legno: un'anta che non chiude, un cassetto rotto, una libreria su misura. Descrivi il lavoro con una foto e le misure, e scegli fino a cinque falegnami che lavorano nella tua zona. Il falegname ti manda la stima in chat; il preventivo arriva dopo che ha visto il lavoro.",
     problemsLede: "Per il falegname contano soprattutto le misure e cosa deve fare il mobile.",
     problems: [
       "L'anta dell'armadio è scesa e non chiude più",
@@ -380,7 +380,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Falegnami della tua zona",
-        text: "L'assistente indica il mestiere e ti mostra i falegnami il cui raggio d'azione comprende il tuo indirizzo. Mandi la richiesta fino a tre.",
+        text: "L'assistente indica il mestiere e ti mostra i falegnami il cui raggio d'azione comprende il tuo indirizzo. Mandi la richiesta fino a cinque.",
       },
       {
         title: "Stima e poi preventivo",
@@ -440,7 +440,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Tecnici nel tuo raggio",
-        text: "Vedi i tecnici della climatizzazione che lavorano vicino a te, dal più vicino. Puoi scrivere fino a tre: lavora chi conferma per primo.",
+        text: "Vedi i tecnici della climatizzazione che lavorano vicino a te, dal più vicino. Puoi scrivere fino a cinque: lavora chi conferma per primo.",
       },
       {
         title: "Gas refrigerante e certificazione",
@@ -504,7 +504,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Scegli il termoidraulico",
-        text: "Vedi i termoidraulici che lavorano nella tua zona, dal più vicino, e mandi la richiesta fino a tre. La stima arriva in chat e l'eventuale Costo Chiamata lo vedi prima del sopralluogo.",
+        text: "Vedi i termoidraulici che lavorano nella tua zona, dal più vicino, e mandi la richiesta fino a cinque. La stima arriva in chat e l'eventuale Costo Chiamata lo vedi prima del sopralluogo.",
       },
       {
         title: "Intervento registrato",
@@ -543,7 +543,7 @@ export const TRADES: Trade[] = [
       "Tapparella bloccata, finestra che non chiude, serranda o zanzariera da sistemare: descrivi il problema su Pluggers e scegli un serramentista a Torino.",
     summary: "Finestre, porte-finestre, tapparelle, persiane, serrande e zanzariere.",
     intro:
-      "Su Pluggers trovi un serramentista a Torino per finestre, porte-finestre, tapparelle, persiane, serrande e zanzariere. Descrivi cosa non funziona, per esempio la cinghia della tapparella rotta o l'anta che non chiude, e fotografa il punto. L'assistente indica il mestiere, poi scegli fino a tre serramentisti che lavorano nella tua zona e ricevi la stima in chat.",
+      "Su Pluggers trovi un serramentista a Torino per finestre, porte-finestre, tapparelle, persiane, serrande e zanzariere. Descrivi cosa non funziona, per esempio la cinghia della tapparella rotta o l'anta che non chiude, e fotografa il punto. L'assistente indica il mestiere, poi scegli fino a cinque serramentisti che lavorano nella tua zona e ricevi la stima in chat.",
     problemsLede: "Sono i guasti più comuni di finestre e chiusure, raccontati come succedono.",
     problems: [
       "La cinghia della tapparella si è rotta e la tapparella è giù",
@@ -560,7 +560,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Serramentisti vicini",
-        text: "Vedi i serramentisti il cui raggio d'azione comprende il tuo indirizzo, dal più vicino. Puoi scrivere fino a tre e lavora chi conferma per primo.",
+        text: "Vedi i serramentisti il cui raggio d'azione comprende il tuo indirizzo, dal più vicino. Puoi scrivere fino a cinque e lavora chi conferma per primo.",
       },
       {
         title: "Stima prima, preventivo dopo",
@@ -603,7 +603,7 @@ export const TRADES: Trade[] = [
       "Infiltrazioni, crepe, intonaco che si stacca o una parete da rifare: descrivi il lavoro su Pluggers e chiedi la stima ai muratori della tua zona di Torino.",
     summary: "Muri, intonaci, crepe, infiltrazioni dall'esterno, impermeabilizzazioni.",
     intro:
-      "Su Pluggers trovi un muratore a Torino per muri, intonaci, crepe, infiltrazioni dall'esterno e impermeabilizzazioni. Descrivi il problema con una foto, per esempio l'intonaco che si stacca o la macchia di umidità che arriva da fuori. L'assistente indica il mestiere e l'urgenza; poi scegli fino a tre muratori della tua zona e ricevi la stima in chat.",
+      "Su Pluggers trovi un muratore a Torino per muri, intonaci, crepe, infiltrazioni dall'esterno e impermeabilizzazioni. Descrivi il problema con una foto, per esempio l'intonaco che si stacca o la macchia di umidità che arriva da fuori. L'assistente indica il mestiere e l'urgenza; poi scegli fino a cinque muratori della tua zona e ricevi la stima in chat.",
     problemsLede: "Per un muratore la foto e il punto della casa dicono quasi tutto.",
     problems: [
       "L'intonaco del balcone si sta staccando a pezzi",
@@ -620,7 +620,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Muratori della tua zona",
-        text: "Vedi i muratori il cui raggio d'azione comprende il tuo indirizzo e mandi la richiesta fino a tre. Lavora chi conferma per primo.",
+        text: "Vedi i muratori il cui raggio d'azione comprende il tuo indirizzo e mandi la richiesta fino a cinque. Lavora chi conferma per primo.",
       },
       {
         title: "Sopralluogo e preventivo",
@@ -663,7 +663,7 @@ export const TRADES: Trade[] = [
       "Piastrelle rotte o sollevate, fughe annerite, silicone da rifare in bagno: descrivi il lavoro su Pluggers e scegli un piastrellista della tua zona di Torino.",
     summary: "Piastrelle, fughe e silicone di bagno e cucina.",
     intro:
-      "Su Pluggers trovi un piastrellista a Torino per piastrelle e fughe: una piastrella rotta da sostituire, le fughe annerite, il silicone del bagno o della cucina da rifare. Descrivi il lavoro con una foto e, se hai piastrelle di scorta, scrivilo. Scegli fino a tre piastrellisti che lavorano nella tua zona e ricevi la stima in chat.",
+      "Su Pluggers trovi un piastrellista a Torino per piastrelle e fughe: una piastrella rotta da sostituire, le fughe annerite, il silicone del bagno o della cucina da rifare. Descrivi il lavoro con una foto e, se hai piastrelle di scorta, scrivilo. Scegli fino a cinque piastrellisti che lavorano nella tua zona e ricevi la stima in chat.",
     problemsLede: "Le richieste per un piastrellista riguardano quasi sempre bagno e cucina.",
     problems: [
       "Il silicone intorno al piatto doccia è nero e si stacca",
@@ -680,7 +680,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Piastrellisti vicini",
-        text: "Vedi i piastrellisti che lavorano nella tua zona, dal più vicino, e mandi la richiesta fino a tre. Lavora chi conferma per primo.",
+        text: "Vedi i piastrellisti che lavorano nella tua zona, dal più vicino, e mandi la richiesta fino a cinque. Lavora chi conferma per primo.",
       },
       {
         title: "Stima in chat",
@@ -723,7 +723,7 @@ export const TRADES: Trade[] = [
       "Siepe da potare, prato da tagliare, irrigazione che non parte: descrivi il lavoro su Pluggers e chiedi la stima ai giardinieri della tua zona di Torino.",
     summary: "Giardino, potature, prato, piante e irrigazione esterna.",
     intro:
-      "Su Pluggers trovi un giardiniere a Torino per il giardino, le piante e l'irrigazione esterna: una siepe da potare, il prato da tagliare, un impianto di irrigazione che non parte. Descrivi il lavoro con qualche foto e la superficie approssimativa, scegli fino a tre giardinieri della tua zona e ricevi la stima in chat.",
+      "Su Pluggers trovi un giardiniere a Torino per il giardino, le piante e l'irrigazione esterna: una siepe da potare, il prato da tagliare, un impianto di irrigazione che non parte. Descrivi il lavoro con qualche foto e la superficie approssimativa, scegli fino a cinque giardinieri della tua zona e ricevi la stima in chat.",
     problemsLede: "Per il giardiniere contano le dimensioni del lavoro e dove va portato il verde tagliato.",
     problems: [
       "La siepe davanti a casa è cresciuta troppo",
@@ -740,7 +740,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Giardinieri della tua zona",
-        text: "Vedi i giardinieri il cui raggio d'azione comprende il tuo indirizzo e mandi la richiesta fino a tre. Lavora chi conferma per primo.",
+        text: "Vedi i giardinieri il cui raggio d'azione comprende il tuo indirizzo e mandi la richiesta fino a cinque. Lavora chi conferma per primo.",
       },
       {
         title: "Stima e smaltimento",
@@ -783,7 +783,7 @@ export const TRADES: Trade[] = [
       "Vetro rotto, doppio vetro appannato, box doccia o specchio da sostituire: descrivi il lavoro su Pluggers e scegli tra i vetrai della tua zona di Torino.",
     summary: "Vetri rotti, vetrocamera, box doccia, specchi e sigillature.",
     intro:
-      "Su Pluggers trovi un vetraio a Torino per vetri rotti, vetrocamera, vetri temperati, box doccia, specchi e sigillature. Descrivi il lavoro con una foto e le misure del vetro, e scrivi se è una finestra, una porta o un mobile. L'assistente indica il mestiere e l'urgenza, poi scegli fino a tre vetrai della tua zona.",
+      "Su Pluggers trovi un vetraio a Torino per vetri rotti, vetrocamera, vetri temperati, box doccia, specchi e sigillature. Descrivi il lavoro con una foto e le misure del vetro, e scrivi se è una finestra, una porta o un mobile. L'assistente indica il mestiere e l'urgenza, poi scegli fino a cinque vetrai della tua zona.",
     problemsLede: "Per un vetraio servono soprattutto il tipo di vetro e le misure.",
     problems: [
       "Si è rotto il vetro della finestra della cucina",
@@ -800,7 +800,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Vetrai vicini",
-        text: "Vedi i vetrai che lavorano nella tua zona, dal più vicino, e mandi la richiesta fino a tre. Lavora chi conferma per primo.",
+        text: "Vedi i vetrai che lavorano nella tua zona, dal più vicino, e mandi la richiesta fino a cinque. Lavora chi conferma per primo.",
       },
       {
         title: "Stima, misure, preventivo",
@@ -843,7 +843,7 @@ export const TRADES: Trade[] = [
       "Mobili da montare, mensole e quadri da appendere, staffa per la TV: descrivi il lavoro su Pluggers e scegli tra i montatori della tua zona di Torino.",
     summary: "Montaggio e smontaggio di mobili, mensole, quadri e staffe TV.",
     intro:
-      "Su Pluggers trovi un montatore di mobili a Torino per montare o smontare mobili, appendere mensole e quadri, fissare una staffa per la TV. Descrivi il lavoro, scrivi quali mobili sono e di che materiale è la parete, e scegli fino a tre montatori che lavorano nella tua zona. La stima arriva in chat prima del sopralluogo.",
+      "Su Pluggers trovi un montatore di mobili a Torino per montare o smontare mobili, appendere mensole e quadri, fissare una staffa per la TV. Descrivi il lavoro, scrivi quali mobili sono e di che materiale è la parete, e scegli fino a cinque montatori che lavorano nella tua zona. La stima arriva in chat prima del sopralluogo.",
     problemsLede: "Le richieste per un montatore partono quasi sempre da una consegna o da un trasloco.",
     problems: [
       "Mi hanno consegnato un armadio in scatola e non so montarlo",
@@ -860,7 +860,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Montatori della tua zona",
-        text: "Vedi i montatori il cui raggio d'azione comprende il tuo indirizzo e mandi la richiesta fino a tre. Lavora chi conferma per primo.",
+        text: "Vedi i montatori il cui raggio d'azione comprende il tuo indirizzo e mandi la richiesta fino a cinque. Lavora chi conferma per primo.",
       },
       {
         title: "Stima in base ai pezzi",
@@ -903,7 +903,7 @@ export const TORINO = {
   description:
     "Idraulici, elettricisti, fabbri e gli altri professionisti per la casa a Torino: descrivi il problema su Pluggers e scegli tra chi lavora nella tua zona.",
   intro:
-    "Su Pluggers trovi a Torino idraulici, elettricisti, fabbri, tecnici degli elettrodomestici e gli altri professionisti per la casa. Non serve sapere quale ti serve: descrivi il problema con una foto e l'assistente indica il mestiere e l'urgenza. Poi scegli a chi scrivere tra i professionisti che lavorano nella tua zona. Usare Pluggers è gratis; il professionista lo paghi direttamente.",
+    "Su Pluggers trovi a Torino idraulici, elettricisti, fabbri, serramentisti e gli altri professionisti per la casa. Non serve sapere quale ti serve: descrivi il problema con una foto e l'assistente indica il mestiere e l'urgenza. Poi scegli a chi scrivere tra i professionisti che lavorano nella tua zona. Non c'è nessun abbonamento e non paghi per sbloccare i professionisti che trovi. Il professionista lo paghi direttamente.",
   faq: [
     {
       q: "Pluggers funziona in tutta Torino?",
