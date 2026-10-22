@@ -336,7 +336,7 @@ export const TRADES: Trade[] = [
     faq: [
       {
         q: "Come trovo un imbianchino a Torino per una stanza sola?",
-        a: "Su Pluggers descrivi la stanza, aggiungi una foto e, se le hai, le misure. Ti vengono mostrati gli imbianchini che lavorano nella tua zona e puoi chiedere la stima a tre di loro. Anche i lavori piccoli, come un ritocco, si chiedono così.",
+        a: "Su Pluggers descrivi la stanza, aggiungi una foto e, se le hai, le misure. Ti vengono mostrati gli imbianchini che lavorano nella tua zona e puoi chiedere la stima fino a cinque di loro. Anche i lavori piccoli, come un ritocco, si chiedono così.",
       },
       {
         q: "Quanto costa imbiancare una stanza con Pluggers?",
