@@ -20,7 +20,7 @@ export const HOME = {
 };
 
 export const HERO = {
-  eyebrow: "Scrivi e fotografa il problema, al resto pensiamo noi",
+  eyebrow: "Scrivi e fotografa il problema, al resto ci pensiamo noi",
   title: "Il professionista giusto, al momento giusto.",
   lede: "Racconti il problema, se le parole non bastano fai una foto, Pluggers capisce quale mestiere ti serve e ti mette in contatto con i professionisti della tua zona. Stima, preventivo, appuntamento e intervento si gestiscono in app.",
 };
@@ -64,10 +64,9 @@ export const HOW = {
 export const TRADES_SECTION = {
   title: "I mestieri su Pluggers",
   lede:
-    "Su Pluggers trovi idraulici, elettricisti, fabbri, serramentisti e gli altri " +
-    "mestieri della casa: impianti, aperture, edilizia e finiture, arredo ed esterni. Non serve sapere " +
-    "quale ti serve, perché lo capisce l'assistente dalla tua descrizione. Per Torino ogni mestiere ha " +
-    "una pagina con i problemi tipici, cosa succede con Pluggers e le domande frequenti.",
+    "Su Pluggers trovi idraulici, elettricisti, fabbri, serramentisti e gli altri mestieri legati alla casa: " +
+    "impianti, aperture, edilizia e finiture, arredo ed esterni. Non serve sapere quale ti serve, " +
+    "perché lo capisce l'assistente dalla tua descrizione.",
 };
 
 /** The «Gestionale» card of the professional's features: the monthly history is in the app, sending it to the accountant is not yet. */

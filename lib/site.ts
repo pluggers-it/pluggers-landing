@@ -11,6 +11,8 @@ export const ORG = {
   /** Partita IVA and codice fiscale are the same number (Agenzia delle Entrate, 8/10/2026). */
   vatNumber: "13523080011",
   shareCapital: "10.000 € i.v.",
+  /** Number in the Torino business register (REA). */
+  rea: "TO-1369120",
   email: "supporto@plggrs.it",
   address: {
     street: "Corso Valdocco 2",

@@ -56,7 +56,7 @@ const STEPS: GuideStep[] = [
     title: "Ricevi le richieste",
     text: "Le richieste arrivano dai clienti della tua zona che ti hanno scelto. Ognuna ha giorno, mestiere, problema, distanza da te e una cifra di riferimento calcolata dall'app.",
     points: ["Apri quelle che ti interessano", "Rifiuta le altre"],
-    tip: "Guarda la scheda del problema prima di uscire: spesso bastano per capire che pezzo portare.",
+    tip: "Guarda la scheda del problema prima di uscire: spesso basta per capire che pezzo portare.",
   },
   {
     id: "preventivo", short: "Stima e preventivo", src: `${G}/05.webp`,

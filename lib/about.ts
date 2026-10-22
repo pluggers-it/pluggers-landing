@@ -16,8 +16,7 @@ export const ABOUT = {
 export const STORY =
   "Abbiamo parlato con artigiani e famiglie di Torino. Le famiglie non sapevano chi chiamare per un guasto. " +
   "Gli artigiani perdevano pomeriggi in sopralluoghi per lavori che al telefono sembravano altro. " +
-  "Da lì è nato Pluggers: si parte dal guasto e l'app trova il mestiere. " +
-  `${ORG.legalName} è stata costituita a Torino il ${FOUNDED}.`;
+  "Da lì è nato Pluggers: si parte dal guasto e l'app trova il mestiere.";
 
 export const WHAT =
   "Scrivi cosa si è rotto e aggiungi una foto. L'assistente indica mestiere, urgenza e cause più probabili. " +

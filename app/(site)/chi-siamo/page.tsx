@@ -40,55 +40,58 @@ export default function ChiSiamoPage() {
           </h1>
           <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-muted sm:text-lg">{ABOUT.intro}</p>
         </div>
-        <div className="relative mx-auto flex h-[560px] w-[340px] justify-center sm:w-[420px]">
+        {/* The box fits the phones (571px tall from sm, 502px below) and shrinks on narrow screens: the rotated phone used to stick out of the right margin, and past the edge on 360px phones. */}
+        <div className="relative mx-auto h-[520px] w-[340px] max-w-full sm:h-[590px] sm:w-[420px]">
           <GuidePhone src="/guida/professionisti/04.webp" alt="Le richieste dei clienti vicini, nell'app del professionista" priority className="absolute left-0 top-6 rotate-[-4deg] scale-[0.86] opacity-95" />
-          <GuidePhone src="/guida/clienti/01.webp" alt="La richiesta del cliente: il problema descritto con una foto" priority className="absolute right-0 top-0 rotate-[3deg]" />
+          <GuidePhone src="/guida/clienti/01.webp" alt="La richiesta del cliente: il problema descritto con una foto" priority className="absolute right-4 top-0 rotate-[3deg]" />
         </div>
       </section>
 
-      <div className="mx-auto w-full max-w-[760px] px-5 pb-8 sm:px-8">
+      {/* Same container as the hero, so the title and the text start on the same line; the text itself stays 760px wide. */}
+      <div className={`${CONTAINER} pb-8`}>
+        <div className="max-w-[760px]">
+          <section className="mt-12" aria-labelledby="story-title">
+            <h2 id="story-title" className={H2}>Come è nato Pluggers</h2>
+            <p className="mt-4 text-[16px] leading-[1.65]">{STORY}</p>
+          </section>
 
-        <section className="mt-12" aria-labelledby="story-title">
-          <h2 id="story-title" className={H2}>Come è nato Pluggers</h2>
-          <p className="mt-4 text-[16px] leading-[1.65]">{STORY}</p>
-        </section>
+          <section className="mt-12" aria-labelledby="what-title">
+            <h2 id="what-title" className={H2}>Cosa fa Pluggers</h2>
+            <p className="mt-4 text-[16px] leading-[1.65]">{WHAT}</p>
+          </section>
 
-        <section className="mt-12" aria-labelledby="what-title">
-          <h2 id="what-title" className={H2}>Cosa fa Pluggers</h2>
-          <p className="mt-4 text-[16px] leading-[1.65]">{WHAT}</p>
-        </section>
+          <section className="mt-12" aria-labelledby="principles-title">
+            <h2 id="principles-title" className={H2}>Cosa facciamo e cosa no</h2>
+            <dl className="mt-6 grid gap-6 sm:grid-cols-2">
+              {PRINCIPLES.map((v) => (
+                <div key={v.title}>
+                  <dt className="font-bold">{v.title}</dt>
+                  <dd className="mt-2 text-[15px] leading-[1.6] text-muted">{v.text}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
 
-        <section className="mt-12" aria-labelledby="principles-title">
-          <h2 id="principles-title" className={H2}>Cosa facciamo e cosa no</h2>
-          <dl className="mt-6 grid gap-6 sm:grid-cols-2">
-            {PRINCIPLES.map((v) => (
-              <div key={v.title}>
-                <dt className="font-bold">{v.title}</dt>
-                <dd className="mt-2 text-[15px] leading-[1.6] text-muted">{v.text}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
+          <section className="mt-12" aria-labelledby="next-title">
+            <h2 id="next-title" className={H2}>Cosa arriva dopo</h2>
+            <p className="mt-4 text-[16px] leading-[1.65]">{NEXT}</p>
+          </section>
 
-        <section className="mt-12" aria-labelledby="next-title">
-          <h2 id="next-title" className={H2}>Cosa arriva dopo</h2>
-          <p className="mt-4 text-[16px] leading-[1.65]">{NEXT}</p>
-        </section>
-
-        <section className="mt-12" aria-labelledby="team-title">
-          <h2 id="team-title" className={H2}>Le persone</h2>
-          <ul className="mt-6 grid gap-x-8 gap-y-8 sm:grid-cols-2">
-            {TEAM.map((m) => <Member key={m.name} m={m} />)}
-          </ul>
-          {ADVISORS.length > 0 && (
-            <>
-              <h3 className="mt-10 text-[15px] font-semibold uppercase tracking-[0.06em] text-muted">Advisor</h3>
-              <ul className="mt-4 grid gap-x-8 gap-y-8 sm:grid-cols-2">
-                {ADVISORS.map((m) => <Member key={m.name} m={m} />)}
-              </ul>
-            </>
-          )}
-        </section>
+          <section className="mt-12" aria-labelledby="team-title">
+            <h2 id="team-title" className={H2}>Le persone</h2>
+            <ul className="mt-6 grid gap-x-8 gap-y-8 sm:grid-cols-2">
+              {TEAM.map((m) => <Member key={m.name} m={m} />)}
+            </ul>
+            {ADVISORS.length > 0 && (
+              <>
+                <h3 className="mt-10 text-[15px] font-semibold uppercase tracking-[0.06em] text-muted">Advisor</h3>
+                <ul className="mt-4 grid gap-x-8 gap-y-8 sm:grid-cols-2">
+                  {ADVISORS.map((m) => <Member key={m.name} m={m} />)}
+                </ul>
+              </>
+            )}
+          </section>
+        </div>
 
         <div className="mt-12 flex justify-center">
           <AppLink beforeLaunch="Pre-iscriviti" className={`${BTN_PRIMARY} w-full sm:w-auto`}>

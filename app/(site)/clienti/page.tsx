@@ -9,7 +9,7 @@ import { TrustRows } from "@/components/landing/TrustRows";
 import { StoreBadges } from "@/components/landing/StoreBadges";
 import { AppLink } from "@/components/landing/AppLink";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
-import { COSTS_LINE, faq } from "@/lib/home";
+import { faq } from "@/lib/home";
 import { appInStores } from "@/lib/prelaunch";
 import { breadcrumbSchema, graph, pageMetadata, pageSchema } from "@/lib/seo";
 import { TRADES } from "@/lib/trades";
@@ -108,10 +108,10 @@ export default async function ClientiPage() {
       <section className={`${CONTAINER} grid items-center gap-12 pb-16 pt-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16 lg:pt-8`}>
         <div>
           <h1 className="max-w-[18ch] text-balance text-[clamp(2.4rem,4.4vw,3.6rem)] font-extrabold leading-[1.04] tracking-[-0.035em]">
-            Scrivi il guasto, scegli chi lo ripara
+            Scrivi e fotografa il problema, al resto ci pensiamo noi!
           </h1>
           <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-muted sm:text-lg">
-            Otto passi, con i nomi dei pulsanti che trovi nell&apos;app. Non serve sapere che professionista ti serve: lo capisce l&apos;assistente dalla tua descrizione. {COSTS_LINE}
+            Non serve sapere che professionista ti serve o comprendere quale è la causa del tuo problema: lo capisce l&apos;intelligenza artificiale dalla tua foto e dalla tua descrizione.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <AppLink computerOnly whenClosed="stores" className={`${BTN_PRIMARY} max-sm:hidden`}>
