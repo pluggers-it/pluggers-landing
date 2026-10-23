@@ -19,7 +19,7 @@ export const STORY =
   "Da lì è nato Pluggers: si parte dal guasto e l'app trova il mestiere.";
 
 export const WHAT =
-  "Scrivi cosa si è rotto e aggiungi una foto. L'assistente indica mestiere, urgenza e cause più probabili. " +
+  "Scrivi cosa si è rotto e aggiungi una foto. L'intelligenza artificiale indica mestiere, urgenza e cause più probabili. " +
   "Poi ti mostra i professionisti della tua zona. Stima, Costo Chiamata e preventivo arrivano in chat. " + COSTS_LINE;
 
 export const PRINCIPLES = [

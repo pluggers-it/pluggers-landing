@@ -7,7 +7,6 @@ import { ConsentProvider } from "@/lib/consent";
 import { ConsentGate } from "@/components/ConsentGate";
 import { BackToTop } from "@/components/BackToTop";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { ThemeSwitch } from "@/components/ThemeSwitch";
 import { JsonLd } from "@/components/JsonLd";
 import { InStoresProvider } from "@/components/landing/InStores";
 import { HOME } from "@/lib/home";
@@ -49,7 +48,6 @@ export default async function RootLayout({
         <ConsentProvider>
           <ThemeProvider>
             <InStoresProvider value={inStores}>{children}</InStoresProvider>
-            <ThemeSwitch />
           </ThemeProvider>
           <ConsentGate />
           <Analytics />

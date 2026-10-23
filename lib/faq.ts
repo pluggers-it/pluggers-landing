@@ -42,7 +42,7 @@ const CLIENT: FaqItem[] = [
     a: "Sì, una foto del problema, quando le parole non bastano. Puoi cambiarla o toglierla prima di inviare. L'intelligenza artificiale la usa per capire il guasto e la foto viene cancellata subito dopo l'analisi. In chat con il professionista puoi mandare altre foto, video e file.",
   },
   {
-    q: "Che domande mi fa l'assistente?",
+    q: "Che domande mi fa l'intelligenza artificiale?",
     a: "Di solito tre o quattro, una alla volta e senza termini tecnici. Tocchi la risposta giusta, oppure scegli «Altro» e rispondi con parole tue. Se non lo sai, scegli «Non lo so». Se vuoi fermarti prima, chiudi la richiesta con quello che hai detto.",
   },
   {
@@ -51,7 +51,7 @@ const CLIENT: FaqItem[] = [
   },
   {
     q: "E se il riepilogo non è giusto?",
-    a: "Tocca «Non è questo il problema» e scegli tu la categoria dall'elenco. Se l'assistente scrive che non serve un intervento ma il problema c'è ancora, aggiungi i dettagli che mancano: lo valuta di nuovo.",
+    a: "Tocca «Non è questo il problema» e scegli tu la categoria dall'elenco. Se l'intelligenza artificiale scrive che non serve un intervento ma il problema c'è ancora, aggiungi i dettagli che mancano: lo valuta di nuovo.",
   },
   {
     q: "E se non è un lavoro per la casa, o è un'emergenza?",

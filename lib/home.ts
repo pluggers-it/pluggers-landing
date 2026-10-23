@@ -36,9 +36,10 @@ export const COMING = {
 export const HOW = {
   title: "Come funziona",
   lede:
-    "Descrivi il guasto con parole e foto: " +
-    "un assistente di intelligenza artificiale capisce quale professionista serve e quanto è urgente, " +
-    `e ti mostra chi lavora nella tua zona. ${COSTS_LINE}`,
+    "Descrivi il problema con parole e foto: l'intelligenza artificiale capisce di che guasto si tratta, " +
+    "quanto è urgente e quale professionista serve, prepara una scheda del problema dettagliata " +
+    "e ti mette in contatto con i professionisti adatti. Prenoti, accetti la stima e il professionista " +
+    "fa sopralluogo e intervento. Il QR code si scansiona all'inizio e alla fine del lavoro.",
   steps: [
     {
       title: "Racconta il problema",
@@ -66,7 +67,7 @@ export const TRADES_SECTION = {
   lede:
     "Su Pluggers trovi idraulici, elettricisti, fabbri, serramentisti e gli altri mestieri legati alla casa: " +
     "impianti, aperture, edilizia e finiture, arredo ed esterni. Non serve sapere quale ti serve, " +
-    "perché lo capisce l'assistente dalla tua descrizione.",
+    "perché lo capisce l'intelligenza artificiale dalla tua descrizione.",
 };
 
 /** The «Gestionale» card of the professional's features: the monthly history is in the app, sending it to the accountant is not yet. */
@@ -127,7 +128,7 @@ export const faq = (inStores: boolean) => [
   },
   {
     q: "Come trovo un idraulico o un elettricista a Torino in fretta?",
-    a: `${!inStores ? "Pluggers arriva a breve su iPhone e Android: lascia i contatti nella pre-iscrizione e ti avvisiamo appena è disponibile. Con l'app descrivi" : WEB_APP_OPEN ? "Apri Pluggers su app.plggrs.it e descrivi" : "Scarica Pluggers su iPhone o Android e descrivi"} il problema: l'assistente capisce quale mestiere serve e quanto è urgente, e ti mostra i professionisti che lavorano nella tua zona. Scegli a chi mandare la richiesta e il giorno tra quelli disponibili: l'orario lo propone il professionista. Le risposte arrivano in chat.`,
+    a: `${!inStores ? "Pluggers arriva a breve su iPhone e Android: lascia i contatti nella pre-iscrizione e ti avvisiamo appena è disponibile. Con l'app descrivi" : WEB_APP_OPEN ? "Apri Pluggers su app.plggrs.it e descrivi" : "Scarica Pluggers su iPhone o Android e descrivi"} il problema: l'intelligenza artificiale capisce quale mestiere serve e quanto è urgente, e ti mostra i professionisti che lavorano nella tua zona. Scegli a chi mandare la richiesta e il giorno tra quelli disponibili: l'orario lo propone il professionista. Le risposte arrivano in chat.`,
   },
   {
     q: "Cos'è il Costo Chiamata?",
@@ -139,7 +140,7 @@ export const faq = (inStores: boolean) => [
   },
   {
     q: "Come fa Pluggers a capire di che si tratta?",
-    a: "Pluggers usa un assistente di intelligenza artificiale: legge la descrizione e la foto, se serve ti fa qualche domanda senza termini tecnici e indica il mestiere, l'urgenza e le cause più probabili. Può sbagliare: il professionista verifica sul posto. La foto usata per questa valutazione viene cancellata subito dopo.",
+    a: "Pluggers usa l'intelligenza artificiale: legge la descrizione e la foto, se serve ti fa qualche domanda senza termini tecnici e indica il mestiere, l'urgenza e le cause più probabili. Può sbagliare: il professionista verifica sul posto. La foto usata per questa valutazione viene cancellata subito dopo.",
   },
   {
     q: "Chi sono i professionisti?",
