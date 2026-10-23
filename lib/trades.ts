@@ -63,7 +63,7 @@ export const TRADES: Trade[] = [
       "Perdite, scarichi intasati, WC che non smette di scaricare: descrivi il problema su Pluggers e scegli tra gli idraulici che lavorano nella tua zona di Torino.",
     summary: "Perdite, scarichi intasati, rubinetti, WC e sanitari.",
     intro:
-      "Su Pluggers trovi un idraulico a Torino partendo dal problema: scrivi cosa succede, aggiungi una foto e l'assistente capisce se serve davvero un idraulico, quanto è urgente e quali sono le cause più probabili. Poi scegli a chi mandare la richiesta tra gli idraulici che lavorano nella tua zona. Non c'è nessun abbonamento e non paghi per sbloccare i professionisti che trovi. L'idraulico lo paghi direttamente.",
+      "Su Pluggers trovi un idraulico a Torino partendo dal problema: scrivi cosa succede, aggiungi una foto e l'intelligenza artificiale capisce se serve davvero un idraulico, quanto è urgente e quali sono le cause più probabili. Poi scegli a chi mandare la richiesta tra gli idraulici che lavorano nella tua zona. Non c'è nessun abbonamento e non paghi per sbloccare i professionisti che trovi. L'idraulico lo paghi direttamente.",
     problemsLede: "Sono i problemi che arrivano più spesso a un idraulico, detti come li direbbe chiunque.",
     problems: [
       "Il rubinetto della cucina perde dalla base quando lo apro",
@@ -76,7 +76,7 @@ export const TRADES: Trade[] = [
     steps: [
       {
         title: "Fotografa il punto esatto",
-        text: "Una foto sotto il lavello, dietro il WC o sul raccordo che gocciola dice più di molte parole. L'assistente ti fa qualche domanda, una alla volta, per capire se è una guarnizione, un flessibile o uno scarico.",
+        text: "Una foto sotto il lavello, dietro il WC o sul raccordo che gocciola dice più di molte parole. L'intelligenza artificiale ti fa qualche domanda, una alla volta, per capire se è una guarnizione, un flessibile o uno scarico.",
       },
       {
         title: "Scegli tra gli idraulici vicini",
@@ -96,7 +96,7 @@ export const TRADES: Trade[] = [
     faq: [
       {
         q: "Come trovo un idraulico a Torino in fretta?",
-        a: "Apri Pluggers, descrivi la perdita o lo scarico con una foto e l'assistente ti indica l'urgenza e gli idraulici che lavorano nella tua zona. Mandi la richiesta fino a cinque e l'intervento va al primo che conferma. L'orario lo propone l'idraulico in base alla sua disponibilità.",
+        a: "Apri Pluggers, descrivi la perdita o lo scarico con una foto e l'intelligenza artificiale ti indica l'urgenza e gli idraulici che lavorano nella tua zona. Mandi la richiesta fino a cinque e l'intervento va al primo che conferma. L'orario lo propone l'idraulico in base alla sua disponibilità.",
       },
       {
         q: "Quanto costa la chiamata di un idraulico con Pluggers?",
@@ -108,7 +108,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Per la caldaia o lo scaldabagno chiamo un idraulico?",
-        a: "Per caldaie, scaldabagni, termosifoni e impianto del gas su Pluggers c'è il termoidraulico. Se descrivi un problema di questo tipo, l'assistente indica quel mestiere al posto dell'idraulico.",
+        a: "Per caldaie, scaldabagni, termosifoni e impianto del gas su Pluggers c'è il termoidraulico. Se descrivi un problema di questo tipo, l'intelligenza artificiale indica quel mestiere al posto dell'idraulico.",
       },
     ],
   },
@@ -123,7 +123,7 @@ export const TRADES: Trade[] = [
       "Salta il salvavita, una presa non va, serve un punto luce: descrivi il guasto su Pluggers e scegli tra gli elettricisti che lavorano nella tua zona di Torino.",
     summary: "Salvavita che scatta, prese, luci, quadro elettrico, citofono.",
     intro:
-      "Con Pluggers trovi un elettricista a Torino descrivendo il guasto come lo vedi: il salvavita che scatta, una presa annerita, una luce da aggiungere. L'assistente capisce se è un lavoro da elettricista e quanto è urgente; se ci sono scintille, fumo o odore di bruciato ti dice subito cosa fare per metterti in sicurezza. Poi scegli tra gli elettricisti della tua zona.",
+      "Con Pluggers trovi un elettricista a Torino descrivendo il guasto come lo vedi: il salvavita che scatta, una presa annerita, una luce da aggiungere. L'intelligenza artificiale capisce se è un lavoro da elettricista e quanto è urgente; se ci sono scintille, fumo o odore di bruciato ti dice subito cosa fare per metterti in sicurezza. Poi scegli tra gli elettricisti della tua zona.",
     problemsLede: "Quasi sempre il problema si riconosce da quello che succede in casa, senza sapere niente di impianti.",
     problems: [
       "Salta il salvavita ogni volta che accendo il forno",
@@ -136,7 +136,7 @@ export const TRADES: Trade[] = [
     steps: [
       {
         title: "Racconta quando succede",
-        text: "Scrivi cosa stavi accendendo quando è saltata la corrente e fotografa il quadro o la presa. L'assistente ti chiede quello che serve, per esempio se scatta il salvavita o un altro interruttore.",
+        text: "Scrivi cosa stavi accendendo quando è saltata la corrente e fotografa il quadro o la presa. L'intelligenza artificiale ti chiede quello che serve, per esempio se scatta il salvavita o un altro interruttore.",
       },
       {
         title: "Prima la sicurezza",
@@ -156,7 +156,7 @@ export const TRADES: Trade[] = [
     faq: [
       {
         q: "Mi salta il salvavita di continuo: chi chiamo a Torino?",
-        a: "Ti serve un elettricista. Su Pluggers descrivi quando scatta e cosa era acceso: l'assistente lo riconosce e ti mostra gli elettricisti della tua zona. Intanto puoi staccare le spine degli elettrodomestici e riattaccarle una alla volta: spesso così si trova il colpevole.",
+        a: "Ti serve un elettricista. Su Pluggers descrivi quando scatta e cosa era acceso: l'intelligenza artificiale lo riconosce e ti mostra gli elettricisti della tua zona. Intanto puoi staccare le spine degli elettrodomestici e riattaccarle una alla volta: spesso così si trova il colpevole.",
       },
       {
         q: "Quanto costa far venire un elettricista con Pluggers?",
@@ -168,7 +168,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Per l'antenna o il segnale della TV serve un elettricista?",
-        a: "La presa TV a muro è un lavoro da elettricista; antenne, parabole e segnale TV sono dell'antennista. Descrivi il problema e l'assistente indica il mestiere giusto.",
+        a: "La presa TV a muro è un lavoro da elettricista; antenne, parabole e segnale TV sono dell'antennista. Descrivi il problema e l'intelligenza artificiale indica il mestiere giusto.",
       },
     ],
   },
@@ -183,7 +183,7 @@ export const TRADES: Trade[] = [
       "Chiuso fuori, serratura bloccata, chiavi perse o cancello da sistemare: descrivi il problema su Pluggers e scegli tra i fabbri della tua zona di Torino.",
     summary: "Porte chiuse, serrature, cilindri, chiavi, cancelli e inferriate.",
     intro:
-      "Su Pluggers trovi un fabbro a Torino scrivendo cosa è successo alla porta, alla serratura o al cancello. L'assistente riconosce che serve un fabbro e quanto è urgente: restare chiusi fuori casa ha un'urgenza diversa da una maniglia da cambiare. Scegli fino a cinque fabbri tra quelli che lavorano nella tua zona e l'intervento va al primo che conferma.",
+      "Su Pluggers trovi un fabbro a Torino scrivendo cosa è successo alla porta, alla serratura o al cancello. L'intelligenza artificiale riconosce che serve un fabbro e quanto è urgente: restare chiusi fuori casa ha un'urgenza diversa da una maniglia da cambiare. Scegli fino a cinque fabbri tra quelli che lavorano nella tua zona e l'intervento va al primo che conferma.",
     problemsLede: "Ecco come arrivano di solito le richieste per un fabbro.",
     problems: [
       "Sono chiuso fuori e le chiavi sono rimaste dentro",
@@ -196,7 +196,7 @@ export const TRADES: Trade[] = [
     steps: [
       {
         title: "Di' com'è la porta",
-        text: "Scrivi se è blindata, se la chiave entra ma non gira o se è rimasta dentro, e fotografa la serratura. L'assistente ti fa poche domande per capire il tipo di intervento.",
+        text: "Scrivi se è blindata, se la chiave entra ma non gira o se è rimasta dentro, e fotografa la serratura. L'intelligenza artificiale ti fa poche domande per capire il tipo di intervento.",
       },
       {
         title: "L'urgenza la vede anche il fabbro",
@@ -216,7 +216,7 @@ export const TRADES: Trade[] = [
     faq: [
       {
         q: "Sono rimasto chiuso fuori casa a Torino: come trovo un fabbro?",
-        a: "Apri Pluggers dal telefono, scrivi che sei chiuso fuori e fotografa la porta. L'assistente segna la richiesta come urgente e ti mostra i fabbri che lavorano vicino a te; l'orario di arrivo lo concordi con chi conferma.",
+        a: "Apri Pluggers dal telefono, scrivi che sei chiuso fuori e fotografa la porta. L'intelligenza artificiale segna la richiesta come urgente e ti mostra i fabbri che lavorano vicino a te; l'orario di arrivo lo concordi con chi conferma.",
       },
       {
         q: "Quanto costa aprire una porta con un fabbro di Pluggers?",
@@ -224,7 +224,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Ho perso le chiavi: devo cambiare tutta la serratura?",
-        a: "Non sempre. Su molte porte basta sostituire il cilindro, che è la parte dove entra la chiave. Scrivilo nella richiesta e allega una foto della serratura: l'assistente ne tiene conto e il fabbro ti dice nella stima cosa serve.",
+        a: "Non sempre. Su molte porte basta sostituire il cilindro, che è la parte dove entra la chiave. Scrivilo nella richiesta e allega una foto della serratura: l'intelligenza artificiale ne tiene conto e il fabbro ti dice nella stima cosa serve.",
       },
       {
         q: "Il fabbro ripara anche cancelli e inferriate?",
@@ -243,7 +243,7 @@ export const TRADES: Trade[] = [
       "Lavatrice che non scarica, frigo che non raffredda, forno spento: descrivi il guasto su Pluggers e scegli tra i tecnici della tua zona di Torino.",
     summary: "Lavatrici, lavastoviglie, frigoriferi, forni, piani cottura e cappe.",
     intro:
-      "Su Pluggers trovi un tecnico degli elettrodomestici a Torino descrivendo il guasto: la lavatrice che si ferma con l'acqua dentro, il frigo che non raffredda, il forno che non scalda. L'assistente capisce di che si tratta e ti mostra i tecnici che lavorano nella tua zona. Con la stima in chat sai quanto può costare la riparazione prima di decidere se ripararlo.",
+      "Su Pluggers trovi un tecnico degli elettrodomestici a Torino descrivendo il guasto: la lavatrice che si ferma con l'acqua dentro, il frigo che non raffredda, il forno che non scalda. L'intelligenza artificiale capisce di che si tratta e ti mostra i tecnici che lavorano nella tua zona. Con la stima in chat sai quanto può costare la riparazione prima di decidere se ripararlo.",
     problemsLede: "Un elettrodomestico guasto si descrive bene da quello che fa, o che smette di fare.",
     problems: [
       "La lavatrice si ferma a metà con l'acqua dentro",
@@ -260,7 +260,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Tecnici della tua zona",
-        text: "L'assistente indica il mestiere e l'urgenza, poi vedi i tecnici il cui raggio d'azione arriva a casa tua. Puoi scriverne fino a cinque.",
+        text: "L'intelligenza artificiale indica il mestiere e l'urgenza, poi vedi i tecnici il cui raggio d'azione arriva a casa tua. Puoi scriverne fino a cinque.",
       },
       {
         title: "Riparare o cambiare?",
@@ -276,7 +276,7 @@ export const TRADES: Trade[] = [
     faq: [
       {
         q: "La lavatrice non scarica l'acqua: chi chiamo a Torino?",
-        a: "Un tecnico degli elettrodomestici. Su Pluggers descrivi il problema e, se puoi, scrivi il codice di errore: l'assistente riconosce il guasto probabile e ti mostra i tecnici vicini. Intanto controlla il filtro in basso sul davanti, spesso è lì che si blocca.",
+        a: "Un tecnico degli elettrodomestici. Su Pluggers descrivi il problema e, se puoi, scrivi il codice di errore: l'intelligenza artificiale riconosce il guasto probabile e ti mostra i tecnici vicini. Intanto controlla il filtro in basso sul davanti, spesso è lì che si blocca.",
       },
       {
         q: "Conviene riparare un elettrodomestico o comprarne uno nuovo?",
@@ -288,7 +288,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Il tecnico ripara anche il piano cottura a gas?",
-        a: "Sì, il piano cottura è tra gli apparecchi del tecnico degli elettrodomestici. Se il problema è nel tubo o nell'allaccio del gas, invece, serve un termoidraulico: l'assistente te lo indica.",
+        a: "Sì, il piano cottura è tra gli apparecchi del tecnico degli elettrodomestici. Se il problema è nel tubo o nell'allaccio del gas, invece, serve un termoidraulico: l'intelligenza artificiale te lo indica.",
       },
     ],
   },
@@ -316,7 +316,7 @@ export const TRADES: Trade[] = [
     steps: [
       {
         title: "Stanze, misure e foto",
-        text: "Scrivi quali stanze, quanti metri se li sai, e fotografa le pareti con la luce del giorno. L'assistente conferma che è un lavoro da imbianchino e non, per esempio, un'infiltrazione da risolvere prima.",
+        text: "Scrivi quali stanze, quanti metri se li sai, e fotografa le pareti con la luce del giorno. L'intelligenza artificiale conferma che è un lavoro da imbianchino e non, per esempio, un'infiltrazione da risolvere prima.",
       },
       {
         title: "Fino a cinque imbianchini vicini",
@@ -336,7 +336,7 @@ export const TRADES: Trade[] = [
     faq: [
       {
         q: "Come trovo un imbianchino a Torino per una stanza sola?",
-        a: "Su Pluggers descrivi la stanza, aggiungi una foto e, se le hai, le misure. Ti vengono mostrati gli imbianchini che lavorano nella tua zona e puoi chiedere la stima a tre di loro. Anche i lavori piccoli, come un ritocco, si chiedono così.",
+        a: "Su Pluggers descrivi la stanza, aggiungi una foto e, se le hai, le misure. Ti vengono mostrati gli imbianchini che lavorano nella tua zona e puoi chiedere la stima fino a cinque di loro. Anche i lavori piccoli, come un ritocco, si chiedono così.",
       },
       {
         q: "Quanto costa imbiancare una stanza con Pluggers?",
@@ -344,7 +344,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Ho la muffa sul soffitto: basta ridipingere?",
-        a: "No, se non si toglie la causa la muffa torna. L'imbianchino può fare il trattamento antimuffa e ridipingere, ma se la causa è un'infiltrazione o una perdita serve prima un muratore o un idraulico: descrivilo e l'assistente indica chi.",
+        a: "No, se non si toglie la causa la muffa torna. L'imbianchino può fare il trattamento antimuffa e ridipingere, ma se la causa è un'infiltrazione o una perdita serve prima un muratore o un idraulico: descrivilo e l'intelligenza artificiale indica chi.",
       },
       {
         q: "Devo spostare i mobili prima che arrivi l'imbianchino?",
@@ -380,7 +380,7 @@ export const TRADES: Trade[] = [
       },
       {
         title: "Falegnami della tua zona",
-        text: "L'assistente indica il mestiere e ti mostra i falegnami il cui raggio d'azione comprende il tuo indirizzo. Mandi la richiesta fino a cinque.",
+        text: "L'intelligenza artificiale indica il mestiere e ti mostra i falegnami il cui raggio d'azione comprende il tuo indirizzo. Mandi la richiesta fino a cinque.",
       },
       {
         title: "Stima e poi preventivo",
@@ -423,7 +423,7 @@ export const TRADES: Trade[] = [
       "Condizionatore che non raffredda, split che gocciola, pompa di calore da controllare: descrivi il problema su Pluggers e scegli un tecnico vicino a te a Torino.",
     summary: "Condizionatori, split, pompe di calore e ventilazione.",
     intro:
-      "Su Pluggers trovi un tecnico della climatizzazione a Torino per condizionatori, split, pompe di calore e ventilazione. Scrivi cosa fa l'impianto, per esempio se non raffredda, gocciola o fa rumore, e fotografa l'unità interna e la targhetta. L'assistente indica il mestiere e l'urgenza, poi scegli tra i tecnici che lavorano nella tua zona e ricevi la stima in chat.",
+      "Su Pluggers trovi un tecnico della climatizzazione a Torino per condizionatori, split, pompe di calore e ventilazione. Scrivi cosa fa l'impianto, per esempio se non raffredda, gocciola o fa rumore, e fotografa l'unità interna e la targhetta. L'intelligenza artificiale indica il mestiere e l'urgenza, poi scegli tra i tecnici che lavorano nella tua zona e ricevi la stima in chat.",
     problemsLede: "Le richieste per la climatizzazione arrivano quasi tutte all'inizio dell'estate o dell'inverno.",
     problems: [
       "Il condizionatore va ma esce aria calda",
@@ -436,7 +436,7 @@ export const TRADES: Trade[] = [
     steps: [
       {
         title: "Fotografa unità e targhetta",
-        text: "Una foto dell'unità interna, una di quella esterna e la targhetta con marca e modello aiutano a capire il problema. L'assistente ti chiede da quanto succede e cosa hai già provato.",
+        text: "Una foto dell'unità interna, una di quella esterna e la targhetta con marca e modello aiutano a capire il problema. L'intelligenza artificiale ti chiede da quanto succede e cosa hai già provato.",
       },
       {
         title: "Tecnici nel tuo raggio",
@@ -456,7 +456,7 @@ export const TRADES: Trade[] = [
     faq: [
       {
         q: "Il condizionatore non raffredda: chi chiamo a Torino?",
-        a: "Un tecnico della climatizzazione. Su Pluggers descrivi cosa fa l'impianto e aggiungi la foto dello split: l'assistente lo riconosce e ti mostra i tecnici vicini. Prima controlla che i filtri dell'unità interna siano puliti, sono la causa più semplice.",
+        a: "Un tecnico della climatizzazione. Su Pluggers descrivi cosa fa l'impianto e aggiungi la foto dello split: l'intelligenza artificiale lo riconosce e ti mostra i tecnici vicini. Prima controlla che i filtri dell'unità interna siano puliti, sono la causa più semplice.",
       },
       {
         q: "Quanto costa la manutenzione del condizionatore con Pluggers?",
@@ -483,7 +483,7 @@ export const TRADES: Trade[] = [
       "Caldaia in blocco, niente acqua calda, termosifoni freddi: descrivi il problema su Pluggers e scegli tra i termoidraulici che lavorano nella tua zona di Torino.",
     summary: "Caldaie, scaldabagni, riscaldamento, termosifoni e impianto del gas.",
     intro:
-      "Su Pluggers trovi un termoidraulico a Torino per caldaie, scaldabagni, riscaldamento, termosifoni e impianto del gas. Descrivi cosa succede, per esempio la caldaia in blocco o l'acqua che non scalda, e fotografa il display. Se descrivi odore di gas, l'assistente ti dice subito cosa fare per metterti in sicurezza; poi scegli tra i termoidraulici della tua zona.",
+      "Su Pluggers trovi un termoidraulico a Torino per caldaie, scaldabagni, riscaldamento, termosifoni e impianto del gas. Descrivi cosa succede, per esempio la caldaia in blocco o l'acqua che non scalda, e fotografa il display. Se descrivi odore di gas, l'intelligenza artificiale ti dice subito cosa fare per metterti in sicurezza; poi scegli tra i termoidraulici della tua zona.",
     problemsLede: "Una caldaia o un termosifone che non va si fa notare subito, soprattutto d'inverno.",
     problems: [
       "La caldaia va in blocco e sul display c'è un codice",
@@ -516,7 +516,7 @@ export const TRADES: Trade[] = [
     faq: [
       {
         q: "La caldaia è in blocco: come trovo un tecnico a Torino?",
-        a: "Su Pluggers scrivi il codice che vedi sul display e fotografalo: l'assistente indica un termoidraulico e ti mostra quelli che lavorano nella tua zona. Puoi provare una volta il tasto di sblocco; se la caldaia torna in blocco, lascia stare.",
+        a: "Su Pluggers scrivi il codice che vedi sul display e fotografalo: l'intelligenza artificiale indica un termoidraulico e ti mostra quelli che lavorano nella tua zona. Puoi provare una volta il tasto di sblocco; se la caldaia torna in blocco, lascia stare.",
       },
       {
         q: "Quanto costa far venire un termoidraulico con Pluggers?",
@@ -524,7 +524,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Che differenza c'è tra idraulico e termoidraulico su Pluggers?",
-        a: "L'idraulico si occupa di acqua, rubinetti, scarichi e sanitari; il termoidraulico di caldaie, scaldabagni, riscaldamento, termosifoni e impianto del gas. Non devi sceglierlo tu: lo indica l'assistente dalla tua descrizione.",
+        a: "L'idraulico si occupa di acqua, rubinetti, scarichi e sanitari; il termoidraulico di caldaie, scaldabagni, riscaldamento, termosifoni e impianto del gas. Non devi sceglierlo tu: lo indica l'intelligenza artificiale dalla tua descrizione.",
       },
       {
         q: "I termosifoni sono freddi sotto: serve un tecnico?",
@@ -543,7 +543,7 @@ export const TRADES: Trade[] = [
       "Tapparella bloccata, finestra che non chiude, serranda o zanzariera da sistemare: descrivi il problema su Pluggers e scegli un serramentista a Torino.",
     summary: "Finestre, porte-finestre, tapparelle, persiane, serrande e zanzariere.",
     intro:
-      "Su Pluggers trovi un serramentista a Torino per finestre, porte-finestre, tapparelle, persiane, serrande e zanzariere. Descrivi cosa non funziona, per esempio la cinghia della tapparella rotta o l'anta che non chiude, e fotografa il punto. L'assistente indica il mestiere, poi scegli fino a cinque serramentisti che lavorano nella tua zona e ricevi la stima in chat.",
+      "Su Pluggers trovi un serramentista a Torino per finestre, porte-finestre, tapparelle, persiane, serrande e zanzariere. Descrivi cosa non funziona, per esempio la cinghia della tapparella rotta o l'anta che non chiude, e fotografa il punto. L'intelligenza artificiale indica il mestiere, poi scegli fino a cinque serramentisti che lavorano nella tua zona e ricevi la stima in chat.",
     problemsLede: "Sono i guasti più comuni di finestre e chiusure, raccontati come succedono.",
     problems: [
       "La cinghia della tapparella si è rotta e la tapparella è giù",
@@ -556,7 +556,7 @@ export const TRADES: Trade[] = [
     steps: [
       {
         title: "Una foto e le misure",
-        text: "Fotografa la tapparella, l'anta o la serranda e, se si tratta di una zanzariera o di un pezzo da sostituire, scrivi le misure del vano. L'assistente ti chiede quello che manca.",
+        text: "Fotografa la tapparella, l'anta o la serranda e, se si tratta di una zanzariera o di un pezzo da sostituire, scrivi le misure del vano. L'intelligenza artificiale ti chiede quello che manca.",
       },
       {
         title: "Serramentisti vicini",
@@ -576,7 +576,7 @@ export const TRADES: Trade[] = [
     faq: [
       {
         q: "Come trovo qualcuno per riparare una tapparella a Torino?",
-        a: "Su Pluggers descrivi il problema, come la cinghia rotta o la tapparella bloccata, e aggiungi una foto. L'assistente indica il serramentista e ti mostra quelli che lavorano nella tua zona.",
+        a: "Su Pluggers descrivi il problema, come la cinghia rotta o la tapparella bloccata, e aggiungi una foto. L'intelligenza artificiale indica il serramentista e ti mostra quelli che lavorano nella tua zona.",
       },
       {
         q: "Quanto costa cambiare la cinghia della tapparella con Pluggers?",
@@ -603,7 +603,7 @@ export const TRADES: Trade[] = [
       "Infiltrazioni, crepe, intonaco che si stacca o una parete da rifare: descrivi il lavoro su Pluggers e chiedi la stima ai muratori della tua zona di Torino.",
     summary: "Muri, intonaci, crepe, infiltrazioni dall'esterno, impermeabilizzazioni.",
     intro:
-      "Su Pluggers trovi un muratore a Torino per muri, intonaci, crepe, infiltrazioni dall'esterno e impermeabilizzazioni. Descrivi il problema con una foto, per esempio l'intonaco che si stacca o la macchia di umidità che arriva da fuori. L'assistente indica il mestiere e l'urgenza; poi scegli fino a cinque muratori della tua zona e ricevi la stima in chat.",
+      "Su Pluggers trovi un muratore a Torino per muri, intonaci, crepe, infiltrazioni dall'esterno e impermeabilizzazioni. Descrivi il problema con una foto, per esempio l'intonaco che si stacca o la macchia di umidità che arriva da fuori. L'intelligenza artificiale indica il mestiere e l'urgenza; poi scegli fino a cinque muratori della tua zona e ricevi la stima in chat.",
     problemsLede: "Per un muratore la foto e il punto della casa dicono quasi tutto.",
     problems: [
       "L'intonaco del balcone si sta staccando a pezzi",
@@ -644,7 +644,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Ho umidità sul muro: chiamo un muratore o un idraulico?",
-        a: "Se l'umidità arriva da fuori, dal terrazzo o dalle pareti esterne, è un lavoro da muratore; se viene da un tubo che perde, da idraulico. Descrivi dove compare e quando peggiora: l'assistente indica il mestiere più probabile.",
+        a: "Se l'umidità arriva da fuori, dal terrazzo o dalle pareti esterne, è un lavoro da muratore; se viene da un tubo che perde, da idraulico. Descrivi dove compare e quando peggiora: l'intelligenza artificiale indica il mestiere più probabile.",
       },
       {
         q: "Per abbattere una parete serve un permesso?",
@@ -676,7 +676,7 @@ export const TRADES: Trade[] = [
     steps: [
       {
         title: "Foto e piastrelle di scorta",
-        text: "Fotografa la zona e scrivi se hai piastrelle avanzate dalla posa: trovare lo stesso modello è spesso la parte più difficile. L'assistente conferma il mestiere.",
+        text: "Fotografa la zona e scrivi se hai piastrelle avanzate dalla posa: trovare lo stesso modello è spesso la parte più difficile. L'intelligenza artificiale conferma il mestiere.",
       },
       {
         title: "Piastrellisti vicini",
@@ -708,7 +708,7 @@ export const TRADES: Trade[] = [
       },
       {
         q: "Il piastrellista posa anche il parquet?",
-        a: "Su Pluggers parquet e laminati sono del posatore di pavimenti; il piastrellista si occupa di piastrelle e fughe. Descrivi il lavoro e l'assistente indica il mestiere giusto.",
+        a: "Su Pluggers parquet e laminati sono del posatore di pavimenti; il piastrellista si occupa di piastrelle e fughe. Descrivi il lavoro e l'intelligenza artificiale indica il mestiere giusto.",
       },
     ],
   },
@@ -783,7 +783,7 @@ export const TRADES: Trade[] = [
       "Vetro rotto, doppio vetro appannato, box doccia o specchio da sostituire: descrivi il lavoro su Pluggers e scegli tra i vetrai della tua zona di Torino.",
     summary: "Vetri rotti, vetrocamera, box doccia, specchi e sigillature.",
     intro:
-      "Su Pluggers trovi un vetraio a Torino per vetri rotti, vetrocamera, vetri temperati, box doccia, specchi e sigillature. Descrivi il lavoro con una foto e le misure del vetro, e scrivi se è una finestra, una porta o un mobile. L'assistente indica il mestiere e l'urgenza, poi scegli fino a cinque vetrai della tua zona.",
+      "Su Pluggers trovi un vetraio a Torino per vetri rotti, vetrocamera, vetri temperati, box doccia, specchi e sigillature. Descrivi il lavoro con una foto e le misure del vetro, e scrivi se è una finestra, una porta o un mobile. L'intelligenza artificiale indica il mestiere e l'urgenza, poi scegli fino a cinque vetrai della tua zona.",
     problemsLede: "Per un vetraio servono soprattutto il tipo di vetro e le misure.",
     problems: [
       "Si è rotto il vetro della finestra della cucina",
@@ -816,7 +816,7 @@ export const TRADES: Trade[] = [
     faq: [
       {
         q: "Come trovo un vetraio a Torino per un vetro rotto?",
-        a: "Su Pluggers descrivi dove si è rotto il vetro e aggiungi una foto e le misure. L'assistente indica il vetraio e l'urgenza e ti mostra quelli che lavorano nella tua zona.",
+        a: "Su Pluggers descrivi dove si è rotto il vetro e aggiungi una foto e le misure. L'intelligenza artificiale indica il vetraio e l'urgenza e ti mostra quelli che lavorano nella tua zona.",
       },
       {
         q: "Quanto costa sostituire un vetro con Pluggers?",
@@ -903,7 +903,7 @@ export const TORINO = {
   description:
     "Idraulici, elettricisti, fabbri e gli altri professionisti per la casa a Torino: descrivi il problema su Pluggers e scegli tra chi lavora nella tua zona.",
   intro:
-    "Su Pluggers trovi a Torino idraulici, elettricisti, fabbri, serramentisti e gli altri professionisti per la casa. Non serve sapere quale ti serve: descrivi il problema con una foto e l'assistente indica il mestiere e l'urgenza. Poi scegli a chi scrivere tra i professionisti che lavorano nella tua zona. Non c'è nessun abbonamento e non paghi per sbloccare i professionisti che trovi. Il professionista lo paghi direttamente.",
+    "Su Pluggers trovi a Torino idraulici, elettricisti, fabbri, serramentisti e gli altri professionisti per la casa. Non serve sapere quale ti serve: descrivi il problema con una foto e l'intelligenza artificiale indica il mestiere e l'urgenza. Poi scegli a chi scrivere tra i professionisti che lavorano nella tua zona. Non c'è nessun abbonamento e non paghi per sbloccare i professionisti che trovi. Il professionista lo paghi direttamente.",
   faq: [
     {
       q: "Pluggers funziona in tutta Torino?",
@@ -915,7 +915,7 @@ export const TORINO = {
     },
     {
       q: "Non so quale professionista mi serve: cosa faccio?",
-      a: "Non devi saperlo. Descrivi il problema come lo vedi, con una foto: l'assistente di Pluggers indica il mestiere, l'urgenza e le cause più probabili, e ti mostra i professionisti adatti.",
+      a: "Non devi saperlo. Descrivi il problema come lo vedi, con una foto: l'intelligenza artificiale di Pluggers indica il mestiere, l'urgenza e le cause più probabili, e ti mostra i professionisti adatti.",
     },
   ],
 };

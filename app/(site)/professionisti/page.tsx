@@ -56,14 +56,14 @@ const STEPS: GuideStep[] = [
     title: "Ricevi le richieste",
     text: "Le richieste arrivano dai clienti della tua zona che ti hanno scelto. Ognuna ha giorno, mestiere, problema, distanza da te e una cifra di riferimento calcolata dall'app.",
     points: ["Apri quelle che ti interessano", "Rifiuta le altre"],
-    tip: "Guarda la scheda del problema prima di uscire: spesso bastano per capire che pezzo portare.",
+    tip: "Guarda la scheda del problema e le foto prima di uscire: spesso bastano per capire che pezzo portare.",
   },
   {
     id: "preventivo", short: "Stima e preventivo", src: `${G}/05.webp`,
     alt: "Schermata «Nuovo preventivo»: la stima automatica con la fascia tipica, le voci del preventivo e il bottone «Invia preventivo».",
     title: "Prima la stima, dopo il sopralluogo il preventivo",
-    text: "Prima del sopralluogo mandi una stima: quanto può costare il lavoro e l'eventuale Costo Chiamata. Se il cliente la accetta, l'appuntamento è confermato. Dopo il sopralluogo mandi il preventivo, voce per voce.",
-    points: ["L'app ti suggerisce una cifra, puoi cambiarla", "Imponibile, IVA e totale li calcola l'app, il cliente riceve anche il PDF", "Se in corso d'opera il prezzo cambia, mandi un preventivo aggiornato con motivo e foto"],
+    text: "Prima del sopralluogo mandi una stima: quanto può costare il lavoro e l'eventuale Costo Chiamata. Se il cliente la accetta, l'appuntamento è confermato. Dopo il sopralluogo mandi il preventivo; puoi poi eseguire l'intervento subito o in un altro giorno.",
+    points: ["L'app ti suggerisce una cifra, sta a te poi definirla e confermarla", "Imponibile, IVA e totale li calcola l'app, il cliente riceve anche il PDF del preventivo", "Se in corso d'opera il prezzo cambia, mandi un preventivo aggiornato con motivo e foto"],
     tip: "Il Costo Chiamata è quello che chiedi per effettuare il sopralluogo. Se il cliente l'ha accettato con la stima, ti spetta anche se poi rifiuta il preventivo.",
   },
   {

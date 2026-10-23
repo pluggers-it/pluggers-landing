@@ -9,7 +9,7 @@ import { TrustRows } from "@/components/landing/TrustRows";
 import { StoreBadges } from "@/components/landing/StoreBadges";
 import { AppLink } from "@/components/landing/AppLink";
 import { BTN_PRIMARY, CONTAINER, H2 } from "@/components/landing/styles";
-import { COSTS_LINE, faq } from "@/lib/home";
+import { faq } from "@/lib/home";
 import { appInStores } from "@/lib/prelaunch";
 import { breadcrumbSchema, graph, pageMetadata, pageSchema } from "@/lib/seo";
 import { TRADES } from "@/lib/trades";
@@ -38,12 +38,12 @@ const STEPS: GuideStep[] = [
     id: "domande", short: "Le domande", src: `${G}/02.webp`,
     alt: "Schermata «Capiamo il problema»: la domanda «Da dove esce l'acqua?» con tre risposte da toccare, «Altro» e «Non lo so».",
     title: "Rispondi a due o tre domande",
-    text: "L'assistente chiede quello che gli serve per capire il guasto. Le risposte sono già scritte, basta toccare quella giusta.",
+    text: "L'intelligenza artificiale chiede quello che le serve per capire il guasto. Le risposte sono già scritte, basta toccare quella giusta.",
     points: ["Tocca la risposta che corrisponde a quello che vedi", "Se non sei sicuro, scegli «Non lo so»"],
   },
   {
     id: "diagnosi", short: "Il riepilogo", src: `${G}/03.webp`,
-    alt: "Schermata «Cosa abbiamo capito»: chi serve, Idraulico, urgenza 2 su 5, la spiegazione dell'assistente e le cause più probabili.",
+    alt: "Schermata «Cosa abbiamo capito»: chi serve, Idraulico, urgenza 2 su 5, la spiegazione dell'intelligenza artificiale e le cause più probabili.",
     title: "Controlla cosa ha capito Pluggers",
     text: "Prima di cercare vedi il riepilogo: quale professionista serve, quanto è urgente e le cause più probabili.",
     points: ["Il mestiere, per esempio idraulico", "L'urgenza, da 1 a 5", "Se il riepilogo è sbagliato, tocca «Non è questo il problema» e correggi"],
@@ -108,10 +108,10 @@ export default async function ClientiPage() {
       <section className={`${CONTAINER} grid items-center gap-12 pb-16 pt-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16 lg:pt-8`}>
         <div>
           <h1 className="max-w-[18ch] text-balance text-[clamp(2.4rem,4.4vw,3.6rem)] font-extrabold leading-[1.04] tracking-[-0.035em]">
-            Scrivi il guasto, scegli chi lo ripara
+            Scrivi e fotografa il problema, al resto ci pensiamo noi!
           </h1>
           <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-muted sm:text-lg">
-            Otto passi, con i nomi dei pulsanti che trovi nell&apos;app. Non serve sapere che professionista ti serve: lo capisce l&apos;assistente dalla tua descrizione. {COSTS_LINE}
+            Non serve sapere che professionista ti serve o comprendere quale è la causa del tuo problema: lo capisce l&apos;intelligenza artificiale dalla tua foto e dalla tua descrizione.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <AppLink computerOnly whenClosed="stores" className={`${BTN_PRIMARY} max-sm:hidden`}>

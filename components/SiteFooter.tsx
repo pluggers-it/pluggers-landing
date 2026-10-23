@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import { ORG, ORG_ADDRESS_LINE, SOCIAL_LINKS } from "@/lib/site";
 
@@ -18,35 +19,27 @@ const LEGAL_LINKS: FooterLink[] = [
   { label: "Elimina account", href: "/elimina-account" },
 ];
 
+// The company line (site review S-42); the email follows as a link.
+const COMPANY_LINE = [
+  `${ORG.legalName}, società a socio unico`,
+  ORG_ADDRESS_LINE,
+  `P.IVA e C.F. ${ORG.vatNumber}`,
+  `REA ${ORG.rea}`,
+  `Capitale sociale ${ORG.shareCapital}`,
+];
+
 const TITLE_CLASS = "flex min-h-12 items-center font-semibold text-ink";
-const ITEM_CLASS = "flex min-h-11 items-center text-muted";
 const LINK_CLASS =
   "inline-flex min-h-11 items-center text-muted underline-offset-4 transition hover:text-ink hover:underline";
 
 /**
  * Shared footer — rendered on all public-facing pages.
- * Four columns with the same shape: company data, site links, legal links, socials.
+ * Three link columns (site, legal, socials), then the company line on a single row.
  */
 export function SiteFooter() {
   return (
     <footer className="border-t border-hair pt-8 text-sm">
-      <div className="grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4">
-        <div className="col-span-2 sm:col-span-1">
-          <p className={TITLE_CLASS}>{ORG.legalName}</p>
-          <address className="not-italic">
-            <ul>
-              <li className={ITEM_CLASS}>{ORG_ADDRESS_LINE}</li>
-              <li className={ITEM_CLASS}>P.IVA e C.F. {ORG.vatNumber}</li>
-              <li className={ITEM_CLASS}>Capitale sociale {ORG.shareCapital}</li>
-              <li>
-                <a href={`mailto:${ORG.email}`} className={LINK_CLASS}>
-                  {ORG.email}
-                </a>
-              </li>
-            </ul>
-          </address>
-        </div>
-
+      <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3">
         {/* On phones this column spans two rows, so «Note legali» and «Seguici» stack beside it. */}
         <FooterLinks id="footer-site" title="Link utili" links={SITE_LINKS} className="row-span-2 sm:row-span-1" />
         <FooterLinks id="footer-legal" title="Note legali" links={LEGAL_LINKS} />
@@ -67,6 +60,21 @@ export function SiteFooter() {
           </ul>
         </nav>
       </div>
+
+      {/* Each part stays whole when the line wraps; the dot ends the line it follows. */}
+      <address className="mt-8 not-italic leading-[1.7] text-muted">
+        {COMPANY_LINE.map((part) => (
+          <Fragment key={part}>
+            <span className="whitespace-nowrap">{part} ·</span>{" "}
+          </Fragment>
+        ))}
+        <a
+          href={`mailto:${ORG.email}`}
+          className="-my-3 inline-block py-3 underline-offset-4 transition hover:text-ink hover:underline"
+        >
+          {ORG.email}
+        </a>
+      </address>
 
       {/* Extra room on phones so the fixed «torna su» button never sits on the last links. */}
       <div className="mt-6 flex items-center justify-between gap-4 border-t border-hair pb-24 pt-6 md:pb-8">
