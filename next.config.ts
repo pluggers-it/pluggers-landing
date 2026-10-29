@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { APP_STORE_URL, PLAY_STORE_URL } from "./components/landing/links";
 
 // ── Supabase project URL (used in connect-src) ────────────────────────────────
 const SUPABASE_HOST = "zfmcltiraiyxryjfahgw.supabase.co";
@@ -84,6 +85,9 @@ const nextConfig: NextConfig = {
         destination: "https://www.plggrs.it/:path*",
         permanent: true,
       },
+      // The store QR codes on the flyers point here: temporary (307), so the store links can change without reprinting
+      { source: "/play", destination: PLAY_STORE_URL, permanent: false },
+      { source: "/ios", destination: APP_STORE_URL, permanent: false },
     ];
   },
 
