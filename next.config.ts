@@ -88,6 +88,7 @@ const nextConfig: NextConfig = {
       // The store QR codes on the flyers point here: temporary (307), so the store links can change without reprinting
       // While Google Play is a closed test its listing gives 404 to non-testers: the professional sign-up on the web app until then
       { source: "/play", destination: PLAY_STORE_PUBLIC ? PLAY_STORE_URL : PRO_SIGNUP_URL, permanent: false },
+      { source: "/android", destination: PLAY_STORE_PUBLIC ? PLAY_STORE_URL : PRO_SIGNUP_URL, permanent: false },
       { source: "/ios", destination: APP_STORE_URL, permanent: false },
     ];
   },
