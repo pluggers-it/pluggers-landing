@@ -27,10 +27,11 @@ export function storeUrlFor(userAgent: string, platform = "", touchPoints = 0): 
 }
 
 /**
- * Whether anyone can install from Google Play. Until then it is a closed test and the public listing gives 404 to
- * whoever isn't a tester: `preferStore` false links (the professional sign-up) keep Android on the web app.
+ * Whether anyone can install from Google Play: true since the production release (1.1.3, November 2026). While it
+ * was false the public listing gave 404 to whoever wasn't a tester, and `preferStore` false links (the professional
+ * sign-up) kept Android on the web app.
  */
-export const PLAY_STORE_PUBLIC: boolean = false;
+export const PLAY_STORE_PUBLIC: boolean = true;
 
 /**
  * Where a link into Pluggers leads: the device's store, or `href` on the web app; null when that would be
