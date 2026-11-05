@@ -8,7 +8,7 @@
  * trade, urgency 1–5 and probable causes, and may be wrong; at urgency 5 for
  * gas, sparks, burning smell, smoke or water on electrics it shows safety
  * instructions, and the app always offers "Chiama il 112"; professionals pick a
- * radius of 1–100 km and are listed nearest first; up to three per request, the
+ * radius of 1–200 km and are listed nearest first; up to five per request, the
  * first to confirm gets the job; the customer picks the day, the professional
  * proposes the time; the professional may ask a Costo Chiamata, shown before the
  * visit, accepted or refused by the customer, paid to them, deducted if the job

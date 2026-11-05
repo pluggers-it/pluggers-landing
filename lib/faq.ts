@@ -110,7 +110,7 @@ const PRO: FaqItem[] = [
   },
   {
     q: "Come scelgo mestieri e zona?",
-    a: "Scegli tutti i mestieri che fai: i clienti ti trovano così. Per ogni mestiere i lavori più comuni sono già selezionati e togli quelli che non fai. Poi indichi l'indirizzo da cui parti e fin dove ti sposti, da 1 a 100 km, e le città in cui accetti interventi. Ricevi solo richieste dentro quella distanza.",
+    a: "Scegli tutti i mestieri che fai: i clienti ti trovano così. Per ogni mestiere i lavori più comuni sono già selezionati e togli quelli che non fai. Poi indichi l'indirizzo da cui parti e fin dove ti sposti, da 1 a 200 km, e le città in cui accetti interventi. Ricevi solo richieste dentro quella distanza.",
   },
   {
     q: "Come ricevo le richieste?",

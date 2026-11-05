@@ -30,7 +30,7 @@ const G = "/guida/professionisti";
 const STEPS: GuideStep[] = [
   {
     id: "mestieri", short: "Mestieri", src: `${G}/01.webp`,
-    alt: "Profilo professionista, passo 1 di 5: «Di cosa ti occupi?» con l'elenco dei mestieri e la descrizione di ciascuno.",
+    alt: "Profilo professionista, passo 1 di 5: «I tuoi mestieri» con l'elenco dei mestieri e la descrizione di ciascuno.",
     title: "Scegli i tuoi mestieri",
     text: "Indica tutti i mestieri che fai. Per ognuno i lavori più comuni sono già selezionati.",
     points: ["Puoi sceglierne più di uno", "Togli i lavori che non fai", "Aggiungi le specializzazioni"],
@@ -38,10 +38,10 @@ const STEPS: GuideStep[] = [
   },
   {
     id: "raggio", short: "Zona", src: `${G}/02.webp`,
-    alt: "Profilo professionista: «Fin dove ti sposti» con il cursore del raggio d'azione a 20 km e la sezione «Dove lavori».",
+    alt: "Profilo professionista: «Fin dove ti sposti» con il cursore del raggio d'azione a 20 km, la sezione «Dove lavori» e «Documento d'identità» con i riquadri per fronte e retro.",
     title: "Decidi fin dove ti sposti",
-    text: "Inserisci l'indirizzo da cui parti e il raggio, da 1 a 100 km. Ti trovano solo i clienti entro quella distanza.",
-    points: ["Il raggio si imposta con il cursore", "Le città in cui lavori, anche più di una", "La descrizione dell'attività e la partita IVA"],
+    text: "Inserisci l'indirizzo da cui parti e il raggio, da 1 a 200 km. Ti trovano solo i clienti entro quella distanza.",
+    points: ["Il raggio si imposta con il cursore", "Le città in cui lavori, anche più di una", "La descrizione dell'attività e la partita IVA", "Il documento d'identità, fronte e retro: serve solo a noi, i clienti non lo vedono"],
   },
   {
     id: "disponibilita", short: "Orari", src: `${G}/03.webp`,
@@ -52,7 +52,7 @@ const STEPS: GuideStep[] = [
   },
   {
     id: "richieste", short: "Richieste", src: `${G}/04.webp`,
-    alt: "Sezione «Richieste»: le schede «Da decidere» e «Da preventivare», i filtri per ordinare e per giorno e tre richieste con il problema, giorno e orario, la distanza e la cifra indicativa.",
+    alt: "Sezione «Richieste»: le schede «Nuove» e «In corso», il bottone «Ordina e filtra» e tre richieste con il problema, il giorno, la distanza, la cifra indicativa e il bottone «Accetta e invia la stima».",
     title: "Ricevi le richieste",
     text: "Le richieste arrivano dai clienti della tua zona che ti hanno scelto. Ognuna ha giorno, mestiere, problema, distanza da te e una cifra di riferimento calcolata dall'app.",
     points: ["Apri quelle che ti interessano", "Rifiuta le altre"],
@@ -68,10 +68,10 @@ const STEPS: GuideStep[] = [
   },
   {
     id: "agenda", short: "Agenda", src: `${G}/06.webp`,
-    alt: "Agenda del professionista: il calendario di ottobre, i prossimi interventi con lo stato e il bottone «Appuntamento cliente esterno».",
+    alt: "Agenda del professionista in vista settimanale, con la scelta tra «Giorno», «Settimana» e «Mese», due interventi dal 5 al 7 novembre e il bottone «Appuntamento cliente esterno».",
     title: "Gli appuntamenti in agenda",
     text: "Gli interventi confermati entrano in agenda da soli. Puoi segnare anche gli appuntamenti dei tuoi clienti di sempre, anche se non ti hanno contattato da Pluggers: così hai tutto in un'unica app.",
-    points: ["Il mese a colpo d'occhio e i prossimi interventi", "Lo stato di ogni appuntamento"],
+    points: ["Giorno, settimana o mese: scegli la vista che ti serve", "Lo stato di ogni appuntamento"],
     tip: "I clienti che non usano Pluggers li aggiungi con «Appuntamento cliente esterno».",
   },
 ];
@@ -82,7 +82,7 @@ const LEDE =
 
 const BENEFITS = [
   { title: "Problema e distanza", text: "Ogni richiesta ha mestiere, scheda del problema e km da te. Se è urgente, lo vedi subito." },
-  { title: "Raggio da 1 a 100 km", text: "Lo imposti dal tuo indirizzo. I clienti fuori dal raggio non ti vedono." },
+  { title: "Raggio da 1 a 200 km", text: "Lo imposti dal tuo indirizzo. I clienti fuori dal raggio non ti vedono." },
   { title: "Prezzi tuoi", text: "Costo Chiamata, stima e preventivo li scrivi tu. L'app ti suggerisce una cifra, puoi cambiarla." },
   GESTIONALE,
 ];

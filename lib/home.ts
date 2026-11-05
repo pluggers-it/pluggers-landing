@@ -45,19 +45,19 @@ export const HOW = {
       title: "Racconta il problema",
       text: "Scrivi due righe e aggiungi una foto. Se serve, l'intelligenza artificiale ti fa qualche domanda senza termini tecnici.",
       src: "/screens/step-describe.png",
-      alt: "Schermata iniziale dell'app: campo «Di cosa hai bisogno?» con la descrizione di un rubinetto che perde, una foto allegata e il bottone «Trova professionisti».",
+      alt: "Schermata iniziale dell'app: campo «Di cosa hai bisogno?» con la descrizione di una caldaia che non parte, una foto allegata e il bottone «Trova professionisti».",
     },
     {
       title: "Pluggers capisce di che si tratta",
       text: "Riconosce il mestiere, l'urgenza e le cause più probabili, poi mostra i professionisti della tua zona. Scegli chi contattare, fino a cinque, e il giorno tra quelli disponibili: l'orario lo propone il professionista.",
       src: "/screens/step-triage.png",
-      alt: "Schermata «Cosa abbiamo capito»: chi serve (Idraulico), urgenza 2 su 5, cause probabili e bottone «Cerca un professionista».",
+      alt: "Schermata «Cosa abbiamo capito»: chi serve (Termoidraulico), urgenza 3 su 5, cause probabili e bottone «Cerca un professionista».",
     },
     {
       title: "Prima stima, poi preventivo, e il QR a inizio e fine lavoro",
       text: "Il professionista ti manda in chat una stima e, se lo chiede, il Costo Chiamata. Dopo il sopralluogo arriva il preventivo. Il QR si scansiona all'inizio e alla fine del lavoro, poi lasci la recensione.",
       src: "/screens/step-estimate.png",
-      alt: "Chat con il professionista: la foto del guasto, un messaggio e una stima di 85 euro con i bottoni Accetta e Rifiuta.",
+      alt: "Chat con il professionista: il messaggio del cliente, la risposta del professionista e una stima di circa € 120 con i bottoni Accetta e Rifiuta.",
     },
   ],
 };
@@ -89,7 +89,7 @@ export const PROS = {
     },
     {
       title: "Il raggio d'azione lo scegli tu",
-      text: "Da 1 a 100 km dal tuo indirizzo operativo: ti vedono solo i clienti dentro quel raggio.",
+      text: "Da 1 a 200 km dal tuo indirizzo operativo: ti vedono solo i clienti dentro quel raggio.",
     },
     {
       title: "Costo Chiamata e preventivo li decidi tu",
