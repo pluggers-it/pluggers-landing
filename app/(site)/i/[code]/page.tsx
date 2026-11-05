@@ -4,11 +4,12 @@ import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { GuidePhone } from "@/components/landing/GuideSteps";
 import { webAppUrl } from "@/components/landing/links";
-import { BTN_PRIMARY, CONTAINER } from "@/components/landing/styles";
+import { CONTAINER } from "@/components/landing/styles";
 import { inviteCode, readInvite } from "@/lib/invite";
 import { OG_IMAGE } from "@/lib/seo";
 import { ORG } from "@/lib/site";
 import { CopyCode } from "./CopyCode";
+import { InviteButton } from "./InviteButton";
 
 type Props = { params: Promise<{ code: string }>; searchParams: Promise<{ p?: string | string[] }> };
 
@@ -37,7 +38,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const QUOTE_TOKEN = /^[0-9a-f]{16,64}$/i;
 
 // Opened from a friend's or colleague's message: who invited you, what Pluggers is, one way in.
-// Always the web app, on phones too: a store link can't carry the invite code to the app.
+// The way in is app.plggrs.it/invito with the code: the app where it's installed, the store on a phone without it,
+// the web app's sign-up on a computer, or the store badges while the web app is closed (see InviteButton).
 export default async function InvitePage({ params, searchParams }: Props) {
   const { code, title } = await lookup((await params).code);
   const { p } = await searchParams;
@@ -60,12 +62,7 @@ export default async function InvitePage({ params, searchParams }: Props) {
               {title}
             </h1>
             <p className="mt-5 max-w-[52ch] text-[17px] leading-[1.6] text-muted sm:text-lg">{ORG.summary}</p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a href={appUrl} target="_blank" rel="noopener noreferrer" className={`${BTN_PRIMARY} w-full sm:w-auto`}>
-                Apri Pluggers
-                <span className="sr-only"> (si apre in una nuova scheda)</span>
-              </a>
-            </div>
+            <InviteButton href={appUrl} code={code} />
             {code && <CopyCode code={code} />}
             <p className="mt-4 text-[15px] text-muted">
               Sei un professionista?{" "}
