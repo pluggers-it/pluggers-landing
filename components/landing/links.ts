@@ -1,12 +1,12 @@
 /**
- * Where the product lives. iPhone and iPad install from the public TestFlight beta, Android from
+ * Where the product lives. iPhone and iPad install from the App Store (1.1.3, November 2026), Android from
  * Google Play; on a computer Pluggers opens in the browser.
  */
 export const WEB_APP_URL = "https://app.plggrs.it";
 /** The web app straight on the professional sign-up: the app reads `registrati`. */
 export const PRO_SIGNUP_URL = `${WEB_APP_URL}/?registrati=professionista`;
 export const TESTFLIGHT_URL = "https://testflight.apple.com/join/p9mmTZrK";
-export const APP_STORE_URL = TESTFLIGHT_URL;
+export const APP_STORE_URL = "https://apps.apple.com/it/app/pluggers/id6795588136";
 export const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=it.pluggers.app";
 /** The anchor of a page's store badges, where links into the web app lead from a computer while it is closed. */
 export const STORE_BADGES_ID = "scarica";
