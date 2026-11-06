@@ -6,7 +6,7 @@
 import { WEB_APP_OPEN } from "@/components/landing/links";
 import { WAITLIST_TEXT } from "@/lib/waitlist";
 
-export const HOME_UPDATED = "2026-10-20";
+export const HOME_UPDATED = "2026-11-06";
 
 /** What using Pluggers does not cost the person who looks for a professional. One sentence, said the same everywhere. */
 export const COSTS_LINE = "Non c'è nessun abbonamento e non paghi per sbloccare i professionisti che trovi.";
@@ -112,7 +112,7 @@ export const TRUST = {
     "Il profilo del professionista mostra le recensioni, che si possono lasciare solo dopo un intervento completato.",
     "La chat è nell'app: stima, preventivo e quello che vi dite restano insieme all'intervento.",
     "La stima e l'eventuale Costo Chiamata li vedi prima del sopralluogo. Il compenso lo concordi con il professionista.",
-    "I dati sono conservati su server nell'Unione Europea.",
+    "Database e file sono su server in Germania, le copie di sicurezza in Belgio: tutto nell'Unione Europea.",
   ],
 };
 
@@ -144,7 +144,7 @@ export const faq = (inStores: boolean) => [
   },
   {
     q: "Chi sono i professionisti?",
-    a: "Sono professionisti e artigiani della tua zona, che scelgono loro in che raggio intervenire. Nel profilo vedi mestieri, città e le recensioni ricevute dopo interventi completati; se la partita IVA è stata controllata, compare «P.IVA verificata».",
+    a: "Sono professionisti e artigiani della tua zona, che scelgono loro in che raggio intervenire. Nel profilo vedi mestieri, città e le recensioni ricevute dopo interventi completati.",
   },
   {
     q: "Cosa succede dopo la richiesta?",

@@ -12,7 +12,7 @@
  */
 import { faq as homeFaq } from "@/lib/home";
 
-export const FAQ_UPDATED = "2026-10-20";
+export const FAQ_UPDATED = "2026-11-06";
 
 export type FaqItem = {
   q: string;
@@ -165,7 +165,7 @@ const PRO: FaqItem[] = [
 const PRIVACY: FaqItem[] = [
   {
     q: "Come elimino l'account o scarico i miei dati?",
-    a: "Dall'app, in Impostazioni, Account e privacy: lì elimini l'account e scarichi una copia dei tuoi dati. Vale per clienti e professionisti. Se non riesci ad accedere, scrivi a supporto@plggrs.it dall'email con cui ti sei registrato.",
+    a: "Dall'app, in Impostazioni, «Privacy e account» (per i professionisti «Dati personali e privacy»): lì elimini l'account e scarichi una copia dei tuoi dati. Se non riesci ad accedere, scrivi a supporto@plggrs.it dall'email con cui ti sei registrato.",
     link: { href: "/elimina-account", label: "Cosa viene cancellato e cosa si conserva" },
   },
   {

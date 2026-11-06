@@ -11,10 +11,11 @@ export const revalidate = 3600;
 
 /** Dates are when each page's content last changed, not the build time. */
 // As stated on each legal page ("Ultimo aggiornamento").
-const PRIVACY_UPDATED = "2026-10-06";
+const PRIVACY_UPDATED = "2026-11-06";
+const COOKIE_UPDATED = "2026-11-06";
 const TERMS_UPDATED = "2026-10-06";
-const ACCOUNT_DELETION_UPDATED = "2026-10-07";
-const SUPPORT_UPDATED = "2026-10-07";
+const ACCOUNT_DELETION_UPDATED = "2026-11-06";
+const SUPPORT_UPDATED = "2026-11-06";
 const PROS_UPDATED = "2026-10-20";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -44,6 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     page("/blog", posts[0]?.createdAt ?? HOME_UPDATED, 0.6),
     ...posts.map((p) => page(postPath(p), p.createdAt, 0.5)),
     page("/privacy", PRIVACY_UPDATED, 0.2),
+    page("/cookie", COOKIE_UPDATED, 0.2),
     page("/termini", TERMS_UPDATED, 0.2),
     page("/supporto", SUPPORT_UPDATED, 0.3),
     page("/elimina-account", ACCOUNT_DELETION_UPDATED, 0.2),

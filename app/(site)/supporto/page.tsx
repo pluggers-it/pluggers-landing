@@ -36,8 +36,9 @@ const SECTIONS: LegalSection[] = [
     content: (
       <>
         <p>
-          Dall&apos;app: Impostazioni → Account e privacy → Elimina account. Se non riesci ad
-          accedere, scrivici dall&apos;email con cui ti sei registrato e lo facciamo noi.
+          Dall&apos;app: Impostazioni → Privacy e account → Elimina account (per i professionisti:
+          Impostazioni → Dati personali e privacy → Elimina account). Se non riesci ad accedere,
+          scrivici dall&apos;email con cui ti sei registrato e lo facciamo noi.
         </p>
         <p>
           Cosa viene cancellato e cosa la legge ci obbliga a conservare:{" "}
@@ -80,7 +81,7 @@ export default function SupportoPage() {
     />
     <LegalPage
       title="Assistenza"
-      updated="7 ottobre 2026"
+      updated="6 novembre 2026"
       intro={
         <p>Per qualsiasi problema con l&apos;app, una prenotazione o il tuo account, scrivici.</p>
       }
