@@ -15,6 +15,7 @@ const SITE_LINKS: FooterLink[] = [
 
 const LEGAL_LINKS: FooterLink[] = [
   { label: "Privacy", href: "/privacy" },
+  { label: "Cookie", href: "/cookie" },
   { label: "Termini", href: "/termini" },
   { label: "Elimina account", href: "/elimina-account" },
 ];

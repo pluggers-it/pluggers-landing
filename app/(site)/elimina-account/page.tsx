@@ -17,7 +17,8 @@ const SECTIONS: LegalSection[] = [
     content: (
       <>
         <p>
-          Dall&apos;app: <strong>Impostazioni → Account e privacy → Elimina account</strong>.
+          Dall&apos;app: <strong>Impostazioni → Privacy e account → Elimina account</strong>. Se sei
+          un professionista: <strong>Impostazioni → Dati personali e privacy → Elimina account</strong>.
         </p>
         <p>
           Se non riesci ad accedere, scrivi a <SupportEmail />{" "}
@@ -95,8 +96,9 @@ const SECTIONS: LegalSection[] = [
       <p>
         Se non vuoi chiudere l&apos;account ma vuoi rimuovere dati specifici, come una foto, una
         recensione o un messaggio, scrivici allo stesso indirizzo indicando cosa vuoi cancellare.
-        Dall&apos;app puoi anche scaricare una copia dei tuoi dati: Impostazioni → Account e
-        privacy → Scarica i miei dati.
+        Dall&apos;app puoi anche scaricare una copia dei tuoi dati: Impostazioni → Privacy e
+        account → Scarica i miei dati (per i professionisti: Impostazioni → Dati personali e
+        privacy → Scarica i miei dati).
       </p>
     ),
   },
@@ -125,7 +127,7 @@ export default function EliminaAccountPage() {
   return (
     <LegalPage
       title="Eliminare il tuo account Pluggers"
-      updated="7 ottobre 2026"
+      updated="6 novembre 2026"
       intro={
         <p>
           Questa pagina riguarda l&apos;app Pluggers e l&apos;account che usi per accedervi. Qui
