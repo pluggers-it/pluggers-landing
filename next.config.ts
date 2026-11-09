@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import { APP_STORE_URL, PLAY_STORE_PUBLIC, PLAY_STORE_URL, PRO_SIGNUP_URL } from "./components/landing/links";
+import { APP_STORE_URL, PLAY_STORE_PUBLIC, PLAY_STORE_URL, PRO_SIGNUP_URL, STORE_BADGES_ID } from "./components/landing/links";
 
 // ── Supabase project URL (used in connect-src) ────────────────────────────────
 const SUPABASE_HOST = "zfmcltiraiyxryjfahgw.supabase.co";
@@ -90,6 +90,11 @@ const nextConfig: NextConfig = {
       { source: "/play", destination: PLAY_STORE_PUBLIC ? PLAY_STORE_URL : PRO_SIGNUP_URL, permanent: false },
       { source: "/android", destination: PLAY_STORE_PUBLIC ? PLAY_STORE_URL : PRO_SIGNUP_URL, permanent: false },
       { source: "/ios", destination: APP_STORE_URL, permanent: false },
+      // One QR for both stores: the phone's store from its user agent, the home's store badges anywhere else.
+      // iPadOS says "Macintosh" and lands on the badges, where AppLink still spots it from the touch screen.
+      { source: "/scarica", has: [{ type: "header", key: "user-agent", value: ".*Android.*" }], destination: PLAY_STORE_URL, permanent: false },
+      { source: "/scarica", has: [{ type: "header", key: "user-agent", value: ".*(iPhone|iPad|iPod).*" }], destination: APP_STORE_URL, permanent: false },
+      { source: "/scarica", destination: `/#${STORE_BADGES_ID}`, permanent: false },
     ];
   },
 
