@@ -190,8 +190,27 @@ const SECTIONS: LegalSection[] = [
           nell&apos;ambito del Data Privacy Framework UE-USA.
         </p>
         <p>
-          Senza il consenso, Google Analytics e il pixel di Meta non vengono caricati e il tuo
-          browser non contatta i loro server. Puoi cambiare la tua scelta in qualsiasi momento, e la revoca
+          Con lo stesso consenso al marketing usiamo anche il tag di Google Ads, un servizio di
+          Google, per misurare le nostre pubblicità su Google: quante persone arrivano sul sito da
+          un nostro annuncio e si iscrivono alla lista d&apos;attesa. Se arrivi da un annuncio,
+          Google Ads salva nel tuo browser, come cookie del nostro sito, l&apos;identificativo di
+          quel clic; quando ti iscrivi, comunica a Google che l&apos;iscrizione è avvenuta. Secondo
+          la documentazione di Google, cookie come questi durano fino a 90 giorni (
+          <a
+            href="https://business.safety.google/adscookies/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-accent-text underline underline-offset-4"
+          >
+            elenco dei cookie pubblicitari di Google
+          </a>
+          ). La personalizzazione degli annunci resta disattivata, e non inviamo a Google nome,
+          cognome, email, telefono né quello che scrivi nei moduli. Base giuridica: consenso (art.
+          6(1)(a)).
+        </p>
+        <p>
+          Senza il consenso, Google Analytics, Google Ads e il pixel di Meta non vengono caricati e
+          il tuo browser non contatta i loro server. Puoi cambiare la tua scelta in qualsiasi momento, e la revoca
           vale da subito: <CookiePreferencesButton />
         </p>
         <h3>Reclamo</h3>
@@ -217,7 +236,7 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       title="Informativa sulla privacy"
-      updated="13 ottobre 2026"
+      updated="11 novembre 2026"
       version="2026-10-06"
       intro={
         <p>

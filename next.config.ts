@@ -1,11 +1,23 @@
 import type { NextConfig } from "next";
 import { APP_STORE_URL, PLAY_STORE_PUBLIC, PLAY_STORE_URL, PRO_SIGNUP_URL, STORE_BADGES_ID } from "./components/landing/links";
+import { GOOGLE_ADS_ID } from "./lib/googleAds";
 
 // ── Supabase project URL (used in connect-src) ────────────────────────────────
 const SUPABASE_HOST = "zfmcltiraiyxryjfahgw.supabase.co";
 
 // BabyLoveGrowth's image CDN: hero images through the image optimizer, images inside their articles straight from it
 const BABYLOVEGROWTH_IMAGES = "media.babylovegrowth.ai";
+
+// Google Ads conversion tag, hosts as in Google's CSP guide (developers.google.com/tag-platform/security/guides/csp).
+// Allowed only when the campaign's ID is set: without it the policy is the one the site always had. Google also lists
+// frame-src https://www.googletagmanager.com; it stays 'none' here until a console violation shows it is needed.
+// www.google.<TLD> must be listed per country: only Italy for now.
+const ADS_SCRIPT = GOOGLE_ADS_ID ? ["https://www.googleadservices.com", "https://www.google.com"] : [];
+const ADS_IMG = GOOGLE_ADS_ID
+  ? ["https://www.googleadservices.com", "https://googleads.g.doubleclick.net", "https://pagead2.googlesyndication.com", "https://www.google.com", "https://www.google.it"]
+  : [];
+const ADS_CONNECT = GOOGLE_ADS_ID ? [...ADS_IMG, "https://ad.doubleclick.net"] : [];
+const ADS_HOSTS = [...ADS_SCRIPT, ...ADS_CONNECT];
 
 /**
  * Content Security Policy
@@ -25,14 +37,15 @@ const BABYLOVEGROWTH_IMAGES = "media.babylovegrowth.ai";
  */
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://connect.facebook.net",
+  ["script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://connect.facebook.net", ...ADS_SCRIPT].join(" "),
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
-  `img-src 'self' data: blob: https://www.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://${BABYLOVEGROWTH_IMAGES}`,
+  [`img-src 'self' data: blob: https://www.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://${BABYLOVEGROWTH_IMAGES}`, ...ADS_IMG].join(" "),
   [
     "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://www.facebook.com",
     `https://${SUPABASE_HOST}`,
     `wss://${SUPABASE_HOST}`,
+    ...ADS_CONNECT,
   ].join(" "),
   "frame-src 'none'",
   "object-src 'none'",
@@ -43,12 +56,14 @@ const csp = [
 /**
  * Invite pages (/i/CODE?p=TOKEN) reach Google only to load gtag.js and send Analytics hits, whose address and
  * referrer the site cleans: gtag's own diagnostics to www.googletagmanager.com read the address, code included.
- * They never reach Meta: the pixel sends the address with every event, so it stays off there.
+ * They never reach Meta: the pixel sends the address with every event, so it stays off there. Nor Google Ads,
+ * which is off on those pages.
  */
 const inviteCsp = csp
   .replace(/ https:\/\/(connect|www)\.facebook\.(net|com)/g, "")
   .split("; ")
   .map((directive) => (directive.startsWith("script-src") ? directive : directive.replace(" https://www.googletagmanager.com", "")))
+  .map((directive) => directive.split(" ").filter((token) => !ADS_HOSTS.includes(token)).join(" "))
   .join("; ");
 
 const securityHeaders = [

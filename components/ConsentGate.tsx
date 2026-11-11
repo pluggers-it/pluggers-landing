@@ -65,8 +65,8 @@ export function ConsentGate() {
               <p className="mt-0.5 text-xs leading-relaxed text-[var(--color-muted)]">
                 Usiamo cookie tecnici, necessari al sito. Se accetti, usiamo anche i cookie di
                 statistica di Google Analytics, per capire come viene usato il sito, e i cookie di
-                marketing di Meta, per misurare le nostre pubblicità e mostrarle a chi lo ha
-                visitato.{" "}
+                marketing di Meta e Google, per misurare le nostre pubblicità e, con Meta, mostrarle
+                a chi lo ha visitato.{" "}
                 {/* A full page load, not <Link>: leaving an invite page (/i/…) without reloading would keep its
                     address in this tab's history, where Google Analytics, once accepted, would read it on Back. */}
                 <a
@@ -91,7 +91,7 @@ export function ConsentGate() {
               />
               <Switch
                 label="Marketing"
-                detail="Meta: misura le nostre pubblicità su Facebook e Instagram e le mostra a chi ha visitato il sito."
+                detail="Meta e Google: misurano le nostre pubblicità su Facebook, Instagram e Google. Meta le mostra anche a chi ha visitato il sito."
                 checked={picked.marketing}
                 onChange={(marketing) => setPicked({ ...picked, marketing })}
               />
