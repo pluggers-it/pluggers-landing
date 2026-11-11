@@ -43,7 +43,7 @@ export default function ChiSiamoPage() {
         {/* The box fits the phones (571px tall from sm, 502px below) and shrinks on narrow screens: the rotated phone used to stick out of the right margin, and past the edge on 360px phones. */}
         <div className="relative mx-auto h-[520px] w-[340px] max-w-full sm:h-[590px] sm:w-[420px]">
           <GuidePhone src="/guida/professionisti/04.webp" alt="Le richieste dei clienti vicini, nell'app del professionista" priority className="absolute left-0 top-6 rotate-[-4deg] scale-[0.86] opacity-95" />
-          <GuidePhone src="/guida/clienti/01.webp" alt="La richiesta del cliente: il problema descritto con una foto" priority className="absolute right-4 top-0 rotate-[3deg]" />
+          <GuidePhone src="/guida/clienti/01.webp" alt="La richiesta del cliente: il problema descritto in due righe" priority className="absolute right-4 top-0 rotate-[3deg]" />
         </div>
       </section>
 
