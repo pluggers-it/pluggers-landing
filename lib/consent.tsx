@@ -7,20 +7,22 @@ import React, {
   useMemo,
   useSyncExternalStore,
 } from "react";
+import { GOOGLE_ADS_ID } from "@/lib/googleAds";
 
 /** What the cookie banner allows on top of the technical cookies. */
 export interface CookieChoice {
   /** Google Analytics */
   analytics: boolean;
-  /** Meta pixel */
+  /** Meta pixel and Google Ads */
   marketing: boolean;
 }
 
 export const ACCEPT_ALL: CookieChoice = { analytics: true, marketing: true };
 export const TECHNICAL_ONLY: CookieChoice = { analytics: false, marketing: false };
 
-// v1 only covered statistics: with Meta added everyone is asked again.
-const CHOICE_KEY = "pluggers_cookies_v2";
+// v1 only covered statistics: with Meta added everyone is asked again. Same when Google Ads joins the marketing
+// choice: with its ID set (the campaign is live) v3 asks everyone again, without it nothing changes.
+const CHOICE_KEY = GOOGLE_ADS_ID ? "pluggers_cookies_v3" : "pluggers_cookies_v2";
 
 function parseChoice(stored: string | null): CookieChoice | null {
   try {
@@ -70,7 +72,7 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
 
   const resetChoice = useCallback(() => {
     localStorage.removeItem(CHOICE_KEY);
-    // Google Analytics and the Meta pixel keep running until the page reloads: a reload is the clean way to stop them
+    // Google Analytics, Google Ads and the Meta pixel keep running until the page reloads: a reload is the clean way to stop them
     if (choice?.analytics || choice?.marketing) window.location.reload();
     else notify();
   }, [choice]);

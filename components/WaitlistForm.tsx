@@ -1,8 +1,9 @@
 "use client";
 
 import { useId, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { metaEvent } from "@/lib/analytics";
+import { GRAZIE_PATH, markSignedUp } from "@/lib/grazie";
 import type { Role } from "@/lib/prelaunch";
 import { MAX, splitContact, splitName, WAITLIST_TEXT } from "@/lib/waitlist";
 import Link from "next/link";
@@ -87,6 +88,7 @@ export function WaitlistForm({
   afterSubmit,
 }: Props) {
   const pathname = usePathname();
+  const router = useRouter();
   const uid = useId();
   const fid = (name: string) => `${uid}-${name}`;
   const [firstName, setFirstName]           = useState("");
@@ -173,6 +175,9 @@ export function WaitlistForm({
               if (res.ok) {
                 setSubmitted(true);
                 metaEvent("track", "Lead", { content_name: prelaunch ? "preiscrizione" : submissionSource });
+                // Waitlist sign-ups end on the thank-you page, which Google Ads counts. The newsletter, a form with its own
+                // follow-up under the thanks, or a browser that won't keep the flag stay on the in-page thanks.
+                if (submissionSource === "waitlist" && !afterSubmit && markSignedUp()) router.push(GRAZIE_PATH);
               } else {
                 const data = (await res.json().catch(() => null)) as {
                   error?: string;

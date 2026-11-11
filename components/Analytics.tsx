@@ -1,33 +1,50 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Script from "next/script";
-import { GA_MEASUREMENT_ID } from "@/lib/analytics";
+import { usePathname } from "next/navigation";
+import { GA_MEASUREMENT_ID, startGtag } from "@/lib/analytics";
 import { useConsent } from "@/lib/consent";
-import { analyticsPage } from "@/lib/invite";
+import { GRAZIE_PATH, takeConversion } from "@/lib/grazie";
+import { GOOGLE_ADS_CONVERSION_LABEL, GOOGLE_ADS_ID, adsOn, consentState, conversionTarget } from "@/lib/googleAds";
+import { analyticsPage, isInvitePath } from "@/lib/invite";
 
 /**
- * Google Analytics 4, loaded only with the statistics consent of the cookie banner. gtag takes the address and
- * referrer from analyticsPage(), so on an invite page Google never gets the code or the estimate token; there
- * next.config.ts also blocks gtag's diagnostics, which read the address on their own.
+ * The Google tag: Google Analytics 4 with the statistics consent of the cookie banner, Google Ads with the marketing
+ * one (and only if NEXT_PUBLIC_GOOGLE_ADS_ID is set). One gtag.js serves both. gtag takes the address and referrer
+ * of Analytics from analyticsPage(), so on an invite page Google never gets the code or the estimate token; there
+ * Google Ads stays off and next.config.ts also blocks gtag's diagnostics, which read the address on their own.
+ * The Ads conversion goes out once, when /grazie opens after the sign-up form.
  */
 export function Analytics() {
   const { choice } = useConsent();
-  const on = Boolean(GA_MEASUREMENT_ID) && choice?.analytics === true;
+  const pathname = usePathname();
+  const analytics = Boolean(GA_MEASUREMENT_ID) && choice?.analytics === true;
+  const ads = adsOn(GOOGLE_ADS_ID, choice, isInvitePath(pathname));
+  const configured = useRef({ analytics: false, ads: false });
 
   useEffect(() => {
-    if (!on) return;
-    const w = window as unknown as { dataLayer?: unknown[] };
-    const dataLayer = (w.dataLayer ??= []);
-    // gtag.js reads its queue as `arguments` objects, not arrays
-    const gtag: (...args: unknown[]) => void = function () {
-      // eslint-disable-next-line prefer-rest-params
-      dataLayer.push(arguments);
-    };
-    gtag("consent", "default", { ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied", analytics_storage: "granted" });
-    gtag("js", new Date());
-    gtag("config", GA_MEASUREMENT_ID, analyticsPage(location.href, document.referrer));
-  }, [on]);
+    if (!analytics && !ads) return;
+    const gtag = startGtag(consentState(analytics, ads));
+    if (analytics && !configured.current.analytics) {
+      configured.current.analytics = true;
+      gtag("config", GA_MEASUREMENT_ID, analyticsPage(location.href, document.referrer));
+    }
+    if (ads && !configured.current.ads) {
+      configured.current.ads = true;
+      gtag("config", GOOGLE_ADS_ID);
+    }
+  }, [analytics, ads]);
 
-  return on ? <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} strategy="afterInteractive" /> : null;
+  // After the effect above, so the Ads destination is configured before its conversion. With the marketing consent
+  // given on /grazie itself, it goes out then.
+  useEffect(() => {
+    const target = conversionTarget(GOOGLE_ADS_ID, GOOGLE_ADS_CONVERSION_LABEL);
+    if (ads && target && pathname === GRAZIE_PATH && takeConversion()) {
+      window.gtag?.("event", "conversion", { send_to: target });
+    }
+  }, [ads, pathname]);
+
+  const tag = analytics ? GA_MEASUREMENT_ID : ads ? GOOGLE_ADS_ID : "";
+  return tag ? <Script src={`https://www.googletagmanager.com/gtag/js?id=${tag}`} strategy="afterInteractive" /> : null;
 }

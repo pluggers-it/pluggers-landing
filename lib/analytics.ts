@@ -8,7 +8,26 @@ export const META_PIXEL_ID = /^\d+$/.test(metaPixelId) ? metaPixelId : "";
 declare global {
   interface Window {
     fbq?: (...args: unknown[]) => void;
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
   }
+}
+
+/**
+ * The page's gtag(), created on first use: Google Analytics and Google Ads share one queue, one gtag.js and these
+ * consent defaults (consentState, from the cookie banner). Call it only once a Google tag is allowed to run.
+ */
+export function startGtag(consent: Record<string, string>) {
+  if (window.gtag) return window.gtag;
+  const dataLayer = (window.dataLayer ??= []);
+  // gtag.js reads its queue as `arguments` objects, not arrays
+  window.gtag = function () {
+    // eslint-disable-next-line prefer-rest-params
+    dataLayer.push(arguments);
+  };
+  window.gtag("consent", "default", consent);
+  window.gtag("js", new Date());
+  return window.gtag;
 }
 
 /**
