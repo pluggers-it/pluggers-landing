@@ -68,15 +68,20 @@ const SECTIONS: LegalSection[] = [
         Dati dell&apos;attività: nome, Partita IVA, zona di lavoro, mestieri e disponibilità. Per
         iscriverti carichi il fronte e il retro di un documento d&apos;identità (carta
         d&apos;identità, patente o passaporto): è un passaggio obbligatorio. Un sistema di
-        intelligenza artificiale (Gemini di Google, nell&apos;Unione Europea) legge le due foto per
+        intelligenza artificiale (Gemini di Google, che elabora i dati negli Stati Uniti) legge le
+        due foto per
         controllare il tipo di documento, la scadenza, che il nome sia quello che hai indicato e che
         tu sia maggiorenne. Per la patente e la carta d&apos;identità cartacea, e ogni volta che
         c&apos;è un dubbio, decide una persona del team: il sistema automatico non ti esclude mai da
         solo, al massimo ti chiede di ricaricare le foto. Non confrontiamo il tuo volto. Di ogni
         controllo salviamo l&apos;esito, il tipo e la scadenza del documento e un&apos;impronta dei
         file e del numero (un codice da cui non si torna alle foto né al numero, che non salviamo in
-        chiaro). I file restano in un archivio privato e non sono mai mostrati ai clienti. Se
-        inserisci un cliente che non ha l&apos;app, scrivi tu il suo nome, il telefono,
+        chiaro). I file restano in un archivio privato e non sono mai mostrati ai clienti. Se detti
+        un preventivo, il telefono trascrive la tua voce e a noi arriva solo il testo, mai
+        l&apos;audio: lo stesso sistema di intelligenza artificiale lo legge insieme alle voci del
+        preventivo e al tuo listino per proporti cosa aggiungere, cambiare o togliere, e decidi tu
+        cosa applicare. Il testo dettato non lo conserviamo; non dettare dati del cliente che non
+        servono al preventivo. Se inserisci un cliente che non ha l&apos;app, scrivi tu il suo nome, il telefono,
         l&apos;indirizzo e il lavoro da fare. Il preventivo si apre da un link valido 30 giorni, che
         condividi tu: la pagina non richiede l&apos;app e mostra il nome di battesimo del cliente,
         la data, l&apos;indirizzo, il lavoro e il totale. Questa informativa vale anche per quel
@@ -102,10 +107,12 @@ const SECTIONS: LegalSection[] = [
       <p>
         La descrizione del problema, con la foto se la aggiungi, viene analizzata da un modello di
         intelligenza artificiale (Gemini di Google, tramite Google Cloud Vertex AI) per classificare
-        il guasto e indirizzarti. Testo e foto sono elaborati nell&apos;Unione Europea. Non inviamo
-        il tuo testo per addestrare modelli. Le foto del problema vengono cancellate dopo
-        l&apos;analisi. Lo stesso modello legge le foto del documento d&apos;identità dei
-        professionisti, come spiegato in «Se sei un professionista».
+        il guasto e indirizzarti. Dal 12 novembre 2026 testo e foto sono elaborati da Google negli
+        Stati Uniti, con le garanzie del Data Privacy Framework UE-USA e delle clausole contrattuali
+        standard. Non inviamo il tuo testo per addestrare modelli. Le foto del problema vengono
+        cancellate dopo l&apos;analisi. Lo stesso modello legge le foto del documento d&apos;identità
+        dei professionisti e il testo dei preventivi che dettano, come spiegato in «Se sei un
+        professionista».
       </p>
     ),
   },
@@ -116,12 +123,13 @@ const SECTIONS: LegalSection[] = [
       <p>
         Con il professionista con cui scegli di interagire. Con i fornitori tecnici necessari, come
         responsabili del trattamento: Hetzner (i server in Germania dove stanno database, account e
-        file), Google Cloud (i servizi dell&apos;app e l&apos;intelligenza artificiale,
-        nell&apos;Unione Europea; le copie di sicurezza, cifrate, sono in Belgio) e Resend (le email
+        file), Google Cloud (i servizi dell&apos;app, nell&apos;Unione Europea, con le copie di
+        sicurezza cifrate in Belgio; l&apos;intelligenza artificiale, negli Stati Uniti) e Resend (le email
         di accesso e di conferma). Con i servizi che l&apos;app usa per funzionare: Google e Apple
         (accesso con il loro account, notifiche, rapporti di errore), Google Places e OpenStreetMap
         (suggerimento degli indirizzi), CARTO (mappa). Google e Apple possono trattare dati anche
-        fuori dall&apos;Unione Europea, per esempio negli Stati Uniti. Non vendiamo i tuoi dati.
+        fuori dall&apos;Unione Europea, per esempio negli Stati Uniti (Data Privacy Framework UE-USA).
+        Non vendiamo i tuoi dati.
       </p>
     ),
   },

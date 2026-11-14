@@ -174,7 +174,7 @@ const PRIVACY: FaqItem[] = [
   },
   {
     q: "Cosa fa l'intelligenza artificiale con i miei dati?",
-    a: "Analizza la descrizione e la foto per capire il problema. Testo e foto sono elaborati nell'Unione Europea, non li usiamo per addestrare modelli e la foto viene cancellata dopo l'analisi. L'intelligenza artificiale può sbagliare: il professionista verifica sul posto.",
+    a: "Analizza la descrizione e la foto per capire il problema. Testo e foto sono elaborati da Google negli Stati Uniti (Data Privacy Framework UE-USA), non li usiamo per addestrare modelli e la foto viene cancellata dopo l'analisi. L'intelligenza artificiale può sbagliare: il professionista verifica sul posto.",
     link: { href: "/privacy", label: "Informativa sulla privacy" },
   },
 ];
