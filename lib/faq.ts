@@ -12,7 +12,7 @@
  */
 import { faq as homeFaq } from "@/lib/home";
 
-export const FAQ_UPDATED = "2026-10-20";
+export const FAQ_UPDATED = "2026-11-06";
 
 export type FaqItem = {
   q: string;
@@ -165,7 +165,7 @@ const PRO: FaqItem[] = [
 const PRIVACY: FaqItem[] = [
   {
     q: "Come elimino l'account o scarico i miei dati?",
-    a: "Dall'app, in Impostazioni, Account e privacy: lì elimini l'account e scarichi una copia dei tuoi dati. Vale per clienti e professionisti. Se non riesci ad accedere, scrivi a supporto@plggrs.it dall'email con cui ti sei registrato.",
+    a: "Dall'app, in Impostazioni, «Privacy e account» (per i professionisti «Dati personali e privacy»): lì elimini l'account e scarichi una copia dei tuoi dati. Se non riesci ad accedere, scrivi a supporto@plggrs.it dall'email con cui ti sei registrato.",
     link: { href: "/elimina-account", label: "Cosa viene cancellato e cosa si conserva" },
   },
   {
@@ -174,7 +174,7 @@ const PRIVACY: FaqItem[] = [
   },
   {
     q: "Cosa fa l'intelligenza artificiale con i miei dati?",
-    a: "Analizza la descrizione e la foto per capire il problema. Testo e foto sono elaborati nell'Unione Europea, non li usiamo per addestrare modelli e la foto viene cancellata dopo l'analisi. L'intelligenza artificiale può sbagliare: il professionista verifica sul posto.",
+    a: "Analizza la descrizione e la foto per capire il problema. Testo e foto sono elaborati da Google negli Stati Uniti (Data Privacy Framework UE-USA), non li usiamo per addestrare modelli e la foto viene cancellata dopo l'analisi. L'intelligenza artificiale può sbagliare: il professionista verifica sul posto.",
     link: { href: "/privacy", label: "Informativa sulla privacy" },
   },
 ];

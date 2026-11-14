@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { pageMetadata } from "@/lib/seo";
 import { CookiePreferencesButton } from "@/components/CookiePreferencesButton";
 import { LegalPage, SupportEmail, type LegalSection } from "@/components/LegalPage";
@@ -12,6 +13,8 @@ export const metadata: Metadata = pageMetadata({
 
 // All sections but the last are the app's notice (pluggers-it/mvp, app/web/legal/privacy.html)
 // word for word: it is the text users accept, so it changes only together with kLegalVersion.
+// The 06/11/2026 factual corrections (where the data lives, processing that was missing) went in on both
+// sides without a new version: whether users must accept again is a decision for the Compliance.
 const SECTIONS: LegalSection[] = [
   {
     id: "titolare",
@@ -29,12 +32,60 @@ const SECTIONS: LegalSection[] = [
     title: "Quali dati raccogliamo",
     content: (
       <p>
-        Dati account (nome, email, telefono); descrizioni e foto dei problemi che invii;
-        posizione approssimata quando la concedi, per mostrarti i professionisti vicini; messaggi
-        della chat con i loro allegati (foto, video e file, con didascalia e nome del file),
-        prenotazioni e preventivi. Le foto del guasto usate per il triage vengono cancellate
-        subito dopo l&apos;elaborazione; gli allegati della chat restano insieme alla
-        conversazione.
+        Dati account (nome, email, telefono). Se entri con Google o Apple riceviamo da loro nome ed
+        email (con Apple può essere un indirizzo schermato). Poi gli indirizzi che salvi;
+        descrizioni e foto dei problemi che invii; posizione approssimata quando la concedi, per
+        mostrarti i professionisti vicini; messaggi della chat con i loro allegati (foto, video e
+        file, con didascalia e nome del file), prenotazioni e preventivi. Se usi l&apos;app senza
+        registrarti, quello che inserisci (richiesta, indirizzo, foto) viene salvato in una sessione
+        anonima, che passa al tuo account quando ti registri. Le foto del guasto usate per il triage
+        vengono cancellate subito dopo l&apos;elaborazione; gli allegati della chat restano insieme
+        alla conversazione. Se accetti le notifiche, il telefono ci dà un codice (token) che serve
+        ad Apple e Google per consegnartele: lo salviamo solo se hai un account e lo togliamo quando
+        esci. Per capire come viene usata l&apos;app registriamo eventi d&apos;uso, come le
+        schermate che apri, senza il testo che scrivi e senza la posizione. Se usi la dettatura (il
+        pulsante «Detta»), il microfono si apre solo mentre detti e la voce diventa testo con il
+        riconoscimento del telefono o, se non è disponibile, con il servizio di Apple o di Google
+        (sul web, quello del browser): Pluggers non registra la voce, e a noi arriva solo il testo
+        che invii dopo averlo riletto. Quando l&apos;app va in errore o si chiude da sola, ci arriva
+        un rapporto tecnico che serve solo a correggere il problema (tipo di errore, punto del
+        codice, modello del telefono, versioni del sistema e dell&apos;app, un identificativo
+        casuale dell&apos;installazione), tramite Firebase Crashlytics di Google: non contiene nome,
+        email, telefono né quello che scrivi, e non è collegato al tuo account. Mentre scrivi un
+        indirizzo, il testo che digiti (e, se hai concesso la posizione, il punto in cui ti trovi)
+        passa dai nostri server a Google Places, o a OpenStreetMap quando Google non è disponibile.
+        Per aprire la mappa l&apos;app chiede le immagini a CARTO, che vede l&apos;indirizzo IP del
+        telefono. Se usi la tua posizione per compilare un indirizzo, a ricavarlo è il servizio del
+        telefono (Apple o Google).
+      </p>
+    ),
+  },
+  {
+    id: "professionisti",
+    title: "Se sei un professionista",
+    content: (
+      <p>
+        Dati dell&apos;attività: nome, Partita IVA, zona di lavoro, mestieri e disponibilità. Per
+        iscriverti carichi il fronte e il retro di un documento d&apos;identità (carta
+        d&apos;identità, patente o passaporto): è un passaggio obbligatorio. Un sistema di
+        intelligenza artificiale (Gemini di Google, che elabora i dati negli Stati Uniti) legge le
+        due foto per
+        controllare il tipo di documento, la scadenza, che il nome sia quello che hai indicato e che
+        tu sia maggiorenne. Per la patente e la carta d&apos;identità cartacea, e ogni volta che
+        c&apos;è un dubbio, decide una persona del team: il sistema automatico non ti esclude mai da
+        solo, al massimo ti chiede di ricaricare le foto. Non confrontiamo il tuo volto. Di ogni
+        controllo salviamo l&apos;esito, il tipo e la scadenza del documento e un&apos;impronta dei
+        file e del numero (un codice da cui non si torna alle foto né al numero, che non salviamo in
+        chiaro). I file restano in un archivio privato e non sono mai mostrati ai clienti. Se detti
+        un preventivo, il telefono trascrive la tua voce e a noi arriva solo il testo, mai
+        l&apos;audio: lo stesso sistema di intelligenza artificiale lo legge insieme alle voci del
+        preventivo e al tuo listino per proporti cosa aggiungere, cambiare o togliere, e decidi tu
+        cosa applicare. Il testo dettato non lo conserviamo; non dettare dati del cliente che non
+        servono al preventivo. Se inserisci un cliente che non ha l&apos;app, scrivi tu il suo nome, il telefono,
+        l&apos;indirizzo e il lavoro da fare. Il preventivo si apre da un link valido 30 giorni, che
+        condividi tu: la pagina non richiede l&apos;app e mostra il nome di battesimo del cliente,
+        la data, l&apos;indirizzo, il lavoro e il totale. Questa informativa vale anche per quel
+        cliente: i suoi diritti li esercita scrivendo a <SupportEmail />.
       </p>
     ),
   },
@@ -44,8 +95,8 @@ const SECTIONS: LegalSection[] = [
     content: (
       <p>
         Per erogare il servizio (metterti in contatto col professionista giusto), gestire le
-        prenotazioni, migliorare l&apos;app con statistiche di utilizzo aggregate, e per obblighi
-        di legge.
+        prenotazioni e le notifiche, controllare i documenti dei professionisti, migliorare
+        l&apos;app con statistiche di utilizzo aggregate, e per obblighi di legge.
       </p>
     ),
   },
@@ -54,10 +105,14 @@ const SECTIONS: LegalSection[] = [
     title: "Intelligenza artificiale",
     content: (
       <p>
-        La descrizione del problema viene analizzata da un modello di intelligenza artificiale
-        (Gemini di Google, tramite Google Cloud Vertex AI) per classificare il guasto e
-        indirizzarti. Testo e foto sono elaborati nell&apos;Unione Europea. Non inviamo il tuo
-        testo per addestrare modelli. Le foto del problema vengono cancellate dopo l&apos;analisi.
+        La descrizione del problema, con la foto se la aggiungi, viene analizzata da un modello di
+        intelligenza artificiale (Gemini di Google, tramite Google Cloud Vertex AI) per classificare
+        il guasto e indirizzarti. Dal 12 novembre 2026 testo e foto sono elaborati da Google negli
+        Stati Uniti, con le garanzie del Data Privacy Framework UE-USA e delle clausole contrattuali
+        standard. Non inviamo il tuo testo per addestrare modelli. Le foto del problema vengono
+        cancellate dopo l&apos;analisi. Lo stesso modello legge le foto del documento d&apos;identità
+        dei professionisti e il testo dei preventivi che dettano, come spiegato in «Se sei un
+        professionista».
       </p>
     ),
   },
@@ -66,9 +121,15 @@ const SECTIONS: LegalSection[] = [
     title: "Con chi li condividiamo",
     content: (
       <p>
-        Solo con i fornitori tecnici necessari (hosting e cloud) come responsabili del
-        trattamento, e con il professionista con cui scegli di interagire. Non vendiamo i tuoi
-        dati.
+        Con il professionista con cui scegli di interagire. Con i fornitori tecnici necessari, come
+        responsabili del trattamento: Hetzner (i server in Germania dove stanno database, account e
+        file), Google Cloud (i servizi dell&apos;app, nell&apos;Unione Europea, con le copie di
+        sicurezza cifrate in Belgio; l&apos;intelligenza artificiale, negli Stati Uniti) e Resend (le email
+        di accesso e di conferma). Con i servizi che l&apos;app usa per funzionare: Google e Apple
+        (accesso con il loro account, notifiche, rapporti di errore), Google Places e OpenStreetMap
+        (suggerimento degli indirizzi), CARTO (mappa). Google e Apple possono trattare dati anche
+        fuori dall&apos;Unione Europea, per esempio negli Stati Uniti (Data Privacy Framework UE-USA).
+        Non vendiamo i tuoi dati.
       </p>
     ),
   },
@@ -87,9 +148,9 @@ const SECTIONS: LegalSection[] = [
     title: "I tuoi diritti",
     content: (
       <p>
-        Accesso, rettifica, cancellazione, portabilità, opposizione. Dall&apos;app puoi scaricare
-        i tuoi dati ed eliminare l&apos;account in autonomia (Impostazioni → profilo). Per gli
-        altri diritti: <SupportEmail />.
+        Accesso, rettifica, cancellazione, portabilità, opposizione. Dall&apos;app puoi scaricare i
+        tuoi dati ed eliminare l&apos;account in autonomia (Impostazioni → Privacy e account; se sei
+        un professionista, Impostazioni → Dati personali e privacy). Per gli altri diritti: <SupportEmail />.
       </p>
     ),
   },
@@ -130,9 +191,12 @@ const SECTIONS: LegalSection[] = [
           liceità del trattamento svolto prima (art. 7(3)).
         </p>
         <p>
-          I dati sono conservati su server cloud nell&apos;Unione Europea, con misure di
-          sicurezza adeguate (art. 32), compresa la crittografia. Non li vendiamo: i fornitori che
-          usiamo sono nominati responsabili del trattamento (art. 28).
+          I dati del modulo sono scritti nello stesso database dell&apos;app, su un server in
+          Germania (Hetzner); le copie di sicurezza, cifrate, stanno in Belgio (Google Cloud). Il
+          sito è ospitato da Vercel: le pagine e il modulo passano dai suoi server, che vedono
+          l&apos;indirizzo IP di chi visita il sito. Le connessioni sono cifrate e adottiamo misure
+          di sicurezza adeguate (art. 32). Non vendiamo i dati: i fornitori che usiamo sono nominati
+          responsabili del trattamento (art. 28).
         </p>
         <p>
           Il modulo è riservato ai maggiorenni. Se ci accorgiamo di aver raccolto dati di un
@@ -140,9 +204,14 @@ const SECTIONS: LegalSection[] = [
         </p>
         <h3>Cookie, statistiche e marketing</h3>
         <p>
-          Il sito usa cookie tecnici, necessari al suo funzionamento: nel tuo browser salva il
-          tema chiaro o scuro e la scelta fatta sul banner dei cookie; a chi gestisce il blog,
-          anche l&apos;accesso all&apos;area riservata. Per questi non serve il consenso.
+          Il sito non usa cookie propri per funzionare. Nel tuo browser salva solo la scelta fatta
+          sul banner dei cookie (nella memoria locale del browser) e, a chi gestisce il blog, il
+          codice di accesso all&apos;area riservata, che sparisce quando chiudi la scheda. Per
+          questi non serve il consenso. L&apos;elenco completo, con i nomi e la durata, è nella{" "}
+          <Link href="/cookie" className="font-semibold text-accent-text underline underline-offset-4">
+            Cookie policy
+          </Link>
+          .
         </p>
         <p>
           Gli altri cookie li usiamo solo se acconsenti dal banner che compare alla prima visita:
@@ -190,6 +259,12 @@ const SECTIONS: LegalSection[] = [
           nell&apos;ambito del Data Privacy Framework UE-USA.
         </p>
         <p>
+          <strong>Immagini del blog.</strong>{" "}Le immagini dentro gli articoli del blog si
+          caricano dal servizio che ci fornisce gli articoli (BabyLoveGrowth,
+          media.babylovegrowth.ai): per mostrarle, il tuo browser lo contatta e quel servizio vede
+          il tuo indirizzo IP. Questo non dipende dalla scelta fatta sul banner.
+        </p>
+        <p>
           Senza il consenso, Google Analytics e il pixel di Meta non vengono caricati e il tuo
           browser non contatta i loro server. Puoi cambiare la tua scelta in qualsiasi momento, e la revoca
           vale da subito: <CookiePreferencesButton />
@@ -217,7 +292,7 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       title="Informativa sulla privacy"
-      updated="13 ottobre 2026"
+      updated="6 novembre 2026"
       version="2026-10-06"
       intro={
         <p>
