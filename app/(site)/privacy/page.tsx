@@ -15,6 +15,8 @@ export const metadata: Metadata = pageMetadata({
 // word for word: it is the text users accept, so it changes only together with kLegalVersion.
 // The 06/11/2026 factual corrections (where the data lives, processing that was missing) went in on both
 // sides without a new version: whether users must accept again is a decision for the Compliance.
+// One deliberate difference: where the identity document is read is «da confermare» here, because
+// ai-engine does not send it outside the EU while the app text says the United States.
 const SECTIONS: LegalSection[] = [
   {
     id: "titolare",
@@ -56,7 +58,10 @@ const SECTIONS: LegalSection[] = [
         passa dai nostri server a Google Places, o a OpenStreetMap quando Google non è disponibile.
         Per aprire la mappa l&apos;app chiede le immagini a CARTO, che vede l&apos;indirizzo IP del
         telefono. Se usi la tua posizione per compilare un indirizzo, a ricavarlo è il servizio del
-        telefono (Apple o Google).
+        telefono (Apple o Google). Solo se acconsenti alla misura delle nostre pubblicità, Meta
+        (Facebook e Instagram) riceve dal tuo telefono l&apos;identificativo pubblicitario,
+        l&apos;indirizzo IP e due eventi, l&apos;apertura dell&apos;app e la registrazione
+        completata; mai nome, email, telefono o testi che scrivi.
       </p>
     ),
   },
@@ -68,9 +73,8 @@ const SECTIONS: LegalSection[] = [
         Dati dell&apos;attività: nome, Partita IVA, zona di lavoro, mestieri e disponibilità. Per
         iscriverti carichi il fronte e il retro di un documento d&apos;identità (carta
         d&apos;identità, patente o passaporto): è un passaggio obbligatorio. Un sistema di
-        intelligenza artificiale (Gemini di Google, che elabora i dati negli Stati Uniti) legge le
-        due foto per
-        controllare il tipo di documento, la scadenza, che il nome sia quello che hai indicato e che
+        intelligenza artificiale (Gemini di Google; dove avviene questa lettura è da confermare)
+        legge le due foto per controllare il tipo di documento, la scadenza, che il nome sia quello che hai indicato e che
         tu sia maggiorenne. Per la patente e la carta d&apos;identità cartacea, e ogni volta che
         c&apos;è un dubbio, decide una persona del team: il sistema automatico non ti esclude mai da
         solo, al massimo ti chiede di ricaricare le foto. Non confrontiamo il tuo volto. Di ogni
@@ -120,7 +124,8 @@ const SECTIONS: LegalSection[] = [
       <p>
         Per erogare il servizio (metterti in contatto col professionista giusto), gestire le
         prenotazioni e le notifiche, controllare i documenti dei professionisti, migliorare
-        l&apos;app con statistiche di utilizzo aggregate, e per obblighi di legge.
+        l&apos;app con statistiche di utilizzo aggregate, misurare le nostre pubblicità su Facebook e
+        Instagram (solo se acconsenti) e per obblighi di legge.
       </p>
     ),
   },
@@ -134,9 +139,9 @@ const SECTIONS: LegalSection[] = [
         il guasto e indirizzarti. Dal 12 novembre 2026 testo e foto sono elaborati da Google negli
         Stati Uniti, con le garanzie del Data Privacy Framework UE-USA e delle clausole contrattuali
         standard. Non inviamo il tuo testo per addestrare modelli. Le foto del problema vengono
-        cancellate dopo l&apos;analisi. Lo stesso modello legge le foto del documento d&apos;identità
-        dei professionisti e il testo dei preventivi che dettano, come spiegato in «Se sei un
-        professionista».
+        cancellate dopo l&apos;analisi. Lo stesso modello legge il testo dei preventivi che i
+        professionisti dettano e le foto del loro documento d&apos;identità (per il documento, dove
+        avviene l&apos;elaborazione è da confermare), come spiegato in «Se sei un professionista».
       </p>
     ),
   },
@@ -151,8 +156,11 @@ const SECTIONS: LegalSection[] = [
         sicurezza cifrate in Belgio; l&apos;intelligenza artificiale, negli Stati Uniti) e Resend (le email
         di accesso e di conferma). Con i servizi che l&apos;app usa per funzionare: Google e Apple
         (accesso con il loro account, notifiche, rapporti di errore), Google Places e OpenStreetMap
-        (suggerimento degli indirizzi), CARTO (mappa). Google e Apple possono trattare dati anche
-        fuori dall&apos;Unione Europea, per esempio negli Stati Uniti (Data Privacy Framework UE-USA).
+        (suggerimento degli indirizzi), CARTO (mappa). Solo se acconsenti alla misura delle
+        pubblicità, anche con Meta Platforms Ireland (Facebook e Instagram), che decide con noi come
+        usare questi dati ed è titolare dei propri usi. Google, Apple e Meta possono trattare dati
+        anche fuori dall&apos;Unione Europea, per esempio negli Stati Uniti (Data Privacy Framework
+        UE-USA).
         Non vendiamo i tuoi dati.
       </p>
     ),
@@ -163,7 +171,8 @@ const SECTIONS: LegalSection[] = [
     content: (
       <p>
         Per il tempo necessario al servizio e agli obblighi di legge. Puoi chiedere la
-        cancellazione in ogni momento (vedi sotto).
+        cancellazione in ogni momento (vedi sotto). Gli eventi inviati a Meta non restano da noi;
+        presso Meta valgono le sue regole.
       </p>
     ),
   },
@@ -174,7 +183,10 @@ const SECTIONS: LegalSection[] = [
       <p>
         Accesso, rettifica, cancellazione, portabilità, opposizione. Dall&apos;app puoi scaricare i
         tuoi dati ed eliminare l&apos;account in autonomia (Impostazioni → Privacy e account; se sei
-        un professionista, Impostazioni → Dati personali e privacy). Per gli altri diritti: <SupportEmail />.
+        un professionista, Impostazioni → Dati personali e privacy). Per gli altri diritti: <SupportEmail />. Il consenso alla misura delle pubblicità lo
+        ritiri quando vuoi in Impostazioni → Privacy e account → Pubblicità: l&apos;app smette di
+        inviare dati a Meta; quelli già inviati si gestiscono dalle impostazioni della tua privacy
+        su Facebook e Instagram.
       </p>
     ),
   },
@@ -317,7 +329,7 @@ export default function PrivacyPage() {
     <LegalPage
       title="Informativa sulla privacy"
       updated="6 novembre 2026"
-      version="2026-10-06"
+      version="2026-10-14"
       intro={
         <p>
           Questa informativa spiega quali dati raccogliamo quando usi Pluggers, perché, e quali

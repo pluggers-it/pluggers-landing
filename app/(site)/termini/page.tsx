@@ -29,10 +29,11 @@ const SECTIONS: LegalSection[] = [
     title: "Costo Chiamata",
     content: (
       <p>
-        Alla prenotazione può essere dovuto un «Costo Chiamata» al professionista per presentarsi
-        e valutare il lavoro, anche se l&apos;intervento non risulta fattibile. L&apos;importo te
-        lo indica il professionista nell&apos;app prima della visita, e lo paghi a lui: non si
-        paga in app.
+        Quando confermi l&apos;appuntamento è dovuto il Costo Chiamata, per il viaggio e la
+        valutazione del lavoro. Te lo indica il professionista nell&apos;app prima della conferma.
+        Se il lavoro si fa, è compreso nel prezzo finale; se non si fa, è il massimo che spendi. Se
+        annulli più di 24 ore prima non è dovuto. Se il professionista non si presenta non è dovuto
+        niente. Se contesti un lavoro, al professionista resta dovuto solo il Costo Chiamata.
       </p>
     ),
   },
@@ -41,9 +42,9 @@ const SECTIONS: LegalSection[] = [
     title: "Preventivi e pagamenti",
     content: (
       <p>
-        Il prezzo dell&apos;intervento è quello del preventivo che accetti. I pagamenti in-app,
-        quando attivi, sono gestiti da provider certificati; fino ad allora l&apos;accordo
-        economico è tra te e il professionista.
+        Il prezzo dell&apos;intervento è quello del preventivo che accetti. I pagamenti in app,
+        quando attivi, passano da un fornitore di pagamenti autorizzato; fino ad allora
+        l&apos;accordo economico è tra te e il professionista.
       </p>
     ),
   },
@@ -53,7 +54,7 @@ const SECTIONS: LegalSection[] = [
     content: (
       <p>
         Ti tuteliamo per quello che succede nell&apos;app: assistenza, gestione delle
-        contestazioni, recensioni verificate e, quando attivi, pagamenti protetti. Se vi accordate
+        contestazioni, recensioni ricevute e, quando attivi, pagamenti in app. Se vi accordate
         su altri canali (telefono, email, messaggi, social) non vediamo cosa succede, non possiamo
         intervenire e non rispondiamo di quegli accordi, fermi i diritti che la legge ti
         riconosce. Per questo non scambiare numeri di telefono, email o altri recapiti per
@@ -176,7 +177,7 @@ const SECTIONS: LegalSection[] = [
         <p>
           Possiamo sospendere o chiudere il tuo profilo in caso di false dichiarazioni, condotte
           scorrette verso i clienti, o violazioni di legge o di questi termini. Assistenza,
-          gestione delle contestazioni, recensioni verificate e, quando attivi, pagamenti protetti
+          gestione delle contestazioni, recensioni ricevute e, quando attivi, pagamenti in app
           valgono solo per quello che succede nell&apos;app: sugli accordi presi con il cliente su
           altri canali non abbiamo visibilità, non possiamo intervenire e non ne rispondiamo. Per
           questo, se scambi o chiedi recapiti per continuare con il cliente fuori dall&apos;app,
@@ -229,8 +230,8 @@ export default function TerminiPage() {
   return (
     <LegalPage
       title="Termini e condizioni"
-      updated="9 ottobre 2026"
-      version="2026-10-06"
+      updated="14 ottobre 2026"
+      version="2026-10-14"
       intro={
         <p>
           Usando Pluggers accetti questi termini. Sono un riassunto leggibile; la versione
