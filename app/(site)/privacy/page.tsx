@@ -15,8 +15,8 @@ export const metadata: Metadata = pageMetadata({
 // word for word: it is the text users accept, so it changes only together with kLegalVersion.
 // The 06/11/2026 factual corrections (where the data lives, processing that was missing) went in on both
 // sides without a new version: whether users must accept again is a decision for the Compliance.
-// The identity document paragraph follows the app after mvp cde91b9a: at sign-up a person on the team
-// reads it (ai-engine does not run the reading outside the EU), and the optional check is Didit's.
+// The identity document paragraph follows the app after mvp 675ecaf9: since the 16/11/2026 decision the
+// only identity check is Didit's (optional); documents uploaded at sign-up before then stay archived.
 const SECTIONS: LegalSection[] = [
   {
     id: "titolare",
@@ -71,20 +71,11 @@ const SECTIONS: LegalSection[] = [
     content: (
       <p>
         Dati dell&apos;attività: nome, Partita IVA, zona di lavoro, mestieri e
-        disponibilità. Per iscriverti carichi il fronte e il retro di un documento
-        d&apos;identità (carta d&apos;identità, patente o passaporto): è un passaggio
-        obbligatorio. Le due foto restano in un archivio privato sui nostri server, non sono
-        mai mostrate ai clienti e non passano da nessun sistema di intelligenza artificiale:
-        le guarda una persona del team, che controlla il tipo di documento, la scadenza e
-        che il nome sia quello che hai indicato. In automatico controlliamo solo che i file
-        siano foto o PDF e che fronte e retro non siano la stessa foto: al massimo ti
-        chiediamo di ricaricarle, non ti escludiamo mai in automatico. Non confrontiamo il
-        tuo volto. Di ogni controllo salviamo l&apos;esito, il tipo e la scadenza del
-        documento quando sono noti e un&apos;impronta dei file (un codice da cui non si
-        torna alle foto). Dal tuo profilo puoi anche verificare la tua identità con Didit
-        (Didit Identity Spain, S.L., Barcellona), il fornitore che usiamo per questo come
-        responsabile del trattamento: è facoltativo e serve al badge «Documento accettato»
-        sulla tua scheda. Nella pagina di Didit fotografi il documento e fai un selfie dal
+        disponibilità. Per iscriverti non devi caricare un documento d&apos;identità. Dal tuo
+        profilo puoi verificare la tua identità con Didit (Didit Identity Spain, S.L.,
+        Barcellona), il fornitore che usiamo per questo come responsabile del trattamento: è
+        facoltativo e il tuo profilo risulta verificato solo dopo l&apos;esito positivo di Didit.
+        Nella pagina di Didit fotografi il documento e fai un selfie dal
         vivo: Didit legge il documento, controlla che davanti alla fotocamera ci sia una
         persona presente, confronta il tuo volto con la foto del documento e valuta
         l&apos;indirizzo IP da cui ti colleghi. Il confronto del volto usa dati biometrici:
@@ -92,10 +83,14 @@ const SECTIONS: LegalSection[] = [
         tiene i dati nell&apos;Unione Europea, su server in Irlanda; per alcuni servizi di
         supporto usa fornitori negli Stati Uniti, con le clausole contrattuali standard.
         Dell&apos;esito noi teniamo solo il tipo di documento, lo Stato che lo ha emesso, la
-        scadenza, se il nome coincide con quello del profilo, se sei maggiorenne e se i
-        controlli del selfie e del volto sono andati bene: non teniamo le foto, il selfie,
-        il numero del documento né la data di nascita. Se elimini l&apos;account, chiediamo
-        a Didit di cancellare le tue verifiche. Se detti un preventivo, il telefono
+        scadenza, se il nome coincide con quello del profilo, se sei maggiorenne, se i
+        controlli del selfie e del volto sono andati bene e lo stato della verifica: non
+        teniamo le foto, il selfie, il numero del documento né la data di nascita. Se elimini
+        l&apos;account, chiediamo a Didit di cancellare le tue verifiche. Fino al [data da
+        confermare] all&apos;iscrizione si caricavano il fronte e il retro di un documento
+        d&apos;identità: le foto caricate prima di quella data restano in un archivio privato
+        sui nostri server, non sono mostrate ai clienti e non passano da sistemi di
+        intelligenza artificiale; le gestiamo secondo un termine da confermare. Se detti un preventivo, il telefono
         trascrive la tua voce e a noi arriva solo il testo, mai l&apos;audio: il sistema di
         intelligenza artificiale descritto in «Intelligenza artificiale» (Gemini di Google)
         lo legge insieme alle voci del preventivo e al tuo listino per proporti cosa
@@ -140,7 +135,7 @@ const SECTIONS: LegalSection[] = [
     content: (
       <p>
         Per erogare il servizio (metterti in contatto col professionista giusto), gestire le
-        prenotazioni e le notifiche, controllare i documenti dei professionisti, migliorare
+        prenotazioni e le notifiche, gestire la verifica facoltativa dell&apos;identità dei professionisti, migliorare
         l&apos;app con statistiche di utilizzo aggregate, misurare le nostre pubblicità su Facebook e
         Instagram (solo se acconsenti) e per obblighi di legge.
       </p>
@@ -158,8 +153,8 @@ const SECTIONS: LegalSection[] = [
         Framework UE-USA e delle clausole contrattuali standard. Non inviamo il tuo testo
         per addestrare modelli. Le foto del problema vengono cancellate dopo l&apos;analisi.
         Lo stesso modello legge il testo dei preventivi che i professionisti dettano, come
-        spiegato in «Se sei un professionista». Le foto del documento d&apos;identità non
-        passano dall&apos;intelligenza artificiale.
+        spiegato in «Se sei un professionista». Le foto dei documenti d&apos;identità non
+        passano da questo modello.
       </p>
     ),
   },
@@ -190,7 +185,9 @@ const SECTIONS: LegalSection[] = [
     content: (
       <p>
         Per il tempo necessario al servizio e agli obblighi di legge. Puoi chiedere la
-        cancellazione in ogni momento (vedi sotto). Gli eventi inviati a Meta non restano da noi;
+        cancellazione in ogni momento (vedi sotto). Per le foto dei documenti d&apos;identità
+        caricate all&apos;iscrizione prima del [data da confermare] il termine è da confermare.
+        Gli eventi inviati a Meta non restano da noi;
         presso Meta valgono le sue regole.
       </p>
     ),

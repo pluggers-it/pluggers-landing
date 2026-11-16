@@ -164,8 +164,8 @@ const SECTIONS: LegalSection[] = [
         <p>
           Per farti trovare mostriamo ai clienti il tuo profilo professionale: nome (con il cognome
           puntato), mestieri e competenze dichiarate, città in cui operi, disponibilità e
-          recensioni ricevute. Il documento d&apos;identità che carichi serve solo alla verifica e
-          NON viene mostrato ai clienti.
+          recensioni ricevute. Se verifichi la tua identità con Didit, ai clienti mostriamo solo che
+          il profilo è verificato: il documento NON viene mostrato ai clienti.
         </p>
         <h3>Recensioni e reputazione</h3>
         <p>
