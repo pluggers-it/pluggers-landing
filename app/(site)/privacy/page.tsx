@@ -90,6 +90,30 @@ const SECTIONS: LegalSection[] = [
     ),
   },
   {
+    id: "condomini",
+    title: "Se sei in un condominio (bozza, da validare con il legale)",
+    content: (
+      <>
+        <p className="text-[15px] text-muted">
+          Il servizio per i condomini è in arrivo: questa sezione vale da quando sarà attivo.
+        </p>
+        <p>
+          Bozza del 16 novembre 2026, da validare con il legale. Se entri in un condominio su
+          Pluggers, l&apos;amministratore e i suoi collaboratori vedono il tuo nome, la tua unità
+          (scala e interno, se la indichi), se sei proprietario o inquilino e, per le sole
+          richieste a carico del condominio, descrizione, foto, referto, la chat con il
+          professionista e gli importi. Non vedono il telefono e l&apos;email del tuo account né le
+          richieste per casa tua; quello che scrivi nella chat di una richiesta a carico del
+          condominio, invece, lo leggono. Usano questi dati solo per gestire il condominio. Se
+          esci, le richieste già aperte restano al condominio e chi lo gestisce continua a vederle
+          con il tuo nome e la tua unità: per quanto tempo è da confermare. Se per questi dati
+          Pluggers e l&apos;amministratore siano titolari autonomi o contitolari è da confermare.
+          Per i tuoi diritti scrivi a <SupportEmail />.
+        </p>
+      </>
+    ),
+  },
+  {
     id: "finalita",
     title: "Perché li usiamo",
     content: (

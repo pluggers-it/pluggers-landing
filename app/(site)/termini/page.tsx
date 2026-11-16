@@ -87,6 +87,38 @@ const SECTIONS: LegalSection[] = [
     ),
   },
   {
+    id: "condomini",
+    title: "Condomini (bozza, da validare con il legale)",
+    content: (
+      <>
+        <p className="text-[15px] text-muted">
+          Il servizio per i condomini è in arrivo: questa sezione vale da quando sarà attivo.
+        </p>
+        <p>
+          Bozza del 16 novembre 2026, da validare con il legale. Su Pluggers un condominio è lo
+          spazio in cui i residenti di uno stabile segnalano i guasti sulle parti comuni e chi lo
+          amministra li gestisce. I ruoli: il residente (proprietario, inquilino o altro) entra con
+          il codice dello stabile, con un link o con un invito personale; l&apos;amministratore crea
+          il condominio e lo gestisce; i collaboratori sono persone del suo studio che lui invita ad
+          aiutarlo. Cosa vede chi gestisce il condominio (amministratore e collaboratori): nome e
+          unità di ogni residente e, per le sole richieste a carico del condominio, la descrizione,
+          la chat con il professionista e gli importi; non vede il telefono e l&apos;email del tuo
+          account né le richieste per casa tua. Approvazione e soglia: le richieste sulle parti
+          comuni partono subito verso i professionisti; sopra la soglia di spesa fissata
+          dall&apos;amministratore il preventivo lo accetta solo chi gestisce il condominio, che
+          può anche rifiutarlo spiegando il motivo. Uscita: puoi uscire dal condominio quando vuoi;
+          le richieste già aperte restano al condominio, e chi lo gestisce continua a vederle con
+          il tuo nome e la tua unità (per quanto tempo è da confermare). Riservatezza:
+          amministratore e collaboratori usano i dati dei residenti solo per gestire il condominio,
+          li tengono riservati e non li comunicano ad altri, salvo che serva a gestirlo o lo
+          imponga la legge; lo accettano quando creano un condominio o entrano a gestirlo. Il ruolo
+          di Pluggers e dell&apos;amministratore per questi dati (titolari autonomi o contitolari)
+          è da confermare.
+        </p>
+      </>
+    ),
+  },
+  {
     id: "contatti-e-foro",
     title: "Contatti e foro",
     content: (
