@@ -230,8 +230,8 @@ export default function TerminiPage() {
   return (
     <LegalPage
       title="Termini e condizioni"
-      updated="14 ottobre 2026"
-      version="2026-10-14"
+      updated="16 novembre 2026"
+      version="2026-11-16"
       intro={
         <p>
           Usando Pluggers accetti questi termini. Sono un riassunto leggibile; la versione

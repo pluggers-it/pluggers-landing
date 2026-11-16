@@ -347,8 +347,8 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       title="Informativa sulla privacy"
-      updated="6 novembre 2026"
-      version="2026-10-14"
+      updated="16 novembre 2026"
+      version="2026-11-16"
       intro={
         <p>
           Questa informativa spiega quali dati raccogliamo quando usi Pluggers, perché, e quali
