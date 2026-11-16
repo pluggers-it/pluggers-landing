@@ -70,6 +70,13 @@ export function ConsentGate() {
                 {/* A full page load, not <Link>: leaving an invite page (/i/…) without reloading would keep its
                     address in this tab's history, where Google Analytics, once accepted, would read it on Back. */}
                 <a
+                  href="/cookie"
+                  className="underline underline-offset-2 transition hover:text-[var(--color-foreground)]"
+                >
+                  Cookie policy
+                </a>
+                {" · "}
+                <a
                   href="/privacy"
                   className="underline underline-offset-2 transition hover:text-[var(--color-foreground)]"
                 >

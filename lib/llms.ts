@@ -66,6 +66,7 @@ ${tradeLinks}
 ## Note legali
 
 - [Privacy Policy](${SITE_URL}/privacy)
+- [Cookie policy](${SITE_URL}/cookie)
 - [Termini e Condizioni](${SITE_URL}/termini)
 - [Assistenza](${SITE_URL}/supporto)
 - [Eliminazione dell'account](${SITE_URL}/elimina-account)
