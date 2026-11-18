@@ -30,7 +30,7 @@ const G = "/guida/professionisti";
 const STEPS: GuideStep[] = [
   {
     id: "mestieri", short: "Mestieri", src: `${G}/01.webp`,
-    alt: "Profilo professionista, passo 1 di 5: «I tuoi mestieri» con l'elenco dei mestieri e la descrizione di ciascuno.",
+    alt: "Impostazioni del professionista, «Mestieri»: la griglia dei mestieri con «Idraulico» scelto e la riga «Lavori e specialità».",
     title: "Scegli i tuoi mestieri",
     text: "Indica tutti i mestieri che fai. Per ognuno i lavori più comuni sono già selezionati.",
     points: ["Puoi sceglierne più di uno", "Togli i lavori che non fai", "Aggiungi le specializzazioni"],
@@ -38,21 +38,21 @@ const STEPS: GuideStep[] = [
   },
   {
     id: "raggio", short: "Zona", src: `${G}/02.webp`,
-    alt: "Profilo professionista: «Fin dove ti sposti» con il cursore del raggio d'azione a 20 km, la sezione «Dove lavori» e «Documento d'identità» con i riquadri per fronte e retro.",
+    alt: "Impostazioni del professionista, «Zona di lavoro»: l'indirizzo di partenza e il cursore del raggio a 20 km, da 1 a 200 km.",
     title: "Decidi fin dove ti sposti",
     text: "Inserisci l'indirizzo da cui parti e il raggio, da 1 a 200 km. Ti trovano solo i clienti entro quella distanza.",
     points: ["Il raggio si imposta con il cursore", "Le città in cui lavori, anche più di una", "La descrizione dell'attività e la partita IVA", "Il documento d'identità, fronte e retro: serve solo a noi, i clienti non lo vedono"],
   },
   {
     id: "disponibilita", short: "Orari", src: `${G}/03.webp`,
-    alt: "Profilo professionista, passo 5 di 5: «La tua disponibilità» con l'orario dalle 9 alle 18 e i giorni lavorativi selezionati.",
+    alt: "Impostazioni del professionista, «Orari di lavoro»: lo stesso orario tutti i giorni, dalle 8 alle 18, dal lunedì al sabato.",
     title: "Imposta orari e giorni",
     text: "Indica la fascia oraria e i giorni in cui accetti interventi, poi salva il profilo.",
-    points: ["Dalle 9 alle 18, o la fascia che preferisci", "I giorni in cui lavori, uno per uno", "Tocca «Salva» e il profilo è pronto"],
+    points: ["Dalle 8 alle 18, o la fascia che preferisci", "I giorni in cui lavori, uno per uno", "Tocca «Salva» e il profilo è pronto"],
   },
   {
     id: "richieste", short: "Richieste", src: `${G}/04.webp`,
-    alt: "Sezione «Richieste»: le schede «Nuove» e «In corso», il bottone «Ordina e filtra» e tre richieste con il problema, il giorno, la distanza, la cifra indicativa e il bottone «Accetta e invia la stima».",
+    alt: "Sezione «Richieste»: le schede «Nuove» e «In corso», il bottone «Ordina e filtra» e una richiesta con il problema, il giorno, la distanza, la cifra indicativa e il bottone «Accetta e invia la stima».",
     title: "Ricevi le richieste",
     text: "Le richieste arrivano dai clienti della tua zona che ti hanno scelto. Ognuna ha giorno, mestiere, problema, distanza da te e una cifra di riferimento calcolata dall'app.",
     points: ["Apri quelle che ti interessano", "Rifiuta le altre"],
@@ -60,7 +60,7 @@ const STEPS: GuideStep[] = [
   },
   {
     id: "preventivo", short: "Stima e preventivo", src: `${G}/05.webp`,
-    alt: "Schermata «Nuovo preventivo»: la stima automatica con la fascia tipica, le voci del preventivo e il bottone «Invia preventivo».",
+    alt: "Schermata «Preventivo per Davide»: la fascia tipica per lavori come questo, tre voci con il loro prezzo, la nota e il bottone «Invia a Davide».",
     title: "Prima la stima, dopo il sopralluogo il preventivo",
     text: "Prima del sopralluogo mandi una stima: quanto può costare il lavoro e l'eventuale Costo Chiamata. Se il cliente la accetta, l'appuntamento è confermato. Dopo il sopralluogo mandi il preventivo; puoi poi eseguire l'intervento subito o in un altro giorno.",
     points: ["L'app ti suggerisce una cifra, sta a te poi definirla e confermarla", "Imponibile, IVA e totale li calcola l'app, il cliente riceve anche il PDF del preventivo", "Se in corso d'opera il prezzo cambia, mandi un preventivo aggiornato con motivo e foto"],
@@ -68,7 +68,7 @@ const STEPS: GuideStep[] = [
   },
   {
     id: "agenda", short: "Agenda", src: `${G}/06.webp`,
-    alt: "Agenda del professionista in vista settimanale, con la scelta tra «Giorno», «Settimana» e «Mese», due interventi dal 5 al 7 novembre e il bottone «Appuntamento cliente esterno».",
+    alt: "Agenda del professionista in vista settimanale, con la scelta tra «Giorno», «Settimana» e «Mese», due interventi il 12 novembre e il bottone «Appuntamento cliente esterno».",
     title: "Gli appuntamenti in agenda",
     text: "Gli interventi confermati entrano in agenda da soli. Puoi segnare anche gli appuntamenti dei tuoi clienti di sempre, anche se non ti hanno contattato da Pluggers: così hai tutto in un'unica app.",
     points: ["Giorno, settimana o mese: scegli la vista che ti serve", "Lo stato di ogni appuntamento"],
