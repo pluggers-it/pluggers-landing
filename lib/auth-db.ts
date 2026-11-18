@@ -30,8 +30,8 @@ export async function verifyAdminUser(
   const matches = await bcrypt.compare(password, row.password_hash);
   if (!matches) return null;
 
-  // Best-effort last-login update (ignore errors)
-  void getSupabase()
+  // Best-effort last-login update: errors are returned (not thrown) and ignored
+  await getSupabase()
     .from("admin_users")
     .update({ last_login_at: new Date().toISOString() })
     .eq("id", row.id);
@@ -74,12 +74,12 @@ export async function verifySession(token: string): Promise<boolean> {
 
   const row = data as SessionRow;
   if (new Date(row.expires_at) < new Date()) {
-    void getSupabase().from("admin_sessions").delete().eq("token", token);
+    await getSupabase().from("admin_sessions").delete().eq("token", token);
     return false;
   }
 
   // Extend last-used timestamp (best-effort)
-  void getSupabase()
+  await getSupabase()
     .from("admin_sessions")
     .update({ last_used_at: new Date().toISOString() })
     .eq("token", token);
