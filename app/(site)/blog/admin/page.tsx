@@ -9,7 +9,8 @@ import { ArrowLeft, Plus, Trash2, LogOut, Loader2, User, Lock, UserPlus, ShieldC
 import { MarkdownEditor } from "@/components/MarkdownEditor";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-type Post = { id: string; title: string; category: string; content: string; createdAt: string };
+type Post = { id: string; title: string; category: string; content: string; createdAt: string; status?: "bozza" | "pubblicato" };
+type Role = "admin" | "autore";
 
 const STORAGE_KEY = "pluggers_admin_token";
 
@@ -149,11 +150,12 @@ function LoginGate({ onAuth }: { onAuth: (token: string) => void }) {
 }
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-type AdminUser = { id: number; username: string; created_at: string; last_login_at: string | null };
+type AdminUser = { id: number; username: string; role: Role; created_at: string; last_login_at: string | null };
 
 // ── Admin dashboard ───────────────────────────────────────────────────────────
 function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => void }) {
   const [posts,      setPosts]      = useState<Post[]>([]);
+  const [role,       setRole]       = useState<Role | null>(null);
   const [loading,    setLoading]    = useState(true);
   const [title,      setTitle]      = useState("");
   const [category,   setCategory]   = useState("Prodotto");
@@ -165,6 +167,7 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
   const [users,        setUsers]       = useState<AdminUser[]>([]);
   const [newUsername,  setNewUsername] = useState("");
   const [newPassword,  setNewPassword] = useState("");
+  const [newRole,      setNewRole]     = useState<Role>("autore");
   const [userErr,      setUserErr]     = useState("");
   const [userOk,       setUserOk]      = useState("");
   const [userLoading,  setUserLoading] = useState(false);
@@ -172,13 +175,15 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
   const loadPosts = useCallback(async () => {
     setLoading(true);
     try {
-      const res  = await fetch("/api/posts");
-      const data = (await res.json()) as { posts: Post[] };
+      const res  = await authFetch(token, "/api/posts");
+      const data = (await res.json()) as { posts: Post[]; role?: Role };
+      if (!data.role) { onLogout(); return; } // session gone: the public list has no role
       setPosts(data.posts ?? []);
+      setRole(data.role);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [token, onLogout]);
 
   const loadUsers = useCallback(async () => {
     try {
@@ -188,7 +193,8 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
     } catch { /* ignore */ }
   }, [token]);
 
-  useEffect(() => { void loadPosts(); void loadUsers(); }, [loadPosts, loadUsers]);
+  useEffect(() => { void loadPosts(); }, [loadPosts]);
+  useEffect(() => { if (role === "admin") void loadUsers(); }, [role, loadUsers]);
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
@@ -229,6 +235,17 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
       body: JSON.stringify({ id }),
     });
     if (res.status === 401) { onLogout(); return; }
+    if (!res.ok) alert(((await res.json().catch(() => null)) as { error?: string } | null)?.error ?? "Errore imprevisto.");
+    await loadPosts();
+  }
+
+  async function handlePublish(id: string) {
+    const res = await authFetch(token, "/api/posts", {
+      method: "PATCH",
+      body: JSON.stringify({ id, status: "pubblicato" }),
+    });
+    if (res.status === 401) { onLogout(); return; }
+    if (!res.ok) alert(((await res.json().catch(() => null)) as { error?: string } | null)?.error ?? "Errore imprevisto.");
     await loadPosts();
   }
 
@@ -239,7 +256,7 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
     try {
       const res = await authFetch(token, "/api/admin/users", {
         method: "POST",
-        body: JSON.stringify({ username: newUsername.trim(), password: newPassword }),
+        body: JSON.stringify({ username: newUsername.trim(), password: newPassword, role: newRole }),
       });
       const data = (await res.json()) as { error?: string; username?: string };
       if (!res.ok) { setUserErr(data.error ?? "Errore imprevisto."); return; }
@@ -346,8 +363,11 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
                   className="h-12 rounded-2xl font-mono text-xs font-semibold tracking-[0.2em] text-white transition hover:scale-[1.02] disabled:opacity-50"
                   style={{ background: "linear-gradient(135deg, var(--color-accent), #a855f7)", boxShadow: "0 4px 20px rgba(139,92,246,0.35)" }}
                 >
-                  {submitting ? <Loader2 className="mx-auto h-4 w-4 animate-spin" /> : "PUBBLICA"}
+                  {submitting ? <Loader2 className="mx-auto h-4 w-4 animate-spin" /> : role === "admin" ? "PUBBLICA" : "SALVA BOZZA"}
                 </button>
+                {role === "autore" && (
+                  <p className="font-mono text-[11px] text-[var(--color-muted)]">Le bozze le pubblica un admin.</p>
+                )}
                 {formErr && <p className="font-mono text-xs text-red-500">{formErr}</p>}
               </form>
             </div>
@@ -357,7 +377,7 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
         {/* Posts list */}
         <section className="mt-8">
           <h2 className="mb-4 font-mono text-xs tracking-[0.25em] text-[var(--color-muted)]">
-            ARTICOLI PUBBLICATI
+            ARTICOLI
           </h2>
           {loading ? (
             <div className="grid place-items-center rounded-2xl border border-[var(--color-border)] bg-[var(--color-panel)] p-10">
@@ -379,6 +399,11 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
                       <span className="rounded-full border border-[var(--color-border)] px-2.5 py-0.5 font-mono text-[10px] text-[var(--color-muted)]">
                         {post.category}
                       </span>
+                      {post.status === "bozza" && (
+                        <span className="rounded-full border border-amber-500/50 px-2.5 py-0.5 font-mono text-[10px] text-amber-400">
+                          BOZZA
+                        </span>
+                      )}
                       <time className="font-mono text-[11px] text-[var(--color-muted)]">
                         {formatDate(post.createdAt)}
                       </time>
@@ -389,26 +414,40 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
                     </p>
                   </div>
                   <div className="flex shrink-0 gap-2">
-                    <Link
-                      href={postPath(post)}
-                      target="_blank"
-                      className="rounded-xl border border-[var(--color-border)] px-3 py-2 font-mono text-[11px] text-[var(--color-muted)] transition hover:border-[var(--color-accent)]"
-                    >
-                      Apri
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(post.id)}
-                      className="rounded-xl border border-transparent p-2 text-[var(--color-muted)] transition hover:border-red-500/50 hover:text-red-400"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
+                    {post.status === "bozza" ? (
+                      role === "admin" && (
+                        <button
+                          onClick={() => handlePublish(post.id)}
+                          className="rounded-xl border border-[var(--color-border)] px-3 py-2 font-mono text-[11px] text-[var(--color-muted)] transition hover:border-[var(--color-accent)]"
+                        >
+                          Pubblica
+                        </button>
+                      )
+                    ) : (
+                      <Link
+                        href={postPath(post)}
+                        target="_blank"
+                        className="rounded-xl border border-[var(--color-border)] px-3 py-2 font-mono text-[11px] text-[var(--color-muted)] transition hover:border-[var(--color-accent)]"
+                      >
+                        Apri
+                      </Link>
+                    )}
+                    {(role === "admin" || post.status === "bozza") && (
+                      <button
+                        onClick={() => handleDelete(post.id)}
+                        className="rounded-xl border border-transparent p-2 text-[var(--color-muted)] transition hover:border-red-500/50 hover:text-red-400"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
           )}
         </section>
-        {/* User management */}
+        {/* User management — admins only */}
+        {role === "admin" && (
         <section className="mt-10">
           <div
             className="relative overflow-hidden rounded-3xl border border-[var(--color-border)] p-6 sm:p-8"
@@ -439,7 +478,7 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
                           {u.username.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <p className="font-mono text-sm font-semibold">{u.username}</p>
+                          <p className="font-mono text-sm font-semibold">{u.username} <span className="font-normal text-[var(--color-muted)]">· {u.role}</span></p>
                           <p className="font-mono text-[10px] text-[var(--color-muted)]">
                             {u.last_login_at
                               ? `Ultimo accesso: ${new Date(u.last_login_at).toLocaleDateString("it-IT")}`
@@ -483,6 +522,15 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
                     />
                   </div>
                 </div>
+                <select
+                  value={newRole}
+                  onChange={(e) => setNewRole(e.target.value as Role)}
+                  className={`${INPUT_CLASS} appearance-none`}
+                  style={SELECT_STYLE}
+                >
+                  <option value="autore" className="bg-[#07070a]">Autore — scrive bozze</option>
+                  <option value="admin" className="bg-[#07070a]">Admin — pubblica e gestisce gli account</option>
+                </select>
                 <button
                   type="submit" disabled={userLoading}
                   className="flex h-11 items-center justify-center gap-2 rounded-2xl border font-mono text-xs font-semibold tracking-[0.16em] transition hover:scale-[1.01] disabled:opacity-50"
@@ -498,6 +546,7 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
             </div>
           </div>
         </section>
+        )}
 
       </div>
     </div>
@@ -518,10 +567,11 @@ export default function AdminPage() {
     setToken(t);
   }
 
-  function handleLogout() {
+  // stable: the dashboard's loaders depend on it
+  const handleLogout = useCallback(() => {
     sessionStorage.removeItem(STORAGE_KEY);
     setToken(null);
-  }
+  }, []);
 
   if (!token) return <LoginGate onAuth={handleAuth} />;
   return <AdminDashboard token={token} onLogout={handleLogout} />;

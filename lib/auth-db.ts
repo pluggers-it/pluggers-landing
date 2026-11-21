@@ -5,7 +5,10 @@ const SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type UserRow = { id: number; password_hash: string };
-type SessionRow = { expires_at: string };
+type SessionRow = { expires_at: string; user_id: number };
+
+export type Role = "admin" | "autore";
+export type SessionUser = { id: number; role: Role };
 
 // ── User verification ─────────────────────────────────────────────────────────
 
@@ -58,25 +61,33 @@ export async function createSession(userId: number): Promise<string> {
 }
 
 /**
- * Verifies a session token: returns true if the token exists and is not expired.
+ * Verifies a session token: returns the user (id + role) if the token exists and is not expired.
  * Auto-deletes expired sessions on access.
  */
-export async function verifySession(token: string): Promise<boolean> {
-  if (!token || token.length < 10) return false;
+export async function verifySession(token: string): Promise<SessionUser | null> {
+  if (!token || token.length < 10) return null;
 
   const { data, error } = await getSupabase()
     .from("admin_sessions")
-    .select("expires_at")
+    .select("expires_at, user_id")
     .eq("token", token)
     .maybeSingle();
 
-  if (error || !data) return false;
+  if (error || !data) return null;
 
   const row = data as SessionRow;
   if (new Date(row.expires_at) < new Date()) {
     await getSupabase().from("admin_sessions").delete().eq("token", token);
-    return false;
+    return null;
   }
+
+  const { data: user, error: userError } = await getSupabase()
+    .from("admin_users")
+    .select("id, role")
+    .eq("id", row.user_id)
+    .maybeSingle();
+
+  if (userError || !user) return null;
 
   // Extend last-used timestamp (best-effort)
   await getSupabase()
@@ -84,7 +95,16 @@ export async function verifySession(token: string): Promise<boolean> {
     .update({ last_used_at: new Date().toISOString() })
     .eq("token", token);
 
-  return true;
+  // anything that is not exactly "admin" gets the smaller rights
+  return { id: user.id as number, role: user.role === "admin" ? "admin" : "autore" };
+}
+
+/** The user behind `Authorization: Bearer <token>`, or null. */
+export async function sessionFromRequest(req: Request): Promise<SessionUser | null> {
+  const auth  = req.headers.get("Authorization") ?? "";
+  const token = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
+  if (!token) return null;
+  try { return await verifySession(token); } catch { return null; }
 }
 
 /**

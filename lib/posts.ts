@@ -9,6 +9,8 @@ import { formatPost, postText } from "@/lib/postFormat";
 import { idFromSegment, mergePosts, slugify } from "./postPath";
 import { getArticle, readArticles } from "./babylovegrowth";
 
+export type PostStatus = "bozza" | "pubblicato";
+
 export type PostCategory = "Idraulico" | "Elettricista" | "Muratore" | "Altro";
 
 export type Post = {
@@ -17,6 +19,9 @@ export type Post = {
   category: PostCategory | string;
   content: string;
   createdAt: string;
+  /** Our posts only: drafts never reach the public pages. */
+  status?: PostStatus;
+  authorId?: number | null;
   /** BabyLoveGrowth articles only (lib/babylovegrowth.ts): served at /blog/<slug>. */
   slug?: string;
   description?: string;
@@ -31,6 +36,8 @@ type PostRow = {
   category: string;
   content: string;
   created_at: string;
+  status: PostStatus;
+  author_id: number | null;
 };
 
 function rowToPost(row: PostRow): Post {
@@ -40,6 +47,8 @@ function rowToPost(row: PostRow): Post {
     category:  row.category,
     content:   row.content,
     createdAt: row.created_at,
+    status:    row.status,
+    authorId:  row.author_id,
   };
 }
 
@@ -125,11 +134,23 @@ export function readingMinutes(md: string): number {
   return Math.max(1, Math.round(excerpt(md).split(/\s+/).length / 200));
 }
 
+/** Published posts only: what the blog, the sitemap and the public API show. */
 export async function readPosts(): Promise<Post[]> {
   const { data, error } = await getSupabase()
     .from("posts")
     .select("*")
+    .eq("status", "pubblicato")
     .order("created_at", { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return (data as PostRow[]).map(rowToPost);
+}
+
+/** The staff panel: an admin sees every post, an author the published ones and their own drafts. */
+export async function readStaffPosts(user: { id: number; role: "admin" | "autore" }): Promise<Post[]> {
+  let query = getSupabase().from("posts").select("*");
+  if (user.role !== "admin") query = query.or(`status.eq.pubblicato,author_id.eq.${Number(user.id)}`);
+  const { data, error } = await query.order("created_at", { ascending: false });
 
   if (error) throw new Error(error.message);
   return (data as PostRow[]).map(rowToPost);
@@ -148,6 +169,7 @@ export const getPostById = cache(async (id: string): Promise<Post | null> => {
     .from("posts")
     .select("*")
     .eq("id", id)
+    .eq("status", "pubblicato")
     .single();
 
   if (error || !data) return null;
@@ -164,6 +186,8 @@ export async function createPost(input: {
   title: string;
   category: string;
   content: string;
+  status: PostStatus;
+  author_id: number;
 }): Promise<Post> {
   const { data, error } = await getSupabase()
     .from("posts")
@@ -175,12 +199,23 @@ export async function createPost(input: {
   return rowToPost(data as PostRow);
 }
 
-export async function deletePost(id: string): Promise<boolean> {
+/** Deletes a post; with `onlyDraftOf` only that author's draft. False when nothing matched. */
+export async function deletePost(id: string, onlyDraftOf?: number): Promise<boolean> {
+  let query = getSupabase().from("posts").delete({ count: "exact" }).eq("id", id);
+  if (onlyDraftOf !== undefined) query = query.eq("author_id", onlyDraftOf).eq("status", "bozza");
+  const { error, count } = await query;
+
+  if (error) throw new Error(error.message);
+  return (count ?? 0) > 0;
+}
+
+/** Publishes or unpublishes a post. False when the post does not exist. */
+export async function setPostStatus(id: string, status: PostStatus): Promise<boolean> {
   const { error, count } = await getSupabase()
     .from("posts")
-    .delete()
+    .update({ status }, { count: "exact" })
     .eq("id", id);
 
   if (error) throw new Error(error.message);
-  return (count ?? 1) > 0;
+  return (count ?? 0) > 0;
 }

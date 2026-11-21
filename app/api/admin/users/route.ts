@@ -1,27 +1,29 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { verifySession } from "@/lib/auth-db";
+import { sessionFromRequest } from "@/lib/auth-db";
 import { getSupabase } from "@/lib/supabase";
 
-async function authenticate(req: Request): Promise<boolean> {
-  const auth  = req.headers.get("Authorization") ?? "";
-  const token = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
-  if (!token) return false;
-  try { return await verifySession(token); } catch { return false; }
+/** Account management is for admins only: null when the caller may go on, the error response otherwise. */
+async function requireAdmin(req: Request): Promise<NextResponse | null> {
+  const user = await sessionFromRequest(req);
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (user.role !== "admin") {
+    return NextResponse.json({ error: "Solo un admin gestisce gli account." }, { status: 403 });
+  }
+  return null;
 }
 
 /**
- * POST /api/admin/users — creates a new admin user.
- * Body: { username: string; password: string }
+ * POST /api/admin/users — creates a staff user (admin only).
+ * Body: { username: string; password: string; role?: "admin" | "autore" } — role defaults to "autore"
  * Requires: Authorization: Bearer <session-token>
  */
 export async function POST(req: Request) {
-  if (!(await authenticate(req))) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin(req);
+  if (denied) return denied;
 
   const body = (await req.json().catch(() => null)) as
-    | { username?: string; password?: string }
+    | { username?: string; password?: string; role?: string }
     | null;
 
   const username = (body?.username ?? "").trim().toLowerCase();
@@ -40,11 +42,12 @@ export async function POST(req: Request) {
     );
   }
 
+  const role = body?.role === "admin" ? "admin" : "autore";
   const passwordHash = await bcrypt.hash(password, 12);
 
   const { error } = await getSupabase()
     .from("admin_users")
-    .insert({ username, password_hash: passwordHash });
+    .insert({ username, password_hash: passwordHash, role });
 
   if (error) {
     if (error.code === "23505") {
@@ -59,21 +62,20 @@ export async function POST(req: Request) {
     );
   }
 
-  return NextResponse.json({ ok: true, username }, { status: 201 });
+  return NextResponse.json({ ok: true, username, role }, { status: 201 });
 }
 
 /**
- * GET /api/admin/users — lists all admin usernames (no hashes).
+ * GET /api/admin/users — lists staff usernames and roles (no hashes). Admin only.
  * Requires: Authorization: Bearer <session-token>
  */
 export async function GET(req: Request) {
-  if (!(await authenticate(req))) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin(req);
+  if (denied) return denied;
 
   const { data, error } = await getSupabase()
     .from("admin_users")
-    .select("id, username, created_at, last_login_at")
+    .select("id, username, role, created_at, last_login_at")
     .order("created_at", { ascending: true });
 
   if (error) {
@@ -84,15 +86,13 @@ export async function GET(req: Request) {
 }
 
 /**
- * DELETE /api/admin/users — deletes an admin user by id.
+ * DELETE /api/admin/users — deletes a staff user by id. Admin only.
  * Body: { id: number }
  * Requires: Authorization: Bearer <session-token>
- * Cannot delete yourself.
  */
 export async function DELETE(req: Request) {
-  if (!(await authenticate(req))) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdmin(req);
+  if (denied) return denied;
 
   const body = (await req.json().catch(() => null)) as { id?: number } | null;
   const id   = body?.id;
