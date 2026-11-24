@@ -54,21 +54,36 @@ function rowToPost(row: PostRow): Post {
   };
 }
 
+type MdNode = { type: string; url?: string; children?: MdNode[] };
+
+const SAFE_URL = /^(?:https?:|mailto:|tel:|[^a-z]|[a-z][a-z0-9+.-]*(?:[/?#]|$))/i;
+
+/** remark plugin: links and images keep only http(s), mailto, tel and relative addresses. */
+function safeUrls() {
+  const walk = (node: MdNode) => {
+    // browsers ignore tabs, newlines and control characters inside a URL ("java\tscript:")
+    if (node.url !== undefined && !SAFE_URL.test(node.url.replace(/[\u0000-\u0020\u007f]/g, ""))) node.url = "";
+    node.children?.forEach(walk);
+  };
+  return (tree: MdNode) => walk(tree);
+}
+
 /** Convert markdown content to HTML, after formatPost has given the newsletter lines their structure.
- *  sanitize: false allows inline HTML (colors, underline, etc.) written by admins.
- *  Only admins publish, so XSS risk is acceptable for their posts; an author's post (`untrusted`) is sanitized,
- *  or a script in a draft would run on the site once an admin publishes it.
+ *  Inline HTML (colors, underline, etc.) is kept for admins: only admins publish.
+ *  An author's post (`untrusted`) is cleaned BEFORE formatPost: its raw HTML becomes plain text and its links
+ *  keep only safe addresses, so the only HTML left is the wrappers formatPost adds itself. Otherwise a script
+ *  in a draft would run on the site once an admin publishes it.
  *  BabyLoveGrowth articles (`external`) are written elsewhere: sanitized, no newsletter formatting.
  */
 export async function markdownToHtml(markdown: string, external = false, untrusted = false): Promise<string> {
   if (external) {
     return String(await remark().use(remarkGfm).use(remarkHtml, { sanitize: true }).process(markdown));
   }
-  const result = await remark()
-    .use(remarkGfm)
-    .use(remarkBreaks)
-    .use(remarkHtml, { sanitize: untrusted })
-    .process(formatPost(markdown));
+  // every HTML tag, comment or autolink in markdown starts with "<"
+  const source = untrusted ? markdown.replace(/</g, "&lt;") : markdown;
+  let pipeline = remark().use(remarkGfm).use(remarkBreaks);
+  if (untrusted) pipeline = pipeline.use(safeUrls);
+  const result = await pipeline.use(remarkHtml, { sanitize: false }).process(formatPost(source));
   return result.toString();
 }
 

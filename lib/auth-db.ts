@@ -3,9 +3,10 @@ import { randomBytes } from "node:crypto";
 import { getSupabase } from "@/lib/supabase";
 
 const SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+const TEMP_PASSWORD_TTL_MS = 7 * 24 * 60 * 60 * 1000; // an unused temporary password stops working after 7 days
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-type UserRow = { id: number; password_hash: string; must_change_password: boolean | null };
+type UserRow = { id: number; password_hash: string; must_change_password: boolean | null; created_at: string };
 type SessionRow = { expires_at: string; user_id: number };
 
 export type Role = "admin" | "autore";
@@ -24,7 +25,7 @@ export async function verifyAdminUser(
 ): Promise<{ id: number; mustChangePassword: boolean } | null> {
   const { data, error } = await getSupabase()
     .from("admin_users")
-    .select("id, password_hash, must_change_password")
+    .select("id, password_hash, must_change_password, created_at")
     .eq("username", username.trim().toLowerCase())
     .maybeSingle();
 
@@ -33,6 +34,9 @@ export async function verifyAdminUser(
   const row = data as UserRow;
   const matches = await bcrypt.compare(password, row.password_hash);
   if (!matches) return null;
+  // the temporary password is set only when the account is created: created_at is when it was issued
+  const temporary = row.must_change_password === true;
+  if (temporary && Date.now() - new Date(row.created_at).getTime() > TEMP_PASSWORD_TTL_MS) return null;
 
   // Best-effort last-login update: errors are returned (not thrown) and ignored
   await getSupabase()
@@ -40,7 +44,7 @@ export async function verifyAdminUser(
     .update({ last_login_at: new Date().toISOString() })
     .eq("id", row.id);
 
-  return { id: row.id, mustChangePassword: row.must_change_password === true };
+  return { id: row.id, mustChangePassword: temporary };
 }
 
 // ── Session management ────────────────────────────────────────────────────────
@@ -127,10 +131,10 @@ export async function sessionFromRequest(req: Request): Promise<SessionUser | nu
 }
 
 /**
- * Replaces a user's password after checking the current one, and clears the temporary-password flag.
- * False when the current password is wrong.
+ * Replaces a user's password after checking the current one, clears the temporary-password flag
+ * and closes the user's other sessions (`keepToken` stays open). False when the current password is wrong.
  */
-export async function changePassword(userId: number, current: string, next: string): Promise<boolean> {
+export async function changePassword(userId: number, current: string, next: string, keepToken: string): Promise<boolean> {
   const { data, error } = await getSupabase()
     .from("admin_users")
     .select("password_hash")
@@ -144,6 +148,13 @@ export async function changePassword(userId: number, current: string, next: stri
     .update({ password_hash: await hashPassword(next), must_change_password: false })
     .eq("id", userId);
   if (updateError) throw new Error("Could not change password: " + updateError.message);
+
+  const { error: sessionsError } = await getSupabase()
+    .from("admin_sessions")
+    .delete()
+    .eq("user_id", userId)
+    .neq("token", keepToken);
+  if (sessionsError) throw new Error("Could not close the other sessions: " + sessionsError.message);
   return true;
 }
 

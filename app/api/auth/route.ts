@@ -19,7 +19,7 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit";
  * PATCH /api/auth — the logged-in user changes their own password
  * Header: Authorization: Bearer <token>
  * Body: { password: string; newPassword: string }
- * → 200 { ok: true } · 400 (new password too short or same) · 401 (no session or wrong current password)
+ * → 200 { ok: true } (the user's other sessions are closed) · 400 (new password too short or same) · 401 (no session or wrong current password)
  */
 
 // ── Login ─────────────────────────────────────────────────────────────────────
@@ -82,7 +82,8 @@ export async function PATCH(req: Request) {
   }
 
   // verifySession, not sessionFromRequest: this is the one call a temporary password may make
-  const user = await verifySession(bearerToken(req)).catch(() => null);
+  const token = bearerToken(req);
+  const user = await verifySession(token).catch(() => null);
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = (await req.json().catch(() => null)) as
@@ -98,7 +99,7 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: "La nuova password deve essere diversa da quella attuale." }, { status: 400 });
   }
 
-  if (!(await changePassword(user.id, password, newPassword))) {
+  if (!(await changePassword(user.id, password, newPassword, token))) {
     return NextResponse.json({ error: "Password attuale non valida." }, { status: 401 });
   }
   return NextResponse.json({ ok: true });
