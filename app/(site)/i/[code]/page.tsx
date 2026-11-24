@@ -77,7 +77,7 @@ export default async function InvitePage({ params, searchParams }: Props) {
           <div className="flex justify-center">
             <GuidePhone
               src="/guida/clienti/01.webp"
-              alt="Schermata iniziale dell'app: il campo «Di cosa hai bisogno?» con la descrizione di un guasto, una foto allegata e il bottone «Trova professionisti»."
+              alt="Schermata iniziale dell'app: «Scrivi e fotografa il problema» con la descrizione di un guasto e il bottone «Trova professionisti»."
               priority
               className="lg:rotate-[3deg]"
             />
