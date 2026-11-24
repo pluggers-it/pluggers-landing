@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { readPosts, createPost, deletePost } from "@/lib/posts";
-import { verifySession } from "@/lib/auth-db";
+import { readPosts, readStaffPosts, createPost, deletePost, setPostStatus, type PostStatus } from "@/lib/posts";
+import { sessionFromRequest } from "@/lib/auth-db";
 import { isSupabaseConfigured } from "@/lib/supabase";
 
 // the blog and the sitemap are cached: a new or deleted post shows at once
@@ -11,40 +11,30 @@ function aggiornaPagine() {
   revalidatePath("/sitemap.xml");
 }
 
-// ── Auth helper ───────────────────────────────────────────────────────────────
-async function authenticate(req: Request): Promise<boolean> {
-  const authHeader = req.headers.get("Authorization") ?? "";
-  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7).trim() : "";
-  if (!token) return false;
-  try {
-    return await verifySession(token);
-  } catch {
-    return false;
-  }
-}
+const unauthorized = () => NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-// ── GET — public: returns all posts ──────────────────────────────────────────
-export async function GET() {
+// ── GET — public: published posts; with a staff session also the drafts the user may see, and the role
+export async function GET(req: Request) {
   if (!isSupabaseConfigured()) return NextResponse.json({ posts: [] });
+  const user = await sessionFromRequest(req);
   try {
-    const posts = await readPosts();
-    return NextResponse.json({ posts });
+    if (user) return NextResponse.json({ posts: await readStaffPosts(user), role: user.role });
+    return NextResponse.json({ posts: await readPosts() });
   } catch {
     return NextResponse.json({ posts: [] });
   }
 }
 
-// ── POST — protected: creates a new post ─────────────────────────────────────
+// ── POST — protected: creates a post. Authors only ever save drafts.
 export async function POST(req: Request) {
   if (!isSupabaseConfigured()) {
     return NextResponse.json({ error: "DB non configurato." }, { status: 503 });
   }
-  if (!(await authenticate(req))) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const user = await sessionFromRequest(req);
+  if (!user) return unauthorized();
 
   const body = (await req.json().catch(() => null)) as
-    | { title?: string; category?: string; content?: string }
+    | { title?: string; category?: string; content?: string; status?: string }
     | null;
 
   const title    = (body?.title    ?? "").trim();
@@ -58,32 +48,62 @@ export async function POST(req: Request) {
     );
   }
 
-  const post = await createPost({ title, category, content });
-  aggiornaPagine();
+  const status: PostStatus =
+    user.role === "admin" && body?.status !== "bozza" ? "pubblicato" : "bozza";
+
+  const post = await createPost({ title, category, content, status, author_id: user.id });
+  if (status === "pubblicato") aggiornaPagine();
   return NextResponse.json({ post }, { status: 201 });
 }
 
-// ── DELETE — protected: deletes a post by id ─────────────────────────────────
+// ── PATCH — admin only: publishes or unpublishes a post. Body: { id, status }
+export async function PATCH(req: Request) {
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json({ error: "DB non configurato." }, { status: 503 });
+  }
+  const user = await sessionFromRequest(req);
+  if (!user) return unauthorized();
+  if (user.role !== "admin") {
+    return NextResponse.json({ error: "Solo un admin può pubblicare." }, { status: 403 });
+  }
+
+  const body = (await req.json().catch(() => null)) as { id?: string; status?: string } | null;
+  const id = String(body?.id ?? "").trim();
+  const status = body?.status;
+  if (!id || (status !== "bozza" && status !== "pubblicato")) {
+    return NextResponse.json({ error: "ID o stato non valido." }, { status: 400 });
+  }
+
+  if (!(await setPostStatus(id, status))) {
+    return NextResponse.json({ error: "Post non trovato." }, { status: 404 });
+  }
+  aggiornaPagine();
+  return NextResponse.json({ ok: true });
+}
+
+// ── DELETE — protected: an admin deletes any post, an author only their own drafts
 export async function DELETE(req: Request) {
   if (!isSupabaseConfigured()) {
     return NextResponse.json({ error: "DB non configurato." }, { status: 503 });
   }
-  if (!(await authenticate(req))) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const user = await sessionFromRequest(req);
+  if (!user) return unauthorized();
 
   const body = (await req.json().catch(() => null)) as
     | { id?: string }
     | null;
 
-  const id = (body?.id ?? "").trim();
+  const id = String(body?.id ?? "").trim();
   if (!id) {
     return NextResponse.json({ error: "ID mancante." }, { status: 400 });
   }
 
-  const deleted = await deletePost(id);
+  const isAdmin = user.role === "admin";
+  const deleted = await deletePost(id, isAdmin ? undefined : user.id);
   if (!deleted) {
-    return NextResponse.json({ error: "Post non trovato." }, { status: 404 });
+    return isAdmin
+      ? NextResponse.json({ error: "Post non trovato." }, { status: 404 })
+      : NextResponse.json({ error: "Puoi eliminare solo le tue bozze." }, { status: 403 });
   }
 
   aggiornaPagine();
