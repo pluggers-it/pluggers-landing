@@ -22,6 +22,8 @@ export type Post = {
   /** Our posts only: drafts never reach the public pages. */
   status?: PostStatus;
   authorId?: number | null;
+  /** Written by an author (not an admin): its inline HTML is sanitized on the public page. */
+  untrusted?: boolean;
   /** BabyLoveGrowth articles only (lib/babylovegrowth.ts): served at /blog/<slug>. */
   slug?: string;
   description?: string;
@@ -53,18 +55,19 @@ function rowToPost(row: PostRow): Post {
 }
 
 /** Convert markdown content to HTML, after formatPost has given the newsletter lines their structure.
- *  sanitize: false allows inline HTML (colors, underline, etc.) written by staff.
- *  Only authenticated staff can publish posts, so XSS risk is acceptable.
+ *  sanitize: false allows inline HTML (colors, underline, etc.) written by admins.
+ *  Only admins publish, so XSS risk is acceptable for their posts; an author's post (`untrusted`) is sanitized,
+ *  or a script in a draft would run on the site once an admin publishes it.
  *  BabyLoveGrowth articles (`external`) are written elsewhere: sanitized, no newsletter formatting.
  */
-export async function markdownToHtml(markdown: string, external = false): Promise<string> {
+export async function markdownToHtml(markdown: string, external = false, untrusted = false): Promise<string> {
   if (external) {
     return String(await remark().use(remarkGfm).use(remarkHtml, { sanitize: true }).process(markdown));
   }
   const result = await remark()
     .use(remarkGfm)
     .use(remarkBreaks)
-    .use(remarkHtml, { sanitize: false })
+    .use(remarkHtml, { sanitize: untrusted })
     .process(formatPost(markdown));
   return result.toString();
 }
@@ -173,7 +176,17 @@ export const getPostById = cache(async (id: string): Promise<Post | null> => {
     .single();
 
   if (error || !data) return null;
-  return rowToPost(data as PostRow);
+  const post = rowToPost(data as PostRow);
+  // no author: written before roles existed, when every account was an admin
+  if (post.authorId != null) {
+    const { data: author } = await getSupabase()
+      .from("admin_users")
+      .select("role")
+      .eq("id", post.authorId)
+      .maybeSingle();
+    post.untrusted = author?.role !== "admin";
+  }
+  return post;
 });
 
 /** What /blog/<segment> opens: our post by id first, then a BabyLoveGrowth article by slug. */

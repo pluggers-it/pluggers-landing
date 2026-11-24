@@ -72,7 +72,7 @@ export default async function BlogPostPage(
   if (`/blog/${slug}` !== postPath(post)) permanentRedirect(postPath(post));
 
   const [rawHtml, related] = await Promise.all([
-    markdownToHtml(post.content, Boolean(post.slug)),
+    markdownToHtml(post.content, Boolean(post.slug), post.untrusted),
     relatedPosts(post),
   ]);
   const { html: contentHtml, toc } = withHeadingIds(rawHtml);

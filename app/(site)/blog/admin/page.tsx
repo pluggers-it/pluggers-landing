@@ -50,7 +50,7 @@ function authFetch(token: string, url: string, options: RequestInit = {}) {
 }
 
 // ── Login form ────────────────────────────────────────────────────────────────
-function LoginGate({ onAuth }: { onAuth: (token: string) => void }) {
+function LoginGate({ onAuth }: { onAuth: (token: string, mustChangeWith?: string) => void }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading,  setLoading]  = useState(false);
@@ -68,7 +68,7 @@ function LoginGate({ onAuth }: { onAuth: (token: string) => void }) {
       });
 
       const data = (await res.json().catch(() => null)) as
-        | { token?: string; error?: string }
+        | { token?: string; mustChangePassword?: boolean; error?: string }
         | null;
 
       if (res.status === 429) { setErr("Troppi tentativi. Attendi 1 minuto."); return; }
@@ -76,7 +76,8 @@ function LoginGate({ onAuth }: { onAuth: (token: string) => void }) {
       if (!res.ok)            { setErr(data?.error ?? `Errore server (${res.status}).`); return; }
       if (!data?.token)       { setErr("Risposta inattesa dal server."); return; }
 
-      onAuth(data.token);
+      // temporary password: kept in memory only, to be replaced right away
+      onAuth(data.token, data.mustChangePassword ? password : undefined);
     } catch {
       setErr("Errore di connessione.");
     } finally {
@@ -149,6 +150,76 @@ function LoginGate({ onAuth }: { onAuth: (token: string) => void }) {
   );
 }
 
+// ── First login: the temporary password must be replaced ────────────────────
+function ChangePasswordGate(
+  { token, current, onDone, onCancel }: { token: string; current: string; onDone: () => void; onCancel: () => void },
+) {
+  const [next,    setNext]    = useState("");
+  const [again,   setAgain]   = useState("");
+  const [loading, setLoading] = useState(false);
+  const [err,     setErr]     = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setErr("");
+    if (next !== again) { setErr("Le due password non coincidono."); return; }
+    setLoading(true);
+    try {
+      const res = await authFetch(token, "/api/auth", {
+        method: "PATCH",
+        body: JSON.stringify({ password: current, newPassword: next }),
+      });
+      const data = (await res.json().catch(() => null)) as { error?: string } | null;
+      if (!res.ok) { setErr(data?.error ?? `Errore server (${res.status}).`); return; }
+      onDone();
+    } catch {
+      setErr("Errore di connessione.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="flex min-h-screen items-center justify-center px-6">
+      <div
+        className="w-full max-w-sm overflow-hidden rounded-3xl border border-[var(--color-border)]"
+        style={{ background: "var(--color-panel)", backdropFilter: "blur(20px)" }}
+      >
+        <div className="h-1 w-full" style={{ background: "linear-gradient(90deg, var(--color-accent), #a855f7)" }} />
+        <div className="p-8">
+          <h1 className="font-sans text-xl font-bold tracking-tight">Scegli la tua password</h1>
+          <p className="mt-1 text-sm text-[var(--color-muted)]">
+            Hai usato una password temporanea. Scegline una tua, di almeno 10 caratteri.
+          </p>
+          <form className="mt-6 flex flex-col gap-3" onSubmit={handleSubmit}>
+            <input
+              type="password" required minLength={10} autoComplete="new-password" autoFocus
+              value={next} onChange={(e) => setNext(e.target.value)}
+              placeholder="Nuova password" className={INPUT_CLASS}
+            />
+            <input
+              type="password" required minLength={10} autoComplete="new-password"
+              value={again} onChange={(e) => setAgain(e.target.value)}
+              placeholder="Ripeti la nuova password" className={INPUT_CLASS}
+            />
+            <button
+              type="submit" disabled={loading}
+              className="h-12 rounded-2xl font-mono text-xs font-semibold tracking-[0.2em] text-white transition hover:scale-[1.02] disabled:opacity-50"
+              style={{ background: "linear-gradient(135deg, var(--color-accent), #a855f7)" }}
+            >
+              {loading ? <Loader2 className="mx-auto h-4 w-4 animate-spin" /> : "SALVA E ENTRA"}
+            </button>
+            <button type="button" onClick={onCancel} className="font-mono text-xs text-[var(--color-muted)]">
+              Esci
+            </button>
+            {err && <p className="text-center font-mono text-xs text-red-500">{err}</p>}
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 type AdminUser = { id: number; username: string; role: Role; created_at: string; last_login_at: string | null };
 
@@ -166,7 +237,7 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
   // User management
   const [users,        setUsers]       = useState<AdminUser[]>([]);
   const [newUsername,  setNewUsername] = useState("");
-  const [newPassword,  setNewPassword] = useState("");
+  const [tempPassword, setTempPassword] = useState("");
   const [newRole,      setNewRole]     = useState<Role>("autore");
   const [userErr,      setUserErr]     = useState("");
   const [userOk,       setUserOk]      = useState("");
@@ -251,17 +322,18 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
 
   async function handleCreateUser(e: React.FormEvent) {
     e.preventDefault();
-    setUserErr(""); setUserOk("");
+    setUserErr(""); setUserOk(""); setTempPassword("");
     setUserLoading(true);
     try {
       const res = await authFetch(token, "/api/admin/users", {
         method: "POST",
-        body: JSON.stringify({ username: newUsername.trim(), password: newPassword, role: newRole }),
+        body: JSON.stringify({ username: newUsername.trim(), role: newRole }),
       });
-      const data = (await res.json()) as { error?: string; username?: string };
+      const data = (await res.json()) as { error?: string; username?: string; tempPassword?: string };
       if (!res.ok) { setUserErr(data.error ?? "Errore imprevisto."); return; }
-      setUserOk(`Utente "${data.username}" creato con successo.`);
-      setNewUsername(""); setNewPassword("");
+      setUserOk(`Utente "${data.username}" creato. Password temporanea, mostrata solo ora:`);
+      setTempPassword(data.tempPassword ?? "");
+      setNewUsername("");
       await loadUsers();
     } catch {
       setUserErr("Errore di connessione.");
@@ -272,10 +344,11 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
 
   async function handleDeleteUser(id: number, username: string) {
     if (!confirm(`Eliminare l'utente "${username}"?`)) return;
-    await authFetch(token, "/api/admin/users", {
+    const res = await authFetch(token, "/api/admin/users", {
       method: "DELETE",
       body: JSON.stringify({ id }),
     });
+    if (!res.ok) alert(((await res.json().catch(() => null)) as { error?: string } | null)?.error ?? "Errore imprevisto.");
     await loadUsers();
   }
 
@@ -409,9 +482,17 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
                       </time>
                     </div>
                     <p className="mt-2 truncate font-sans font-semibold">{post.title}</p>
-                    <p className="mt-1 line-clamp-2 text-xs text-[var(--color-muted)]">
-                      {post.content.slice(0, 120)}
-                    </p>
+                    {post.status === "bozza" ? (
+                      // the whole text, so an admin reads a draft before publishing it (plain text, never HTML)
+                      <details className="mt-1 text-xs text-[var(--color-muted)]">
+                        <summary className="cursor-pointer">{post.content.slice(0, 120)}</summary>
+                        <p className="mt-2 whitespace-pre-wrap break-words font-mono">{post.content}</p>
+                      </details>
+                    ) : (
+                      <p className="mt-1 line-clamp-2 text-xs text-[var(--color-muted)]">
+                        {post.content.slice(0, 120)}
+                      </p>
+                    )}
                   </div>
                   <div className="flex shrink-0 gap-2">
                     {post.status === "bozza" ? (
@@ -502,25 +583,14 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
 
               {/* Add new user form */}
               <form className="flex flex-col gap-3" onSubmit={handleCreateUser}>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <div className="relative">
-                    <User className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted)]" />
-                    <input
-                      type="text" required minLength={3} value={newUsername}
-                      onChange={(e) => setNewUsername(e.target.value)}
-                      placeholder="Nuovo username" autoComplete="off"
-                      className={`${INPUT_CLASS} pl-10`}
-                    />
-                  </div>
-                  <div className="relative">
-                    <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted)]" />
-                    <input
-                      type="password" required minLength={8} value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="Password (min. 8 caratteri)" autoComplete="new-password"
-                      className={`${INPUT_CLASS} pl-10`}
-                    />
-                  </div>
+                <div className="relative">
+                  <User className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted)]" />
+                  <input
+                    type="text" required minLength={3} value={newUsername}
+                    onChange={(e) => setNewUsername(e.target.value)}
+                    placeholder="Nuovo username" autoComplete="off"
+                    className={`${INPUT_CLASS} pl-10`}
+                  />
                 </div>
                 <select
                   value={newRole}
@@ -542,6 +612,14 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
                 </button>
                 {userErr && <p className="font-mono text-xs text-red-500">{userErr}</p>}
                 {userOk  && <p className="font-mono text-xs text-emerald-400">{userOk}</p>}
+                {tempPassword && (
+                  <div className="flex flex-col gap-1">
+                    <code className="select-all rounded-xl border border-[var(--color-border)] px-4 py-3 font-mono text-sm">{tempPassword}</code>
+                    <p className="font-mono text-[11px] text-[var(--color-muted)]">
+                      Consegnala a mano: al primo accesso il sistema chiede di cambiarla. Non viene salvata in chiaro.
+                    </p>
+                  </div>
+                )}
               </form>
             </div>
           </div>
@@ -556,13 +634,16 @@ function AdminDashboard({ token, onLogout }: { token: string; onLogout: () => vo
 // ── Root ──────────────────────────────────────────────────────────────────────
 export default function AdminPage() {
   const [token, setToken] = useState<string | null>(null);
+  // set right after a login with a temporary password: the panel stays closed until it is changed
+  const [tempLogin, setTempLogin] = useState<{ token: string; password: string } | null>(null);
 
   useEffect(() => {
     const stored = sessionStorage.getItem(STORAGE_KEY);
     if (stored) setToken(stored);
   }, []);
 
-  function handleAuth(t: string) {
+  function handleAuth(t: string, mustChangeWith?: string) {
+    if (mustChangeWith !== undefined) { setTempLogin({ token: t, password: mustChangeWith }); return; }
     sessionStorage.setItem(STORAGE_KEY, t);
     setToken(t);
   }
@@ -573,6 +654,19 @@ export default function AdminPage() {
     setToken(null);
   }, []);
 
+  if (tempLogin) {
+    return (
+      <ChangePasswordGate
+        token={tempLogin.token}
+        current={tempLogin.password}
+        onDone={() => { const t = tempLogin.token; setTempLogin(null); handleAuth(t); }}
+        onCancel={() => {
+          void fetch("/api/auth", { method: "DELETE", headers: { Authorization: `Bearer ${tempLogin.token}` } }).catch(() => null);
+          setTempLogin(null);
+        }}
+      />
+    );
+  }
   if (!token) return <LoginGate onAuth={handleAuth} />;
   return <AdminDashboard token={token} onLogout={handleLogout} />;
 }

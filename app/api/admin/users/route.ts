@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import { sessionFromRequest } from "@/lib/auth-db";
+import { hashPassword, sessionFromRequest, temporaryPassword } from "@/lib/auth-db";
 import { getSupabase } from "@/lib/supabase";
 
 /** Account management is for admins only: null when the caller may go on, the error response otherwise. */
@@ -15,7 +14,9 @@ async function requireAdmin(req: Request): Promise<NextResponse | null> {
 
 /**
  * POST /api/admin/users — creates a staff user (admin only).
- * Body: { username: string; password: string; role?: "admin" | "autore" } — role defaults to "autore"
+ * Body: { username: string; role?: "admin" | "autore" } — role defaults to "autore"
+ * → 201 { ok, username, role, tempPassword }: the temporary password is generated here, returned this once
+ *   and stored only as a bcrypt hash; the new user must replace it at the first login.
  * Requires: Authorization: Bearer <session-token>
  */
 export async function POST(req: Request) {
@@ -23,11 +24,10 @@ export async function POST(req: Request) {
   if (denied) return denied;
 
   const body = (await req.json().catch(() => null)) as
-    | { username?: string; password?: string; role?: string }
+    | { username?: string; role?: string }
     | null;
 
   const username = (body?.username ?? "").trim().toLowerCase();
-  const password = (body?.password ?? "").trim();
 
   if (!username || username.length < 3) {
     return NextResponse.json(
@@ -35,19 +35,14 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   }
-  if (!password || password.length < 8) {
-    return NextResponse.json(
-      { error: "La password deve avere almeno 8 caratteri." },
-      { status: 400 },
-    );
-  }
 
   const role = body?.role === "admin" ? "admin" : "autore";
-  const passwordHash = await bcrypt.hash(password, 12);
+  const tempPassword = temporaryPassword();
+  const passwordHash = await hashPassword(tempPassword);
 
   const { error } = await getSupabase()
     .from("admin_users")
-    .insert({ username, password_hash: passwordHash, role });
+    .insert({ username, password_hash: passwordHash, role, must_change_password: true });
 
   if (error) {
     if (error.code === "23505") {
@@ -62,7 +57,10 @@ export async function POST(req: Request) {
     );
   }
 
-  return NextResponse.json({ ok: true, username, role }, { status: 201 });
+  return NextResponse.json(
+    { ok: true, username, role, tempPassword },
+    { status: 201, headers: { "Cache-Control": "no-store" } },
+  );
 }
 
 /**
@@ -87,6 +85,7 @@ export async function GET(req: Request) {
 
 /**
  * DELETE /api/admin/users — deletes a staff user by id. Admin only.
+ * Refused (409) while the user still has posts: a post without author counts as an admin's and keeps its raw HTML.
  * Body: { id: number }
  * Requires: Authorization: Bearer <session-token>
  */
@@ -99,6 +98,20 @@ export async function DELETE(req: Request) {
 
   if (!id) {
     return NextResponse.json({ error: "ID mancante." }, { status: 400 });
+  }
+
+  const { count, error: postsError } = await getSupabase()
+    .from("posts")
+    .select("id", { count: "exact", head: true })
+    .eq("author_id", id);
+  if (postsError) {
+    return NextResponse.json({ error: "Errore DB." }, { status: 500 });
+  }
+  if ((count ?? 0) > 0) {
+    return NextResponse.json(
+      { error: "Questo utente ha ancora articoli: eliminali prima di eliminare l'utente." },
+      { status: 409 },
+    );
   }
 
   const { error } = await getSupabase()

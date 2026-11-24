@@ -1,29 +1,30 @@
 import bcrypt from "bcryptjs";
+import { randomBytes } from "node:crypto";
 import { getSupabase } from "@/lib/supabase";
 
 const SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-type UserRow = { id: number; password_hash: string };
+type UserRow = { id: number; password_hash: string; must_change_password: boolean | null };
 type SessionRow = { expires_at: string; user_id: number };
 
 export type Role = "admin" | "autore";
-export type SessionUser = { id: number; role: Role };
+export type SessionUser = { id: number; role: Role; mustChangePassword: boolean };
 
 // ── User verification ─────────────────────────────────────────────────────────
 
 /**
  * Verifies username + plaintext password against the DB.
- * Returns the user id on success, null on failure.
+ * Returns the user id (and whether the password is a temporary one) on success, null on failure.
  * Uses bcrypt.compare — safe against timing attacks.
  */
 export async function verifyAdminUser(
   username: string,
   password: string,
-): Promise<number | null> {
+): Promise<{ id: number; mustChangePassword: boolean } | null> {
   const { data, error } = await getSupabase()
     .from("admin_users")
-    .select("id, password_hash")
+    .select("id, password_hash, must_change_password")
     .eq("username", username.trim().toLowerCase())
     .maybeSingle();
 
@@ -39,7 +40,7 @@ export async function verifyAdminUser(
     .update({ last_login_at: new Date().toISOString() })
     .eq("id", row.id);
 
-  return row.id;
+  return { id: row.id, mustChangePassword: row.must_change_password === true };
 }
 
 // ── Session management ────────────────────────────────────────────────────────
@@ -83,7 +84,7 @@ export async function verifySession(token: string): Promise<SessionUser | null> 
 
   const { data: user, error: userError } = await getSupabase()
     .from("admin_users")
-    .select("id, role")
+    .select("id, role, must_change_password")
     .eq("id", row.user_id)
     .maybeSingle();
 
@@ -96,15 +97,59 @@ export async function verifySession(token: string): Promise<SessionUser | null> 
     .eq("token", token);
 
   // anything that is not exactly "admin" gets the smaller rights
-  return { id: user.id as number, role: user.role === "admin" ? "admin" : "autore" };
+  return {
+    id: user.id as number,
+    role: user.role === "admin" ? "admin" : "autore",
+    mustChangePassword: user.must_change_password === true,
+  };
 }
 
-/** The user behind `Authorization: Bearer <token>`, or null. */
+/** The bearer token of a request, or "". */
+export function bearerToken(req: Request): string {
+  const auth = req.headers.get("Authorization") ?? "";
+  return auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
+}
+
+/**
+ * The user behind `Authorization: Bearer <token>`, or null.
+ * Null also while the user still has a temporary password: until they change it, the session only
+ * opens PATCH /api/auth (which calls verifySession itself).
+ */
 export async function sessionFromRequest(req: Request): Promise<SessionUser | null> {
-  const auth  = req.headers.get("Authorization") ?? "";
-  const token = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
+  const token = bearerToken(req);
   if (!token) return null;
-  try { return await verifySession(token); } catch { return null; }
+  try {
+    const user = await verifySession(token);
+    return user && !user.mustChangePassword ? user : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Replaces a user's password after checking the current one, and clears the temporary-password flag.
+ * False when the current password is wrong.
+ */
+export async function changePassword(userId: number, current: string, next: string): Promise<boolean> {
+  const { data, error } = await getSupabase()
+    .from("admin_users")
+    .select("password_hash")
+    .eq("id", userId)
+    .maybeSingle();
+  if (error || !data) return false;
+  if (!(await bcrypt.compare(current, (data as { password_hash: string }).password_hash))) return false;
+
+  const { error: updateError } = await getSupabase()
+    .from("admin_users")
+    .update({ password_hash: await hashPassword(next), must_change_password: false })
+    .eq("id", userId);
+  if (updateError) throw new Error("Could not change password: " + updateError.message);
+  return true;
+}
+
+/** A random temporary password (16 URL-safe chars, 96 bits): shown once to the admin, stored only as a bcrypt hash. */
+export function temporaryPassword(): string {
+  return randomBytes(12).toString("base64url");
 }
 
 /**
