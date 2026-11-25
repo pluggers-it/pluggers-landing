@@ -29,10 +29,11 @@ const SECTIONS: LegalSection[] = [
     title: "Costo Chiamata",
     content: (
       <p>
-        Alla prenotazione può essere dovuto un «Costo Chiamata» al professionista per presentarsi
-        e valutare il lavoro, anche se l&apos;intervento non risulta fattibile. L&apos;importo te
-        lo indica il professionista nell&apos;app prima della visita, e lo paghi a lui: non si
-        paga in app.
+        Quando confermi l&apos;appuntamento è dovuto il Costo Chiamata, per il viaggio e la
+        valutazione del lavoro. Te lo indica il professionista nell&apos;app prima della conferma.
+        Se il lavoro si fa, è compreso nel prezzo finale; se non si fa, è il massimo che spendi. Se
+        annulli più di 24 ore prima non è dovuto. Se il professionista non si presenta non è dovuto
+        niente. Se contesti un lavoro, al professionista resta dovuto solo il Costo Chiamata.
       </p>
     ),
   },
@@ -41,9 +42,9 @@ const SECTIONS: LegalSection[] = [
     title: "Preventivi e pagamenti",
     content: (
       <p>
-        Il prezzo dell&apos;intervento è quello del preventivo che accetti. I pagamenti in-app,
-        quando attivi, sono gestiti da provider certificati; fino ad allora l&apos;accordo
-        economico è tra te e il professionista.
+        Il prezzo dell&apos;intervento è quello del preventivo che accetti. I pagamenti in app,
+        quando attivi, passano da un fornitore di pagamenti autorizzato; fino ad allora
+        l&apos;accordo economico è tra te e il professionista.
       </p>
     ),
   },
@@ -53,7 +54,7 @@ const SECTIONS: LegalSection[] = [
     content: (
       <p>
         Ti tuteliamo per quello che succede nell&apos;app: assistenza, gestione delle
-        contestazioni, recensioni verificate e, quando attivi, pagamenti protetti. Se vi accordate
+        contestazioni, recensioni ricevute e, quando attivi, pagamenti in app. Se vi accordate
         su altri canali (telefono, email, messaggi, social) non vediamo cosa succede, non possiamo
         intervenire e non rispondiamo di quegli accordi, fermi i diritti che la legge ti
         riconosce. Per questo non scambiare numeri di telefono, email o altri recapiti per
@@ -84,6 +85,38 @@ const SECTIONS: LegalSection[] = [
         professionista, ma si adopera per la sicurezza e la trasparenza della piattaforma e per
         la gestione delle segnalazioni.
       </p>
+    ),
+  },
+  {
+    id: "condomini",
+    title: "Condomini (bozza, da validare con il legale)",
+    content: (
+      <>
+        <p className="text-[15px] text-muted">
+          Il servizio per i condomini è in arrivo: questa sezione vale da quando sarà attivo.
+        </p>
+        <p>
+          Bozza del 16 novembre 2026, da validare con il legale. Su Pluggers un condominio è lo
+          spazio in cui i residenti di uno stabile segnalano i guasti sulle parti comuni e chi lo
+          amministra li gestisce. I ruoli: il residente (proprietario, inquilino o altro) entra con
+          il codice dello stabile, con un link o con un invito personale; l&apos;amministratore crea
+          il condominio e lo gestisce; i collaboratori sono persone del suo studio che lui invita ad
+          aiutarlo. Cosa vede chi gestisce il condominio (amministratore e collaboratori): nome e
+          unità di ogni residente e, per le sole richieste a carico del condominio, la descrizione,
+          la chat con il professionista e gli importi; non vede il telefono e l&apos;email del tuo
+          account né le richieste per casa tua. Approvazione e soglia: le richieste sulle parti
+          comuni partono subito verso i professionisti; sopra la soglia di spesa fissata
+          dall&apos;amministratore il preventivo lo accetta solo chi gestisce il condominio, che
+          può anche rifiutarlo spiegando il motivo. Uscita: puoi uscire dal condominio quando vuoi;
+          le richieste già aperte restano al condominio, e chi lo gestisce continua a vederle con
+          il tuo nome e la tua unità (per quanto tempo è da confermare). Riservatezza:
+          amministratore e collaboratori usano i dati dei residenti solo per gestire il condominio,
+          li tengono riservati e non li comunicano ad altri, salvo che serva a gestirlo o lo
+          imponga la legge; lo accettano quando creano un condominio o entrano a gestirlo. Il ruolo
+          di Pluggers e dell&apos;amministratore per questi dati (titolari autonomi o contitolari)
+          è da confermare.
+        </p>
+      </>
     ),
   },
   {
@@ -131,8 +164,8 @@ const SECTIONS: LegalSection[] = [
         <p>
           Per farti trovare mostriamo ai clienti il tuo profilo professionale: nome (con il cognome
           puntato), mestieri e competenze dichiarate, città in cui operi, disponibilità e
-          recensioni ricevute. Il documento d&apos;identità che carichi serve solo alla verifica e
-          NON viene mostrato ai clienti.
+          recensioni ricevute. Se verifichi la tua identità con Didit, ai clienti mostriamo solo che
+          il profilo è verificato: il documento NON viene mostrato ai clienti.
         </p>
         <h3>Recensioni e reputazione</h3>
         <p>
@@ -144,7 +177,7 @@ const SECTIONS: LegalSection[] = [
         <p>
           Possiamo sospendere o chiudere il tuo profilo in caso di false dichiarazioni, condotte
           scorrette verso i clienti, o violazioni di legge o di questi termini. Assistenza,
-          gestione delle contestazioni, recensioni verificate e, quando attivi, pagamenti protetti
+          gestione delle contestazioni, recensioni ricevute e, quando attivi, pagamenti in app
           valgono solo per quello che succede nell&apos;app: sugli accordi presi con il cliente su
           altri canali non abbiamo visibilità, non possiamo intervenire e non ne rispondiamo. Per
           questo, se scambi o chiedi recapiti per continuare con il cliente fuori dall&apos;app,
@@ -197,8 +230,8 @@ export default function TerminiPage() {
   return (
     <LegalPage
       title="Termini e condizioni"
-      updated="9 ottobre 2026"
-      version="2026-10-06"
+      updated="16 novembre 2026"
+      version="2026-11-16"
       intro={
         <p>
           Usando Pluggers accetti questi termini. Sono un riassunto leggibile; la versione

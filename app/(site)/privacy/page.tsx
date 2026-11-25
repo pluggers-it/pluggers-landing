@@ -15,6 +15,8 @@ export const metadata: Metadata = pageMetadata({
 // word for word: it is the text users accept, so it changes only together with kLegalVersion.
 // The 06/11/2026 factual corrections (where the data lives, processing that was missing) went in on both
 // sides without a new version: whether users must accept again is a decision for the Compliance.
+// The identity document paragraph follows the app after mvp 675ecaf9: since the 16/11/2026 decision the
+// only identity check is Didit's (optional); documents uploaded at sign-up before then stay archived.
 const SECTIONS: LegalSection[] = [
   {
     id: "titolare",
@@ -56,7 +58,10 @@ const SECTIONS: LegalSection[] = [
         passa dai nostri server a Google Places, o a OpenStreetMap quando Google non è disponibile.
         Per aprire la mappa l&apos;app chiede le immagini a CARTO, che vede l&apos;indirizzo IP del
         telefono. Se usi la tua posizione per compilare un indirizzo, a ricavarlo è il servizio del
-        telefono (Apple o Google).
+        telefono (Apple o Google). Solo se acconsenti alla misura delle nostre pubblicità, Meta
+        (Facebook e Instagram) riceve dal tuo telefono l&apos;identificativo pubblicitario,
+        l&apos;indirizzo IP e due eventi, l&apos;apertura dell&apos;app e la registrazione
+        completata; mai nome, email, telefono o testi che scrivi.
       </p>
     ),
   },
@@ -65,28 +70,63 @@ const SECTIONS: LegalSection[] = [
     title: "Se sei un professionista",
     content: (
       <p>
-        Dati dell&apos;attività: nome, Partita IVA, zona di lavoro, mestieri e disponibilità. Per
-        iscriverti carichi il fronte e il retro di un documento d&apos;identità (carta
-        d&apos;identità, patente o passaporto): è un passaggio obbligatorio. Un sistema di
-        intelligenza artificiale (Gemini di Google, che elabora i dati negli Stati Uniti) legge le
-        due foto per
-        controllare il tipo di documento, la scadenza, che il nome sia quello che hai indicato e che
-        tu sia maggiorenne. Per la patente e la carta d&apos;identità cartacea, e ogni volta che
-        c&apos;è un dubbio, decide una persona del team: il sistema automatico non ti esclude mai da
-        solo, al massimo ti chiede di ricaricare le foto. Non confrontiamo il tuo volto. Di ogni
-        controllo salviamo l&apos;esito, il tipo e la scadenza del documento e un&apos;impronta dei
-        file e del numero (un codice da cui non si torna alle foto né al numero, che non salviamo in
-        chiaro). I file restano in un archivio privato e non sono mai mostrati ai clienti. Se detti
-        un preventivo, il telefono trascrive la tua voce e a noi arriva solo il testo, mai
-        l&apos;audio: lo stesso sistema di intelligenza artificiale lo legge insieme alle voci del
-        preventivo e al tuo listino per proporti cosa aggiungere, cambiare o togliere, e decidi tu
-        cosa applicare. Il testo dettato non lo conserviamo; non dettare dati del cliente che non
-        servono al preventivo. Se inserisci un cliente che non ha l&apos;app, scrivi tu il suo nome, il telefono,
-        l&apos;indirizzo e il lavoro da fare. Il preventivo si apre da un link valido 30 giorni, che
-        condividi tu: la pagina non richiede l&apos;app e mostra il nome di battesimo del cliente,
-        la data, l&apos;indirizzo, il lavoro e il totale. Questa informativa vale anche per quel
-        cliente: i suoi diritti li esercita scrivendo a <SupportEmail />.
+        Dati dell&apos;attività: nome, Partita IVA, zona di lavoro, mestieri e
+        disponibilità. Per iscriverti non devi caricare un documento d&apos;identità. Dal tuo
+        profilo puoi verificare la tua identità con Didit (Didit Identity Spain, S.L.,
+        Barcellona), il fornitore che usiamo per questo come responsabile del trattamento: è
+        facoltativo e il tuo profilo risulta verificato solo dopo l&apos;esito positivo di Didit.
+        Nella pagina di Didit fotografi il documento e fai un selfie dal
+        vivo: Didit legge il documento, controlla che davanti alla fotocamera ci sia una
+        persona presente, confronta il tuo volto con la foto del documento e valuta
+        l&apos;indirizzo IP da cui ti colleghi. Il confronto del volto usa dati biometrici:
+        li tratta solo Didit, solo per questa verifica e solo se scegli di farla. Didit
+        tiene i dati nell&apos;Unione Europea, su server in Irlanda; per alcuni servizi di
+        supporto usa fornitori negli Stati Uniti, con le clausole contrattuali standard.
+        Dell&apos;esito noi teniamo solo il tipo di documento, lo Stato che lo ha emesso, la
+        scadenza, se il nome coincide con quello del profilo, se sei maggiorenne, se i
+        controlli del selfie e del volto sono andati bene e lo stato della verifica: non
+        teniamo le foto, il selfie, il numero del documento né la data di nascita. Se elimini
+        l&apos;account, chiediamo a Didit di cancellare le tue verifiche. Fino al [data da
+        confermare] all&apos;iscrizione si caricavano il fronte e il retro di un documento
+        d&apos;identità: le foto caricate prima di quella data restano in un archivio privato
+        sui nostri server, non sono mostrate ai clienti e non passano da sistemi di
+        intelligenza artificiale; le gestiamo secondo un termine da confermare. Se detti un preventivo, il telefono
+        trascrive la tua voce e a noi arriva solo il testo, mai l&apos;audio: il sistema di
+        intelligenza artificiale descritto in «Intelligenza artificiale» (Gemini di Google)
+        lo legge insieme alle voci del preventivo e al tuo listino per proporti cosa
+        aggiungere, cambiare o togliere, e decidi tu cosa applicare. Il testo dettato non lo
+        conserviamo; non dettare dati del cliente che non servono al preventivo. Se
+        inserisci un cliente che non ha l&apos;app, scrivi tu il suo nome, il telefono,
+        l&apos;indirizzo e il lavoro da fare. Il preventivo si apre da un link valido 30
+        giorni, che condividi tu: la pagina non richiede l&apos;app e mostra il nome di
+        battesimo del cliente, la data, l&apos;indirizzo, il lavoro e il totale. Questa
+        informativa vale anche per quel cliente: i suoi diritti li esercita scrivendo a
+        <SupportEmail />.
       </p>
+    ),
+  },
+  {
+    id: "condomini",
+    title: "Se sei in un condominio (bozza, da validare con il legale)",
+    content: (
+      <>
+        <p className="text-[15px] text-muted">
+          Il servizio per i condomini è in arrivo: questa sezione vale da quando sarà attivo.
+        </p>
+        <p>
+          Bozza del 16 novembre 2026, da validare con il legale. Se entri in un condominio su
+          Pluggers, l&apos;amministratore e i suoi collaboratori vedono il tuo nome, la tua unità
+          (scala e interno, se la indichi), se sei proprietario o inquilino e, per le sole
+          richieste a carico del condominio, descrizione, foto, referto, la chat con il
+          professionista e gli importi. Non vedono il telefono e l&apos;email del tuo account né le
+          richieste per casa tua; quello che scrivi nella chat di una richiesta a carico del
+          condominio, invece, lo leggono. Usano questi dati solo per gestire il condominio. Se
+          esci, le richieste già aperte restano al condominio e chi lo gestisce continua a vederle
+          con il tuo nome e la tua unità: per quanto tempo è da confermare. Se per questi dati
+          Pluggers e l&apos;amministratore siano titolari autonomi o contitolari è da confermare.
+          Per i tuoi diritti scrivi a <SupportEmail />.
+        </p>
+      </>
     ),
   },
   {
@@ -95,8 +135,9 @@ const SECTIONS: LegalSection[] = [
     content: (
       <p>
         Per erogare il servizio (metterti in contatto col professionista giusto), gestire le
-        prenotazioni e le notifiche, controllare i documenti dei professionisti, migliorare
-        l&apos;app con statistiche di utilizzo aggregate, e per obblighi di legge.
+        prenotazioni e le notifiche, gestire la verifica facoltativa dell&apos;identità dei professionisti, migliorare
+        l&apos;app con statistiche di utilizzo aggregate, misurare le nostre pubblicità su Facebook e
+        Instagram (solo se acconsenti) e per obblighi di legge.
       </p>
     ),
   },
@@ -105,14 +146,15 @@ const SECTIONS: LegalSection[] = [
     title: "Intelligenza artificiale",
     content: (
       <p>
-        La descrizione del problema, con la foto se la aggiungi, viene analizzata da un modello di
-        intelligenza artificiale (Gemini di Google, tramite Google Cloud Vertex AI) per classificare
-        il guasto e indirizzarti. Dal 12 novembre 2026 testo e foto sono elaborati da Google negli
-        Stati Uniti, con le garanzie del Data Privacy Framework UE-USA e delle clausole contrattuali
-        standard. Non inviamo il tuo testo per addestrare modelli. Le foto del problema vengono
-        cancellate dopo l&apos;analisi. Lo stesso modello legge le foto del documento d&apos;identità
-        dei professionisti e il testo dei preventivi che dettano, come spiegato in «Se sei un
-        professionista».
+        La descrizione del problema, con la foto se la aggiungi, viene analizzata da un
+        modello di intelligenza artificiale (Gemini di Google, tramite Google Cloud Vertex
+        AI) per classificare il guasto e indirizzarti. Dal 12 novembre 2026 testo e foto
+        sono elaborati da Google negli Stati Uniti, con le garanzie del Data Privacy
+        Framework UE-USA e delle clausole contrattuali standard. Non inviamo il tuo testo
+        per addestrare modelli. Le foto del problema vengono cancellate dopo l&apos;analisi.
+        Lo stesso modello legge il testo dei preventivi che i professionisti dettano, come
+        spiegato in «Se sei un professionista». Le foto dei documenti d&apos;identità non
+        passano da questo modello.
       </p>
     ),
   },
@@ -121,15 +163,19 @@ const SECTIONS: LegalSection[] = [
     title: "Con chi li condividiamo",
     content: (
       <p>
-        Con il professionista con cui scegli di interagire. Con i fornitori tecnici necessari, come
-        responsabili del trattamento: Hetzner (i server in Germania dove stanno database, account e
-        file), Google Cloud (i servizi dell&apos;app, nell&apos;Unione Europea, con le copie di
-        sicurezza cifrate in Belgio; l&apos;intelligenza artificiale, negli Stati Uniti) e Resend (le email
-        di accesso e di conferma). Con i servizi che l&apos;app usa per funzionare: Google e Apple
-        (accesso con il loro account, notifiche, rapporti di errore), Google Places e OpenStreetMap
-        (suggerimento degli indirizzi), CARTO (mappa). Google e Apple possono trattare dati anche
-        fuori dall&apos;Unione Europea, per esempio negli Stati Uniti (Data Privacy Framework UE-USA).
-        Non vendiamo i tuoi dati.
+        Con il professionista con cui scegli di interagire. Con i fornitori tecnici
+        necessari, come responsabili del trattamento: Hetzner (i server in Germania dove
+        stanno database, account e file), Google Cloud (i servizi dell&apos;app,
+        nell&apos;Unione Europea, con le copie di sicurezza cifrate in Belgio;
+        l&apos;intelligenza artificiale, negli Stati Uniti), Resend (le email di accesso e
+        di conferma) e Didit (la verifica facoltativa dell&apos;identità dei professionisti,
+        nell&apos;Unione Europea). Con i servizi che l&apos;app usa per funzionare: Google e
+        Apple (accesso con il loro account, notifiche, rapporti di errore), Google Places e
+        OpenStreetMap (suggerimento degli indirizzi), CARTO (mappa). Solo se acconsenti alla
+        misura delle pubblicità, anche con Meta Platforms Ireland (Facebook e Instagram),
+        che decide con noi come usare questi dati ed è titolare dei propri usi. Google,
+        Apple e Meta possono trattare dati anche fuori dall&apos;Unione Europea, per esempio
+        negli Stati Uniti (Data Privacy Framework UE-USA). Non vendiamo i tuoi dati.
       </p>
     ),
   },
@@ -139,7 +185,10 @@ const SECTIONS: LegalSection[] = [
     content: (
       <p>
         Per il tempo necessario al servizio e agli obblighi di legge. Puoi chiedere la
-        cancellazione in ogni momento (vedi sotto).
+        cancellazione in ogni momento (vedi sotto). Per le foto dei documenti d&apos;identità
+        caricate all&apos;iscrizione prima del [data da confermare] il termine è da confermare.
+        Gli eventi inviati a Meta non restano da noi;
+        presso Meta valgono le sue regole.
       </p>
     ),
   },
@@ -150,7 +199,10 @@ const SECTIONS: LegalSection[] = [
       <p>
         Accesso, rettifica, cancellazione, portabilità, opposizione. Dall&apos;app puoi scaricare i
         tuoi dati ed eliminare l&apos;account in autonomia (Impostazioni → Privacy e account; se sei
-        un professionista, Impostazioni → Dati personali e privacy). Per gli altri diritti: <SupportEmail />.
+        un professionista, Impostazioni → Dati personali e privacy). Per gli altri diritti: <SupportEmail />. Il consenso alla misura delle pubblicità lo
+        ritiri quando vuoi in Impostazioni → Privacy e account → Pubblicità: l&apos;app smette di
+        inviare dati a Meta; quelli già inviati si gestiscono dalle impostazioni della tua privacy
+        su Facebook e Instagram.
       </p>
     ),
   },
@@ -292,8 +344,8 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       title="Informativa sulla privacy"
-      updated="6 novembre 2026"
-      version="2026-10-06"
+      updated="16 novembre 2026"
+      version="2026-11-16"
       intro={
         <p>
           Questa informativa spiega quali dati raccogliamo quando usi Pluggers, perché, e quali
